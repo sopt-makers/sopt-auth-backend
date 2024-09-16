@@ -1,5 +1,3 @@
-import com.diffplug.gradle.spotless.SpotlessExtension
-
 plugins {
 	java
 	id("org.springframework.boot") version "3.3.3"
