@@ -46,7 +46,7 @@ spotless{
 	java {
 		target("**/*.java")
 		googleJavaFormat(googleJavaFormatVersion)
-		importOrder("java", "javax", "jakarta", "org", "com")
+		importOrder("sopt", "java", "javax", "jakarta", "org", "com")
 		indentWithTabs(2)
 		endWithNewline()
 		removeUnusedImports()
