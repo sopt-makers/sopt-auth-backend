@@ -2,6 +2,7 @@ plugins {
 	java
 	id("org.springframework.boot") version "3.3.3"
 	id("io.spring.dependency-management") version "1.1.6"
+	id ("com.diffplug.spotless") version "6.23.3"
 }
 
 group = "sopt.makers"
@@ -37,4 +38,31 @@ dependencies {
 
 tasks.withType<Test> {
 	useJUnitPlatform()
+}
+
+val googleJavaFormatVersion = "1.18.1"
+
+spotless{
+	java {
+		target("**/*.java")
+		googleJavaFormat(googleJavaFormatVersion)
+		importOrder("sopt", "java", "javax", "jakarta", "org", "com")
+		indentWithTabs(2)
+		endWithNewline()
+		removeUnusedImports()
+	}
+}
+
+tasks.register<Copy>("updateGitHooks") {
+	from(".github/script/pre-commit")
+	into(".git/hooks")
+}
+
+tasks.register<Exec>("makeGitHooksExecutable") {
+	commandLine("chmod", "+x", ".git/hooks/pre-commit")
+	dependsOn("updateGitHooks")
+}
+
+tasks.named("compileJava") {
+	dependsOn("makeGitHooksExecutable")
 }
