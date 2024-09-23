@@ -11,6 +11,6 @@ import org.springframework.context.annotation.ComponentScan;
 @ComponentScan(basePackageClasses = {DomainRoot.class, InfraRoot.class, SupportRoot.class})
 class AppApplicationTests {
 
-@Test
-void 전체_컨텍스트_로드_테스트() {}
+	@Test
+	void 전체_컨텍스트_로드_테스트() {}
 }

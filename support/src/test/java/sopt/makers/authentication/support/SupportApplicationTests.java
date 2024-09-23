@@ -6,6 +6,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest(classes = SupportRoot.class)
 class SupportApplicationTests {
 
-@Test
-void 초기_컨텍스트_로드_테스트() {}
+	@Test
+	void 초기_컨텍스트_로드_테스트() {}
 }

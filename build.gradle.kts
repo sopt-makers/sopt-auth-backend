@@ -41,7 +41,7 @@ subprojects{
 			target("**/*.java")
 			googleJavaFormat(googleJavaFormatVersion)
 			importOrder("sopt", "java", "javax", "jakarta", "org", "com")
-			indentWithTabs(4)
+			indentWithTabs(2)
 			endWithNewline()
 			removeUnusedImports()
 		}
