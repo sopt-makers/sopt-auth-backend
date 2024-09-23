@@ -36,5 +36,11 @@ out/
 ### VS Code ###
 .vscode/
 
-## setting file
+## setting file ###
 *.properties
+*.yml
+
+### build directory ###
+!/domain/build/
+build
+.gradle
