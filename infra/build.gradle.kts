@@ -10,7 +10,11 @@ dependencies {
     //spring
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+
+    //db
     runtimeOnly("com.h2database:h2")
+    runtimeOnly("org.postgresql:postgresql")
+
 
     //test
     testImplementation("org.springframework.boot:spring-boot-starter-test")
