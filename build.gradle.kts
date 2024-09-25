@@ -27,9 +27,15 @@ subprojects{
 	apply(plugin = "java")
 	apply(plugin = "com.diffplug.spotless")
 
+	val archunitVersion = "${property("archunitVersion")}"
+	val fixtureMonkeyVersion = "${property("fixturemonkeyVersion")}"
+
 	dependencies{
 		compileOnly("org.projectlombok:lombok")
 		annotationProcessor("org.projectlombok:lombok")
+
+		testImplementation("com.tngtech.archunit:archunit:${archunitVersion}")
+		testImplementation("com.navercorp.fixturemonkey:fixture-monkey-starter:${fixtureMonkeyVersion}")
 	}
 
 	tasks.getByName("jar") {
