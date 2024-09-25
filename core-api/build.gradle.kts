@@ -15,7 +15,9 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
 
     //Test
+    val restAssuredVersion = "${property("restassuredVersion")}"
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("io.rest-assured:rest-assured:${restAssuredVersion}")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
