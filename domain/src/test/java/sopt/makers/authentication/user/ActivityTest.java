@@ -3,6 +3,9 @@ package sopt.makers.authentication.user;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -12,8 +15,9 @@ public class ActivityTest {
 	@DisplayName("활동 이력은 Null이 될 수 없다")
 	public void 성공_활동_NOTNULL() {
 		// given
-		ActivityList activityList = new ActivityList();
 		Activity activity = null;
+		List<Activity> activities = new ArrayList<>();
+		ActivityList activityList = new ActivityList(activities);
 
 		// when & then
 		assertThatThrownBy(
@@ -27,10 +31,8 @@ public class ActivityTest {
 	@DisplayName("같은 활동 이력은 동시에 존재할 수 없다")
 	public void 예외_활동_이력_중복() {
 		// given
-		ActivityList activityList = new ActivityList();
 		Activity activity1 = ActivityTestUtil.createActivity();
-
-		activityList.addActivity(activity1);
+		ActivityList activityList = new ActivityList(List.of(activity1));
 
 		// when
 		Part part = Part.ANDROID;
@@ -49,7 +51,7 @@ public class ActivityTest {
 		Activity activity = new Activity(34, team, Part.IOS, Role.MEMBER);
 
 		// when
-		Team team1 = activity.team;
+		Team team1 = activity.team();
 
 		// then
 		assertThat(team1).isEqualTo(Team.MAKERS);
@@ -63,15 +65,14 @@ public class ActivityTest {
 		Role role = Role.MEMBER;
 
 		Activity activity = new Activity(34, team, Part.IOS, role);
-		ActivityList activityList = new ActivityList();
+		ActivityList activityList = new ActivityList(List.of(activity));
 
 		// when
-		Team team1 = activity.team;
-		activityList.addActivity(activity);
+		Team team1 = activity.team();
 
 		// then
 		assertThat(team1).isEqualTo(null);
-		assertThat(activityList.getFirstActivity().team).isEqualTo(null);
+		assertThat(activityList.getFirstActivity().team()).isEqualTo(null);
 	}
 
 	@Test
@@ -82,7 +83,7 @@ public class ActivityTest {
 		Activity activity = new Activity(34, Team.MAKERS, Part.ANDROID, Role.MEMBER);
 
 		// when
-		Part part1 = activity.part;
+		Part part1 = activity.part();
 
 		// then
 		assertThat(part1).isEqualTo(Part.ANDROID);
@@ -92,9 +93,9 @@ public class ActivityTest {
 	@DisplayName("활동 이력은 NOT NULL이다")
 	public void 예외_활동_이력은_NOT_NULL() {
 		// given
-		ActivityList activityList = new ActivityList();
 		Part part = Part.ANDROID;
 		Activity activity = new Activity(34, Team.MAKERS, null, Role.MEMBER);
+		ActivityList activityList = new ActivityList(List.of(activity));
 
 		// when & then
 		assertThatThrownBy(
@@ -112,7 +113,7 @@ public class ActivityTest {
 		Activity activity = new Activity(34, Team.MAKERS, Part.ANDROID, role);
 
 		// when
-		Role role1 = activity.role;
+		Role role1 = activity.role();
 
 		// then
 		assertThat(role1).isEqualTo(Role.MEMBER);
@@ -123,7 +124,7 @@ public class ActivityTest {
 	public void 역할은_NOT_NULL() {
 		// given
 		Activity activity = new Activity(34, Team.MAKERS, Part.ANDROID, null);
-		ActivityList activityList = new ActivityList();
+		ActivityList activityList = new ActivityList(List.of(activity));
 
 		// when & then
 		assertThatThrownBy(
@@ -131,5 +132,25 @@ public class ActivityTest {
 							activityList.addActivity(activity);
 						})
 				.isInstanceOf(IllegalArgumentException.class);
+	}
+
+	@Test
+	@DisplayName("임원진은 Part가 Null일 수 있다")
+	public void 성공_임원진_PART_NULL() {
+		// given
+		Part part = null;
+		Role presidentRole = Role.PRESIDENT;
+		Role vicepresidentRole = Role.VICE_PRESIDENT;
+
+		User user = new User(1L, null, null);
+		Activity activity = new Activity(34, Team.MAKERS, part, presidentRole);
+		Activity activity1 = new Activity(34, Team.MAKERS, part, vicepresidentRole);
+
+		// when
+		user.join(activity);
+		user.join(activity1);
+
+		// then
+		assertThat(user.getActivityHistory().getTotalActivitySize()).isEqualTo(2);
 	}
 }

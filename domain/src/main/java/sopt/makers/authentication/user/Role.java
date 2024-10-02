@@ -15,4 +15,8 @@ public enum Role {
 				.findFirst()
 				.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 역할입니다 : " + role));
 	}
+
+	public boolean isPartRequired() {
+		return !(this == PRESIDENT || this == VICE_PRESIDENT);
+	}
 }
