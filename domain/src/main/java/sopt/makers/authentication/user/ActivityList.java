@@ -11,10 +11,16 @@ public class ActivityList {
 		this.activities = new ArrayList<>();
 	}
 
-	public void addActivity(Activity activity) {
+	public ActivityList(List<Activity> activityList) {
+		this.activities = activityList;
+	}
+
+	public ActivityList addActivity(Activity activity) {
 		validateActivityDuplication(activity);
 		validateActivityEmpty(activity);
-		this.activities.add(activity);
+		List<Activity> updatedActivities = new ArrayList<>(this.activities);
+		updatedActivities.add(activity);
+		return new ActivityList(updatedActivities);
 	}
 
 	public Activity getFirstActivity() {
@@ -43,6 +49,6 @@ public class ActivityList {
 		if (activity == null) {
 			throw new IllegalArgumentException("활동이 비어있습니다.");
 		}
-		activity.validateActivityContentsEmpty(activity);
+		activity.validateActivityContentsEmpty();
 	}
 }
