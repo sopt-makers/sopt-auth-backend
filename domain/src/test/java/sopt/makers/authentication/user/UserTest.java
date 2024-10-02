@@ -6,6 +6,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 public class UserTest {
@@ -27,6 +28,7 @@ public class UserTest {
 	}
 
 	@Test
+	@DisplayName("유저는 소셜 계정 정보를 가진다")
 	public void 유저는_소셜_계정_정보를_가진다() {
 		// given
 		SocialAccount socialAccount = new SocialAccount("1L", "GOOGLE");
@@ -42,6 +44,7 @@ public class UserTest {
 	}
 
 	@Test
+	@DisplayName("유저는 프로필 정보를 가진다")
 	public void 유저는_프로필_정보를_가진다() {
 		// given
 		SocialAccount socialAccount = new SocialAccount("1L", "GOOGLE");
@@ -57,6 +60,7 @@ public class UserTest {
 	}
 
 	@Test
+	@DisplayName("유저는 활동 정보를 가진다")
 	public void 유저는_활동_정보를_가진다() {
 		// given
 		SocialAccount socialAccount = new SocialAccount("1L", "GOOGLE");
@@ -72,6 +76,7 @@ public class UserTest {
 	}
 
 	@Test
+	@DisplayName("유저는 여러 활동 이력을 가질 수 있다")
 	public void 유저는_여러_활동_이력을_가질_수_있다() {
 		// given
 		SocialAccount socialAccount = new SocialAccount("1L", "GOOGLE");
@@ -90,6 +95,7 @@ public class UserTest {
 	}
 
 	@Test
+	@DisplayName("유저의 활동 내역은 중복되어선 안된다")
 	public void 유저의_활동_내역은_중복되어선_안된다() {
 		// given
 		SocialAccount socialAccount = new SocialAccount("1L", "GOOGLE");

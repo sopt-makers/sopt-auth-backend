@@ -3,11 +3,13 @@ package sopt.makers.authentication.user;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 public class SocialAccountTest {
 
 	@Test
+	@DisplayName("소셜 계정은 플랫폼 타입을 가진다")
 	public void 소셜_계정은_플랫폼_타입을_가진다() {
 		// given
 		AuthPlatform authPlatform = AuthPlatform.GOOGLE;
@@ -18,6 +20,7 @@ public class SocialAccountTest {
 	}
 
 	@Test
+	@DisplayName("플랫폼 생성시 Null 검증이 필요하다")
 	public void 플랫폼_생성시_NOT_NULL_검사() {
 		// given
 		AuthPlatform authPlatform = null;
@@ -28,6 +31,7 @@ public class SocialAccountTest {
 	}
 
 	@Test
+	@DisplayName("플랫폼은 KAKAO, GOOGLE만 가능하다")
 	public void 플랫폼은_KAKAO_GOOGLE() {
 		// given
 		SocialAccount googleAccount = new SocialAccount("1L", "GOOGLE");
@@ -43,6 +47,7 @@ public class SocialAccountTest {
 	}
 
 	@Test
+	@DisplayName("플랫폼은 GOOGLE, APPLE 이외는 불허한다")
 	public void 플랫폼_GOOGLE_APPLE_이외는_불허한다() {
 
 		// given

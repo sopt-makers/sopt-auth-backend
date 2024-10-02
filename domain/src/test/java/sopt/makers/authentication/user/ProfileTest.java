@@ -4,11 +4,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.LocalDate;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 public class ProfileTest {
 
 	@Test
+	@DisplayName("자신의 정보는 수정이 가능하다")
 	public void 자신의_정보는_수정_가능하다() {
 		// given
 		Profile profile =

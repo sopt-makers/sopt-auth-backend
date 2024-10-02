@@ -3,12 +3,14 @@ package sopt.makers.authentication.user;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 public class ActivityTest {
 
 	@Test
-	public void 활동_이력은_NOTNULL() {
+	@DisplayName("활동 이력은 Null이 될 수 없다")
+	public void 성공_활동_NOTNULL() {
 		// given
 		ActivityList activityList = new ActivityList();
 		Activity activity = null;
@@ -22,7 +24,8 @@ public class ActivityTest {
 	}
 
 	@Test
-	public void 같은_활동_이력은_동시에_존재할_수_없다() {
+	@DisplayName("같은 활동 이력은 동시에 존재할 수 없다")
+	public void 예외_활동_이력_중복() {
 		// given
 		ActivityList activityList = new ActivityList();
 		Activity activity1 = ActivityTestUtil.createActivity();
@@ -39,7 +42,8 @@ public class ActivityTest {
 	}
 
 	@Test
-	public void 활동은_TEAM_ENUM을_가진다() {
+	@DisplayName("활동 이력은 TEAM ENUM을 가진다")
+	public void 성공_TEAM_ENUM_멤버_확인() {
 		// given
 		Team team = Team.MAKERS;
 		Activity activity = new Activity(34, team, Part.IOS, Role.MEMBER);
@@ -52,7 +56,8 @@ public class ActivityTest {
 	}
 
 	@Test
-	public void Team은_NULL이_가능하다() {
+	@DisplayName("Team은_NULL이_가능하다")
+	public void 성공_TEAM_NULL_가능() {
 		// given
 		Team team = null;
 		Role role = Role.MEMBER;
@@ -70,7 +75,8 @@ public class ActivityTest {
 	}
 
 	@Test
-	public void 활동_이력은_활동_파트를_가진다() {
+	@DisplayName("활동 이력은 활동 파트를 가진다")
+	public void 성공_활동_PART_멤버_확인() {
 		// given
 		Part part = Part.ANDROID;
 		Activity activity = new Activity(34, Team.MAKERS, Part.ANDROID, Role.MEMBER);
@@ -83,7 +89,8 @@ public class ActivityTest {
 	}
 
 	@Test
-	public void 활동_이력은_NOT_NULL() {
+	@DisplayName("활동 이력은 NOT NULL이다")
+	public void 예외_활동_이력은_NOT_NULL() {
 		// given
 		ActivityList activityList = new ActivityList();
 		Part part = Part.ANDROID;
@@ -98,7 +105,8 @@ public class ActivityTest {
 	}
 
 	@Test
-	public void 활동은_역할을_가진다() {
+	@DisplayName("활동은 역할을 가진다")
+	public void 성공_활동_ROLE_보유() {
 		// given
 		Role role = Role.MEMBER;
 		Activity activity = new Activity(34, Team.MAKERS, Part.ANDROID, role);
@@ -111,6 +119,7 @@ public class ActivityTest {
 	}
 
 	@Test
+	@DisplayName("역할은 NOT NULL이다")
 	public void 역할은_NOT_NULL() {
 		// given
 		Activity activity = new Activity(34, Team.MAKERS, Part.ANDROID, null);
