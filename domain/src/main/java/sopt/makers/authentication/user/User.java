@@ -8,14 +8,14 @@ public class User {
 
 	private final Profile profile;
 
-	private final ActivityList activityHistory;
+	private final ActivityList activities;
 
 	public User(Long id, SocialAccount socialAccount, Profile profile, Activity activity) {
 		this.id = id;
 		this.socialAccount = socialAccount;
 		this.profile = profile;
-		this.activityHistory = new ActivityList();
-		this.activityHistory.addActivity(activity);
+		this.activities = new ActivityList();
+		this.activities.addActivity(activity);
 	}
 
 	public Profile getProfile() {
@@ -31,10 +31,10 @@ public class User {
 	}
 
 	public ActivityList getActivityHistory() {
-		return activityHistory;
+		return activities;
 	}
 
 	public void join(Activity activity) {
-		this.activityHistory.addActivity(activity);
+		this.activities.addActivity(activity);
 	}
 }
