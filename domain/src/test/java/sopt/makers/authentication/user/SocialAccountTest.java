@@ -13,37 +13,37 @@ public class SocialAccountTest {
 	public void 소셜_계정은_플랫폼_타입을_가진다() {
 		// given
 		AuthPlatform authPlatform = AuthPlatform.GOOGLE;
-		SocialAccount socialAccount = new SocialAccount("1L", "GOOGLE");
+		SocialAccount socialAccount = SocialAccount.of("1L", "GOOGLE");
 
 		// when & then
-		assertThat(socialAccount.getPlatformType()).isEqualTo(authPlatform);
+		assertThat(socialAccount.authPlatformType()).isEqualTo(authPlatform);
 	}
 
 	@Test
 	@DisplayName("플랫폼 생성시 Null 검증이 필요하다")
 	public void 플랫폼_생성시_NOT_NULL_검사() {
 		// given
-		AuthPlatform authPlatform = null;
+		String authPlatform = null;
 
 		// when & then
-		assertThatThrownBy(() -> new SocialAccount("1L", null))
+		assertThatThrownBy(() -> SocialAccount.of("1L", null))
 				.isInstanceOf(IllegalArgumentException.class);
 	}
 
 	@Test
-	@DisplayName("플랫폼은 KAKAO, GOOGLE만 가능하다")
+	@DisplayName("플랫폼은 APPLE, GOOGLE만 가능하다")
 	public void 플랫폼은_KAKAO_GOOGLE() {
 		// given
-		SocialAccount googleAccount = new SocialAccount("1L", "GOOGLE");
-		SocialAccount appleAccount = new SocialAccount("1L", "APPLE");
+		SocialAccount googleAccount = SocialAccount.of("1L", "GOOGLE");
+		SocialAccount appleAccount = SocialAccount.of("1L", "APPLE");
 
 		// when
 		AuthPlatform apple = AuthPlatform.APPLE;
 		AuthPlatform google = AuthPlatform.GOOGLE;
 
 		// then
-		assertThat(googleAccount.getPlatformType()).isEqualTo(google);
-		assertThat(appleAccount.getPlatformType()).isEqualTo(apple);
+		assertThat(googleAccount.authPlatformType()).isEqualTo(google);
+		assertThat(appleAccount.authPlatformType()).isEqualTo(apple);
 	}
 
 	@Test
@@ -52,7 +52,7 @@ public class SocialAccountTest {
 
 		// given
 		// when & then
-		assertThatThrownBy(() -> new SocialAccount("1L", "KAKAO"))
+		assertThatThrownBy(() -> SocialAccount.of("1L", "KAKAO"))
 				.isInstanceOf(IllegalArgumentException.class);
 	}
 }
