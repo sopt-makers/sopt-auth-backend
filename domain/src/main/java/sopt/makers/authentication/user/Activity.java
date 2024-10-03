@@ -1,13 +1,13 @@
 package sopt.makers.authentication.user;
 
-public record Activity(Integer generation, Team team, Part part, Role role) {
+public record Activity(int generation, Team team, Part part, Role role) {
 
-	public Activity(Integer generation, Team team, Part part) {
+	public Activity(int generation, Team team, Part part) {
 		this(generation, team, part, Role.MEMBER);
 	}
 
 	public void validateActivityContentsEmpty() {
-		if (this.generation == null || this.role == null) {
+		if (this.role == null) {
 			throw new IllegalArgumentException("활동 정보가 비어있습니다.");
 		}
 

@@ -2,7 +2,7 @@ package sopt.makers.authentication.user;
 
 public class User {
 
-	private final Long id;
+	private final long id;
 
 	private final SocialAccount socialAccount;
 
@@ -10,7 +10,7 @@ public class User {
 
 	private ActivityList activities;
 
-	public User(Long id, SocialAccount socialAccount, Profile profile) {
+	public User(long id, SocialAccount socialAccount, Profile profile) {
 		this.id = id;
 		this.socialAccount = socialAccount;
 		this.profile = profile;
@@ -21,7 +21,7 @@ public class User {
 		return profile;
 	}
 
-	public Long getId() {
+	public long getId() {
 		return id;
 	}
 
