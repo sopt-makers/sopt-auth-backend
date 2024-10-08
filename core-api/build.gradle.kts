@@ -13,6 +13,7 @@ dependencies {
     //Spring
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation ("org.springframework.cloud:spring-cloud-starter-openfeign:${property("springOpenFeignVersion")}")
 
     //Test
     val restAssuredVersion = "${property("restassuredVersion")}"
