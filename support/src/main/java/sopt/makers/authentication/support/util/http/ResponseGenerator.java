@@ -1,8 +1,9 @@
-package sopt.makers.authentication.support.util.dto;
+package sopt.makers.authentication.support.util.http;
 
 import org.springframework.http.ResponseEntity;
 import sopt.makers.authentication.support.common.code.Failure;
 import sopt.makers.authentication.support.common.code.Success;
+import sopt.makers.authentication.support.util.http.dto.BaseResponse;
 
 public interface ResponseGenerator {
     static <T> ResponseEntity<BaseResponse<?>> successOf(Success success, T data) {
