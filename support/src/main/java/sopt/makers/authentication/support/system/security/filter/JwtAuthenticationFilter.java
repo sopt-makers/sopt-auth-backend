@@ -40,7 +40,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private String getAuthorizationToken(final HttpServletRequest request) {
         String authorizationHeaderValue = request.getHeader(HttpHeaders.AUTHORIZATION)
                 .substring(HttpHeaders.AUTHORIZATION.length());
-        return authorizationHeaderValue.trim();
+        String authorizationToken = authorizationHeaderValue.trim();
+        return authorizationToken;
     }
 
 }
