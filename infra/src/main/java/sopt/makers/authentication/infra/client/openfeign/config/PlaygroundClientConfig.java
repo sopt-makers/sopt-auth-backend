@@ -19,7 +19,7 @@ public class PlaygroundClientConfig {
     public RequestInterceptor playgroundRequestInterceptor() {
         return new BearerAuthRequestInterceptor(ClientConstant.AUTHORIZATION_TOKEN_PREFIX + clientValue.playground().token()) {
             @Override
-            public void apply(RequestTemplate template) {
+            public void apply(final RequestTemplate template) {
                 template.header(HttpHeaders.AUTHORIZATION, getToken());}
         };
     }

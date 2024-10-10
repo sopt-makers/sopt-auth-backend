@@ -6,11 +6,11 @@ import org.springframework.security.core.GrantedAuthority;
 import java.util.Collection;
 
 public class CustomAuthentication extends UsernamePasswordAuthenticationToken {
-    public CustomAuthentication(Object principal, Object credentials) {
+    public CustomAuthentication(final Object principal, final Object credentials) {
         super(principal, credentials);
     }
 
-    public CustomAuthentication(Object principal, Object credentials, Collection<? extends GrantedAuthority> authorities) {
+    public CustomAuthentication(final Object principal, final Object credentials, final Collection<? extends GrantedAuthority> authorities) {
         super(principal, credentials, authorities);
     }
 }

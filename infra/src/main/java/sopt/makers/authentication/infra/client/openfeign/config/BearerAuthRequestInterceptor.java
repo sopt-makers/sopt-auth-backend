@@ -13,5 +13,5 @@ public abstract class BearerAuthRequestInterceptor implements RequestInterceptor
         this.token = token;
     }
 
-    public abstract void apply(RequestTemplate template);
+    public abstract void apply(final RequestTemplate template);
 }

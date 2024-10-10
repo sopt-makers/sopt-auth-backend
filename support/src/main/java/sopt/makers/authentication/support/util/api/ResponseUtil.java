@@ -16,7 +16,7 @@ public final class ResponseUtil {
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
-    public static void generateErrorResponse(HttpServletResponse response, final BaseException exception) throws IOException {
+    public static void generateErrorResponse(final HttpServletResponse response, final BaseException exception) throws IOException {
         String bodyValue = MAPPER.writeValueAsString(ResponseGenerator.failureOf(exception.getFailure()));
 
         response.setStatus(exception.getFailure().getStatus().value());

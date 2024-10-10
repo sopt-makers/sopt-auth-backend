@@ -24,9 +24,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(
-            @NonNull HttpServletRequest request,
-            @NonNull HttpServletResponse response,
-            FilterChain filterChain
+            @NonNull final HttpServletRequest request,
+            @NonNull final HttpServletResponse response,
+            final FilterChain filterChain
     ) throws ServletException, IOException {
         String authorizationToken = getAuthorizationToken(request);
         CustomAuthentication authentication = authJwtProvider.parse(authorizationToken);
@@ -37,8 +37,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    private String getAuthorizationToken(HttpServletRequest request) {
-        return request.getHeader(HttpHeaders.AUTHORIZATION).substring(HttpHeaders.AUTHORIZATION.length()).trim();
+    private String getAuthorizationToken(final HttpServletRequest request) {
+        String authorizationHeaderValue = request.getHeader(HttpHeaders.AUTHORIZATION)
+                .substring(HttpHeaders.AUTHORIZATION.length());
+        return authorizationHeaderValue.trim();
     }
 
 }
