@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
-import sopt.makers.authentication.infra.value.ClientConst;
+import sopt.makers.authentication.infra.value.ClientConstant;
 
 
 @Configuration
@@ -17,7 +17,7 @@ public class PlaygroundClientConfig {
 
     @Bean
     public RequestInterceptor playgroundRequestInterceptor() {
-        return new BearerAuthRequestInterceptor(ClientConst.AUTHORIZATION_TOKEN_PREFIX + clientValue.playground().token()) {
+        return new BearerAuthRequestInterceptor(ClientConstant.AUTHORIZATION_TOKEN_PREFIX + clientValue.playground().token()) {
             @Override
             public void apply(RequestTemplate template) {
                 template.header(HttpHeaders.AUTHORIZATION, getToken());}

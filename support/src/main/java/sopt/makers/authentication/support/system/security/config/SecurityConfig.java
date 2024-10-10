@@ -19,7 +19,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import sopt.makers.authentication.support.system.security.filter.JwtAuthenticationFilter;
 import sopt.makers.authentication.support.system.security.filter.JwtExceptionFilter;
 
-import static sopt.makers.authentication.support.value.SystemConst.*;
+import static sopt.makers.authentication.support.value.SystemConstant.*;
 
 @Configuration
 @EnableWebSecurity

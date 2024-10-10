@@ -1,8 +1,8 @@
 package sopt.makers.authentication.support.value;
 
-public final class SystemConst {
+public final class SystemConstant {
 
-    private SystemConst() {}
+    private SystemConstant() {}
 
     public static final String UTF_8 = "UTF-8";
     private static final String API_PATH_PREFIX = "/api";

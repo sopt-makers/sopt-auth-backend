@@ -1,4 +1,4 @@
-package sopt.makers.authentication.support.util.http;
+package sopt.makers.authentication.support.util.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletResponse;
@@ -7,7 +7,7 @@ import sopt.makers.authentication.support.common.exception.BaseException;
 
 import java.io.IOException;
 
-import static sopt.makers.authentication.support.value.SystemConst.UTF_8;
+import static sopt.makers.authentication.support.value.SystemConstant.UTF_8;
 
 
 public final class ResponseUtil {

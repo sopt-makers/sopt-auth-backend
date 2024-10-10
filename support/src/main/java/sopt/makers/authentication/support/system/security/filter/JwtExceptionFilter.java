@@ -8,7 +8,7 @@ import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import sopt.makers.authentication.support.common.exception.BaseException;
-import sopt.makers.authentication.support.util.http.ResponseUtil;
+import sopt.makers.authentication.support.util.api.ResponseUtil;
 
 import java.io.IOException;
 

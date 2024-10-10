@@ -1,4 +1,4 @@
-package sopt.makers.authentication.support.util.http.dto;
+package sopt.makers.authentication.support.util.api.dto;
 
 import lombok.Builder;
 
