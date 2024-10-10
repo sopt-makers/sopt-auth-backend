@@ -7,7 +7,7 @@ import sopt.makers.authentication.support.common.code.Failure;
 public class BaseException extends RuntimeException{
 
     private final Failure failure;
-    public BaseException(Failure failure) {
+    public BaseException(final Failure failure) {
         super(failure.getMessage());
         this.failure = failure;
     }

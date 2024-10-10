@@ -11,8 +11,12 @@ import static sopt.makers.authentication.support.value.SystemConstant.UTF_8;
 
 
 public final class ResponseUtil {
+
+    private ResponseUtil(){}
+
     private static final ObjectMapper MAPPER = new ObjectMapper();
-    public static void generateErrorResponse(HttpServletResponse response, BaseException exception) throws IOException {
+
+    public static void generateErrorResponse(HttpServletResponse response, final BaseException exception) throws IOException {
         String bodyValue = MAPPER.writeValueAsString(ResponseGenerator.failureOf(exception.getFailure()));
 
         response.setStatus(exception.getFailure().getStatus().value());
@@ -20,4 +24,5 @@ public final class ResponseUtil {
         response.setCharacterEncoding(UTF_8);
         response.getWriter().write(bodyValue);
     }
+
 }

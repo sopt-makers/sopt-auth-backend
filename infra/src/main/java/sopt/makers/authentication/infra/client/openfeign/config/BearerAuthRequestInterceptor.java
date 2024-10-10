@@ -9,7 +9,7 @@ public abstract class BearerAuthRequestInterceptor implements RequestInterceptor
 
     private final String token;
 
-    public BearerAuthRequestInterceptor(String token) {
+    public BearerAuthRequestInterceptor(final String token) {
         this.token = token;
     }
 

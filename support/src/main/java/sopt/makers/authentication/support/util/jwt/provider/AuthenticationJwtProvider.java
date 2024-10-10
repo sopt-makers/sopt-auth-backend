@@ -10,12 +10,12 @@ import java.io.IOException;
 public class AuthenticationJwtProvider implements JwtProvider<CustomAuthentication> {
 
     @Override
-    public String generate(CustomAuthentication value) {
+    public String generate(final CustomAuthentication value) {
         return null;
     }
 
     @Override
-    public CustomAuthentication parse(String token) throws IOException {
+    public CustomAuthentication parse(final String token) throws IOException {
         return null;
     }
 
