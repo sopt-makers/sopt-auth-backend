@@ -2,7 +2,7 @@ package sopt.makers.authentication.user;
 
 public record Activity(int generation, Team team, Part part, Role role) {
 
-	public Activity(int generation, Team team, Part part) {
+	public Activity(int generation, final Team team, final Part part) {
 		this(generation, team, part, Role.MEMBER);
 	}
 
