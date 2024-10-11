@@ -4,13 +4,13 @@ public class User {
 
 	private final long id;
 
-	private final SocialAccount socialAccount;
+	private SocialAccount socialAccount;
 
 	private final Profile profile;
 
 	private ActivityList activities;
 
-	public User(long id, SocialAccount socialAccount, Profile profile) {
+	public User(long id, final SocialAccount socialAccount, final Profile profile) {
 		this.id = id;
 		this.socialAccount = socialAccount;
 		this.profile = profile;
@@ -29,11 +29,15 @@ public class User {
 		return socialAccount;
 	}
 
+	public void updateSocialAccount(final SocialAccount socialAccount) {
+		this.socialAccount = socialAccount;
+	}
+
 	public ActivityList getActivityHistory() {
 		return activities;
 	}
 
-	public void join(Activity activity) {
+	public void join(final Activity activity) {
 		this.activities = activities.addActivity(activity);
 	}
 }

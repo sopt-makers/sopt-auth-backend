@@ -31,15 +31,15 @@ public class ActivityTest {
 	@DisplayName("같은 활동 이력은 동시에 존재할 수 없다")
 	public void 예외_활동_이력_중복() {
 		// given
-		Activity activity1 = ActivityTestUtil.createActivity();
-		ActivityList activityList = new ActivityList(List.of(activity1));
+		Activity givenActivity = ActivityTestUtil.createActivity();
+		ActivityList givenActivityList = new ActivityList(List.of(givenActivity));
 
 		// when
 		Part part = Part.ANDROID;
-		Activity activity2 = ActivityTestUtil.createActivity();
+		Activity expectedActivity = ActivityTestUtil.createActivity();
 
 		// then
-		assertThatThrownBy(() -> activityList.addActivity(activity2))
+		assertThatThrownBy(() -> givenActivityList.addActivity(expectedActivity))
 				.isInstanceOf(IllegalArgumentException.class);
 	}
 

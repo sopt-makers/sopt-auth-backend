@@ -44,6 +44,23 @@ public class UserTest {
 	}
 
 	@Test
+	@DisplayName("유저는 소셜 계정 정보를 변경할 수 있다")
+	public void 유저는_소셜_계정_정보를_변경할_수_있다() {
+		// given
+		SocialAccount socialAccount = SocialAccount.of("1L", "GOOGLE");
+		Profile profile = new Profile("이름", "이메일", "010-1234-5678", LocalDate.now());
+		Activity activity = new Activity(34, null, Part.ANDROID, Role.MEMBER);
+		User user = new User(1L, socialAccount, profile);
+		SocialAccount exchangeSocialAccount = SocialAccount.of("2L", "GOOGLE");
+
+		// when
+		user.updateSocialAccount(exchangeSocialAccount);
+
+		// then
+		assertThat(user.getSocialAccount()).isEqualTo(exchangeSocialAccount);
+	}
+
+	@Test
 	@DisplayName("유저는 프로필 정보를 가진다")
 	public void 유저는_프로필_정보를_가진다() {
 		// given
