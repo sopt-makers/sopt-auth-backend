@@ -14,6 +14,6 @@ public interface UserPort {
 
 	ActivityList findActivitiesByUser(User user);
 
-	// 사용자가 프로필에 등록한 이메일은 유지할지, 소셜 계정에 따라 프로필 이메일도 변경할지
+	// TODO 사용자가 프로필에 등록한 이메일은 유지할지, 소셜 계정에 따라 프로필 이메일도 변경할지
 	SocialAccount exchangeSocialPlatform(User user, SocialAccount socialAccount, Profile profile);
 }
