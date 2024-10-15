@@ -18,7 +18,7 @@ public class UserTest {
 		Profile profile = new Profile("이름", "이메일", "010-1234-5678", LocalDate.now());
 		Activity activity = new Activity(34, null, Part.IOS, Role.MEMBER);
 		Long userId = 1L;
-		User user = new User(userId, socialAccount, profile);
+		User user = User.createNewUser(userId, socialAccount, profile);
 
 		// when
 		Long id = user.getId();
@@ -34,7 +34,7 @@ public class UserTest {
 		SocialAccount socialAccount = SocialAccount.of("1L", "GOOGLE");
 		Profile profile = new Profile("이름", "이메일", "010-1234-5678", LocalDate.now());
 		Activity activity = new Activity(34, null, Part.ANDROID, Role.MEMBER);
-		User user = new User(1L, socialAccount, profile);
+		User user = User.createNewUser(1L, socialAccount, profile);
 
 		// when
 		socialAccount = user.getSocialAccount();
@@ -50,14 +50,14 @@ public class UserTest {
 		SocialAccount socialAccount = SocialAccount.of("1L", "GOOGLE");
 		Profile profile = new Profile("이름", "이메일", "010-1234-5678", LocalDate.now());
 		Activity activity = new Activity(34, null, Part.ANDROID, Role.MEMBER);
-		User user = new User(1L, socialAccount, profile);
+		User user = User.createNewUser(1L, socialAccount, profile);
 		SocialAccount exchangeSocialAccount = SocialAccount.of("2L", "GOOGLE");
 
 		// when
-		user.updateSocialAccount(exchangeSocialAccount);
+		user = user.updateSocialAccount(exchangeSocialAccount);
 
 		// then
-		assertThat(user.getSocialAccount()).isEqualTo(exchangeSocialAccount);
+		assertThat(user.getSocialAccount().equals(exchangeSocialAccount)).isTrue();
 	}
 
 	@Test
@@ -67,7 +67,7 @@ public class UserTest {
 		SocialAccount socialAccount = SocialAccount.of("1L", "GOOGLE");
 		Profile profile = new Profile("이름", "이미지", "상태메시지", LocalDate.now());
 		Activity activity = new Activity(34, null, Part.ANDROID, Role.MEMBER);
-		User user = new User(1L, socialAccount, profile);
+		User user = User.createNewUser(1L, socialAccount, profile);
 
 		// when
 		Profile profile1 = new Profile("이름", "이미지", "상태메시지", LocalDate.now());
@@ -83,7 +83,7 @@ public class UserTest {
 		SocialAccount socialAccount = SocialAccount.of("1L", "GOOGLE");
 		Profile profile = new Profile("이름", "이메일", "010-1234-5678", LocalDate.now());
 		Activity activity = new Activity(34, null, Part.ANDROID, Role.MEMBER);
-		User user = new User(1L, socialAccount, profile);
+		User user = User.createNewUser(1L, socialAccount, profile);
 
 		// when
 		Activity activity1 = new Activity(35, null, Part.ANDROID, Role.MEMBER);
@@ -103,7 +103,7 @@ public class UserTest {
 		Activity activity = new Activity(34, null, Part.ANDROID, Role.MEMBER);
 		Activity activity1 = new Activity(34, null, Part.IOS, Role.MEMBER);
 		List activities = List.of(activity, activity1);
-		User user = new User(1L, socialAccount, profile);
+		User user = User.createNewUser(1L, socialAccount, profile);
 
 		// when
 		user.join(activity1);
@@ -122,7 +122,7 @@ public class UserTest {
 		Profile profile = new Profile("이름", "이메일", "010-1234-5678", LocalDate.now());
 		Activity activity = new Activity(34, null, Part.ANDROID, Role.MEMBER);
 		Activity sameActivity = new Activity(34, null, Part.ANDROID, Role.MEMBER);
-		User user = new User(1L, socialAccount, profile);
+		User user = User.createNewUser(1L, socialAccount, profile);
 
 		// when
 		user.join(activity);

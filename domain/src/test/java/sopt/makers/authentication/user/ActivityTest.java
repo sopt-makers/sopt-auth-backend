@@ -142,7 +142,7 @@ public class ActivityTest {
 		Role presidentRole = Role.PRESIDENT;
 		Role vicepresidentRole = Role.VICE_PRESIDENT;
 
-		User user = new User(1L, null, null);
+		User user = User.createNewUser(1L, null, null);
 		Activity activity = new Activity(34, Team.MAKERS, part, presidentRole);
 		Activity activity1 = new Activity(34, Team.MAKERS, part, vicepresidentRole);
 
