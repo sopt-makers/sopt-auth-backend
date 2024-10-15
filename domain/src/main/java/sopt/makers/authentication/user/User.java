@@ -6,7 +6,7 @@ public class User {
 
 	private final long id;
 	private final Profile profile;
-	private SocialAccount socialAccount;
+	private final SocialAccount socialAccount;
 	private ActivityList activities;
 
 	@Builder
