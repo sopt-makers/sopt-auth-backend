@@ -31,15 +31,15 @@ public class ActivityTest {
 	@DisplayName("같은 활동 이력은 동시에 존재할 수 없다")
 	public void 예외_활동_이력_중복() {
 		// given
-		Activity givenActivity = ActivityTestUtil.createActivity();
-		ActivityList givenActivityList = new ActivityList(List.of(givenActivity));
+		Activity activity1 = ActivityTestUtil.createActivity();
+		ActivityList activityList = new ActivityList(List.of(activity1));
 
 		// when
 		Part part = Part.ANDROID;
-		Activity expectedActivity = ActivityTestUtil.createActivity();
+		Activity activity2 = ActivityTestUtil.createActivity();
 
 		// then
-		assertThatThrownBy(() -> givenActivityList.addActivity(expectedActivity))
+		assertThatThrownBy(() -> activityList.addActivity(activity2))
 				.isInstanceOf(IllegalArgumentException.class);
 	}
 
@@ -142,7 +142,7 @@ public class ActivityTest {
 		Role presidentRole = Role.PRESIDENT;
 		Role vicepresidentRole = Role.VICE_PRESIDENT;
 
-		User user = User.createNewUser(1L, null, null);
+		User user = new User(1L, null, null);
 		Activity activity = new Activity(34, Team.MAKERS, part, presidentRole);
 		Activity activity1 = new Activity(34, Team.MAKERS, part, vicepresidentRole);
 

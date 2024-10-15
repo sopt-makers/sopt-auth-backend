@@ -10,7 +10,7 @@ public enum Part {
 	PLAN,
 	WEB;
 
-	public static Part findPart(final String part) {
+	public static Part findPart(String part) {
 
 		return Arrays.stream(Part.values())
 				.filter(p -> p.name().equals(part))

@@ -6,7 +6,7 @@ public enum AuthPlatform {
 	GOOGLE,
 	APPLE;
 
-	public static AuthPlatform find(final String platform) {
+	public static AuthPlatform find(String platform) {
 
 		return Arrays.stream(AuthPlatform.values())
 				.filter(p -> p.name().equals(platform))

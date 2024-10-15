@@ -9,7 +9,7 @@ public enum Role {
 	TEAM_LEADER,
 	PART_LEADER;
 
-	public static Role findRole(final String role) {
+	public static Role findRole(String role) {
 		return Arrays.stream(Role.values())
 				.filter(r -> r.name().equals(role))
 				.findFirst()

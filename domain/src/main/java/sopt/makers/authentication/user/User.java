@@ -1,34 +1,20 @@
 package sopt.makers.authentication.user;
 
-import lombok.Builder;
-
 public class User {
 
 	private final long id;
-	private final Profile profile;
+
 	private final SocialAccount socialAccount;
+
+	private final Profile profile;
+
 	private ActivityList activities;
 
-	@Builder
-	public User(
-			long id,
-			final SocialAccount socialAccount,
-			final Profile profile,
-			final ActivityList activities) {
+	public User(long id, SocialAccount socialAccount, Profile profile) {
 		this.id = id;
 		this.socialAccount = socialAccount;
 		this.profile = profile;
-		this.activities = activities;
-	}
-
-	public static User createNewUser(
-			long id, final SocialAccount socialAccount, final Profile profile) {
-		return User.builder()
-				.id(id)
-				.socialAccount(socialAccount)
-				.profile(profile)
-				.activities(new ActivityList())
-				.build();
+		this.activities = new ActivityList();
 	}
 
 	public Profile getProfile() {
@@ -43,15 +29,11 @@ public class User {
 		return socialAccount;
 	}
 
-	public User updateSocialAccount(final SocialAccount socialAccount) {
-		return new User(this.id, socialAccount, this.profile, this.activities);
-	}
-
 	public ActivityList getActivityHistory() {
 		return activities;
 	}
 
-	public void join(final Activity activity) {
+	public void join(Activity activity) {
 		this.activities = activities.addActivity(activity);
 	}
 }

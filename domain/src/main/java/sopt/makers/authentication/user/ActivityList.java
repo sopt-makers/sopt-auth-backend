@@ -11,11 +11,11 @@ public class ActivityList {
 		this.activities = new ArrayList<>();
 	}
 
-	public ActivityList(final List<Activity> activityList) {
+	public ActivityList(List<Activity> activityList) {
 		this.activities = activityList;
 	}
 
-	public ActivityList addActivity(final Activity activity) {
+	public ActivityList addActivity(Activity activity) {
 		validateActivityDuplication(activity);
 		validateActivityEmpty(activity);
 		List<Activity> updatedActivities = new ArrayList<>(this.activities);
@@ -35,7 +35,7 @@ public class ActivityList {
 		return activities.size();
 	}
 
-	private void validateActivityDuplication(final Activity activity) {
+	private void validateActivityDuplication(Activity activity) {
 		activities.stream()
 				.filter(a -> a.equals(activity))
 				.findAny()
@@ -45,7 +45,7 @@ public class ActivityList {
 						});
 	}
 
-	private void validateActivityEmpty(final Activity activity) {
+	private void validateActivityEmpty(Activity activity) {
 		if (activity == null) {
 			throw new IllegalArgumentException("활동이 비어있습니다.");
 		}
