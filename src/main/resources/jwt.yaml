@@ -1,0 +1,22 @@
+spring.config.activate.on-profile:
+  - prod
+  - dev
+jwt:
+  secret:
+    rsa:
+      public-key: ${RSA_PUBLIC_KEY_PATH}
+      private-key: ${RSA_PRIVATE_KEY_PATH}
+---
+spring.config.activate.on-profile: local
+jwt:
+  secret:
+    rsa:
+      public-key: ${RSA_PUBLIC_KEY_PATH_ON_LOCAL}
+      private-key: ${RSA_PRIVATE_KEY_PATH_ON_LOCAL}
+---
+spring.config.activate.on-profile: test
+jwt:
+  secret:
+    rsa:
+      public-key: ${RSA_PUBLIC_KEY_PATH_ON_TEST}
+      private-key: ${RSA_PRIVATE_KEY_PATH_ON_TEST}

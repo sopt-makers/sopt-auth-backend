@@ -1,0 +1,20 @@
+spring.config.activate.on-profile:
+  - prod
+  - dev
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: none
+---
+spring.config.activate.on-profile: local
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+---
+spring.config.activate.on-profile: test
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop

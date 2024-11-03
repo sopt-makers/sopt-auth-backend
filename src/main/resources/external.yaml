@@ -1,0 +1,26 @@
+spring.config.activate.on-profile: prod
+external:
+  makers:
+    url: ${PROD_PLAYGROUND_URL}
+    token: ${PROD_PLAYGROUND_TOKEN}
+  gabia:
+    sms:
+      id: ${GABIA_SMS_URL}
+      key: ${GABIA_SMS_ID}
+      url: ${GABIA_SMS_KEY}
+      phone: ${GABIA_SMS_PHONE}
+---
+spring.config.activate.on-profile:
+  - dev
+  - local
+  - test
+external:
+  makers:
+    url: ${DEV_PLAYGROUND_URL}
+    token: ${DEV_PLAYGROUND_TOKEN}
+  gabia:
+    sms:
+      id: ${GABIA_SMS_URL}
+      key: ${GABIA_SMS_ID}
+      url: ${GABIA_SMS_KEY}
+      phone: ${GABIA_SMS_PHONE}
