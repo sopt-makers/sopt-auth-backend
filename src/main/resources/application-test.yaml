@@ -1,0 +1,15 @@
+spring:
+  config:
+    activate:
+      on-profile: test
+    import:
+      - classpath:jpa.yaml
+      - classpath:external.yaml
+      - classpath:jwt.yaml
+  datasource:
+    url: jdbc:h2:mem:testdb
+    username: sa
+    password:
+auth:
+  client:
+    url: ${LOCAL_AUTH_URL}
