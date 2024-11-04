@@ -1,7 +1,6 @@
 package sopt.makers.authentication.application.auth.api;
 
-import sopt.makers.authentication.application.auth.dto.request.Create;
-import sopt.makers.authentication.application.auth.dto.request.Verify;
+import sopt.makers.authentication.application.auth.dto.request.AuthRequest;
 import sopt.makers.authentication.support.common.api.BaseResponse;
 import sopt.makers.authentication.usecase.auth.port.in.CreateVerificationUsecase;
 
@@ -22,14 +21,14 @@ public class AuthApiController implements AuthApi {
   @Override
   @PostMapping("/phone")
   public ResponseEntity<BaseResponse<?>> createPhoneVerification(
-      Create.PhoneVerification phoneVerify) {
+      AuthRequest.CreatePhoneVerification phoneVerification) {
     return null;
   }
 
   @Override
   @PostMapping("/verify/phone")
   public ResponseEntity<BaseResponse<?>> verifyPhoneVerification(
-      Verify.PhoneVerification phoneVerification) {
+      AuthRequest.VerifyPhoneVerification phoneVerification) {
     return null;
   }
 }
