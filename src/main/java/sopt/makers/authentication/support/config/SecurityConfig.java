@@ -55,11 +55,7 @@ public class SecurityConfig {
     setDefaultHttp(http);
     http.authorizeHttpRequests(
         authorizeHttpRequests ->
-            authorizeHttpRequests
-                .requestMatchers(new AntPathRequestMatcher(PATTERN_SWAGGER))
-                .permitAll()
-                .requestMatchers(new AntPathRequestMatcher("/v3/**"))
-                .permitAll());
+            authorizeHttpRequests.requestMatchers(new AntPathRequestMatcher("/v3/**")).permitAll());
     setSecuredHttp(http);
     return http.build();
   }
