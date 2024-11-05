@@ -42,6 +42,10 @@ dependencies {
 	implementation("org.springframework.retry:spring-retry")
 	implementation("com.fasterxml.jackson.core:jackson-databind:${property("jacksonDataBindVersion")}")
 
+
+	implementation ("com.squareup.okhttp3:okhttp:4.9.3")
+	implementation ("com.google.code.gson:gson:2.9.0")
+
 	compileOnly("org.projectlombok:lombok")
 	runtimeOnly("org.postgresql:postgresql")
 	annotationProcessor("org.projectlombok:lombok")
