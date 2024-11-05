@@ -2,8 +2,8 @@ package sopt.makers.authentication.support.common.api;
 
 import static lombok.AccessLevel.PRIVATE;
 
-import sopt.makers.authentication.support.common.code.base.FailureCode;
-import sopt.makers.authentication.support.common.code.base.SuccessCode;
+import sopt.makers.authentication.support.code.base.FailureCode;
+import sopt.makers.authentication.support.code.base.SuccessCode;
 
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;

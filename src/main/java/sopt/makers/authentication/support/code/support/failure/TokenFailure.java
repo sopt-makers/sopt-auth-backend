@@ -1,6 +1,6 @@
-package sopt.makers.authentication.support.common.code.failure;
+package sopt.makers.authentication.support.code.support.failure;
 
-import sopt.makers.authentication.support.common.code.base.FailureCode;
+import sopt.makers.authentication.support.code.base.FailureCode;
 
 import org.springframework.http.HttpStatus;
 

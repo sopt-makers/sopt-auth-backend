@@ -1,4 +1,4 @@
-package sopt.makers.authentication.database.repository;
+package sopt.makers.authentication.database.postgres.repository;
 
 import sopt.makers.authentication.usecase.auth.port.out.VerificationRepository;
 

@@ -1,4 +1,4 @@
-package sopt.makers.authentication.support.common.code.base;
+package sopt.makers.authentication.support.code.base;
 
 import org.springframework.http.HttpStatus;
 

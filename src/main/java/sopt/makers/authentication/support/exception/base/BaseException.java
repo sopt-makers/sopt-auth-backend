@@ -1,6 +1,6 @@
-package sopt.makers.authentication.support.common.exception.base;
+package sopt.makers.authentication.support.exception.base;
 
-import sopt.makers.authentication.support.common.code.base.FailureCode;
+import sopt.makers.authentication.support.code.base.FailureCode;
 
 public abstract class BaseException extends RuntimeException {
 
