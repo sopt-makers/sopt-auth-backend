@@ -1,11 +1,14 @@
 package sopt.makers.authentication.database.core.entity;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
-import java.time.*;
-import lombok.*;
 import sopt.makers.authentication.database.core.common.*;
 import sopt.makers.authentication.domain.auth.*;
+
+import java.time.*;
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
+
+import lombok.*;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
