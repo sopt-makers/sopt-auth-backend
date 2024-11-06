@@ -1,4 +1,4 @@
-package sopt.makers.authentication.database.entity;
+package sopt.makers.authentication.database.core.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
