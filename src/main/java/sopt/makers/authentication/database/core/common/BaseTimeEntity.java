@@ -1,10 +1,13 @@
 package sopt.makers.authentication.database.core.common;
 
-import jakarta.persistence.*;
 import java.time.*;
-import lombok.*;
+
+import jakarta.persistence.*;
+
 import org.springframework.data.annotation.*;
 import org.springframework.data.jpa.domain.support.*;
+
+import lombok.*;
 
 @Getter
 @EntityListeners(AuditingEntityListener.class)
