@@ -31,7 +31,6 @@ class GabiaClient {
 
   protected void sendSmsMessage(String receiver, String content) {
     String authToken = authenticate();
-    OkHttpClient client = new OkHttpClient();
 
     RequestBody requestBody =
         new MultipartBody.Builder()
@@ -43,29 +42,19 @@ class GabiaClient {
             .addFormDataPart("refkey", generateReferenceKey())
             .build();
 
-    Request request =
-        new Request.Builder()
-            .url(gabiaProperty.sms().url() + URI_SEND_SMS)
-            .post(requestBody)
-            .headers(generateHeaderOfAuthorization(encodeAuthorization(authToken)))
-            .build();
+    Request request = buildPostRequest(URI_SEND_SMS, encodeAuthorization(authToken), requestBody);
+    Response response = executeRequest(request);
 
-    try {
-      Response response = client.newCall(request).execute();
-      String message = extractSerializedDataIn("message", response);
-      if (!message.trim().equals("Success")) {
-        ClientError error = ClientError.GABIA_RESPONSE_UNAVAILABLE;
-        error.addMessage(message);
-        throw new ClientRequestException(error);
-      }
-    } catch (IOException e) {
-      throw new ClientRequestException(ClientError.GABIA_REQUEST_INVALID_AUTH_DATA);
+    String message = extractSerializedDataIn("message", response);
+    if (!message.trim().equals("Success")) {
+      ClientError error = ClientError.GABIA_RESPONSE_UNAVAILABLE;
+      error.addMessage(message);
+      throw new ClientRequestException(error);
     }
   }
 
   protected void sendLmsMessage(String receiver, String title, String content) {
     String authToken = authenticate();
-    OkHttpClient client = new OkHttpClient();
 
     RequestBody requestBody =
         new MultipartBody.Builder()
@@ -78,23 +67,14 @@ class GabiaClient {
             .addFormDataPart("subject", title)
             .build();
 
-    Request request =
-        new Request.Builder()
-            .url(gabiaProperty.sms().url() + URI_SEND_LMS)
-            .post(requestBody)
-            .headers(generateHeaderOfAuthorization(encodeAuthorization(authToken)))
-            .build();
+    Request request = buildPostRequest(URI_SEND_LMS, encodeAuthorization(authToken), requestBody);
+    Response response = executeRequest(request);
 
-    try {
-      Response response = client.newCall(request).execute();
-      String message = extractSerializedDataIn("message", response);
-      if (!message.trim().equals("Success")) {
-        ClientError error = ClientError.GABIA_RESPONSE_UNAVAILABLE;
-        error.addMessage(message);
-        throw new ClientRequestException(error);
-      }
-    } catch (IOException e) {
-      throw new ClientRequestException(ClientError.GABIA_REQUEST_INVALID_AUTH_DATA);
+    String message = extractSerializedDataIn("message", response);
+    if (!message.trim().equals("Success")) {
+      ClientError error = ClientError.GABIA_RESPONSE_UNAVAILABLE;
+      error.addMessage(message);
+      throw new ClientRequestException(error);
     }
   }
 
@@ -103,26 +83,15 @@ class GabiaClient {
   }
 
   private String authenticate() {
-    OkHttpClient client = new OkHttpClient();
     RequestBody requestBody =
         new MultipartBody.Builder()
             .setType(MultipartBody.FORM)
             .addFormDataPart("grant_type", "client_credentials")
             .build();
 
-    Request request =
-        new Request.Builder()
-            .url(gabiaProperty.sms().url() + URI_OAUTH_TOKEN)
-            .post(requestBody)
-            .headers(generateHeaderOfAuthorization(gabiaProperty.sms().key()))
-            .build();
-
-    try {
-      Response response = client.newCall(request).execute();
-      return extractSerializedDataIn("access_token", response);
-    } catch (IOException e) {
-      throw new ClientRequestException(ClientError.GABIA_REQUEST_INVALID_AUTH_DATA);
-    }
+    Request request = buildPostRequest(URI_OAUTH_TOKEN, gabiaProperty.sms().key(), requestBody);
+    Response response = executeRequest(request);
+    return extractSerializedDataIn("access_token", response);
   }
 
   private String extractSerializedDataIn(String dataKey, Response response) {
@@ -152,5 +121,23 @@ class GabiaClient {
         .encodeToString(
             String.format(FORMAT_AUTHORIZATION, gabiaProperty.sms().id(), value)
                 .getBytes(StandardCharsets.UTF_8));
+  }
+
+  private Request buildPostRequest(
+      String requestUri, String authorizationValue, RequestBody requestBody) {
+    return new Request.Builder()
+        .url(gabiaProperty.sms().url() + requestUri)
+        .post(requestBody)
+        .headers(generateHeaderOfAuthorization(authorizationValue))
+        .build();
+  }
+
+  private Response executeRequest(Request request) {
+    try {
+      OkHttpClient client = new OkHttpClient();
+      return client.newCall(request).execute();
+    } catch (IOException e) {
+      throw new ClientRequestException(ClientError.GABIA_REQUEST_INVALID_AUTH_DATA);
+    }
   }
 }
