@@ -29,9 +29,9 @@ public class UserActivityHistoryEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  @NotNull
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user_id")
-  @NotNull
   private UserEntity user;
 
   @Min(1)
