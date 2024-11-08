@@ -1,6 +1,6 @@
 package sopt.makers.authentication.domain.auth;
 
-import java.time.*;
+import java.time.LocalDate;
 
 public record Profile(String name, String email, String phone, LocalDate birthday) {
 

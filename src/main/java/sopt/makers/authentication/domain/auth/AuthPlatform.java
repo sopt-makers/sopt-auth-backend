@@ -1,6 +1,6 @@
 package sopt.makers.authentication.domain.auth;
 
-import java.util.*;
+import java.util.Arrays;
 
 public enum AuthPlatform {
   GOOGLE,

@@ -1,6 +1,6 @@
 package sopt.makers.authentication.domain.auth;
 
-import lombok.*;
+import lombok.Builder;
 
 public class User {
 
