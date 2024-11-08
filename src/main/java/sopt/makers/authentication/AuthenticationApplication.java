@@ -5,7 +5,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.*;
 
 @SpringBootApplication(scanBasePackages = {"sopt.makers.authentication"})
-@EnableJpaAuditing
 public class AuthenticationApplication {
 
   public static void main(String[] args) {
