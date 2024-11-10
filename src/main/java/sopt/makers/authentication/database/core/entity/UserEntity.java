@@ -17,6 +17,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 
+import org.hibernate.annotations.*;
+
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -38,7 +40,9 @@ public class UserEntity extends BaseTimeEntity {
   @Enumerated(EnumType.STRING)
   AuthPlatform authPlatformType;
 
-  @NotNull Boolean isActive;
+  @NotNull
+  @ColumnDefault(value = "false")
+  Boolean isActive;
 
   public UserEntity(final User user, boolean isActive) {
     Profile profile = user.getProfile();
@@ -50,6 +54,5 @@ public class UserEntity extends BaseTimeEntity {
     this.birthday = profile.birthday();
     this.authPlatformId = socialAccount.authPlatformId();
     this.authPlatformType = socialAccount.authPlatformType();
-    this.isActive = isActive;
   }
 }
