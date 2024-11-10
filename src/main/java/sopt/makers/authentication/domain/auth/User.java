@@ -3,24 +3,14 @@ package sopt.makers.authentication.domain.auth;
 import lombok.*;
 
 @Getter
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Builder
 public class User {
 
   private final long id;
   private final Profile profile;
   private final SocialAccount socialAccount;
   private ActivityList activities;
-
-  @Builder
-  public User(
-      long id,
-      final SocialAccount socialAccount,
-      final Profile profile,
-      final ActivityList activities) {
-    this.id = id;
-    this.socialAccount = socialAccount;
-    this.profile = profile;
-    this.activities = activities;
-  }
 
   public static User createNewUser(
       long id, final SocialAccount socialAccount, final Profile profile) {
@@ -33,7 +23,7 @@ public class User {
   }
 
   public User updateSocialAccount(final SocialAccount socialAccount) {
-    return new User(this.id, socialAccount, this.profile, this.activities);
+    return new User(this.id, this.profile, socialAccount, this.activities);
   }
 
   public ActivityList getActivityHistory() {
