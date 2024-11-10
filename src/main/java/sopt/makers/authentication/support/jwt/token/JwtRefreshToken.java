@@ -1,58 +1,35 @@
 package sopt.makers.authentication.support.jwt.token;
 
-import sopt.makers.authentication.support.common.code.failure.TokenFailure;
+import static sopt.makers.authentication.support.common.code.failure.TokenFailure.TOKEN_EXPIRED;
+
 import sopt.makers.authentication.support.common.exception.TokenException;
-import sopt.makers.authentication.support.constant.JwtConstant;
 
 import java.time.Instant;
-import java.util.UUID;
 
 import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.security.oauth2.jwt.JwtClaimsSet;
-import org.springframework.security.oauth2.jwt.JwtDecoder;
-import org.springframework.security.oauth2.jwt.JwtEncoder;
-import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 
 public class JwtRefreshToken {
 
-  private final String token;
+  private final Jwt jwt;
 
-  public JwtRefreshToken(final String token) {
-    this.token = token;
+  private JwtRefreshToken(final Jwt jwt) {
+    this.jwt = jwt;
   }
 
-  public static JwtRefreshToken createRefreshToken(JwtEncoder jwtEncoder) {
-    String uuid = UUID.randomUUID().toString();
-    Instant now = Instant.now();
-    Instant expiration = getExpireInstant(now);
-
-    JwtClaimsSet claimsSet =
-        JwtClaimsSet.builder().claim("uuid", uuid).expiresAt(expiration).issuedAt(now).build();
-    return new JwtRefreshToken(
-        jwtEncoder.encode(JwtEncoderParameters.from(claimsSet)).getTokenValue());
+  public static JwtRefreshToken createRefreshToken(Jwt jwt) {
+    return new JwtRefreshToken(jwt);
   }
 
-  public static JwtRefreshToken fromStringToken(String token) {
-    return new JwtRefreshToken(token);
+  public String getToken() {
+    return this.jwt.getTokenValue();
   }
 
-  public String getTokenValue() {
-    return token;
-  }
-
-  public void validateExpire(JwtDecoder jwtDecoder) {
-    Jwt jwt = jwtDecoder.decode(token);
+  public void validateExpire() {
     Instant expiration = jwt.getExpiresAt();
-    if (expiration.isBefore(Instant.now())) {
-      throw new TokenException(TokenFailure.TOKEN_EXPIRED);
+    boolean isTokenExpired = expiration.isBefore(Instant.now());
+
+    if (isTokenExpired) {
+      throw new TokenException(TOKEN_EXPIRED);
     }
-  }
-
-  public JwtRefreshToken refresh(JwtEncoder jwtEncoder, JwtDecoder jwtDecoder) {
-    return createRefreshToken(jwtEncoder);
-  }
-
-  private static Instant getExpireInstant(Instant now) {
-    return now.plusSeconds(JwtConstant.REFRESH_TOKEN_EXPIRATION);
   }
 }

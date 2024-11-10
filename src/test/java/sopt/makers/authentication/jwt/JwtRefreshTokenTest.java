@@ -6,6 +6,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import sopt.makers.authentication.support.common.exception.TokenException;
 import sopt.makers.authentication.support.jwt.provider.JwtAuthRefreshTokenProvider;
 import sopt.makers.authentication.support.jwt.provider.JwtTokenUtil;
+import sopt.makers.authentication.support.value.JwtProperty;
 
 import java.io.IOException;
 import java.time.Instant;
@@ -33,37 +34,44 @@ public class JwtRefreshTokenTest {
 
   @Autowired private JwtTokenUtil jwtTokenUtil;
 
+  @Autowired private JwtProperty jwtProperty;
+
   @Test
   @DisplayName("RefreshToken 생성")
   public void generate_jwt_refresh_token() {
     // When
-    String refreshToken = jwtAuthRefreshTokenProvider.generate("");
+    String accessToken = "Bearer ey.d.d";
+    String givenToken = jwtAuthRefreshTokenProvider.generate(accessToken);
+
+    // When
+    String expectedToken = jwtAuthRefreshTokenProvider.generate(accessToken);
 
     // Then
-    System.out.println("RefreshToken: [" + refreshToken + "]");
+    assertThat(givenToken).isNotNull();
+    assertThat(givenToken).isNotEqualTo(expectedToken);
   }
 
   @Test
   @DisplayName("RefreshToken 디코딩")
   public void decode_jwt_refresh_token() {
     // Given
-    String refreshToken = jwtAuthRefreshTokenProvider.generate("");
+    String accessToken = "Bearer ey.d.d";
+    String refreshToken = jwtAuthRefreshTokenProvider.generate(accessToken);
     String pureToken = jwtTokenUtil.extract(refreshToken);
 
     // When
-    System.out.println("PureToken: [" + pureToken + "]");
     Jwt jwt = jwtDecoder.decode(pureToken);
 
     // then
-    System.out.println("Jwt: [ " + jwt.getClaims() + " ]");
+    assertThat(jwt.getClaims()).isNotNull();
   }
 
   @Test
   @DisplayName("RefreshToken 갱신")
   public void refresh_jwt_refresh_token() throws IOException {
     // Given
-    String token = jwtAuthRefreshTokenProvider.generate("");
-    String pureToken = jwtTokenUtil.extract(token);
+    String accessToken = "Bearer ey.d.d";
+    String token = jwtAuthRefreshTokenProvider.generate(accessToken);
 
     // When
     String refreshedToken = jwtAuthRefreshTokenProvider.parse(token);
