@@ -26,10 +26,6 @@ public class User {
     return new User(this.id, this.profile, socialAccount, this.activities);
   }
 
-  public ActivityList getActivityHistory() {
-    return activities;
-  }
-
   public void joinActivity(final Activity activity) {
     this.activities = activities.addActivity(activity);
   }
