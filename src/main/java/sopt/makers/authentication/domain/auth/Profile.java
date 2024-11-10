@@ -9,10 +9,10 @@ public record Profile(
     @NotNull String name,
     Optional<String> email,
     @NotNull String phone,
-    Optional<LocalDate> birthday) {
+    @NotNull LocalDate birthday) {
 
   public static Profile of(String name, String email, String phone, LocalDate birthday) {
-    return new Profile(name, Optional.ofNullable(email), phone, Optional.ofNullable(birthday));
+    return new Profile(name, Optional.ofNullable(email), phone, birthday);
   }
 
   public Profile updateName(final String name) {
@@ -28,6 +28,6 @@ public record Profile(
   }
 
   public Profile updateBirthday(final LocalDate birthday) {
-    return new Profile(this.name, this.email, this.phone, Optional.ofNullable(birthday));
+    return new Profile(this.name, this.email, this.phone, birthday);
   }
 }
