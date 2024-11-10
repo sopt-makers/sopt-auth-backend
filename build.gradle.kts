@@ -44,6 +44,9 @@ dependencies {
 
 	implementation ("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
 
+	implementation("org.bouncycastle:bcprov-jdk18on:1.78.1")
+	implementation("org.bouncycastle:bcpkix-jdk18on:1.78.1")
+
 	compileOnly("org.projectlombok:lombok")
 	runtimeOnly("org.postgresql:postgresql")
 	runtimeOnly("com.mysql:mysql-connector-j")
