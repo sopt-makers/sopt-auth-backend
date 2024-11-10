@@ -2,7 +2,13 @@ package sopt.makers.authentication.domain.auth;
 
 import java.time.LocalDate;
 
-public record Profile(String name, String email, String phone, LocalDate birthday) {
+import jakarta.validation.constraints.*;
+
+public record Profile(
+    @NotNull String name, @NotNull String email, @NotNull String phone, LocalDate birthday) {
+  public static Profile of(String name, String email, String phone, LocalDate birthday) {
+    return new Profile(name, email, phone, birthday);
+  }
 
   public Profile updateName(final String name) {
     return new Profile(name, this.email, this.phone, this.birthday);
