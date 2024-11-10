@@ -67,8 +67,8 @@ public class UserEntity extends BaseTimeEntity {
         user.getId(),
         profile.name(),
         profile.phone(),
-        profile.email(),
-        profile.birthday(),
+        profile.email().orElse(null),
+        profile.birthday().orElse(null),
         socialAccount.authPlatformId(),
         socialAccount.authPlatformType());
   }
