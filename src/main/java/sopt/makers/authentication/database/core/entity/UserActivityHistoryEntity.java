@@ -1,6 +1,10 @@
 package sopt.makers.authentication.database.core.entity;
 
-import sopt.makers.authentication.domain.auth.*;
+import sopt.makers.authentication.domain.auth.Activity;
+import sopt.makers.authentication.domain.auth.Part;
+import sopt.makers.authentication.domain.auth.Role;
+import sopt.makers.authentication.domain.auth.Team;
+import sopt.makers.authentication.domain.auth.User;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
