@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "USER_REGISTER_INFOS")
+@Table(name = "user_register_infos")
 public class UserRegisterInfoEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

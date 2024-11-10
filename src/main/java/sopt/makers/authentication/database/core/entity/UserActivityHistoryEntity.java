@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "USER_ACTIVITY_HISTORIES")
+@Table(name = "user_activity_histories")
 public class UserActivityHistoryEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
