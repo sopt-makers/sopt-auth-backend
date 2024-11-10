@@ -1,7 +1,8 @@
 package sopt.makers.authentication.domain.auth;
 
-import lombok.Builder;
+import lombok.*;
 
+@Getter
 public class User {
 
   private final long id;
@@ -29,18 +30,6 @@ public class User {
         .profile(profile)
         .activities(new ActivityList())
         .build();
-  }
-
-  public Profile getProfile() {
-    return profile;
-  }
-
-  public long getId() {
-    return id;
-  }
-
-  public SocialAccount getSocialAccount() {
-    return socialAccount;
   }
 
   public User updateSocialAccount(final SocialAccount socialAccount) {
