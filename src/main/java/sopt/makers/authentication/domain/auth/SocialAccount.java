@@ -1,6 +1,6 @@
 package sopt.makers.authentication.domain.auth;
 
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.NotNull;
 
 public record SocialAccount(
     @NotNull String authPlatformId, @NotNull AuthPlatform authPlatformType) {
