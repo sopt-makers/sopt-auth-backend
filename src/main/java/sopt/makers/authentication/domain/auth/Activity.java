@@ -1,8 +1,12 @@
 package sopt.makers.authentication.domain.auth;
 
-import java.util.*;
+import static sopt.makers.authentication.support.common.code.failure.DomainFailure.ROLE_REQUIRES_PART;
 
-import jakarta.validation.constraints.*;
+import sopt.makers.authentication.support.common.exception.DomainException;
+
+import java.util.Optional;
+
+import jakarta.validation.constraints.NotNull;
 
 public record Activity(
     int generation, Optional<Team> team, Optional<Part> part, @NotNull Role role) {
@@ -18,7 +22,7 @@ public record Activity(
 
   public void validateActivityContentsEmpty() {
     if (this.role.isPartRequired() && this.part.isEmpty()) {
-      throw new IllegalArgumentException("해당 Role은 part 필드가 필수입니다.");
+      throw new DomainException(ROLE_REQUIRES_PART);
     }
   }
 }
