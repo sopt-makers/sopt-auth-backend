@@ -1,11 +1,17 @@
 package sopt.makers.authentication.domain.auth;
 
+import static sopt.makers.authentication.support.common.code.failure.DomainFailure.DUPLICATE_ACTIVITY;
+
+import sopt.makers.authentication.support.common.exception.DomainException;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.NotNull;
 
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
@@ -41,7 +47,7 @@ public class ActivityList {
         .findAny()
         .ifPresent(
             a -> {
-              throw new IllegalArgumentException("이미 존재하는 활동 정보입니다.");
+              throw new DomainException(DUPLICATE_ACTIVITY);
             });
   }
 }
