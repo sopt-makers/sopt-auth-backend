@@ -40,7 +40,7 @@ public class User {
     return activities;
   }
 
-  public void join(final Activity activity) {
+  public void joinActivity(final Activity activity) {
     this.activities = activities.addActivity(activity);
   }
 }
