@@ -19,8 +19,7 @@ import jakarta.validation.constraints.NotNull;
 
 import org.hibernate.annotations.*;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -32,8 +31,8 @@ public class UserEntity extends BaseTimeEntity {
 
   @NotNull String name;
   @NotNull String phone;
-  @NotNull String email;
-  @NotNull LocalDate birthday;
+  String email;
+  LocalDate birthday;
   @NotNull String authPlatformId;
 
   @NotNull
@@ -44,15 +43,39 @@ public class UserEntity extends BaseTimeEntity {
   @ColumnDefault(value = "false")
   Boolean isActive;
 
-  public UserEntity(final User user, boolean isActive) {
+  private UserEntity(
+      long id,
+      String name,
+      String phone,
+      String email,
+      LocalDate birthday,
+      String authPlatformId,
+      AuthPlatform authPlatformType) {
+    this.id = id;
+    this.name = name;
+    this.phone = phone;
+    this.email = email;
+    this.birthday = birthday;
+    this.authPlatformId = authPlatformId;
+    this.authPlatformType = authPlatformType;
+  }
+
+  public static UserEntity fromDomain(final User user) {
     Profile profile = user.getProfile();
     SocialAccount socialAccount = user.getSocialAccount();
+    return new UserEntity(
+        user.getId(),
+        profile.name(),
+        profile.phone(),
+        profile.email(),
+        profile.birthday(),
+        socialAccount.authPlatformId(),
+        socialAccount.authPlatformType());
+  }
 
-    this.name = profile.name();
-    this.phone = profile.phone();
-    this.email = profile.email();
-    this.birthday = profile.birthday();
-    this.authPlatformId = socialAccount.authPlatformId();
-    this.authPlatformType = socialAccount.authPlatformType();
+  public User toDomain() {
+    SocialAccount socialAccount = SocialAccount.of(authPlatformId, authPlatformType.name());
+    Profile profile = Profile.of(name, email, phone, birthday);
+    return User.createNewUser(id, socialAccount, profile);
   }
 }
