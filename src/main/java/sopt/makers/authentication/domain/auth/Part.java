@@ -1,5 +1,8 @@
 package sopt.makers.authentication.domain.auth;
 
+import sopt.makers.authentication.support.common.code.failure.DomainFailure;
+import sopt.makers.authentication.support.common.exception.DomainException;
+
 import java.util.Arrays;
 
 public enum Part {
@@ -15,6 +18,6 @@ public enum Part {
     return Arrays.stream(Part.values())
         .filter(p -> p.name().equals(part))
         .findFirst()
-        .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 파트입니다 : " + part));
+        .orElseThrow(() -> new DomainException(DomainFailure.NOT_FOUND_PART));
   }
 }
