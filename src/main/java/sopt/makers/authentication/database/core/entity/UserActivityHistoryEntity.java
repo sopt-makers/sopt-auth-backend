@@ -1,9 +1,6 @@
 package sopt.makers.authentication.database.core.entity;
 
-import sopt.makers.authentication.domain.auth.Activity;
-import sopt.makers.authentication.domain.auth.Part;
-import sopt.makers.authentication.domain.auth.Role;
-import sopt.makers.authentication.domain.auth.Team;
+import sopt.makers.authentication.domain.auth.*;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -48,15 +45,30 @@ public class UserActivityHistoryEntity {
   @Enumerated(EnumType.STRING)
   private Role role;
 
-  public UserActivityHistoryEntity(final UserEntity user, final Activity activity) {
+  private UserActivityHistoryEntity(
+      final UserEntity user,
+      final int generation,
+      final Team team,
+      final Part part,
+      final Role role) {
     this.user = user;
-    this.generation = activity.generation();
-    this.team = activity.team();
-    this.part = activity.part();
-    this.role = activity.role();
+    this.generation = generation;
+    this.team = team;
+    this.part = part;
+    this.role = role;
+  }
+
+  public static UserActivityHistoryEntity fromDomain(final User user, final Activity activity) {
+    UserEntity userEntity = UserEntity.fromDomain(user);
+    return new UserActivityHistoryEntity(
+        userEntity,
+        activity.generation(),
+        activity.team().orElse(null),
+        activity.part().orElse(null),
+        activity.role());
   }
 
   public Activity toDomain() {
-    return new Activity(generation, team, part);
+    return Activity.of(generation, team, part, role);
   }
 }
