@@ -17,7 +17,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 
-import org.hibernate.annotations.*;
+import org.hibernate.annotations.ColumnDefault;
 
 import lombok.*;
 
