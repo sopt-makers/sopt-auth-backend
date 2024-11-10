@@ -10,6 +10,8 @@ import java.io.IOException;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -21,6 +23,7 @@ import org.springframework.test.context.ActiveProfiles;
 @ActiveProfiles("test")
 public class JwtAccessTokenTest {
 
+  private static final Logger log = LoggerFactory.getLogger(JwtAccessTokenTest.class);
   @Autowired private JwtAuthAccessTokenProvider jwtAuthAccessTokenProvider;
 
   @Autowired private JwtEncoder jwtEncoder;
@@ -34,7 +37,6 @@ public class JwtAccessTokenTest {
   void create_jwt_access_token() {
     // Given
     CustomAuthentication customAuthentication = new CustomAuthentication("test", "test");
-
     // When
     String accessToken = jwtAuthAccessTokenProvider.generate(customAuthentication);
 
@@ -56,7 +58,8 @@ public class JwtAccessTokenTest {
     Jwt jwt = jwtDecoder.decode(pureToken);
 
     // Then
-    System.out.println("Jwt: [ " + jwt.getClaims() + " ]");
+    assertThat(jwt.getClaims().get("iss")).isEqualTo("operation");
+    assertThat(jwt.getClaims().get("sub")).isEqualTo("test");
   }
 
   @Test
