@@ -46,7 +46,7 @@ public class ActivityList {
         .filter(a -> a.equals(activity))
         .findAny()
         .ifPresent(
-            a -> {
+            existActivity -> {
               throw new DomainException(DUPLICATE_ACTIVITY);
             });
   }
