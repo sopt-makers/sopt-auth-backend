@@ -30,7 +30,7 @@ public abstract class BaseEntity {
   @Column(name = "deleted_at")
   private LocalDateTime deletedAt;
 
-  protected BaseEntity(Long id) {
+  protected void setId(Long id) {
     this.id = id;
   }
 
