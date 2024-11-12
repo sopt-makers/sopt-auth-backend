@@ -7,9 +7,8 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-@Builder
+@Builder(access = AccessLevel.PRIVATE)
 public class User {
-
   private final long id;
   private final Profile profile;
   private final SocialAccount socialAccount;
@@ -26,7 +25,12 @@ public class User {
   }
 
   public User updateSocialAccount(final SocialAccount socialAccount) {
-    return new User(this.id, this.profile, socialAccount, this.activities);
+    return User.builder()
+        .id(this.id)
+        .socialAccount(socialAccount)
+        .profile(this.profile)
+        .activities(this.activities)
+        .build();
   }
 
   public void joinActivity(final Activity activity) {
