@@ -9,6 +9,7 @@ import sopt.makers.authentication.domain.auth.PhoneVerificationType;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
 
@@ -22,17 +23,17 @@ import lombok.NoArgsConstructor;
 public class PhoneVerificationEntity extends BaseEntity {
 
   @Column(name = "name", nullable = false)
-  String name;
+  private String name;
 
   @Column(name = "phone", nullable = false)
-  String phone;
+  private String phone;
 
   @Column(name = "code", nullable = false)
-  String code;
+  private String code;
 
   @Column(name = "type", nullable = false)
   @Enumerated(EnumType.STRING)
-  PhoneVerificationType type;
+  private PhoneVerificationType type;
 
   private PhoneVerificationEntity(PhoneVerification verification) {
     super();
