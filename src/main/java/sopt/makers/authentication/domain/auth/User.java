@@ -9,13 +9,13 @@ import lombok.Getter;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(access = AccessLevel.PRIVATE)
 public class User {
-  private final long id;
+  private final Long id;
   private final Profile profile;
   private final SocialAccount socialAccount;
   private ActivityList activities;
 
   public static User createNewUser(
-      long id, final SocialAccount socialAccount, final Profile profile) {
+      Long id, final SocialAccount socialAccount, final Profile profile) {
     return User.builder()
         .id(id)
         .socialAccount(socialAccount)

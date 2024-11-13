@@ -7,6 +7,7 @@ import sopt.makers.authentication.domain.auth.SocialAccount;
 import sopt.makers.authentication.domain.auth.User;
 
 import java.time.LocalDate;
+import java.util.*;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -44,7 +45,7 @@ public class UserEntity extends BaseTimeEntity {
   Boolean isActive;
 
   private UserEntity(
-      long id,
+      Long id,
       String name,
       String phone,
       String email,
