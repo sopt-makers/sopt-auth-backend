@@ -8,5 +8,5 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @Configuration
 @EntityScan(basePackages = {"sopt.makers.authentication.database.postgres.entity"})
 @EnableJpaAuditing
-@EnableJpaRepositories(basePackages = {"sopt.makers.authentication.database.postgres.repository"})
+@EnableJpaRepositories(basePackages = {"sopt.makers.authentication.database.rdb.repository"})
 public class JpaConfig {}

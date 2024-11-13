@@ -1,4 +1,4 @@
-package sopt.makers.authentication.database.postgres.entity;
+package sopt.makers.authentication.database.rdb.entity;
 
 import sopt.makers.authentication.database.BaseEntity;
 import sopt.makers.authentication.domain.auth.PhoneVerification;
