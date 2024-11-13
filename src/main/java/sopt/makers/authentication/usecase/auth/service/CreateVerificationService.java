@@ -1,7 +1,6 @@
 package sopt.makers.authentication.usecase.auth.service;
 
 import sopt.makers.authentication.domain.auth.PhoneVerification;
-import sopt.makers.authentication.domain.auth.PhoneVerificationType;
 import sopt.makers.authentication.domain.message.Message;
 import sopt.makers.authentication.usecase.auth.port.in.CreatePhoneVerificationUsecase;
 import sopt.makers.authentication.usecase.auth.port.out.PhoneVerificationRepository;
@@ -24,9 +23,6 @@ public class CreateVerificationService implements CreatePhoneVerificationUsecase
   public PhoneVerification create(CreateVerificationCommand command) {
     PhoneVerification phoneVerification =
         PhoneVerification.create(command.name(), command.phone(), command.verificationType());
-
-    if (PhoneVerificationType.REGISTER.equals(phoneVerification.getVerificationType())) {}
-
     Message verificationMessage =
         Message.sms(
             command.phone(),

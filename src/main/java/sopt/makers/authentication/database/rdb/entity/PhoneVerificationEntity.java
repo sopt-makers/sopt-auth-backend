@@ -1,19 +1,24 @@
 package sopt.makers.authentication.database.rdb.entity;
 
+import static lombok.AccessLevel.PRIVATE;
+import static lombok.AccessLevel.PROTECTED;
+
 import sopt.makers.authentication.database.BaseEntity;
 import sopt.makers.authentication.domain.auth.PhoneVerification;
 import sopt.makers.authentication.domain.auth.PhoneVerificationType;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.Table;
 
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "phone_verifications")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = PROTECTED)
+@AllArgsConstructor(access = PRIVATE)
 public class PhoneVerificationEntity extends BaseEntity {
 
   @Column(name = "name", nullable = false)

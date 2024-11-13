@@ -2,7 +2,14 @@ package sopt.makers.authentication.database;
 
 import java.time.LocalDateTime;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -17,7 +24,7 @@ import lombok.NoArgsConstructor;
 public abstract class BaseEntity {
 
   @Id
-  @Column(name = "id", nullable = false)
+  @Column(name = "id")
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 

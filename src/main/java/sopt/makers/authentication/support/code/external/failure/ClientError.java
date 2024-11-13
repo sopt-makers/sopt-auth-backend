@@ -1,6 +1,6 @@
 package sopt.makers.authentication.support.code.external.failure;
 
-import static lombok.AccessLevel.*;
+import static lombok.AccessLevel.PRIVATE;
 
 import sopt.makers.authentication.support.code.base.FailureCode;
 

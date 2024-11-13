@@ -1,6 +1,6 @@
 package sopt.makers.authentication.domain.auth;
 
-import static lombok.AccessLevel.*;
+import static lombok.AccessLevel.PRIVATE;
 
 import java.util.Random;
 

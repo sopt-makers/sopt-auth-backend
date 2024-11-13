@@ -6,7 +6,9 @@ import sopt.makers.authentication.support.common.api.BaseResponse;
 import sopt.makers.authentication.usecase.auth.port.in.CreatePhoneVerificationUsecase;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 

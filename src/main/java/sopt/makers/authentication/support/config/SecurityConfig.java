@@ -1,6 +1,9 @@
 package sopt.makers.authentication.support.config;
 
-import static sopt.makers.authentication.support.constant.SystemConstant.*;
+import static sopt.makers.authentication.support.constant.SystemConstant.PATTERN_ALL;
+import static sopt.makers.authentication.support.constant.SystemConstant.PATTERN_AUTH;
+import static sopt.makers.authentication.support.constant.SystemConstant.PATTERN_ERROR_PATH;
+import static sopt.makers.authentication.support.constant.SystemConstant.PATTERN_TEST;
 
 import sopt.makers.authentication.support.security.filter.JwtAuthenticationFilter;
 import sopt.makers.authentication.support.security.filter.JwtExceptionFilter;

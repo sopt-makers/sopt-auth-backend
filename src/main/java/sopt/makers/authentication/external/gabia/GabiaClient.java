@@ -7,7 +7,11 @@ import sopt.makers.authentication.support.value.GabiaProperty;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.Base64;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.UUID;
 
 import org.springframework.stereotype.Component;
 
@@ -16,7 +20,12 @@ import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
 
 import lombok.RequiredArgsConstructor;
-import okhttp3.*;
+import okhttp3.Headers;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 @Component
 @RequiredArgsConstructor
