@@ -1,5 +1,21 @@
 package sopt.makers.authentication.external.gabia;
 
+import static sopt.makers.authentication.support.constant.GabiaConstant.AUTHORIZATION_PREFIX;
+import static sopt.makers.authentication.support.constant.GabiaConstant.FORMAT_AUTHORIZATION;
+import static sopt.makers.authentication.support.constant.GabiaConstant.FORM_DATA_NAME_CALLBACK;
+import static sopt.makers.authentication.support.constant.GabiaConstant.FORM_DATA_NAME_GRANT_TYPE;
+import static sopt.makers.authentication.support.constant.GabiaConstant.FORM_DATA_NAME_MESSAGE;
+import static sopt.makers.authentication.support.constant.GabiaConstant.FORM_DATA_NAME_PHONE;
+import static sopt.makers.authentication.support.constant.GabiaConstant.FORM_DATA_NAME_REFERENCE_KEY;
+import static sopt.makers.authentication.support.constant.GabiaConstant.FORM_DATA_NAME_SUBJECT;
+import static sopt.makers.authentication.support.constant.GabiaConstant.FORM_DATA_VALUE_GRANT_TYPE;
+import static sopt.makers.authentication.support.constant.GabiaConstant.RESPONSE_ACCESS_TOKEN_FIELD;
+import static sopt.makers.authentication.support.constant.GabiaConstant.RESPONSE_SUCCESS_FLAG_FIELD;
+import static sopt.makers.authentication.support.constant.GabiaConstant.RESPONSE_SUCCESS_FLAG_VALUE;
+import static sopt.makers.authentication.support.constant.GabiaConstant.URI_OAUTH_TOKEN;
+import static sopt.makers.authentication.support.constant.GabiaConstant.URI_SEND_LMS;
+import static sopt.makers.authentication.support.constant.GabiaConstant.URI_SEND_SMS;
+
 import sopt.makers.authentication.support.code.external.failure.ClientError;
 import sopt.makers.authentication.support.exception.external.ClientRequestException;
 import sopt.makers.authentication.support.exception.external.ClientResponseException;
@@ -13,6 +29,9 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
+import org.springframework.http.CacheControl;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 
 import com.google.gson.Gson;
@@ -31,11 +50,6 @@ import okhttp3.Response;
 @RequiredArgsConstructor
 class GabiaClient {
 
-  private static final String FORMAT_AUTHORIZATION = "%s:%s";
-  private static final String URI_OAUTH_TOKEN = "/oauth/token";
-  private static final String URI_SEND_SMS = "/api/send/sms";
-  private static final String URI_SEND_LMS = "/api/send/lms";
-
   private final GabiaProperty gabiaProperty;
 
   protected void sendSmsMessage(String receiver, String content) {
@@ -45,21 +59,16 @@ class GabiaClient {
         new MultipartBody.Builder()
             .setType(MultipartBody.FORM)
             // 수신번호가 두 개 이상인 경우 ',' 를 이용하여 입력 ex) 01011112222,01033334444
-            .addFormDataPart("phone", receiver)
-            .addFormDataPart("callback", gabiaProperty.sms().phone())
-            .addFormDataPart("message", content)
-            .addFormDataPart("refkey", generateReferenceKey())
+            .addFormDataPart(FORM_DATA_NAME_PHONE, receiver)
+            .addFormDataPart(FORM_DATA_NAME_CALLBACK, gabiaProperty.sms().phone())
+            .addFormDataPart(FORM_DATA_NAME_MESSAGE, content)
+            .addFormDataPart(FORM_DATA_NAME_REFERENCE_KEY, generateReferenceKey())
             .build();
 
     Request request = buildPostRequest(URI_SEND_SMS, encodeAuthorization(authToken), requestBody);
     Response response = executeRequest(request);
 
-    String message = extractSerializedDataIn("message", response);
-    if (!message.trim().equals("Success")) {
-      ClientError error = ClientError.GABIA_RESPONSE_UNAVAILABLE;
-      error.addMessage(message);
-      throw new ClientRequestException(error);
-    }
+    validateResponse(response);
   }
 
   protected void sendLmsMessage(String receiver, String title, String content) {
@@ -69,20 +78,27 @@ class GabiaClient {
         new MultipartBody.Builder()
             .setType(MultipartBody.FORM)
             // 수신번호가 두 개 이상인 경우 ',' 를 이용하여 입력 ex) 01011112222,01033334444
-            .addFormDataPart("phone", receiver)
-            .addFormDataPart("callback", gabiaProperty.sms().phone())
-            .addFormDataPart("message", content)
-            .addFormDataPart("refkey", generateReferenceKey())
-            .addFormDataPart("subject", title)
+            .addFormDataPart(FORM_DATA_NAME_PHONE, receiver)
+            .addFormDataPart(FORM_DATA_NAME_CALLBACK, gabiaProperty.sms().phone())
+            .addFormDataPart(FORM_DATA_NAME_MESSAGE, content)
+            .addFormDataPart(FORM_DATA_NAME_REFERENCE_KEY, generateReferenceKey())
+            .addFormDataPart(FORM_DATA_NAME_SUBJECT, title)
             .build();
 
     Request request = buildPostRequest(URI_SEND_LMS, encodeAuthorization(authToken), requestBody);
     Response response = executeRequest(request);
 
-    String message = extractSerializedDataIn("message", response);
-    if (!message.trim().equals("Success")) {
+    validateResponse(response);
+  }
+
+  private void validateResponse(Response response) {
+    String successFlagValue = extractSerializedDataIn(RESPONSE_SUCCESS_FLAG_FIELD, response);
+    boolean isSuccessDataExistInResponse =
+        successFlagValue.trim().equals(RESPONSE_SUCCESS_FLAG_VALUE);
+
+    if (!isSuccessDataExistInResponse) {
       ClientError error = ClientError.GABIA_RESPONSE_UNAVAILABLE;
-      error.addMessage(message);
+      error.addMessage(successFlagValue);
       throw new ClientRequestException(error);
     }
   }
@@ -95,12 +111,12 @@ class GabiaClient {
     RequestBody requestBody =
         new MultipartBody.Builder()
             .setType(MultipartBody.FORM)
-            .addFormDataPart("grant_type", "client_credentials")
+            .addFormDataPart(FORM_DATA_NAME_GRANT_TYPE, FORM_DATA_VALUE_GRANT_TYPE)
             .build();
 
     Request request = buildPostRequest(URI_OAUTH_TOKEN, gabiaProperty.sms().key(), requestBody);
     Response response = executeRequest(request);
-    return extractSerializedDataIn("access_token", response);
+    return extractSerializedDataIn(RESPONSE_ACCESS_TOKEN_FIELD, response);
   }
 
   private String extractSerializedDataIn(String dataKey, Response response) {
@@ -119,9 +135,9 @@ class GabiaClient {
 
   private Headers generateHeaderOfAuthorization(String authValue) {
     Map<String, String> headers = new HashMap<>();
-    headers.put("Content-Type", "application/x-www-form-urlencoded");
-    headers.put("Authorization", "Basic " + encodeAuthorization(authValue));
-    headers.put("cache-control", "no-cache");
+    headers.put(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED_VALUE);
+    headers.put(HttpHeaders.AUTHORIZATION, AUTHORIZATION_PREFIX + encodeAuthorization(authValue));
+    headers.put(HttpHeaders.CACHE_CONTROL, CacheControl.noCache().getHeaderValue());
     return Headers.of(headers);
   }
 
