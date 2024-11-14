@@ -6,6 +6,11 @@ jwt:
     rsa:
       public-key: ${RSA_PUBLIC_KEY_PATH}
       private-key: ${RSA_PRIVATE_KEY_PATH}
+    expiration:
+      access-token-expiration: ${ACCESS_TOKEN_EXPIRATION_TIME}
+      refresh-token-expiration: ${REFRESH_TOKEN_EXPIRATION_TIME}
+    issuer:
+      issuer-name: ${ISSUER}
 ---
 spring.config.activate.on-profile: local
 jwt:
@@ -13,6 +18,11 @@ jwt:
     rsa:
       public-key: ${RSA_PUBLIC_KEY_PATH_ON_LOCAL}
       private-key: ${RSA_PRIVATE_KEY_PATH_ON_LOCAL}
+    expiration:
+      access-token-expiration: ${ACCESS_TOKEN_EXPIRATION_TIME}
+      refresh-token-expiration: ${REFRESH_TOKEN_EXPIRATION_TIME}
+    issuer:
+      issuer-name: ${ISSUER_ON_LOCAL}
 ---
 spring.config.activate.on-profile: test
 jwt:
@@ -20,3 +30,8 @@ jwt:
     rsa:
       public-key: ${RSA_PUBLIC_KEY_PATH_ON_TEST}
       private-key: ${RSA_PRIVATE_KEY_PATH_ON_TEST}
+    expiration:
+      access-token-expiration: ${ACCESS_TOKEN_EXPIRATION_TIME}
+      refresh-token-expiration: ${REFRESH_TOKEN_EXPIRATION_TIME}
+    issuer:
+      issuer-name: ${ISSUER_ON_TEST}
