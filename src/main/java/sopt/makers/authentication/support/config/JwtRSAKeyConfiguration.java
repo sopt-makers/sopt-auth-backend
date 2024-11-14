@@ -36,36 +36,24 @@ import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
-import com.nimbusds.jose.util.StandardCharset;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Configuration
 @EnableConfigurationProperties(JwtProperty.class)
+@RequiredArgsConstructor
 @Slf4j
 public class JwtRSAKeyConfiguration {
 
   private final JwtProperty jwtProperty;
   private final ResourceLoader resourceLoader;
 
-  public JwtRSAKeyConfiguration(JwtProperty jwtProperty, ResourceLoader resourceLoader) {
-    this.jwtProperty = jwtProperty;
-    this.resourceLoader = resourceLoader;
-  }
-
-  @Bean
   public RSAPublicKey createPublicKeyFromProperty() {
-    Resource resource = resourceLoader.getResource(jwtProperty.secret().rsa().publicKey());
     try {
-      PemReader pemReader =
-          new PemReader(new StringReader(resource.getContentAsString(StandardCharset.UTF_8)));
-      PemObject pemObject = pemReader.readPemObject();
-      pemReader.close();
-
-      byte[] publicKeyBytes = pemObject.getContent();
-      X509EncodedKeySpec keySpec = new X509EncodedKeySpec(publicKeyBytes);
-      KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-      return (RSAPublicKey) keyFactory.generatePublic(keySpec);
+      Resource resource = loadPublicKeyResource();
+      PemObject pemObject = readPublicPemFile(resource);
+      return generatePublicKey(pemObject);
     } catch (IOException e) {
       throw new TokenException(INVALID_LOCATION);
     } catch (NoSuchAlgorithmException e) {
@@ -75,20 +63,11 @@ public class JwtRSAKeyConfiguration {
     }
   }
 
-  @Bean
   public RSAPrivateKey createPrivateKeyFromProperty() {
-    Resource resource = resourceLoader.getResource(jwtProperty.secret().rsa().privateKey());
     try {
-      PemReader pemReader =
-          new PemReader(new StringReader(resource.getContentAsString(StandardCharsets.UTF_8)));
-      PemObject pemObject = pemReader.readPemObject();
-      pemReader.close();
-
-      byte[] privateKeyBytes = pemObject.getContent();
-      PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(privateKeyBytes);
-
-      KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-      return (RSAPrivateKey) keyFactory.generatePrivate(keySpec);
+      Resource resource = loadPrivateKeyResource();
+      PemObject pemObject = readPrivatePemFile(resource);
+      return generatePrivateKey(pemObject);
     } catch (IOException e) {
       throw new TokenException(INVALID_LOCATION);
     } catch (NoSuchAlgorithmException e) {
@@ -111,5 +90,43 @@ public class JwtRSAKeyConfiguration {
   @Bean
   public JwtDecoder jwtDecoder() {
     return NimbusJwtDecoder.withPublicKey(createPublicKeyFromProperty()).build();
+  }
+
+  private Resource loadPublicKeyResource() {
+    return resourceLoader.getResource(jwtProperty.secret().rsa().publicKey());
+  }
+
+  private PemObject readPublicPemFile(Resource resource) throws IOException {
+    try (PemReader pemReader =
+        new PemReader(new StringReader(resource.getContentAsString(StandardCharsets.UTF_8)))) {
+      return pemReader.readPemObject();
+    }
+  }
+
+  private RSAPublicKey generatePublicKey(PemObject pemObject)
+      throws NoSuchAlgorithmException, InvalidKeySpecException {
+    byte[] publicKeyBytes = pemObject.getContent();
+    X509EncodedKeySpec keySpec = new X509EncodedKeySpec(publicKeyBytes);
+    KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+    return (RSAPublicKey) keyFactory.generatePublic(keySpec);
+  }
+
+  private Resource loadPrivateKeyResource() {
+    return resourceLoader.getResource(jwtProperty.secret().rsa().privateKey());
+  }
+
+  private PemObject readPrivatePemFile(Resource resource) throws IOException {
+    try (PemReader pemReader =
+        new PemReader(new StringReader(resource.getContentAsString(StandardCharsets.UTF_8)))) {
+      return pemReader.readPemObject();
+    }
+  }
+
+  private RSAPrivateKey generatePrivateKey(PemObject pemObject)
+      throws NoSuchAlgorithmException, InvalidKeySpecException {
+    byte[] privateKeyBytes = pemObject.getContent();
+    PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(privateKeyBytes);
+    KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+    return (RSAPrivateKey) keyFactory.generatePrivate(keySpec);
   }
 }
