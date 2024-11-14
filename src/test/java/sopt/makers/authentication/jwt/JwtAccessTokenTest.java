@@ -1,9 +1,10 @@
 package sopt.makers.authentication.jwt;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static sopt.makers.authentication.support.jwt.provider.JwtTokenUtil.addPrefix;
+import static sopt.makers.authentication.support.jwt.provider.JwtTokenUtil.extract;
 
 import sopt.makers.authentication.support.jwt.provider.JwtAuthAccessTokenProvider;
-import sopt.makers.authentication.support.jwt.provider.JwtTokenUtil;
 import sopt.makers.authentication.support.security.authentication.CustomAuthentication;
 
 import java.io.IOException;
@@ -30,13 +31,12 @@ public class JwtAccessTokenTest {
 
   @Autowired private JwtDecoder jwtDecoder;
 
-  @Autowired private JwtTokenUtil jwtTokenUtil;
-
   @Test
   @DisplayName("AccessToken 생성")
   void create_jwt_access_token() {
     // Given
     CustomAuthentication customAuthentication = new CustomAuthentication("test", "test");
+
     // When
     String accessToken = jwtAuthAccessTokenProvider.generate(customAuthentication);
 
@@ -51,7 +51,7 @@ public class JwtAccessTokenTest {
     // Given
     CustomAuthentication customAuthentication = new CustomAuthentication("test", "test");
     String accessToken = jwtAuthAccessTokenProvider.generate(customAuthentication);
-    String pureToken = jwtTokenUtil.extract(accessToken);
+    String pureToken = extract(accessToken);
 
     // When
     System.out.println("PureToken: [" + pureToken + "]");
@@ -86,7 +86,7 @@ public class JwtAccessTokenTest {
     String expectedToken = "Bearer test";
 
     // When
-    String completionToken = jwtTokenUtil.addPrefix(givenToken);
+    String completionToken = addPrefix(givenToken);
 
     // then
     assertThat(completionToken).isEqualTo(expectedToken);
@@ -100,7 +100,7 @@ public class JwtAccessTokenTest {
     String expectedToken = "SomeToken";
 
     // when
-    String pureToken = jwtTokenUtil.extract(tokenWithHeader);
+    String pureToken = extract(tokenWithHeader);
 
     // then
     assertThat(pureToken).isEqualTo(expectedToken);

@@ -1,5 +1,8 @@
 package sopt.makers.authentication.support.jwt.provider;
 
+import static sopt.makers.authentication.support.jwt.provider.JwtTokenUtil.addPrefix;
+import static sopt.makers.authentication.support.jwt.provider.JwtTokenUtil.extract;
+
 import sopt.makers.authentication.support.jwt.JwtProvider;
 import sopt.makers.authentication.support.jwt.token.JwtRefreshToken;
 import sopt.makers.authentication.support.value.JwtProperty.Secret.Expiration;
@@ -21,7 +24,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class JwtAuthRefreshTokenProvider implements JwtProvider<String> {
 
-  private final JwtTokenUtil tokenUtil;
   private final JwtEncoder jwtEncoder;
   private final JwtDecoder jwtDecoder;
   private final Expiration tokenExpiration;
@@ -32,19 +34,19 @@ public class JwtAuthRefreshTokenProvider implements JwtProvider<String> {
     JwtClaimsSet claimsSet = generateClaimSet();
     Jwt jwt = jwtEncoder.encode(JwtEncoderParameters.from(claimsSet));
     JwtRefreshToken jwtRefreshToken = JwtRefreshToken.createRefreshToken(jwt);
-    return tokenUtil.addPrefix(jwtRefreshToken.getToken());
+    return addPrefix(jwtRefreshToken.getToken());
   }
 
   @Override
   public String parse(String requestToken) {
-    String token = tokenUtil.extract(requestToken);
+    String token = extract(requestToken);
     Jwt jwt = jwtDecoder.decode(token);
 
     JwtRefreshToken jwtRefreshToken = JwtRefreshToken.createRefreshToken(jwt);
     jwtRefreshToken.validateExpire();
     JwtRefreshToken refreshedToken = refresh();
 
-    return tokenUtil.addPrefix(refreshedToken.getToken());
+    return addPrefix(refreshedToken.getToken());
   }
 
   private JwtRefreshToken refresh() {

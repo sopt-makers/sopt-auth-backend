@@ -2,10 +2,11 @@ package sopt.makers.authentication.jwt;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static sopt.makers.authentication.support.jwt.provider.JwtTokenUtil.addPrefix;
+import static sopt.makers.authentication.support.jwt.provider.JwtTokenUtil.extract;
 
 import sopt.makers.authentication.support.common.exception.TokenException;
 import sopt.makers.authentication.support.jwt.provider.JwtAuthRefreshTokenProvider;
-import sopt.makers.authentication.support.jwt.provider.JwtTokenUtil;
 import sopt.makers.authentication.support.value.JwtProperty;
 
 import java.io.IOException;
@@ -32,14 +33,12 @@ public class JwtRefreshTokenTest {
 
   @Autowired private JwtDecoder jwtDecoder;
 
-  @Autowired private JwtTokenUtil jwtTokenUtil;
-
   @Autowired private JwtProperty jwtProperty;
 
   @Test
   @DisplayName("RefreshToken 생성")
   public void generate_jwt_refresh_token() {
-    // When
+    // Given
     String accessToken = "Bearer ey.d.d";
     String givenToken = jwtAuthRefreshTokenProvider.generate(accessToken);
 
@@ -57,7 +56,7 @@ public class JwtRefreshTokenTest {
     // Given
     String accessToken = "Bearer ey.d.d";
     String refreshToken = jwtAuthRefreshTokenProvider.generate(accessToken);
-    String pureToken = jwtTokenUtil.extract(refreshToken);
+    String pureToken = extract(refreshToken);
 
     // When
     Jwt jwt = jwtDecoder.decode(pureToken);
@@ -88,7 +87,7 @@ public class JwtRefreshTokenTest {
     JwtClaimsSet jwtClaimsSet =
         JwtClaimsSet.builder().expiresAt(Instant.now().minusSeconds(1)).build();
     Jwt jwt = jwtEncoder.encode(JwtEncoderParameters.from(jwtClaimsSet));
-    String token = jwtTokenUtil.addPrefix(jwt.getTokenValue());
+    String token = addPrefix(jwt.getTokenValue());
     System.out.println("Token: [" + token + "]");
 
     // When & then

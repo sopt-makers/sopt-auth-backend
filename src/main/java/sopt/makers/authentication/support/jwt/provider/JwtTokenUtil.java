@@ -2,16 +2,15 @@ package sopt.makers.authentication.support.jwt.provider;
 
 import static sopt.makers.authentication.support.constant.JwtConstant.TOKEN_HEADER;
 
-import org.springframework.stereotype.Component;
+public final class JwtTokenUtil {
 
-@Component
-public class JwtTokenUtil {
+  private JwtTokenUtil() {}
 
-  public String extract(String token) {
+  public static String extract(String token) {
     return token.substring(TOKEN_HEADER.length());
   }
 
-  public String addPrefix(String token) {
+  public static String addPrefix(String token) {
     return TOKEN_HEADER + token;
   }
 }
