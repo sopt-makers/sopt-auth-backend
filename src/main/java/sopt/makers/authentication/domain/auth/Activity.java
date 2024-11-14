@@ -21,7 +21,9 @@ public record Activity(
   }
 
   public void validateActivityContentsEmpty() {
-    if (this.role.isPartRequired() && this.part.isEmpty()) {
+    boolean isActivityContentsEmpty = this.role.isPartRequired() && this.part.isEmpty();
+
+    if (isActivityContentsEmpty) {
       throw new DomainException(ROLE_REQUIRES_PART);
     }
   }
