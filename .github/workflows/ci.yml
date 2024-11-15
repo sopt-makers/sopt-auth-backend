@@ -1,0 +1,35 @@
+name: Continuous Integration for SOPT makers Authentication Project
+
+on:
+  pull_request:
+    branches: [ develop ]
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: ⚙️ Set up JDK 21
+        uses: actions/setup-java@v3
+        with:
+          java-version: 21
+          distribution: 'corretto'
+          cache: gradle
+
+      - name: 🤝 Grant execute permission for gradlew
+        run: chmod +x ./gradlew
+        shell: bash
+
+      - name: 🔑 Create Application Property File
+        env:
+          APPLICATION_RESOURCE_PATH: ./src/main/resources
+        run: |
+          touch $APPLICATION_RESOURCE_PATH/application.properties
+          echo "${{ secrets.APPLICATION_PROPERTIES }}" >> $APPLICATION_RESOURCE_PATH/application.properties
+
+      - name: 🧱 Build with Gradle
+        run: ./gradlew clean build
+        shell: bash
