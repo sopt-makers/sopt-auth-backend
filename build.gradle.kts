@@ -38,6 +38,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-security")
+	implementation("org.springframework.boot:spring-boot-starter-validation")
 
 	implementation("org.springframework.retry:spring-retry")
 	implementation("com.fasterxml.jackson.core:jackson-databind:${property("jacksonDataBindVersion")}")
@@ -46,8 +47,14 @@ dependencies {
 	implementation ("com.squareup.okhttp3:okhttp:4.9.3")
 	implementation ("com.google.code.gson:gson:2.9.0")
 
+	implementation ("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
+
+	implementation("org.bouncycastle:bcprov-jdk18on:1.78.1")
+	implementation("org.bouncycastle:bcpkix-jdk18on:1.78.1")
+
 	compileOnly("org.projectlombok:lombok")
 	runtimeOnly("org.postgresql:postgresql")
+	runtimeOnly("com.mysql:mysql-connector-j")
 	annotationProcessor("org.projectlombok:lombok")
 
 	testImplementation("org.springframework.boot:spring-boot-starter-test")

@@ -1,6 +1,6 @@
 package sopt.makers.authentication.support.security.filter;
 
-import sopt.makers.authentication.support.jwt.provider.JwtAuthTokenProvider;
+import sopt.makers.authentication.support.jwt.provider.JwtAuthAccessTokenProvider;
 import sopt.makers.authentication.support.security.authentication.CustomAuthentication;
 
 import java.io.IOException;
@@ -22,7 +22,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-  private final JwtAuthTokenProvider authTokenProvider;
+  private final JwtAuthAccessTokenProvider authTokenProvider;
 
   @Override
   protected void doFilterInternal(
