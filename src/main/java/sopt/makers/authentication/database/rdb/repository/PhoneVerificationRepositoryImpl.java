@@ -17,7 +17,7 @@ public class PhoneVerificationRepositoryImpl implements PhoneVerificationReposit
   @Override
   public PhoneVerification save(PhoneVerification phoneVerification) {
     PhoneVerificationEntity createdEntity =
-        jpaRepository.save(PhoneVerificationEntity.from(phoneVerification));
+        jpaRepository.save(PhoneVerificationEntity.fromDomain(phoneVerification));
     return createdEntity.toDomain();
   }
 }

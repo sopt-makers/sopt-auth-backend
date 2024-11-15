@@ -43,14 +43,19 @@ public class PhoneVerificationEntity extends BaseEntity {
     this.type = verification.getVerificationType();
   }
 
-  public static PhoneVerificationEntity from(PhoneVerification phoneVerification) {
+  public static PhoneVerificationEntity fromDomain(PhoneVerification phoneVerification) {
+    return new PhoneVerificationEntity(phoneVerification);
+  }
+
+  public static PhoneVerificationEntity fromDomain(
+      final long id, PhoneVerification phoneVerification) {
     PhoneVerificationEntity phoneVerificationEntity =
         new PhoneVerificationEntity(phoneVerification);
-    phoneVerificationEntity.setId(phoneVerification.getId());
+    phoneVerificationEntity.setId(id);
     return phoneVerificationEntity;
   }
 
   public PhoneVerification toDomain() {
-    return PhoneVerification.of(this.getId(), this.name, this.phone, this.type, this.code);
+    return PhoneVerification.of(this.name, this.phone, this.type, this.code);
   }
 }

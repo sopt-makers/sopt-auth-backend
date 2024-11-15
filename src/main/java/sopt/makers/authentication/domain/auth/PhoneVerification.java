@@ -13,17 +13,15 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor(access = PRIVATE)
 public class PhoneVerification {
 
-  private final Long id;
   private final String name;
   private final String phone;
   private final PhoneVerificationType verificationType;
   private final VerificationCode verificationCode;
 
   public static PhoneVerification of(
-      Long id, String name, String phone, PhoneVerificationType type, String code) {
+      String name, String phone, PhoneVerificationType type, String code) {
     VerificationCode verificationCode = VerificationCode.of(code);
     return PhoneVerification.builder()
-        .id(id)
         .name(name)
         .phone(phone)
         .verificationType(type)
