@@ -32,25 +32,26 @@ configurations {
 
 val archunitVersion = "${property("archunitVersion")}"
 val fixtureMonkeyVersion = "${property("fixturemonkeyVersion")}"
-
+val jacksonCoreVersion = "${property("jacksonDataBindVersion")}"
+val okHttpVersion = "${property("okHttp3Version")}"
+val gsonVersion = "${property("gsonVersion")}"
+val bouncycastleVersion = "${property("bouncycastleVersion")}"
 
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("org.springframework.boot:spring-boot-starter-validation")
-
+	implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
 	implementation("org.springframework.retry:spring-retry")
-	implementation("com.fasterxml.jackson.core:jackson-databind:${property("jacksonDataBindVersion")}")
 
+	implementation("com.fasterxml.jackson.core:jackson-databind:${jacksonCoreVersion}")
 
-	implementation ("com.squareup.okhttp3:okhttp:4.9.3")
-	implementation ("com.google.code.gson:gson:2.9.0")
+	implementation ("com.squareup.okhttp3:okhttp:${okHttpVersion}")
+	implementation ("com.google.code.gson:gson:${gsonVersion}")
 
-	implementation ("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
-
-	implementation("org.bouncycastle:bcprov-jdk18on:1.78.1")
-	implementation("org.bouncycastle:bcpkix-jdk18on:1.78.1")
+	implementation("org.bouncycastle:bcprov-jdk18on:${bouncycastleVersion}")
+	implementation("org.bouncycastle:bcpkix-jdk18on:${bouncycastleVersion}")
 
 	compileOnly("org.projectlombok:lombok")
 	runtimeOnly("org.postgresql:postgresql")
