@@ -39,3 +39,6 @@ out/
 ### Propety ###
 *.properties
 
+### Key ###
+*.pem
+
