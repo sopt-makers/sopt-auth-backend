@@ -1,8 +1,6 @@
 package sopt.makers.authentication.support.value;
 
-import java.lang.ProcessBuilder.*;
-
-import org.springframework.boot.context.properties.*;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties(prefix = "external.oauth.google")
 public record GoogleProperty(Google google) {
