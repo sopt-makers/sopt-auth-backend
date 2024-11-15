@@ -5,7 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static sopt.makers.authentication.support.jwt.provider.JwtTokenUtil.addPrefix;
 import static sopt.makers.authentication.support.jwt.provider.JwtTokenUtil.extract;
 
-import sopt.makers.authentication.support.common.exception.TokenException;
+import sopt.makers.authentication.support.exception.support.TokenException;
 import sopt.makers.authentication.support.jwt.provider.JwtAuthRefreshTokenProvider;
 import sopt.makers.authentication.support.value.JwtProperty;
 

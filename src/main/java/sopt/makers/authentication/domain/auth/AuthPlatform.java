@@ -1,8 +1,8 @@
 package sopt.makers.authentication.domain.auth;
 
-import static sopt.makers.authentication.support.common.code.failure.DomainFailure.INVALID_SOCIAL_PLATFORM;
+import static sopt.makers.authentication.support.code.domain.failure.AuthFailure.INVALID_SOCIAL_PLATFORM;
 
-import sopt.makers.authentication.support.common.exception.DomainException;
+import sopt.makers.authentication.support.exception.domain.AuthException;
 
 import java.util.Arrays;
 
@@ -15,6 +15,6 @@ public enum AuthPlatform {
     return Arrays.stream(AuthPlatform.values())
         .filter(p -> p.name().equals(platform))
         .findFirst()
-        .orElseThrow(() -> new DomainException(INVALID_SOCIAL_PLATFORM));
+        .orElseThrow(() -> new AuthException(INVALID_SOCIAL_PLATFORM));
   }
 }

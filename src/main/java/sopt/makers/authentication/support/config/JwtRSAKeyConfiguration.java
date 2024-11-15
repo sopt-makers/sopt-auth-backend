@@ -1,10 +1,10 @@
 package sopt.makers.authentication.support.config;
 
-import static sopt.makers.authentication.support.common.code.failure.TokenFailure.INVALID_ALGORITHM;
-import static sopt.makers.authentication.support.common.code.failure.TokenFailure.INVALID_LOCATION;
-import static sopt.makers.authentication.support.common.code.failure.TokenFailure.INVALID_SUBJECT;
+import static sopt.makers.authentication.support.code.support.failure.TokenFailure.INVALID_ALGORITHM;
+import static sopt.makers.authentication.support.code.support.failure.TokenFailure.INVALID_LOCATION;
+import static sopt.makers.authentication.support.code.support.failure.TokenFailure.INVALID_SUBJECT;
 
-import sopt.makers.authentication.support.common.exception.TokenException;
+import sopt.makers.authentication.support.exception.support.TokenException;
 import sopt.makers.authentication.support.value.JwtProperty;
 
 import java.io.IOException;

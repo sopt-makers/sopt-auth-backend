@@ -3,7 +3,7 @@ package sopt.makers.authentication.support.util;
 import static sopt.makers.authentication.support.constant.SystemConstant.UTF_8;
 
 import sopt.makers.authentication.support.common.api.BaseResponse;
-import sopt.makers.authentication.support.common.exception.base.BaseException;
+import sopt.makers.authentication.support.exception.base.BaseException;
 
 import java.io.IOException;
 
