@@ -9,9 +9,51 @@ external:
       key: ${GABIA_SMS_KEY}
       url: ${GABIA_SMS_URL}
       phone: ${GABIA_SMS_PHONE}
+  oauth:
+    apple:
+      aud: ${PROD_APPLE_AUD}
+      sub: ${PROD_APPLE_SUB}
+      key:
+        id: ${PROD_APPLE_KEY_ID}
+        path: ${PROD_APPLE_KEY_PATH}
+      team:
+        id: ${PROD_APPLE_TEAM_ID}
+    google:
+      redirect:
+        url: ${PROD_GOOGLE_REDIRECT_URL}
+      client:
+        id: ${PROD_GOOGLE_CLIENT_ID}
+        secret: ${PROD_GOOGLE_CLIENT_SECRET}
 ---
 spring.config.activate.on-profile:
   - dev
+external:
+  makers:
+    url: ${DEV_PLAYGROUND_URL}
+    token: ${DEV_PLAYGROUND_TOKEN}
+  gabia:
+    sms:
+      id: ${GABIA_SMS_ID}
+      key: ${GABIA_SMS_KEY}
+      url: ${GABIA_SMS_URL}
+      phone: ${GABIA_SMS_PHONE}
+  oauth:
+    apple:
+      aud: ${DEV_APPLE_AUD}
+      sub: ${DEV_APPLE_SUB}
+      key:
+        id: ${DEV_APPLE_KEY_ID}
+        path: ${DEV_APPLE_KEY_PATH}
+      team:
+        id: ${DEV_APPLE_TEAM_ID}
+    google:
+      redirect:
+        url: ${DEV_GOOGLE_REDIRECT_URL}
+      client:
+        id: ${DEV_GOOGLE_CLIENT_ID}
+        secret: ${DEV_GOOGLE_CLIENT_SECRET}
+---
+spring.config.activate.on-profile:
   - local
   - test
 external:
@@ -24,3 +66,18 @@ external:
       key: ${GABIA_SMS_KEY}
       url: ${GABIA_SMS_URL}
       phone: ${GABIA_SMS_PHONE}
+  oauth:
+    apple:
+      aud: ${LOCAL_APPLE_AUD}
+      sub: ${LOCAL_APPLE_SUB}
+      key:
+        id: ${LOCAL_APPLE_KEY_ID}
+        path: ${LOCAL_APPLE_KEY_PATH}
+      team:
+        id: ${LOCAL_APPLE_TEAM_ID}
+    google:
+      redirect:
+        url: ${LOCAL_GOOGLE_REDIRECT_URL}
+      client:
+        id: ${LOCAL_GOOGLE_CLIENT_ID}
+        secret: ${LOCAL_GOOGLE_CLIENT_SECRET}
