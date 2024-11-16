@@ -40,8 +40,7 @@ import okhttp3.Response;
 
 @RequiredArgsConstructor
 @Slf4j
-public class AppleAuthService {
-
+public class AppleAuthService implements OAuthService {
   private static final int TOKEN_EXPIRATION_TIME = 3600 * 1000; // 1 hour
   private static final String GRANT_TYPE = "authorization_code";
   private static final String TOKEN_URL = "https://appleid.apple.com/auth/token";
@@ -50,7 +49,8 @@ public class AppleAuthService {
 
   private final AppleProperty appleProperty;
 
-  public String getAuthPlatformIdFromIdToken(final String code) {
+  @Override
+  public String getAuthPlatformId(final String code) {
     Gson gson = new Gson();
     FormBody formBody = createTokenRequestFormBody(code);
     Request request = createHttpRequest(formBody);
