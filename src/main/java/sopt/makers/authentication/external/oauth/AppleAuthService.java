@@ -5,7 +5,9 @@ import static sopt.makers.authentication.support.code.external.failure.AppleErro
 import static sopt.makers.authentication.support.code.external.failure.AppleError.INVALID_APPLE_AUTH_CODE;
 
 import sopt.makers.authentication.external.oauth.dto.IdTokenResponse;
+import sopt.makers.authentication.support.code.external.failure.ClientError;
 import sopt.makers.authentication.support.exception.external.AppleAuthException;
+import sopt.makers.authentication.support.exception.external.ClientResponseException;
 import sopt.makers.authentication.support.value.AppleProperty;
 
 import java.io.IOException;
@@ -41,18 +43,17 @@ public class AppleAuthService implements OAuthService {
   private static final int TOKEN_EXPIRATION_TIME = 3600 * 1000; // 1 hour
   private static final String GRANT_TYPE = "authorization_code";
   private static final String TOKEN_URL = "https://appleid.apple.com/auth/token";
-
-  private static final String EXTRACT_APPLE_PLATFORM_ID_FILED = "sub";
-
   private final AppleProperty appleProperty;
+  private final Gson gson;
+  private final OkHttpClient client;
 
   @Override
   public IdTokenResponse getIdTokenByCode(final String code) {
-    Gson gson = new Gson();
     FormBody formBody = createTokenRequestFormBody(code);
     Request request = createHttpRequest(formBody);
     Response response = executeRequest(request);
-    return gson.fromJson(response.body().toString(), IdTokenResponse.class);
+
+    return parseResponseBody(response);
   }
 
   private FormBody createTokenRequestFormBody(final String code) {
@@ -122,7 +123,7 @@ public class AppleAuthService implements OAuthService {
     }
   }
 
-  private Request createHttpRequest(RequestBody requestBody) {
+  private static Request createHttpRequest(RequestBody requestBody) {
     return new Request.Builder()
         .url(TOKEN_URL)
         .post(requestBody)
@@ -132,8 +133,6 @@ public class AppleAuthService implements OAuthService {
   }
 
   private Response executeRequest(Request request) {
-    OkHttpClient client = new OkHttpClient();
-
     try {
       Response response = client.newCall(request).execute();
 
@@ -150,5 +149,15 @@ public class AppleAuthService implements OAuthService {
     if (isNotSuccessResponse) {
       throw new AppleAuthException(INVALID_APPLE_AUTH_CODE);
     }
+  }
+
+  private IdTokenResponse parseResponseBody(Response response) {
+    boolean containsResponseBody = response.body() != null;
+
+    if (containsResponseBody) {
+      String responseBody = response.body().toString();
+      return gson.fromJson(responseBody, IdTokenResponse.class);
+    }
+    throw new ClientResponseException(ClientError.APPLE_RESPONSE_UNAVAILABLE);
   }
 }
