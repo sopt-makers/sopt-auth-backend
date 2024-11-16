@@ -14,7 +14,10 @@ public enum ClientError implements FailureCode {
   GABIA_REQUEST_FAIL(HttpStatus.BAD_REQUEST, "Gabia 요청에 실패했습니다."),
   GABIA_RESPONSE_UNAVAILABLE(HttpStatus.BAD_REQUEST, "Gabia 요청 결과 내 의도한 데이터가 없습니다."),
   GABIA_RESPONSE_BIND_FAIL(HttpStatus.BAD_REQUEST, "Gabia 요청 결과 역질렬화에 실패했습니다."),
-  INVALID_ID_TOKEN(HttpStatus.BAD_REQUEST, "유효하지 않은 id token 입니다.");
+  INVALID_ID_TOKEN(HttpStatus.BAD_REQUEST, "유효하지 않은 id token 입니다."),
+  APPLE_RESPONSE_UNAVAILABLE(HttpStatus.BAD_REQUEST, "APPLE 인증 요청 결과 반환된 값이 없습니다."),
+  GOOGLE_RESPONSE_UNAVAILABLE(HttpStatus.BAD_REQUEST, "GOOGLE 인증 요청 결과 반환된 값이 없습니다."),
+  ;
 
   private final HttpStatus status;
   private final String message;
