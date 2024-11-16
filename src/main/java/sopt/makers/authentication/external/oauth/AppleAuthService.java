@@ -31,6 +31,7 @@ import com.google.gson.JsonParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.*;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -38,6 +39,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 @RequiredArgsConstructor
+@Slf4j
 public class AppleAuthService {
 
   private static final int TOKEN_EXPIRATION_TIME = 3600 * 1000; // 1 hour
@@ -110,6 +112,7 @@ public class AppleAuthService {
               StandardCharsets.UTF_8);
       return Optional.of(content);
     } catch (IOException | URISyntaxException e) {
+      log.error(e.getMessage());
       return Optional.empty();
     }
   }
@@ -118,6 +121,7 @@ public class AppleAuthService {
     try (PEMParser pemParser = new PEMParser(new StringReader(privateKeyContent))) {
       return Optional.ofNullable((PrivateKeyInfo) pemParser.readObject());
     } catch (IOException e) {
+      log.error(e.getMessage());
       return Optional.empty();
     }
   }
@@ -127,6 +131,7 @@ public class AppleAuthService {
       PrivateKey privateKey = new JcaPEMKeyConverter().getPrivateKey(privateKeyInfo);
       return Optional.ofNullable(privateKey);
     } catch (PEMException e) {
+      log.error(e.getMessage());
       return Optional.empty();
     }
   }
