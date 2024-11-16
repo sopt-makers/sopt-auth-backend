@@ -1,35 +1,27 @@
 package sopt.makers.authentication.external.oauth;
 
-import static sopt.makers.authentication.support.code.external.failure.AppleError.APPLE_INTERNAL_SERVER_ERROR;
-import static sopt.makers.authentication.support.code.external.failure.AppleError.FAIL_READ_APPLE_PRIVATE_KEY_FILE;
-import static sopt.makers.authentication.support.code.external.failure.AppleError.INVALID_APPLE_AUTH_CODE;
-
 import sopt.makers.authentication.external.oauth.dto.IdTokenResponse;
 import sopt.makers.authentication.support.code.external.failure.ClientError;
-import sopt.makers.authentication.support.exception.external.AppleAuthException;
+import sopt.makers.authentication.support.exception.external.ClientRequestException;
 import sopt.makers.authentication.support.exception.external.ClientResponseException;
 import sopt.makers.authentication.support.value.AppleProperty;
 
 import java.io.IOException;
 import java.io.StringReader;
-import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.security.PrivateKey;
-import java.util.Date;
-import java.util.Optional;
+import java.util.*;
 
 import org.bouncycastle.asn1.pkcs.PrivateKeyInfo;
-import org.bouncycastle.openssl.PEMException;
 import org.bouncycastle.openssl.PEMParser;
 import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter;
+import org.springframework.core.io.*;
 
 import com.google.gson.Gson;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
@@ -70,7 +62,9 @@ public class AppleAuthService implements OAuthService {
   private String createClientSecret() {
     Date now = new Date();
     PrivateKey privateKey =
-        getPrivateKey().orElseThrow(() -> new AppleAuthException(FAIL_READ_APPLE_PRIVATE_KEY_FILE));
+        getPrivateKey()
+            .orElseThrow(
+                () -> new ClientRequestException(ClientError.FAIL_READ_APPLE_PRIVATE_KEY_FILE));
 
     return Jwts.builder()
         .setHeaderParam("kid", appleProperty.apple().key().id())
@@ -86,38 +80,18 @@ public class AppleAuthService implements OAuthService {
 
   private Optional<PrivateKey> getPrivateKey() {
     String appleKeyPath = appleProperty.apple().key().path();
-    return readKeyFileContent(appleKeyPath)
-        .flatMap(this::parsePrivateKeyInfo)
-        .flatMap(this::convertToPrivateKey);
-  }
 
-  private Optional<String> readKeyFileContent(String path) {
     try {
-      String content =
-          Files.readString(
-              Paths.get(getClass().getClassLoader().getResource(path).toURI()),
-              StandardCharsets.UTF_8);
-      return Optional.of(content);
-    } catch (IOException | URISyntaxException e) {
-      log.error(e.getMessage());
-      return Optional.empty();
-    }
-  }
+      ClassPathResource resource = new ClassPathResource(appleKeyPath);
+      String privateKey =
+          new String(resource.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+      StringReader pemReader = new StringReader(privateKey);
+      PEMParser pemParser = new PEMParser(pemReader);
+      JcaPEMKeyConverter converter = new JcaPEMKeyConverter();
+      PrivateKeyInfo privateKeyInfo = (PrivateKeyInfo) pemParser.readObject();
 
-  private Optional<PrivateKeyInfo> parsePrivateKeyInfo(String privateKeyContent) {
-    try (PEMParser pemParser = new PEMParser(new StringReader(privateKeyContent))) {
-      return Optional.ofNullable((PrivateKeyInfo) pemParser.readObject());
+      return Optional.of(converter.getPrivateKey(privateKeyInfo));
     } catch (IOException e) {
-      log.error(e.getMessage());
-      return Optional.empty();
-    }
-  }
-
-  private Optional<PrivateKey> convertToPrivateKey(PrivateKeyInfo privateKeyInfo) {
-    try {
-      PrivateKey privateKey = new JcaPEMKeyConverter().getPrivateKey(privateKeyInfo);
-      return Optional.ofNullable(privateKey);
-    } catch (PEMException e) {
       log.error(e.getMessage());
       return Optional.empty();
     }
@@ -139,7 +113,7 @@ public class AppleAuthService implements OAuthService {
       validateResponse(response);
       return response;
     } catch (IOException e) {
-      throw new AppleAuthException(APPLE_INTERNAL_SERVER_ERROR);
+      throw new ClientResponseException(ClientError.APPLE_RESPONSE_UNAVAILABLE);
     }
   }
 
@@ -147,7 +121,7 @@ public class AppleAuthService implements OAuthService {
     boolean isNotSuccessResponse = !response.isSuccessful();
 
     if (isNotSuccessResponse) {
-      throw new AppleAuthException(INVALID_APPLE_AUTH_CODE);
+      throw new ClientRequestException(ClientError.INVALID_APPLE_AUTH_CODE);
     }
   }
 
