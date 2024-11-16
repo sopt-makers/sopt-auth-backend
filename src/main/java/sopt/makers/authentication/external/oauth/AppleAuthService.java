@@ -4,8 +4,8 @@ import static sopt.makers.authentication.support.code.external.failure.AppleErro
 import static sopt.makers.authentication.support.code.external.failure.AppleError.FAIL_READ_APPLE_PRIVATE_KEY_FILE;
 import static sopt.makers.authentication.support.code.external.failure.AppleError.INVALID_APPLE_AUTH_CODE;
 
+import sopt.makers.authentication.external.oauth.dto.IdTokenResponse;
 import sopt.makers.authentication.support.exception.external.AppleAuthException;
-import sopt.makers.authentication.support.exception.external.dto.IdTokenResponse;
 import sopt.makers.authentication.support.value.AppleProperty;
 
 import java.io.IOException;

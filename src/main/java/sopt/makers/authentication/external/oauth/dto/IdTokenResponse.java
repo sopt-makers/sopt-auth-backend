@@ -1,4 +1,4 @@
-package sopt.makers.authentication.support.exception.external.dto;
+package sopt.makers.authentication.external.oauth.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
