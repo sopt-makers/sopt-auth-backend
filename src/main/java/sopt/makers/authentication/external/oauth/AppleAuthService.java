@@ -15,7 +15,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.PrivateKey;
-import java.util.Base64;
 import java.util.Date;
 import java.util.Optional;
 
@@ -25,8 +24,6 @@ import org.bouncycastle.openssl.PEMParser;
 import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -50,23 +47,12 @@ public class AppleAuthService implements OAuthService {
   private final AppleProperty appleProperty;
 
   @Override
-  public String getAuthPlatformId(final String code) {
+  public IdTokenResponse getIdTokenByCode(final String code) {
     Gson gson = new Gson();
     FormBody formBody = createTokenRequestFormBody(code);
     Request request = createHttpRequest(formBody);
     Response response = executeRequest(request);
-    IdTokenResponse idTokenResponse =
-        gson.fromJson(response.body().toString(), IdTokenResponse.class);
-    String idToken = idTokenResponse.idToken();
-    return decodeIdToken(idToken);
-  }
-
-  public String decodeIdToken(String idToken) {
-    String[] parts = idToken.split("\\.");
-    String payload = new String(Base64.getDecoder().decode(parts[1]), StandardCharsets.UTF_8);
-    JsonObject payloadJson = JsonParser.parseString(payload).getAsJsonObject();
-
-    return payloadJson.get(EXTRACT_APPLE_PLATFORM_ID_FILED).getAsString();
+    return gson.fromJson(response.body().toString(), IdTokenResponse.class);
   }
 
   private FormBody createTokenRequestFormBody(final String code) {

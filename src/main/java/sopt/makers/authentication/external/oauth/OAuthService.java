@@ -1,5 +1,7 @@
 package sopt.makers.authentication.external.oauth;
 
+import sopt.makers.authentication.external.oauth.dto.IdTokenResponse;
+
 public interface OAuthService {
-  String getAuthPlatformId(String code);
+  IdTokenResponse getIdTokenByCode(String code);
 }
