@@ -14,9 +14,14 @@ public enum ClientError implements FailureCode {
   GABIA_REQUEST_FAIL(HttpStatus.BAD_REQUEST, "Gabia 요청에 실패했습니다."),
   GABIA_RESPONSE_UNAVAILABLE(HttpStatus.BAD_REQUEST, "Gabia 요청 결과 내 의도한 데이터가 없습니다."),
   GABIA_RESPONSE_BIND_FAIL(HttpStatus.BAD_REQUEST, "Gabia 요청 결과 역질렬화에 실패했습니다."),
-  INVALID_ID_TOKEN(HttpStatus.BAD_REQUEST, "유효하지 않은 id token 입니다."),
-  APPLE_RESPONSE_UNAVAILABLE(HttpStatus.BAD_REQUEST, "APPLE 인증 요청 결과 반환된 값이 없습니다."),
-  GOOGLE_RESPONSE_UNAVAILABLE(HttpStatus.BAD_REQUEST, "GOOGLE 인증 요청 결과 반환된 값이 없습니다."),
+  INVALID_ID_TOKEN(HttpStatus.INTERNAL_SERVER_ERROR, "유효하지 않은 id token 입니다."),
+  GOOGLE_RESPONSE_UNAVAILABLE(HttpStatus.INTERNAL_SERVER_ERROR, "GOOGLE 인증 요청 결과 반환된 값이 없습니다."),
+  INVALID_GOOGLE_AUTH_CODE(HttpStatus.BAD_REQUEST, "유효하지 않은 Google 인증 code 입니다"),
+  APPLE_RESPONSE_UNAVAILABLE(HttpStatus.INTERNAL_SERVER_ERROR, "APPLE 인증 요청 결과 반환된 값이 없습니다."),
+  FAIL_READ_APPLE_PRIVATE_KEY_FILE(
+      HttpStatus.INTERNAL_SERVER_ERROR, "Apple private key 파일을 읽는데 실패했습니다."),
+  APPLE_INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "Apple 인증 서버로부터 응답을 받지 못했습니다."),
+  INVALID_APPLE_AUTH_CODE(HttpStatus.BAD_REQUEST, "유효하지 않은 Apple 인증 code 입니다.");
   ;
 
   private final HttpStatus status;
