@@ -1,0 +1,115 @@
+name: Continuous Deployment for SOPT makers Authentication Production Server
+
+on:
+  push:
+    branches: [ main ]
+
+env:
+  AWS_REGION: ${{ secrets.AWS_REGION }}
+  AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
+  AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
+
+jobs:
+  build-and-push-image:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: ✅ Set up JDK 21
+        uses: actions/setup-java@v3
+        with:
+          java-version: 21
+          distribution: 'corretto'
+          cache: gradle
+
+      - name: 🤝 Grant execute permission for gradlew
+        run: chmod +x ./gradlew
+        shell: bash
+
+      - name: ⚙️ Create Gradle Property File
+        env:
+          GRADLE_PROPERTY: ${{ secrets.GRADLE_PROPERTY }}
+        run: |
+          touch gradle.properties
+          echo "$GRADLE_PROPERTY" >> ./gradle.properties  
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: $AWS_ACCESS_KEY
+          aws-secret-access-key: $AWS_SECRET_KEY
+          aws-region: $AWS_REGION
+
+      - name: 🧱 Build Image and Push to ECR
+        env:
+          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+          AWS_ECR_REPO: ${{ secrets.AWS_ECR_DEV_REPOSITORY_NAME }}
+        run: |
+          aws ecr-public get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin public.ecr.aws/$AWS_ACCOUNT_ID
+          docker build -t $AWS_ECR_REPO:latest .
+          docker tag $AWS_ECR_REPO:latest public.ecr.aws/$AWS_ACCOUNT_ID/$AWS_ECR_REPO:latest
+          docker push public.ecr.aws/$AWS_ACCOUNT_ID/$AWS_ECR_REPO:latest
+
+
+  create-deploy:
+    needs: build-and-push-image
+    runs-on: ubuntu-22.04
+    steps:
+      - name: ⚙️ Create Application Property Files
+        env:
+          APPLICATION_RESOURCE_PATH: ./src/main/resources
+          APPLICATION_PROPERTY: ${{ secrets.APPLICATION_PROPERTY }}
+          JWT_PUBLIC_KEY_PEM: ${{ secrets.JWT_DEV_RSA_PUBLIC_KEY }}
+          JWT_PRIVATE_KEY_PEM: ${{ secrets.JWT_DEV_RSA_PRIVATE_KEY }}
+        run: |
+          mkdir -p property
+          
+          touch application.properties
+          echo "$APPLICATION_PROPERTY" >> ./property/application.properties
+
+          touch jwt_public_key.pem
+          echo "$JWT_PUBLIC_KEY_PEM" >> ./property/jwt_public_key.pem
+
+          touch application.properties
+          echo "$JWT_PRIVATE_KEY_PEM" >> ./property/jwt_private_key.pem
+
+      - name: 📄 Create Script Files
+        env:
+          BUILD_SCRIPT:
+          SWITCH_SCRIPT:
+        run: |
+          mkdir -p script
+          
+          touch application.properties
+          echo "$APPLICATION_PROPERTY" >> ./script/.sh
+
+          touch jwt_public_key.pem
+          echo "$JWT_PUBLIC_KEY_PEM" >> ./script/.sh
+
+          touch application.properties
+          echo "$JWT_PRIVATE_KEY_PEM" >> ./script/.sh
+
+      - name: 📁 Make files to zip
+        run: zip -r ./$GITHUB_SHA.zip ./script ./property
+        shell: bash
+
+      - name: 🔑 Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: $AWS_ACCESS_KEY
+          aws-secret-access-key: $AWS_SECRET_KEY
+          aws-region: $AWS_REGION
+
+      - name: 🚀 Upload Property Zip to S3 and Create Code Deploy
+        env:
+          AWS_DEPLOY_APPLICATION_NAME: ${{ secrets.AWS_DEPLOY_APPLICATION_NAME }}
+          AWS_DEPLOY_GROUP_NAME: ${{ secrets.AWS_DEV_DEPLOY_GROUP_NAME }}
+          AWS_BUCKET_NAME: ${{ secrets.AWS_BUCKET_NAME }}
+          AWS_BUCKET_DEPLOY_PATH: ${{ secrets.AWS_BUCKET_DEV_DEPLOY_PATH }}
+        run: |
+          aws s3 cp --region $AWS_REGION ./$GITHUB_SHA.zip s3://$AWS_BUCKET_NAME$AWS_BUCKET_DEPLOY_PATH/$GITHUB_SHA.zip
+          aws deploy create-deployment --application-name $AWS_DEPLOY_APPLICATION_NAME
+          --deployment-config-name CodeDeployDefault.AllAtOnce
+          --deployment-group-name $AWS_DEPLOY_GROUP_NAME
+          --s3-location bucket=$AWS_BUCKET_NAME,bundleType=zip,key=$AWS_BUCKET_DEPLOY_PATH/$GITHUB_SHA.zip
