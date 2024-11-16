@@ -9,11 +9,14 @@ import sopt.makers.authentication.usecase.auth.port.out.OAuthPlatformPort;
 
 import java.text.ParseException;
 
+import org.springframework.stereotype.Component;
+
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 
 import lombok.RequiredArgsConstructor;
 
+@Component
 @RequiredArgsConstructor
 public class OAuthPlatformService implements OAuthPlatformPort {
   private final AppleAuthService appleAuthService;

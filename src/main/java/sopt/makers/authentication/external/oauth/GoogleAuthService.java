@@ -8,6 +8,8 @@ import sopt.makers.authentication.support.value.GoogleProperty;
 
 import java.io.IOException;
 
+import org.springframework.stereotype.Component;
+
 import com.google.gson.Gson;
 
 import lombok.RequiredArgsConstructor;
@@ -16,6 +18,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
+@Component
 @RequiredArgsConstructor
 public class GoogleAuthService implements OAuthService {
   private static final String GRANT_TYPE = "authorization_code";
