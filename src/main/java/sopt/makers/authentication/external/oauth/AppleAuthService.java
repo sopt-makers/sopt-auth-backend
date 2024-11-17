@@ -133,12 +133,12 @@ public class AppleAuthService implements OAuthService {
   }
 
   private IdTokenResponse parseResponseBody(Response response) {
-    boolean containsResponseBody = response.body() != null;
+    boolean containsResponseBody = response.body() == null;
 
     if (containsResponseBody) {
-      String responseBody = response.body().toString();
-      return gson.fromJson(responseBody, IdTokenResponse.class);
+      throw new ClientResponseException(APPLE_RESPONSE_UNAVAILABLE);
     }
-    throw new ClientResponseException(APPLE_RESPONSE_UNAVAILABLE);
+    String responseBody = response.body().toString();
+    return gson.fromJson(responseBody, IdTokenResponse.class);
   }
 }
