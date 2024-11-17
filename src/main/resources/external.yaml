@@ -18,6 +18,8 @@ external:
         path: ${PROD_APPLE_KEY_PATH}
       team:
         id: ${PROD_APPLE_TEAM_ID}
+      expiration:
+        token-expiration: ${APPLE_TOKEN_EXPIRATION_TIME}
     google:
       redirect:
         url: ${PROD_GOOGLE_REDIRECT_URL}
@@ -46,6 +48,8 @@ external:
         path: ${DEV_APPLE_KEY_PATH}
       team:
         id: ${DEV_APPLE_TEAM_ID}
+      expiration:
+        token-expiration: ${APPLE_TOKEN_EXPIRATION_TIME}
     google:
       redirect:
         url: ${DEV_GOOGLE_REDIRECT_URL}
@@ -75,6 +79,8 @@ external:
         path: ${LOCAL_APPLE_KEY_PATH}
       team:
         id: ${LOCAL_APPLE_TEAM_ID}
+      expiration:
+        token-expiration: ${APPLE_TOKEN_EXPIRATION_TIME}
     google:
       redirect:
         url: ${LOCAL_GOOGLE_REDIRECT_URL}

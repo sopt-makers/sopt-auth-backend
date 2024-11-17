@@ -4,7 +4,6 @@ import static sopt.makers.authentication.support.code.external.failure.ClientErr
 import static sopt.makers.authentication.support.code.external.failure.ClientError.FAIL_READ_APPLE_PRIVATE_KEY_FILE;
 import static sopt.makers.authentication.support.code.external.failure.ClientError.INVALID_APPLE_AUTH_CODE;
 import static sopt.makers.authentication.support.constant.OAuthConstant.ACCEPT;
-import static sopt.makers.authentication.support.constant.OAuthConstant.APPLE_TOKEN_EXPIRATION_TIME;
 import static sopt.makers.authentication.support.constant.OAuthConstant.APPLE_TOKEN_URL;
 import static sopt.makers.authentication.support.constant.OAuthConstant.CONTENT_TYPE;
 import static sopt.makers.authentication.support.constant.OAuthConstant.GRANT_TYPE;
@@ -78,7 +77,8 @@ public class AppleAuthService implements OAuthService {
         .setHeaderParam("kid", appleProperty.apple().key().id())
         .setHeaderParam("alg", "ES256")
         .setIssuedAt(now)
-        .setExpiration(new Date(now.getTime() + APPLE_TOKEN_EXPIRATION_TIME))
+        .setExpiration(
+            new Date(now.getTime() + appleProperty.apple().expiration().tokenExpiration()))
         .setIssuer(appleProperty.apple().team().id())
         .setAudience(appleProperty.apple().aud())
         .setSubject(appleProperty.apple().sub())
