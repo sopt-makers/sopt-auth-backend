@@ -33,11 +33,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import okhttp3.FormBody;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
+import okhttp3.*;
 
 @Component
 @RequiredArgsConstructor
@@ -133,12 +129,12 @@ public class AppleAuthService implements OAuthService {
   }
 
   private IdTokenResponse parseResponseBody(Response response) {
-    boolean isBodyNull = response.body() == null;
+    ResponseBody responseBody = response.body();
+    boolean isBodyNull = responseBody == null;
 
     if (isBodyNull) {
       throw new ClientResponseException(APPLE_RESPONSE_UNAVAILABLE);
     }
-    String responseBody = response.body().toString();
-    return gson.fromJson(responseBody, IdTokenResponse.class);
+    return gson.fromJson(response.body().toString(), IdTokenResponse.class);
   }
 }

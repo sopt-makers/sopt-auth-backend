@@ -78,12 +78,12 @@ public class GoogleAuthService implements OAuthService {
   }
 
   private IdTokenResponse parseResponseBody(Response response) {
-    boolean containsResponseBody = response.body() != null;
+    boolean isBodyNull = response.body() == null;
 
-    if (containsResponseBody) {
-      String responseBody = response.body().toString();
-      return gson.fromJson(responseBody, IdTokenResponse.class);
+    if (isBodyNull) {
+      throw new ClientResponseException(ClientError.GOOGLE_RESPONSE_UNAVAILABLE);
     }
-    throw new ClientResponseException(ClientError.GOOGLE_RESPONSE_UNAVAILABLE);
+    String responseBody = response.body().toString();
+    return gson.fromJson(responseBody, IdTokenResponse.class);
   }
 }
