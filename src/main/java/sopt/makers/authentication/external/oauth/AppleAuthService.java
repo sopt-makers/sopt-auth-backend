@@ -1,5 +1,11 @@
 package sopt.makers.authentication.external.oauth;
 
+import static sopt.makers.authentication.support.constant.OAuthConstant.ACCEPT;
+import static sopt.makers.authentication.support.constant.OAuthConstant.APPLE_TOKEN_EXPIRATION_TIME;
+import static sopt.makers.authentication.support.constant.OAuthConstant.APPLE_TOKEN_URL;
+import static sopt.makers.authentication.support.constant.OAuthConstant.CONTENT_TYPE;
+import static sopt.makers.authentication.support.constant.OAuthConstant.GRANT_TYPE;
+
 import sopt.makers.authentication.external.oauth.dto.IdTokenResponse;
 import sopt.makers.authentication.support.code.external.failure.ClientError;
 import sopt.makers.authentication.support.exception.external.ClientRequestException;
@@ -35,9 +41,6 @@ import okhttp3.Response;
 @RequiredArgsConstructor
 @Slf4j
 public class AppleAuthService implements OAuthService {
-  private static final int TOKEN_EXPIRATION_TIME = 3600 * 1000; // 1 hour
-  private static final String GRANT_TYPE = "authorization_code";
-  private static final String TOKEN_URL = "https://appleid.apple.com/auth/token";
   private final AppleProperty appleProperty;
   private final Gson gson;
   private final OkHttpClient client;
@@ -73,7 +76,7 @@ public class AppleAuthService implements OAuthService {
         .setHeaderParam("kid", appleProperty.apple().key().id())
         .setHeaderParam("alg", "ES256")
         .setIssuedAt(now)
-        .setExpiration(new Date(now.getTime() + TOKEN_EXPIRATION_TIME))
+        .setExpiration(new Date(now.getTime() + APPLE_TOKEN_EXPIRATION_TIME))
         .setIssuer(appleProperty.apple().team().id())
         .setAudience(appleProperty.apple().aud())
         .setSubject(appleProperty.apple().sub())
@@ -102,10 +105,10 @@ public class AppleAuthService implements OAuthService {
 
   private static Request createHttpRequest(RequestBody requestBody) {
     return new Request.Builder()
-        .url(TOKEN_URL)
+        .url(APPLE_TOKEN_URL)
         .post(requestBody)
-        .addHeader("Content-Type", "application/x-www-form-urlencoded")
-        .addHeader("Accept", "application/json")
+        .addHeader("Content-Type", CONTENT_TYPE)
+        .addHeader("Accept", ACCEPT)
         .build();
   }
 
