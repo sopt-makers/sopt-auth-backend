@@ -1,5 +1,8 @@
 package sopt.makers.authentication.external.oauth;
 
+import static sopt.makers.authentication.support.code.external.failure.ClientError.APPLE_RESPONSE_UNAVAILABLE;
+import static sopt.makers.authentication.support.code.external.failure.ClientError.FAIL_READ_APPLE_PRIVATE_KEY_FILE;
+import static sopt.makers.authentication.support.code.external.failure.ClientError.INVALID_APPLE_AUTH_CODE;
 import static sopt.makers.authentication.support.constant.OAuthConstant.ACCEPT;
 import static sopt.makers.authentication.support.constant.OAuthConstant.APPLE_TOKEN_EXPIRATION_TIME;
 import static sopt.makers.authentication.support.constant.OAuthConstant.APPLE_TOKEN_URL;
@@ -7,7 +10,6 @@ import static sopt.makers.authentication.support.constant.OAuthConstant.CONTENT_
 import static sopt.makers.authentication.support.constant.OAuthConstant.GRANT_TYPE;
 
 import sopt.makers.authentication.external.oauth.dto.IdTokenResponse;
-import sopt.makers.authentication.support.code.external.failure.ClientError;
 import sopt.makers.authentication.support.exception.external.ClientRequestException;
 import sopt.makers.authentication.support.exception.external.ClientResponseException;
 import sopt.makers.authentication.support.value.AppleProperty;
@@ -69,8 +71,7 @@ public class AppleAuthService implements OAuthService {
     Date now = new Date();
     PrivateKey privateKey =
         getPrivateKey()
-            .orElseThrow(
-                () -> new ClientRequestException(ClientError.FAIL_READ_APPLE_PRIVATE_KEY_FILE));
+            .orElseThrow(() -> new ClientRequestException(FAIL_READ_APPLE_PRIVATE_KEY_FILE));
 
     return Jwts.builder()
         .setHeaderParam("kid", appleProperty.apple().key().id())
@@ -119,7 +120,7 @@ public class AppleAuthService implements OAuthService {
       validateResponse(response);
       return response;
     } catch (IOException e) {
-      throw new ClientResponseException(ClientError.APPLE_RESPONSE_UNAVAILABLE);
+      throw new ClientResponseException(APPLE_RESPONSE_UNAVAILABLE);
     }
   }
 
@@ -127,7 +128,7 @@ public class AppleAuthService implements OAuthService {
     boolean isNotSuccessResponse = !response.isSuccessful();
 
     if (isNotSuccessResponse) {
-      throw new ClientRequestException(ClientError.INVALID_APPLE_AUTH_CODE);
+      throw new ClientRequestException(INVALID_APPLE_AUTH_CODE);
     }
   }
 
@@ -138,6 +139,6 @@ public class AppleAuthService implements OAuthService {
       String responseBody = response.body().toString();
       return gson.fromJson(responseBody, IdTokenResponse.class);
     }
-    throw new ClientResponseException(ClientError.APPLE_RESPONSE_UNAVAILABLE);
+    throw new ClientResponseException(APPLE_RESPONSE_UNAVAILABLE);
   }
 }
