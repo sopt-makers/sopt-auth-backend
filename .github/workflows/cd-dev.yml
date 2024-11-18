@@ -4,13 +4,10 @@ on:
   push:
     branches: [ develop ]
 
-jobs:
-  build:
-    runs-on: ubuntu-22.04
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+env:
+  AWS_REGION: ${{ secrets.AWS_REGION }}
+  AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
+  AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
 
 jobs:
   build-and-push-image:
@@ -63,18 +60,18 @@ jobs:
         env:
           APPLICATION_RESOURCE_PATH: ./src/main/resources
           APPLICATION_PROPERTY: ${{ secrets.APPLICATION_PROPERTY }}
-          JWT_PUBLIC_KEY_PEM: ${{ secrets.JWT_PROD_RSA_PUBLIC_KEY }}
-          JWT_PRIVATE_KEY_PEM: ${{ secrets.JWT_PROD_RSA_PRIVATE_KEY }}
+          JWT_PUBLIC_KEY_PEM: ${{ secrets.JWT_RSA_PUBLIC_KEY }}
+          JWT_PRIVATE_KEY_PEM: ${{ secrets.JWT_RSA_PRIVATE_KEY }}
         run: |
           mkdir -p property
           
-          touch application.properties
+          touch ./property/application.properties
           echo "$APPLICATION_PROPERTY" >> ./property/application.properties
 
-          touch jwt_public_key.pem
+          touch ./property/jwt_public_key.pem
           echo "$JWT_PUBLIC_KEY_PEM" >> ./property/jwt_public_key.pem
 
-          touch application.properties
+          touch ./property/jwt_private_key.pem
           echo "$JWT_PRIVATE_KEY_PEM" >> ./property/jwt_private_key.pem
 
       - name: 📄 Create Script Files
@@ -84,14 +81,14 @@ jobs:
         run: |
           mkdir -p script
           
-          touch application.properties
-          echo "$APPLICATION_PROPERTY" >> ./script/.sh
+          touch ./script/deploy.sh
+          echo "$DEPLOY_SCRIPT" >> ./script/deploy.sh
 
-          touch jwt_public_key.pem
-          echo "$JWT_PUBLIC_KEY_PEM" >> ./script/.sh
+          touch ./script/switch.sh
+          echo "$SWITCH_SCRIPT" >> ./script/switch.sh
 
-          touch application.properties
-          echo "$JWT_PRIVATE_KEY_PEM" >> ./script/.sh
+          touch ./script/valid.sh
+          echo "$VALIDATE_SCRIPT" >> ./script/.sh
 
       - name: 📁 Make files to zip
         run: zip -r ./$GITHUB_SHA.zip ./script ./property
