@@ -42,6 +42,7 @@ public class PhoneVerification {
   }
 
   @Getter
+  @EqualsAndHashCode
   public static class VerificationCode {
     private static final int CODE_SIZE = 6;
     private final String code;
