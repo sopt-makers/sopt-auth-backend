@@ -1,9 +1,11 @@
 package sopt.makers.authentication.application.auth.api;
 
 import sopt.makers.authentication.application.auth.dto.request.AuthRequest;
+import sopt.makers.authentication.application.auth.dto.response.AuthResponse;
 import sopt.makers.authentication.support.code.domain.success.AuthSuccess;
 import sopt.makers.authentication.support.common.api.BaseResponse;
 import sopt.makers.authentication.usecase.auth.port.in.CreatePhoneVerificationUsecase;
+import sopt.makers.authentication.usecase.auth.port.in.VerifyPhoneVerificationUsecase;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 public class AuthApiController implements AuthApi {
 
   private final CreatePhoneVerificationUsecase createVerificationUsecase;
+  private final VerifyPhoneVerificationUsecase verifyVerificationUsecase;
 
   @Override
   @PostMapping("/phone")
@@ -32,6 +35,9 @@ public class AuthApiController implements AuthApi {
   @PostMapping("/verify/phone")
   public ResponseEntity<BaseResponse<?>> verifyPhoneVerification(
       AuthRequest.VerifyPhoneVerification phoneVerification) {
-    return null;
+    AuthResponse.VerifyResult result =
+        verifyVerificationUsecase.verify(phoneVerification.toCommand());
+    return ResponseEntity.status(AuthSuccess.CREATE_PHONE_VERIFICATION.getStatus().value())
+        .body(BaseResponse.ofSuccess(AuthSuccess.CREATE_PHONE_VERIFICATION, result));
   }
 }
