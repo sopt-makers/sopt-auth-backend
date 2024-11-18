@@ -5,12 +5,14 @@ import static lombok.AccessLevel.PRIVATE;
 import java.util.Random;
 
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @Getter
 @Builder(access = PRIVATE)
 @RequiredArgsConstructor(access = PRIVATE)
+@EqualsAndHashCode
 public class PhoneVerification {
 
   private final String name;
