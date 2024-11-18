@@ -76,8 +76,9 @@ jobs:
 
       - name: 📄 Create Script Files
         env:
-          BUILD_SCRIPT:
-          SWITCH_SCRIPT:
+          DEPLOY_SCRIPT: ${{ secrets.DEPLOY_SCRIPT }}
+          SWITCH_SCRIPT: ${{ secrets.SWITCH_SCRIPT }}
+          VALIDATE_SCRIPT: ${{ secrets.VALIDATE_SCRIPT }}
         run: |
           mkdir -p script
           
