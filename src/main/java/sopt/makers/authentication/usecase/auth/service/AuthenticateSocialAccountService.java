@@ -1,12 +1,12 @@
 package sopt.makers.authentication.usecase.auth.service;
 
-import sopt.makers.authentication.domain.auth.*;
-import sopt.makers.authentication.usecase.auth.port.in.*;
-import sopt.makers.authentication.usecase.auth.port.out.*;
+import sopt.makers.authentication.domain.auth.SocialAccount;
+import sopt.makers.authentication.usecase.auth.port.in.AuthenticateSocialAccountUsecase;
+import sopt.makers.authentication.usecase.auth.port.out.OAuthPlatformPort;
 
-import org.springframework.stereotype.*;
+import org.springframework.stereotype.Service;
 
-import lombok.*;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
