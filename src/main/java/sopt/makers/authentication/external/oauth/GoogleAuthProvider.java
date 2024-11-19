@@ -32,7 +32,7 @@ import okhttp3.ResponseBody;
 
 @Component
 @RequiredArgsConstructor
-public class GoogleAuthService implements OAuthService {
+public class GoogleAuthProvider implements OAuthService {
   private final GoogleProperty googleProperty;
   private final Gson gson;
   private final OkHttpClient client;
