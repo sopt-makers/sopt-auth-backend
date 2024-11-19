@@ -1,9 +1,15 @@
 package sopt.makers.authentication.external.oauth;
 
 import static sopt.makers.authentication.support.constant.OAuthConstant.ACCEPT;
+import static sopt.makers.authentication.support.constant.OAuthConstant.ACCEPT_VALUE;
+import static sopt.makers.authentication.support.constant.OAuthConstant.CLIENT_ID;
+import static sopt.makers.authentication.support.constant.OAuthConstant.CLIENT_SECRET;
+import static sopt.makers.authentication.support.constant.OAuthConstant.CODE;
 import static sopt.makers.authentication.support.constant.OAuthConstant.CONTENT_TYPE;
 import static sopt.makers.authentication.support.constant.OAuthConstant.GOOGLE_TOKEN_URL;
 import static sopt.makers.authentication.support.constant.OAuthConstant.GRANT_TYPE;
+import static sopt.makers.authentication.support.constant.OAuthConstant.GRANT_TYPE_VALUE;
+import static sopt.makers.authentication.support.constant.OAuthConstant.REDIRECT_URI;
 
 import sopt.makers.authentication.external.oauth.dto.IdTokenResponse;
 import sopt.makers.authentication.support.code.external.failure.ClientError;
@@ -42,11 +48,11 @@ public class GoogleAuthService implements OAuthService {
 
   private FormBody createTokenRequestFormBody(String code) {
     return new FormBody.Builder()
-        .add("client_id", googleProperty.google().client().id())
-        .add("client_secret", googleProperty.google().client().secret())
-        .add("code", code)
-        .add("grant_type", GRANT_TYPE)
-        .add("redirect_uri", googleProperty.google().redirect().url())
+        .add(CLIENT_ID, googleProperty.google().client().id())
+        .add(CLIENT_SECRET, googleProperty.google().client().secret())
+        .add(CODE, code)
+        .add(GRANT_TYPE, GRANT_TYPE_VALUE)
+        .add(REDIRECT_URI, googleProperty.google().redirect().url())
         .build();
   }
 
@@ -54,8 +60,8 @@ public class GoogleAuthService implements OAuthService {
     return new Request.Builder()
         .url(GOOGLE_TOKEN_URL)
         .post(formBody)
-        .addHeader("Content-Type", CONTENT_TYPE)
-        .addHeader("Accept", ACCEPT)
+        .addHeader(CONTENT_TYPE, CONTENT_TYPE)
+        .addHeader(ACCEPT, ACCEPT_VALUE)
         .build();
   }
 

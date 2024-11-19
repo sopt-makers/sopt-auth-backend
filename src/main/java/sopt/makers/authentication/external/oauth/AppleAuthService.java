@@ -4,9 +4,18 @@ import static sopt.makers.authentication.support.code.external.failure.ClientErr
 import static sopt.makers.authentication.support.code.external.failure.ClientError.FAIL_READ_APPLE_PRIVATE_KEY_FILE;
 import static sopt.makers.authentication.support.code.external.failure.ClientError.INVALID_APPLE_AUTH_CODE;
 import static sopt.makers.authentication.support.constant.OAuthConstant.ACCEPT;
+import static sopt.makers.authentication.support.constant.OAuthConstant.ACCEPT_VALUE;
+import static sopt.makers.authentication.support.constant.OAuthConstant.APPLE_ALGORITHM_HEADER;
+import static sopt.makers.authentication.support.constant.OAuthConstant.APPLE_ALGORITHM_VALUE;
+import static sopt.makers.authentication.support.constant.OAuthConstant.APPLE_KEY_ID_HEADER;
 import static sopt.makers.authentication.support.constant.OAuthConstant.APPLE_TOKEN_URL;
+import static sopt.makers.authentication.support.constant.OAuthConstant.CLIENT_ID;
+import static sopt.makers.authentication.support.constant.OAuthConstant.CLIENT_SECRET;
+import static sopt.makers.authentication.support.constant.OAuthConstant.CODE;
 import static sopt.makers.authentication.support.constant.OAuthConstant.CONTENT_TYPE;
+import static sopt.makers.authentication.support.constant.OAuthConstant.CONTENT_TYPE_VALUE;
 import static sopt.makers.authentication.support.constant.OAuthConstant.GRANT_TYPE;
+import static sopt.makers.authentication.support.constant.OAuthConstant.GRANT_TYPE_VALUE;
 
 import sopt.makers.authentication.external.oauth.dto.IdTokenResponse;
 import sopt.makers.authentication.support.exception.external.ClientRequestException;
@@ -60,10 +69,10 @@ public class AppleAuthService implements OAuthService {
     String clientId = appleProperty.apple().sub();
     String clientSecret = createClientSecret();
     return new FormBody.Builder()
-        .add("client_id", clientId)
-        .add("client_secret", clientSecret)
-        .add("code", code)
-        .add("grant_type", GRANT_TYPE)
+        .add(CLIENT_ID, clientId)
+        .add(CLIENT_SECRET, clientSecret)
+        .add(CODE, code)
+        .add(GRANT_TYPE, GRANT_TYPE_VALUE)
         .build();
   }
 
@@ -74,8 +83,8 @@ public class AppleAuthService implements OAuthService {
             .orElseThrow(() -> new ClientRequestException(FAIL_READ_APPLE_PRIVATE_KEY_FILE));
 
     return Jwts.builder()
-        .setHeaderParam("kid", appleProperty.apple().key().id())
-        .setHeaderParam("alg", "ES256")
+        .setHeaderParam(APPLE_KEY_ID_HEADER, appleProperty.apple().key().id())
+        .setHeaderParam(APPLE_ALGORITHM_HEADER, APPLE_ALGORITHM_VALUE)
         .setIssuedAt(now)
         .setExpiration(
             new Date(now.getTime() + appleProperty.apple().expiration().tokenExpiration()))
@@ -109,8 +118,8 @@ public class AppleAuthService implements OAuthService {
     return new Request.Builder()
         .url(APPLE_TOKEN_URL)
         .post(requestBody)
-        .addHeader("Content-Type", CONTENT_TYPE)
-        .addHeader("Accept", ACCEPT)
+        .addHeader(CONTENT_TYPE, CONTENT_TYPE_VALUE)
+        .addHeader(ACCEPT, ACCEPT_VALUE)
         .build();
   }
 
