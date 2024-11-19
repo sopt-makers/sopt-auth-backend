@@ -62,6 +62,8 @@ jobs:
           APPLICATION_PROPERTY: ${{ secrets.APPLICATION_PROPERTY }}
           JWT_PUBLIC_KEY_PEM: ${{ secrets.JWT_DEV_RSA_PUBLIC_KEY }}
           JWT_PRIVATE_KEY_PEM: ${{ secrets.JWT_DEV_RSA_PRIVATE_KEY }}
+          APPLE_CREDENTIAL_KEY: ${{ secrets.APPLE_DEV_AUTH_P8_NAME }}
+          APPLE_CREDENTIAL: ${{ secrets.APPLE_DEV_AUTH_P8_CONTENT }}
         run: |
           mkdir -p property
           
@@ -73,6 +75,9 @@ jobs:
 
           touch ./property/jwt_private_key.pem
           echo "$JWT_PRIVATE_KEY_PEM" >> ./property/jwt_private_key.pem
+          
+          touch ./property/$APPLE_CREDENTIAL_KEY
+          echo "$APPLE_CREDENTIAL_CONTENT" >> ./property/$APPLE_CREDENTIAL_KEY
 
       - name: 📄 Create Script Files
         env:
