@@ -1,6 +1,5 @@
 package sopt.makers.authentication.usecase.auth.service;
 
-import sopt.makers.authentication.application.auth.dto.response.AuthResponse;
 import sopt.makers.authentication.domain.auth.PhoneVerification;
 import sopt.makers.authentication.usecase.auth.port.in.VerifyPhoneVerificationUsecase;
 import sopt.makers.authentication.usecase.auth.port.out.PhoneVerificationRepository;
@@ -15,7 +14,7 @@ public class VerifyVerificationService implements VerifyPhoneVerificationUsecase
   private final PhoneVerificationRepository phoneVerificationRepository;
 
   @Override
-  public AuthResponse.VerifyResult verify(VerifyVerificationCommand command) {
+  public boolean verify(VerifyVerificationCommand command) {
     PhoneVerification targetVerification =
         PhoneVerification.of(
             command.name(), command.phone(), command.verificationType(), command.code());
@@ -26,6 +25,6 @@ public class VerifyVerificationService implements VerifyPhoneVerificationUsecase
     if (isVerified) {
       phoneVerificationRepository.deletedByPhoneVerification(findVerification);
     }
-    return new AuthResponse.VerifyResult(isVerified);
+    return isVerified;
   }
 }

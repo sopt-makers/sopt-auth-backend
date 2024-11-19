@@ -1,10 +1,10 @@
 package sopt.makers.authentication.application.auth.dto.request;
 
 import static lombok.AccessLevel.PRIVATE;
-import static sopt.makers.authentication.usecase.auth.port.in.VerifyPhoneVerificationUsecase.*;
 
 import sopt.makers.authentication.domain.auth.PhoneVerificationType;
 import sopt.makers.authentication.usecase.auth.port.in.CreatePhoneVerificationUsecase.CreateVerificationCommand;
+import sopt.makers.authentication.usecase.auth.port.in.VerifyPhoneVerificationUsecase.VerifyVerificationCommand;
 
 import lombok.RequiredArgsConstructor;
 
