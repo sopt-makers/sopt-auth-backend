@@ -1,6 +1,7 @@
 name: Continuous Deployment for SOPT makers Authentication Development Server
 
 on:
+  workflow_dispatch:
   push:
     branches: [ develop ]
 
@@ -31,10 +32,10 @@ jobs:
         env:
           GRADLE_PROPERTY: ${{ secrets.GRADLE_PROPERTY }}
         run: |
-          touch gradle.properties
+          touch ./gradle.properties
           echo "$GRADLE_PROPERTY" >> ./gradle.properties  
 
-      - name: Configure AWS credentials
+      - name: 🔒Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: $AWS_ACCESS_KEY
@@ -58,7 +59,6 @@ jobs:
     steps:
       - name: ⚙️ Create Application Property Files
         env:
-          APPLICATION_RESOURCE_PATH: ./src/main/resources
           APPLICATION_PROPERTY: ${{ secrets.APPLICATION_PROPERTY }}
           JWT_PUBLIC_KEY_PEM: ${{ secrets.JWT_RSA_PUBLIC_KEY }}
           JWT_PRIVATE_KEY_PEM: ${{ secrets.JWT_RSA_PRIVATE_KEY }}
@@ -89,7 +89,7 @@ jobs:
           echo "$SWITCH_SCRIPT" >> ./script/switch.sh
 
           touch ./script/valid.sh
-          echo "$VALIDATE_SCRIPT" >> ./script/.sh
+          echo "$VALIDATE_SCRIPT" >> ./script/valid.sh
 
       - name: 📁 Make files to zip
         run: zip -r ./$GITHUB_SHA.zip ./script ./property
@@ -105,9 +105,9 @@ jobs:
       - name: 🚀 Upload Property Zip to S3 and Create Code Deploy
         env:
           AWS_DEPLOY_APPLICATION_NAME: ${{ secrets.AWS_DEPLOY_APPLICATION_NAME }}
-          AWS_DEPLOY_GROUP_NAME: ${{ secrets.AWS_PROD_DEPLOY_GROUP_NAME }}
+          AWS_DEPLOY_GROUP_NAME: ${{ secrets.AWS_DEV_DEPLOY_GROUP_NAME }}
           AWS_BUCKET_NAME: ${{ secrets.AWS_BUCKET_NAME }}
-          AWS_BUCKET_DEPLOY_PATH: ${{ secrets.AWS_BUCKET_PROD_DEPLOY_PATH }}
+          AWS_BUCKET_DEPLOY_PATH: ${{ secrets.AWS_BUCKET_DEV_DEPLOY_PATH }}
         run: |
           aws s3 cp --region $AWS_REGION ./$GITHUB_SHA.zip s3://$AWS_BUCKET_NAME$AWS_BUCKET_DEPLOY_PATH/$GITHUB_SHA.zip
           aws deploy create-deployment --application-name $AWS_DEPLOY_APPLICATION_NAME

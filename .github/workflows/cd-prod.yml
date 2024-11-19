@@ -1,6 +1,7 @@
 name: Continuous Deployment for SOPT makers Authentication Production Server
 
 on:
+  workflow_dispatch:
   push:
     branches: [ main ]
 
@@ -31,10 +32,10 @@ jobs:
         env:
           GRADLE_PROPERTY: ${{ secrets.GRADLE_PROPERTY }}
         run: |
-          touch gradle.properties
+          touch ./gradle.properties
           echo "$GRADLE_PROPERTY" >> ./gradle.properties  
 
-      - name: Configure AWS credentials
+      - name: 🔒Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: $AWS_ACCESS_KEY
@@ -58,37 +59,38 @@ jobs:
     steps:
       - name: ⚙️ Create Application Property Files
         env:
-          APPLICATION_RESOURCE_PATH: ./src/main/resources
           APPLICATION_PROPERTY: ${{ secrets.APPLICATION_PROPERTY }}
-          JWT_PUBLIC_KEY_PEM: ${{ secrets.JWT_DEV_RSA_PUBLIC_KEY }}
-          JWT_PRIVATE_KEY_PEM: ${{ secrets.JWT_DEV_RSA_PRIVATE_KEY }}
+          JWT_PUBLIC_KEY_PEM: ${{ secrets.JWT_RSA_PUBLIC_KEY }}
+          JWT_PRIVATE_KEY_PEM: ${{ secrets.JWT_RSA_PRIVATE_KEY }}
         run: |
           mkdir -p property
           
-          touch application.properties
+          touch ./property/application.properties
           echo "$APPLICATION_PROPERTY" >> ./property/application.properties
 
-          touch jwt_public_key.pem
+          touch ./property/jwt_public_key.pem
           echo "$JWT_PUBLIC_KEY_PEM" >> ./property/jwt_public_key.pem
 
-          touch application.properties
+          touch ./property/jwt_private_key.pem
           echo "$JWT_PRIVATE_KEY_PEM" >> ./property/jwt_private_key.pem
 
       - name: 📄 Create Script Files
         env:
-          BUILD_SCRIPT:
-          SWITCH_SCRIPT:
+          DEPLOY_SCRIPT: ${{ secrets.DEPLOY_SCRIPT }}
+          SWITCH_SCRIPT: ${{ secrets.SWITCH_SCRIPT }}
+          VALIDATE_SCRIPT: ${{ secrets.VALIDATE_SCRIPT }}
         run: |
           mkdir -p script
           
-          touch application.properties
-          echo "$APPLICATION_PROPERTY" >> ./script/.sh
+          touch ./script/deploy.sh
+          echo "$DEPLOY_SCRIPT" >> ./script/deploy.sh
 
-          touch jwt_public_key.pem
-          echo "$JWT_PUBLIC_KEY_PEM" >> ./script/.sh
+          touch ./script/switch.sh
+          echo "$SWITCH_SCRIPT" >> ./script/switch.sh
 
-          touch application.properties
-          echo "$JWT_PRIVATE_KEY_PEM" >> ./script/.sh
+          touch ./script/valid.sh
+          echo "$VALIDATE_SCRIPT" >> ./script/valid.sh
+        shell: bash
 
       - name: 📁 Make files to zip
         run: zip -r ./$GITHUB_SHA.zip ./script ./property
@@ -104,9 +106,9 @@ jobs:
       - name: 🚀 Upload Property Zip to S3 and Create Code Deploy
         env:
           AWS_DEPLOY_APPLICATION_NAME: ${{ secrets.AWS_DEPLOY_APPLICATION_NAME }}
-          AWS_DEPLOY_GROUP_NAME: ${{ secrets.AWS_DEV_DEPLOY_GROUP_NAME }}
+          AWS_DEPLOY_GROUP_NAME: ${{ secrets.AWS_PROD_DEPLOY_GROUP_NAME }}
           AWS_BUCKET_NAME: ${{ secrets.AWS_BUCKET_NAME }}
-          AWS_BUCKET_DEPLOY_PATH: ${{ secrets.AWS_BUCKET_DEV_DEPLOY_PATH }}
+          AWS_BUCKET_DEPLOY_PATH: ${{ secrets.AWS_BUCKET_PROD_DEPLOY_PATH }}
         run: |
           aws s3 cp --region $AWS_REGION ./$GITHUB_SHA.zip s3://$AWS_BUCKET_NAME$AWS_BUCKET_DEPLOY_PATH/$GITHUB_SHA.zip
           aws deploy create-deployment --application-name $AWS_DEPLOY_APPLICATION_NAME
