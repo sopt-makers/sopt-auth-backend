@@ -103,7 +103,7 @@ public class AppleAuthProvider implements OAuthService {
     try (PEMParser pemParser = createPemParser(appleKeyPath)) {
       return parsePrivateKey(pemParser);
     } catch (IOException e) {
-      log.error("Error while reading private key: {}", e.getMessage());
+      log.error(e.getMessage());
       return Optional.empty();
     }
   }
