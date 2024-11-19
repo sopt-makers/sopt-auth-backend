@@ -19,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 @Component
 @RequiredArgsConstructor
 public class OAuthPlatformService implements OAuthPlatformPort {
-  private final AppleAuthService appleAuthService;
+  private final AppleAuthProvider appleAuthProvider;
   private final GoogleAuthService googleAuthService;
 
   public String getAuthPlatformId(AuthPlatform authPlatform, String code) {
@@ -29,7 +29,7 @@ public class OAuthPlatformService implements OAuthPlatformPort {
 
   public IdTokenResponse getIdTokenByCode(AuthPlatform type, String code) {
     return switch (type) {
-      case APPLE -> appleAuthService.getIdTokenByCode(code);
+      case APPLE -> appleAuthProvider.getIdTokenByCode(code);
       case GOOGLE -> googleAuthService.getIdTokenByCode(code);
     };
   }
