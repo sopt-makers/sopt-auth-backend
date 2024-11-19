@@ -24,6 +24,7 @@ import sopt.makers.authentication.support.value.AppleProperty;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.security.PrivateKey;
 import java.util.Date;
@@ -52,6 +53,7 @@ import okhttp3.ResponseBody;
 @RequiredArgsConstructor
 @Slf4j
 public class AppleAuthProvider implements OAuthService {
+  private static final Charset UTF_8 = StandardCharsets.UTF_8;
   private final AppleProperty appleProperty;
   private final Gson gson;
   private final OkHttpClient client;
@@ -98,20 +100,24 @@ public class AppleAuthProvider implements OAuthService {
   private Optional<PrivateKey> getPrivateKey() {
     String appleKeyPath = appleProperty.apple().key().path();
 
-    try {
-      ClassPathResource resource = new ClassPathResource(appleKeyPath);
-      String privateKey =
-          new String(resource.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
-      StringReader pemReader = new StringReader(privateKey);
-      PEMParser pemParser = new PEMParser(pemReader);
-      JcaPEMKeyConverter converter = new JcaPEMKeyConverter();
-      PrivateKeyInfo privateKeyInfo = (PrivateKeyInfo) pemParser.readObject();
-
-      return Optional.of(converter.getPrivateKey(privateKeyInfo));
+    try (PEMParser pemParser = createPemParser(appleKeyPath)) {
+      return parsePrivateKey(pemParser);
     } catch (IOException e) {
-      log.error(e.getMessage());
+      log.error("Error while reading private key: {}", e.getMessage());
       return Optional.empty();
     }
+  }
+
+  private PEMParser createPemParser(String appleKeyPath) throws IOException {
+    ClassPathResource resource = new ClassPathResource(appleKeyPath);
+    String privateKey = new String(resource.getInputStream().readAllBytes(), UTF_8);
+    return new PEMParser(new StringReader(privateKey));
+  }
+
+  private Optional<PrivateKey> parsePrivateKey(PEMParser pemParser) throws IOException {
+    JcaPEMKeyConverter converter = new JcaPEMKeyConverter();
+    PrivateKeyInfo privateKeyInfo = (PrivateKeyInfo) pemParser.readObject();
+    return Optional.of(converter.getPrivateKey(privateKeyInfo));
   }
 
   private static Request createHttpRequest(RequestBody requestBody) {
