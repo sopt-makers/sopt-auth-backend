@@ -29,7 +29,7 @@ public class CreateVerificationService implements CreatePhoneVerificationUsecase
             convertCodeToMessage(phoneVerification.getVerificationCode().getCode()));
 
     messageSendPort.sendMessage(verificationMessage);
-    return verificationRepository.save(phoneVerification);
+    return verificationRepository.create(phoneVerification);
   }
 
   private String convertCodeToMessage(String code) {
