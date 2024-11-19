@@ -60,8 +60,8 @@ jobs:
       - name: ⚙️ Create Application Property Files
         env:
           APPLICATION_PROPERTY: ${{ secrets.APPLICATION_PROPERTY }}
-          JWT_PUBLIC_KEY_PEM: ${{ secrets.JWT_RSA_PUBLIC_KEY }}
-          JWT_PRIVATE_KEY_PEM: ${{ secrets.JWT_RSA_PRIVATE_KEY }}
+          JWT_PUBLIC_KEY_PEM: ${{ secrets.JWT_PROD_RSA_PUBLIC_KEY }}
+          JWT_PRIVATE_KEY_PEM: ${{ secrets.JWT_PROD_RSA_PRIVATE_KEY }}
         run: |
           mkdir -p property
           
