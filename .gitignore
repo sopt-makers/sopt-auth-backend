@@ -43,3 +43,5 @@ out/
 *.pem
 *p8
 
+### Deploy ###
+script/
