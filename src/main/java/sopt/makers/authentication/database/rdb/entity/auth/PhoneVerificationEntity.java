@@ -22,7 +22,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor(access = PRIVATE)
 public class PhoneVerificationEntity extends BaseEntity {
 
-  @Column(name = "name", nullable = false)
+  @Column(name = "name")
   private String name;
 
   @Column(name = "phone", nullable = false)

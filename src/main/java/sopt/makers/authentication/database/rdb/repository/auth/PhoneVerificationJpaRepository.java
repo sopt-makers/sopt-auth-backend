@@ -12,16 +12,15 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 interface PhoneVerificationJpaRepository extends JpaRepository<PhoneVerificationEntity, Long> {
 
-  Optional<PhoneVerificationEntity> findByNameAndPhoneAndCodeAndType(
-      String name, String phone, String code, PhoneVerificationType type);
+  Optional<PhoneVerificationEntity> findByPhoneAndCodeAndType(
+      String phone, String code, PhoneVerificationType type);
 
   void deleteByNameAndPhoneAndCodeAndType(
       String name, String phone, String code, PhoneVerificationType type);
 
   default PhoneVerificationEntity findByPhoneVerification(PhoneVerification verification) {
     PhoneVerificationEntity targetPhoneVerificationEntity =
-        findByNameAndPhoneAndCodeAndType(
-                verification.getName(),
+        findByPhoneAndCodeAndType(
                 verification.getPhone(),
                 verification.getVerificationCode().getCode(),
                 verification.getVerificationType())
