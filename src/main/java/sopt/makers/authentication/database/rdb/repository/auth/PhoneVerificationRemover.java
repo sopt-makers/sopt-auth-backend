@@ -16,6 +16,10 @@ public class PhoneVerificationRemover {
   private final PhoneVerificationJpaRepository jpaRepository;
 
   public void remove(PhoneVerification phoneVerification) {
-    jpaRepository.deleteByVerification(phoneVerification);
+    jpaRepository.deleteByNameAndPhoneAndCodeAndType(
+        phoneVerification.getName(),
+        phoneVerification.getPhone(),
+        phoneVerification.getVerificationCode().getCode(),
+        phoneVerification.getVerificationType());
   }
 }
