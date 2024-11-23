@@ -5,7 +5,7 @@ import static sopt.makers.authentication.support.code.external.failure.ClientErr
 import sopt.makers.authentication.domain.auth.AuthPlatform;
 import sopt.makers.authentication.external.oauth.dto.IdTokenResponse;
 import sopt.makers.authentication.support.exception.external.*;
-import sopt.makers.authentication.usecase.auth.port.out.OAuthPlatformPort;
+import sopt.makers.authentication.usecase.auth.port.out.OAuthAuthenticator;
 
 import java.text.ParseException;
 
@@ -16,11 +16,12 @@ import com.nimbusds.jwt.SignedJWT;
 
 import lombok.RequiredArgsConstructor;
 
+// 애는 원래 서비스
 @Component
 @RequiredArgsConstructor
-public class OAuthPlatformService implements OAuthPlatformPort {
-  private final AppleAuthProvider appleAuthProvider;
-  private final GoogleAuthProvider googleAuthProvider;
+public class OAuthAuthenticatorImpl implements OAuthAuthenticator { // OAuthAuthenticatorImpl
+  private final AppleAuthService appleAuthService;
+  private final GoogleAuthService googleAuthService;
 
   public String getAuthPlatformId(AuthPlatform authPlatform, String code) {
     IdTokenResponse idTokenResponse = getIdTokenByCode(authPlatform, code);
@@ -29,8 +30,8 @@ public class OAuthPlatformService implements OAuthPlatformPort {
 
   public IdTokenResponse getIdTokenByCode(AuthPlatform type, String code) {
     return switch (type) {
-      case APPLE -> appleAuthProvider.getIdTokenByCode(code);
-      case GOOGLE -> googleAuthProvider.getIdTokenByCode(code);
+      case APPLE -> appleAuthService.getIdTokenByCode(code);
+      case GOOGLE -> googleAuthService.getIdTokenByCode(code);
     };
   }
 

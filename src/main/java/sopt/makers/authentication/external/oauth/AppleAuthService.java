@@ -45,7 +45,7 @@ import okhttp3.ResponseBody;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class AppleAuthProvider implements OAuthService {
+public class AppleAuthService implements OAuthService {
   private final AppleProperty appleProperty;
   private final Gson gson;
   private final OkHttpClient client;
