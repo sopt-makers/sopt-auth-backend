@@ -1,18 +1,20 @@
 package sopt.makers.authentication.external.oauth;
 
+import static sopt.makers.authentication.support.code.external.failure.ClientError.GOOGLE_RESPONSE_UNAVAILABLE;
+import static sopt.makers.authentication.support.code.external.failure.ClientError.INVALID_GOOGLE_AUTH_CODE;
 import static sopt.makers.authentication.support.constant.OAuthConstant.ACCEPT;
 import static sopt.makers.authentication.support.constant.OAuthConstant.ACCEPT_VALUE;
 import static sopt.makers.authentication.support.constant.OAuthConstant.CLIENT_ID;
 import static sopt.makers.authentication.support.constant.OAuthConstant.CLIENT_SECRET;
 import static sopt.makers.authentication.support.constant.OAuthConstant.CODE;
 import static sopt.makers.authentication.support.constant.OAuthConstant.CONTENT_TYPE;
+import static sopt.makers.authentication.support.constant.OAuthConstant.CONTENT_TYPE_VALUE;
 import static sopt.makers.authentication.support.constant.OAuthConstant.GOOGLE_TOKEN_URL;
 import static sopt.makers.authentication.support.constant.OAuthConstant.GRANT_TYPE;
 import static sopt.makers.authentication.support.constant.OAuthConstant.GRANT_TYPE_VALUE;
 import static sopt.makers.authentication.support.constant.OAuthConstant.REDIRECT_URI;
 
 import sopt.makers.authentication.external.oauth.dto.IdTokenResponse;
-import sopt.makers.authentication.support.code.external.failure.ClientError;
 import sopt.makers.authentication.support.exception.external.ClientRequestException;
 import sopt.makers.authentication.support.exception.external.ClientResponseException;
 import sopt.makers.authentication.support.value.GoogleProperty;
@@ -60,7 +62,7 @@ public class GoogleAuthProvider implements OAuthService {
     return new Request.Builder()
         .url(GOOGLE_TOKEN_URL)
         .post(formBody)
-        .addHeader(CONTENT_TYPE, CONTENT_TYPE)
+        .addHeader(CONTENT_TYPE, CONTENT_TYPE_VALUE)
         .addHeader(ACCEPT, ACCEPT_VALUE)
         .build();
   }
@@ -72,7 +74,7 @@ public class GoogleAuthProvider implements OAuthService {
       validateResponse(response);
       return response;
     } catch (IOException e) {
-      throw new ClientResponseException(ClientError.GOOGLE_RESPONSE_UNAVAILABLE);
+      throw new ClientResponseException(GOOGLE_RESPONSE_UNAVAILABLE);
     }
   }
 
@@ -80,7 +82,7 @@ public class GoogleAuthProvider implements OAuthService {
     boolean isNotSuccessResponse = !response.isSuccessful();
 
     if (isNotSuccessResponse) {
-      throw new ClientRequestException(ClientError.INVALID_GOOGLE_AUTH_CODE);
+      throw new ClientRequestException(INVALID_GOOGLE_AUTH_CODE);
     }
   }
 
@@ -89,7 +91,7 @@ public class GoogleAuthProvider implements OAuthService {
     boolean isBodyNull = responseBody == null;
 
     if (isBodyNull) {
-      throw new ClientResponseException(ClientError.GOOGLE_RESPONSE_UNAVAILABLE);
+      throw new ClientResponseException(GOOGLE_RESPONSE_UNAVAILABLE);
     }
     return gson.fromJson(responseBody.toString(), IdTokenResponse.class);
   }
