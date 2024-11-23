@@ -20,20 +20,13 @@ import static sopt.makers.authentication.support.constant.OAuthConstant.GRANT_TY
 import sopt.makers.authentication.external.oauth.dto.IdTokenResponse;
 import sopt.makers.authentication.support.exception.external.ClientRequestException;
 import sopt.makers.authentication.support.exception.external.ClientResponseException;
+import sopt.makers.authentication.support.util.*;
 import sopt.makers.authentication.support.value.AppleProperty;
 
 import java.io.IOException;
-import java.io.StringReader;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.security.PrivateKey;
 import java.util.Date;
-import java.util.Optional;
 
-import org.bouncycastle.asn1.pkcs.PrivateKeyInfo;
-import org.bouncycastle.openssl.PEMParser;
-import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
 import com.google.gson.Gson;
@@ -53,7 +46,6 @@ import okhttp3.ResponseBody;
 @RequiredArgsConstructor
 @Slf4j
 public class AppleAuthProvider implements OAuthService {
-  private static final Charset UTF_8 = StandardCharsets.UTF_8;
   private final AppleProperty appleProperty;
   private final Gson gson;
   private final OkHttpClient client;
@@ -81,10 +73,10 @@ public class AppleAuthProvider implements OAuthService {
   private String createClientSecret() {
     Date now = new Date();
     PrivateKey privateKey =
-        getPrivateKey()
+        KeyFileUtil.getPrivateKey(appleProperty.apple().key().path())
             .orElseThrow(() -> new ClientRequestException(FAIL_READ_APPLE_PRIVATE_KEY_FILE));
 
-    return Jwts.builder()
+    return Jwts.builder() // 토큰 생성 로직은 tokenProvider? 근데 얘는 parse는 없음
         .setHeaderParam(APPLE_KEY_ID_HEADER, appleProperty.apple().key().id())
         .setHeaderParam(APPLE_ALGORITHM_HEADER, APPLE_ALGORITHM_VALUE)
         .setIssuedAt(now)
@@ -95,29 +87,6 @@ public class AppleAuthProvider implements OAuthService {
         .setSubject(appleProperty.apple().sub())
         .signWith(privateKey, SignatureAlgorithm.ES256)
         .compact();
-  }
-
-  private Optional<PrivateKey> getPrivateKey() {
-    String appleKeyPath = appleProperty.apple().key().path();
-
-    try (PEMParser pemParser = createPemParser(appleKeyPath)) {
-      return parsePrivateKey(pemParser);
-    } catch (IOException e) {
-      log.error(e.getMessage());
-      return Optional.empty();
-    }
-  }
-
-  private PEMParser createPemParser(String appleKeyPath) throws IOException {
-    ClassPathResource resource = new ClassPathResource(appleKeyPath);
-    String privateKey = new String(resource.getInputStream().readAllBytes(), UTF_8);
-    return new PEMParser(new StringReader(privateKey));
-  }
-
-  private Optional<PrivateKey> parsePrivateKey(PEMParser pemParser) throws IOException {
-    JcaPEMKeyConverter converter = new JcaPEMKeyConverter();
-    PrivateKeyInfo privateKeyInfo = (PrivateKeyInfo) pemParser.readObject();
-    return Optional.of(converter.getPrivateKey(privateKeyInfo));
   }
 
   private static Request createHttpRequest(RequestBody requestBody) {
