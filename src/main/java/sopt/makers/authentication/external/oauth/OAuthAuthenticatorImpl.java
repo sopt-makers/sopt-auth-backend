@@ -16,10 +16,9 @@ import com.nimbusds.jwt.SignedJWT;
 
 import lombok.RequiredArgsConstructor;
 
-// 애는 원래 서비스
 @Component
 @RequiredArgsConstructor
-public class OAuthAuthenticatorImpl implements OAuthAuthenticator { // OAuthAuthenticatorImpl
+public class OAuthAuthenticatorImpl implements OAuthAuthenticator {
   private final AppleAuthService appleAuthService;
   private final GoogleAuthService googleAuthService;
 
