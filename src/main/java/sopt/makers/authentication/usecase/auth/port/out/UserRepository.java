@@ -5,4 +5,6 @@ import sopt.makers.authentication.domain.user.User;
 
 public interface UserRepository {
   User findBySocialAccount(SocialAccount socialAccount);
+
+  Long findIdByUser(User user);
 }
