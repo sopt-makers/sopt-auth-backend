@@ -1,7 +1,7 @@
 package sopt.makers.authentication.application.auth.api;
 
 import sopt.makers.authentication.application.auth.dto.request.AuthRequest;
-import sopt.makers.authentication.application.auth.dto.response.AuthResponse;
+import sopt.makers.authentication.application.auth.dto.request.AuthRequest.*;
 import sopt.makers.authentication.support.common.api.BaseResponse;
 
 import org.springframework.http.ResponseEntity;
@@ -14,9 +14,9 @@ public interface AuthApi {
   ResponseEntity<BaseResponse<?>> verifyPhoneVerification(
       AuthRequest.VerifyPhoneVerification phoneVerification);
 
-  ResponseEntity<BaseResponse<AuthResponse.AuthenticateSocialAuthInfoForWeb>>
-      authenticateSocialAuthInfoFromWeb(AuthRequest.AuthenticateSocialAuthInfo socialAuthInfo);
+  ResponseEntity<BaseResponse<?>> authenticateSocialAuthInfoFromWeb(
+      AuthenticateSocialAuthInfo socialAuthInfo);
 
-  ResponseEntity<BaseResponse<AuthResponse.AuthenticateSocialAuthInfoForApp>>
-      authenticateSocialAuthInfoFromApp(AuthRequest.AuthenticateSocialAuthInfo socialAuthInfo);
+  ResponseEntity<BaseResponse<?>> authenticateSocialAuthInfoFromApp(
+      AuthRequest.AuthenticateSocialAuthInfo socialAuthInfo);
 }
