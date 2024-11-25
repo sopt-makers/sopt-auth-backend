@@ -2,7 +2,7 @@ package sopt.makers.authentication.support.constant;
 
 import static lombok.AccessLevel.PRIVATE;
 
-import lombok.*;
+import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor(access = PRIVATE)
 public final class OAuthConstant {
