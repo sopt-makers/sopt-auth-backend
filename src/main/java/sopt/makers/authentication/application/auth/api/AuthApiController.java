@@ -61,7 +61,7 @@ public class AuthApiController implements AuthApi {
   }
 
   @Override
-  @PostMapping("/web/app")
+  @PostMapping("/app/login")
   public ResponseEntity<BaseResponse<?>> authenticateSocialAuthInfoFromApp(
       AuthRequest.AuthenticateSocialAuthInfo socialAuthInfo) {
     AuthenticateTokenInfo tokenInfo =
