@@ -2,8 +2,8 @@ version: 0.0
 os: linux
 
 files:
-  - source: /
-    destination: /home/ubuntu
+  - source: /script
+    destination: /home/ubuntu/script/auth
 file_exists_behavior: OVERWRITE
 
 permissions:
