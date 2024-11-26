@@ -37,7 +37,8 @@ out/
 .vscode/
 
 ### Propety ###
-*.properties
+gradle.properties
+**/src/main/resources/*.properties
 
 ### Key ###
 *.pem
