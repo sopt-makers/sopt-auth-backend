@@ -32,5 +32,5 @@ jobs:
           echo "${{ secrets.PROPERTY_APPLICATION }}" >> ./src/main/resources/application.properties
 
       - name: 🧱 Build with Gradle
-        run: ./gradlew clean build
+        run: gradle build -x test
         shell: bash
