@@ -2,7 +2,7 @@ name: Continuous Integration for SOPT makers Authentication Project
 
 on:
   pull_request:
-    branches: [ develop ]
+    branches: [ dev ]
 
 jobs:
   build:
@@ -24,16 +24,12 @@ jobs:
         shell: bash
 
       - name: 🔑 Create Application Property File
-        env:
-          APPLICATION_RESOURCE_PATH: ./src/main/resources
         run: |
-          touch $APPLICATION_RESOURCE_PATH/application.properties
-          touch $APPLICATION_RESOURCE_PATH/jwt_public_key.pem
-          touch $APPLICATION_RESOURCE_PATH/jwt_private_key.pem
+          touch ./gradle.properties
+          touch ./src/main/resources/application.properties
           
-          echo "${{ secrets.APPLICATION_PROPERTIES }}" >> $APPLICATION_RESOURCE_PATH/application.properties
-          echo "${{ secrets.JWT_RSA_PUBLIC_KEY }}" >> $APPLICATION_RESOURCE_PATH/jwt_public_key.pem
-          echo "${{ secrets.JWT_RSA_PRIVATE_KEY }}" >> $APPLICATION_RESOURCE_PATH/jwt_private_key.pem
+          echo "${{ secrets.GRADLE_PROPERTIES }}" >> ./gradle.properties
+          echo "${{ secrets.APPLICATION_PROPERTIES }}" >> ./src/main/resources/application.properties
 
       - name: 🧱 Build with Gradle
         run: ./gradlew clean build
