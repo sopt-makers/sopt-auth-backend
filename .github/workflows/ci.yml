@@ -28,8 +28,8 @@ jobs:
           touch ./gradle.properties
           touch ./src/main/resources/application.properties
           
-          echo "${{ secrets.GRADLE_PROPERTIES }}" >> ./gradle.properties
-          echo "${{ secrets.APPLICATION_PROPERTIES }}" >> ./src/main/resources/application.properties
+          echo "${{ secrets.PROPERTY_GRADLE }}" >> ./gradle.properties
+          echo "${{ secrets.PROPERTY_APPLICATION }}" >> ./src/main/resources/application.properties
 
       - name: 🧱 Build with Gradle
         run: ./gradlew clean build
