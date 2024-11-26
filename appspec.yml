@@ -6,15 +6,21 @@ files:
     destination: /home/ubuntu
 file_exists_behavior: OVERWRITE
 
+permissions:
+  - object: /home/ubuntu
+    pattern: '**'
+    owner: ubuntu
+    group: ubuntu
+
 hooks:
   AfterInstall:
-    - location: script/deploy.sh
+    - location: script/auth/deploy.sh
       timeout: 120
       runas: root
-    - location: script/switch.sh
+    - location: script/auth/switch.sh
       timeout: 120
       runas: root
   ValidateService:
-    - location: script/valid.sh
+    - location: script/auth/valid.sh
       timeout: 60
       runas: root
