@@ -33,7 +33,7 @@ import lombok.extern.slf4j.Slf4j;
 @EnableConfigurationProperties(JwtProperty.class)
 @RequiredArgsConstructor
 @Slf4j
-public class LocalRSARSAKeyManager implements RSAKeyManager {
+public class LocalRSAKeyManager implements RSAKeyManager {
 
   private final JwtProperty jwtProperty;
   private final ResourceLoader resourceLoader;
