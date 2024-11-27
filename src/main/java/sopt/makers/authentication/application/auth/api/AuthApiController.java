@@ -45,7 +45,7 @@ public class AuthApiController implements AuthApi {
   }
 
   @Override
-  @PostMapping("/web/login")
+  @PostMapping("/login/web")
   public ResponseEntity<BaseResponse<?>> authenticateSocialAuthInfoFromWeb(
       AuthRequest.AuthenticateSocialAuthInfo socialAuthInfo) {
     AuthenticateTokenInfo tokenInfo =
@@ -61,7 +61,7 @@ public class AuthApiController implements AuthApi {
   }
 
   @Override
-  @PostMapping("/app/login")
+  @PostMapping("/login/app")
   public ResponseEntity<BaseResponse<?>> authenticateSocialAuthInfoFromApp(
       AuthRequest.AuthenticateSocialAuthInfo socialAuthInfo) {
     AuthenticateTokenInfo tokenInfo =
