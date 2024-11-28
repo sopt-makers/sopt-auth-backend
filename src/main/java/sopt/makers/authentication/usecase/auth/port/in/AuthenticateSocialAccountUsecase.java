@@ -3,11 +3,11 @@ package sopt.makers.authentication.usecase.auth.port.in;
 import sopt.makers.authentication.domain.auth.AuthPlatform;
 
 public interface AuthenticateSocialAccountUsecase {
-  SocialAccountInfo authenticate(AuthenticateSocialAccountCommand command);
+  AuthenticateTokenInfo authenticate(AuthenticateSocialAccountCommand command);
 
-  record SocialAccountInfo(String authPlatformId, String authPlatformType) {
-    public static SocialAccountInfo of(String authPlatformId, String authPlatformType) {
-      return new SocialAccountInfo(authPlatformId, authPlatformType);
+  record AuthenticateTokenInfo(String accessToken, String refreshToken) {
+    public static AuthenticateTokenInfo of(String accessToken, String refreshToken) {
+      return new AuthenticateTokenInfo(accessToken, refreshToken);
     }
   }
 

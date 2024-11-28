@@ -2,7 +2,9 @@ package sopt.makers.authentication.application.auth.dto.request;
 
 import static lombok.AccessLevel.PRIVATE;
 
+import sopt.makers.authentication.domain.auth.AuthPlatform;
 import sopt.makers.authentication.domain.auth.PhoneVerificationType;
+import sopt.makers.authentication.usecase.auth.port.in.AuthenticateSocialAccountUsecase.AuthenticateSocialAccountCommand;
 import sopt.makers.authentication.usecase.auth.port.in.CreatePhoneVerificationUsecase.CreateVerificationCommand;
 
 import lombok.RequiredArgsConstructor;
@@ -18,4 +20,10 @@ public final class AuthRequest {
   }
 
   public record VerifyPhoneVerification(String name, String number, String code) {}
+
+  public record AuthenticateSocialAuthInfo(String code, String authPlatform) {
+    public AuthenticateSocialAccountCommand toCommand() {
+      return new AuthenticateSocialAccountCommand(AuthPlatform.find(authPlatform), code);
+    }
+  }
 }

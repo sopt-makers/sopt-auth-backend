@@ -13,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor(access = PRIVATE)
 public enum AuthSuccess implements SuccessCode {
   CREATE_PHONE_VERIFICATION(HttpStatus.CREATED, "번호 인증 생성에 성공했습니다."),
-  ;
+  AUTHENTICATE_SOCIAL_ACCOUNT(HttpStatus.OK, "소셜 로그인에 성공했습니다.");
 
   private final HttpStatus status;
   private final String message;

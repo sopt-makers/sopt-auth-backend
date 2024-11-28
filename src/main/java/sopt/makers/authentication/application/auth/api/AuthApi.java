@@ -12,4 +12,10 @@ public interface AuthApi {
 
   ResponseEntity<BaseResponse<?>> verifyPhoneVerification(
       AuthRequest.VerifyPhoneVerification phoneVerification);
+
+  ResponseEntity<BaseResponse<?>> authenticateSocialAuthInfoFromWeb(
+      AuthRequest.AuthenticateSocialAuthInfo socialAuthInfo);
+
+  ResponseEntity<BaseResponse<?>> authenticateSocialAuthInfoFromApp(
+      AuthRequest.AuthenticateSocialAuthInfo socialAuthInfo);
 }
