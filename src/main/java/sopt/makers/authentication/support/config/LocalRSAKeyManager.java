@@ -1,10 +1,10 @@
 package sopt.makers.authentication.support.config;
 
-import static sopt.makers.authentication.support.code.support.failure.TokenFailure.INVALID_ALGORITHM;
-import static sopt.makers.authentication.support.code.support.failure.TokenFailure.INVALID_LOCATION;
-import static sopt.makers.authentication.support.code.support.failure.TokenFailure.INVALID_SUBJECT;
+import static sopt.makers.authentication.support.code.support.failure.ResourceFailure.INVALID_ALGORITHM;
+import static sopt.makers.authentication.support.code.support.failure.ResourceFailure.INVALID_LOCATION;
+import static sopt.makers.authentication.support.code.support.failure.ResourceFailure.INVALID_SUBJECT;
 
-import sopt.makers.authentication.support.exception.support.TokenException;
+import sopt.makers.authentication.support.exception.support.ResourceException;
 import sopt.makers.authentication.support.jwt.RSAKeyManager;
 import sopt.makers.authentication.support.value.JwtProperty;
 
@@ -22,14 +22,14 @@ import java.security.spec.X509EncodedKeySpec;
 import org.bouncycastle.util.io.pem.PemObject;
 import org.bouncycastle.util.io.pem.PemReader;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-@Configuration
+@Component
 @EnableConfigurationProperties(JwtProperty.class)
 @RequiredArgsConstructor
 @Slf4j
@@ -45,11 +45,11 @@ public class LocalRSAKeyManager implements RSAKeyManager {
       PemObject pemObject = readPublicPemFile(resource);
       return parsePublicKey(pemObject);
     } catch (IOException e) {
-      throw new TokenException(INVALID_LOCATION);
+      throw new ResourceException(INVALID_LOCATION);
     } catch (NoSuchAlgorithmException e) {
-      throw new TokenException(INVALID_ALGORITHM);
+      throw new ResourceException(INVALID_ALGORITHM);
     } catch (InvalidKeySpecException e) {
-      throw new TokenException(INVALID_SUBJECT);
+      throw new ResourceException(INVALID_SUBJECT);
     }
   }
 
@@ -60,11 +60,11 @@ public class LocalRSAKeyManager implements RSAKeyManager {
       PemObject pemObject = readPrivatePemFile(resource);
       return generatePrivateKey(pemObject);
     } catch (IOException e) {
-      throw new TokenException(INVALID_LOCATION);
+      throw new ResourceException(INVALID_LOCATION);
     } catch (NoSuchAlgorithmException e) {
-      throw new TokenException(INVALID_ALGORITHM);
+      throw new ResourceException(INVALID_ALGORITHM);
     } catch (InvalidKeySpecException e) {
-      throw new TokenException(INVALID_SUBJECT);
+      throw new ResourceException(INVALID_SUBJECT);
     }
   }
 
@@ -72,14 +72,14 @@ public class LocalRSAKeyManager implements RSAKeyManager {
     return resourceLoader.getResource(jwtProperty.secret().rsa().publicKey());
   }
 
-  private PemObject readPublicPemFile(Resource resource) throws IOException {
+  private PemObject readPublicPemFile(final Resource resource) throws IOException {
     try (PemReader pemReader =
         new PemReader(new StringReader(resource.getContentAsString(StandardCharsets.UTF_8)))) {
       return pemReader.readPemObject();
     }
   }
 
-  private RSAPublicKey parsePublicKey(PemObject pemObject)
+  private RSAPublicKey parsePublicKey(final PemObject pemObject)
       throws NoSuchAlgorithmException, InvalidKeySpecException {
     byte[] publicKeyBytes = pemObject.getContent();
     X509EncodedKeySpec keySpec = new X509EncodedKeySpec(publicKeyBytes);
@@ -91,14 +91,14 @@ public class LocalRSAKeyManager implements RSAKeyManager {
     return resourceLoader.getResource(jwtProperty.secret().rsa().privateKey());
   }
 
-  private PemObject readPrivatePemFile(Resource resource) throws IOException {
+  private PemObject readPrivatePemFile(final Resource resource) throws IOException {
     try (PemReader pemReader =
         new PemReader(new StringReader(resource.getContentAsString(StandardCharsets.UTF_8)))) {
       return pemReader.readPemObject();
     }
   }
 
-  private RSAPrivateKey generatePrivateKey(PemObject pemObject)
+  private RSAPrivateKey generatePrivateKey(final PemObject pemObject)
       throws NoSuchAlgorithmException, InvalidKeySpecException {
     byte[] privateKeyBytes = pemObject.getContent();
     PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(privateKeyBytes);
