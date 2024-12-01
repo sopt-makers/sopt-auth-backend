@@ -45,8 +45,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     return isJwksRequest(request);
   }
 
-  /*
-   * Authorization 헤더에서 "Bearer "를 제거하여 토큰을 추출합니다.
+  /**
+   * @author 강현욱 @hyunw9
+   * @return JwtToken Authorization 헤더에서 "Bearer "를 제거하여 토큰을 추출합니다.
    */
   private String getAuthorizationToken(final HttpServletRequest request) {
     String authorizationHeaderValue =
