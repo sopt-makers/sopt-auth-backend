@@ -45,6 +45,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     return isJwksRequest(request);
   }
 
+  /*
+   * Authorization 헤더에서 "Bearer "를 제거하여 토큰을 추출합니다.
+   */
   private String getAuthorizationToken(final HttpServletRequest request) {
     String authorizationHeaderValue =
         request.getHeader(HttpHeaders.AUTHORIZATION).substring(HttpHeaders.AUTHORIZATION.length());
@@ -54,7 +57,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
   private static boolean isJwksRequest(HttpServletRequest request) {
     boolean isCorrectUrl = request.getRequestURI().equals("/.well-known/jwks.json");
     boolean isCorrectHeader =
-        Arrays.stream(JwtConstant.serviceNames)
+        Arrays.stream(JwtConstant.SERVICE_NAMES)
             .anyMatch(request.getHeader(HttpHeaders.SERVER)::contains);
 
     return isCorrectUrl && isCorrectHeader;
