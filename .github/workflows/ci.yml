@@ -2,7 +2,7 @@ name: Continuous Integration for SOPT makers Authentication Project
 
 on:
   pull_request:
-    branches: [ dev ]
+    branches: [ dev, prod ]
 
 jobs:
   build:
@@ -26,11 +26,9 @@ jobs:
       - name: 🔑 Create Application Property File
         run: |
           touch ./gradle.properties
-          touch ./src/main/resources/application.properties
           
           echo "${{ secrets.PROPERTY_GRADLE }}" >> ./gradle.properties
-          echo "${{ secrets.PROPERTY_APPLICATION }}" >> ./src/main/resources/application.properties
 
       - name: 🧱 Build with Gradle
-        run: gradle build -x test
+        run: docker build -t app-ci .
         shell: bash
