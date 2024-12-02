@@ -39,6 +39,7 @@ out/
 ### Propety ###
 gradle.properties
 **/src/main/resources/*.properties
+**/src/main/resources/**/*.env
 
 ### Key ###
 *.pem
