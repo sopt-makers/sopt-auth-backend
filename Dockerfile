@@ -1,4 +1,7 @@
-FROM gradle:8.10.2 as builder
+FROM openjdk:21-jdk-slim as builder
+
+# 기본값 : test
+ARG PROFILE=test
 
 # mkdir /app-build && cd /app-build
 WORKDIR /app-build
@@ -7,7 +10,7 @@ WORKDIR /app-build
 COPY . /app-build
 
 # create .jar
-RUN gradle clean build --no-daemon
+RUN echo "Build with PROFILE=${PROFILE}" && ./gradlew build -x test -Pprofile=${PROFILE} --no-daemon
 
 # Run-Time Image Setting
 FROM openjdk:21-jdk-slim as production
@@ -16,7 +19,7 @@ FROM openjdk:21-jdk-slim as production
 WORKDIR /app-run
 
 # copy .jar to Run-Time Image
-COPY --from=builder /app-build/build/libs/*.jar /app-run/authentication.jar
+COPY --from=builder /app-build/build/libs/authentication.jar /app-run/authentication.jar
 
 
 EXPOSE 8080
