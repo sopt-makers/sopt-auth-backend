@@ -15,3 +15,8 @@ spring:
 auth:
   client:
     url: ${PROD_AUTH_URL}
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health

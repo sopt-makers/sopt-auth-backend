@@ -21,3 +21,9 @@ auth:
 rsa:
   public-key: ${RSA_PUBLIC_KEY_PATH}
   private-key: ${RSA_PRIVATE_KEY_PATH}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health

@@ -17,3 +17,9 @@ auth:
 rsa:
   public-key: classpath:jwt_public_key.pem
   private-key: classpath:jwt_private_key.pem
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
