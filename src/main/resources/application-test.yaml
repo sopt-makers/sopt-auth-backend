@@ -9,14 +9,6 @@ spring:
   datasource:
     url: jdbc:h2:mem:testdb
     username: sa
-    password:
-auth:
-  client:
-    url: ${LOCAL_AUTH_URL}
-
-rsa:
-  public-key: classpath:jwt_public_key.pem
-  private-key: classpath:jwt_private_key.pem
 
 management:
   endpoints:

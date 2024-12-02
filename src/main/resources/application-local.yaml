@@ -7,20 +7,10 @@ spring:
       - classpath:external.yaml
       - classpath:jwt.yaml
   datasource:
-    url: ${LOCAL_DB_URL}
-    username: ${LOCAL_DB_USERNAME}
-    password: ${LOCAL_DB_PASSWORD}
-    driver-class-name: ${LOCAL_DB_DRIVER_CLASS}
-  jpa:
-    hibernate:
-      ddl-auto: create
-auth:
-  client:
-    url: ${LOCAL_AUTH_URL}
-
-rsa:
-  public-key: ${RSA_PUBLIC_KEY_PATH}
-  private-key: ${RSA_PRIVATE_KEY_PATH}
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: ${DB_DRIVER_CLASS}
 
 management:
   endpoints:

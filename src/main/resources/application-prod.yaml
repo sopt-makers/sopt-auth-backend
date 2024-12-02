@@ -1,4 +1,3 @@
-spring.profiles.active: prod
 spring:
   config:
     activate:
@@ -8,13 +7,11 @@ spring:
       - classpath:external.yaml
       - classpath:jwt.yaml
   datasource:
-    url: ${PROD_DB_URL}
-    username: ${PROD_DB_USERNAME}
-    password: ${PROD_DB_PASSWORD}
-    driver-class-name: ${PROD_DB_DRIVER_CLASS}
-auth:
-  client:
-    url: ${PROD_AUTH_URL}
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: ${DB_DRIVER_CLASS}
+
 management:
   endpoints:
     web:
