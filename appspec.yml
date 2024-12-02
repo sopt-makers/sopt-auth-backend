@@ -2,8 +2,17 @@ version: 0.0
 os: linux
 
 files:
-  - source: /script
+  - source: script/deploy.sh
     destination: /home/ubuntu/script/auth
+    overwrite: yes
+  - source: script/switch.sh
+    destination: /home/ubuntu/script/auth
+    overwrite: yes
+  - source: script/valid.sh
+    destination: /home/ubuntu/script/auth
+    overwrite: yes
+  - source: application.env
+    destination: /home/ubuntu/env/auth
 file_exists_behavior: OVERWRITE
 
 permissions:
@@ -14,13 +23,13 @@ permissions:
 
 hooks:
   AfterInstall:
-    - location: script/auth/deploy.sh
+    - location: script/deploy.sh
       timeout: 120
       runas: root
-    - location: script/auth/switch.sh
+    - location: script/switch.sh
       timeout: 120
       runas: root
   ValidateService:
-    - location: script/auth/valid.sh
+    - location: script/valid.sh
       timeout: 60
       runas: root
