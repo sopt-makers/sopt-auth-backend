@@ -38,6 +38,7 @@ out/
 
 ### Propety ###
 *.properties
+!gradle/wrapper/*.properties
 
 ### Key ###
 *.pem
