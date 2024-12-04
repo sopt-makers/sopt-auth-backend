@@ -42,10 +42,10 @@ class VerifyVerificationServiceTest {
         new VerifyVerificationCommand(null, givenVerifyPhone, givenCode, givenVerifyType);
 
     // when
-    boolean result = verifyService.verify(givenCommand);
+    VerifyVerificationResult result = verifyService.verify(givenCommand);
 
     // then
-    assertThat(result).isTrue();
+    assertThat(result.isVerifySuccess()).isTrue();
     assertThatThrownBy(() -> phoneVerificationRepository.findByPhoneVerification(givenVerification))
         .isInstanceOf(AuthException.class)
         .hasMessageContaining(AuthFailure.NOT_FOUND_PHONE_VERIFICATION.getMessage());

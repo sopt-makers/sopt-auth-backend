@@ -41,7 +41,7 @@ class AuthApiControllerTest {
 
     // when
     when(verifyPhoneVerificationUsecase.verify(any(VerifyVerificationCommand.class)))
-        .thenReturn(true);
+        .thenReturn(new VerifyVerificationResult(true));
     mockMvc
         .perform(
             post("/api/v1/auth/verify/phone")

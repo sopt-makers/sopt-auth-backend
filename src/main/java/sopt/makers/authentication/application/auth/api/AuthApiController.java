@@ -36,10 +36,11 @@ public class AuthApiController implements AuthApi {
   @PostMapping(value = "/verify/phone")
   public ResponseEntity<BaseResponse<?>> verifyPhoneVerification(
       @RequestBody AuthRequest.VerifyPhoneVerification phoneVerification) {
-    boolean result = verifyVerificationUsecase.verify(phoneVerification.toCommand());
+    VerifyPhoneVerificationUsecase.VerifyVerificationResult result =
+        verifyVerificationUsecase.verify(phoneVerification.toCommand());
     return ResponseEntity.status(AuthSuccess.VERIFY_PHONE_VERIFICATION.getStatus().value())
         .body(
             BaseResponse.ofSuccess(
-                AuthSuccess.VERIFY_PHONE_VERIFICATION, new AuthResponse.VerifyResult(result)));
+                AuthSuccess.VERIFY_PHONE_VERIFICATION, AuthResponse.VerifyResult.from(result)));
   }
 }
