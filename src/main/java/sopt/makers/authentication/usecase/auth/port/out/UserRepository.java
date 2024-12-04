@@ -7,4 +7,6 @@ public interface UserRepository {
   User findBySocialAccount(SocialAccount socialAccount);
 
   Long findIdByUser(User user);
+
+  User findByPhone(String phone);
 }

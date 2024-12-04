@@ -23,4 +23,9 @@ public class UserRepositoryImpl implements UserRepository {
   public Long findIdByUser(User user) {
     return userRetriever.findIdByUser(user);
   }
+
+  @Override
+  public User findByPhone(String phone) {
+    return null;
+  }
 }
