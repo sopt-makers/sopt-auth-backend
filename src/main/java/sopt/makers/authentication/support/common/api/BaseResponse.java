@@ -6,8 +6,10 @@ import sopt.makers.authentication.support.code.base.FailureCode;
 import sopt.makers.authentication.support.code.base.SuccessCode;
 
 import lombok.Builder;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+@Getter
 @Builder(access = PRIVATE)
 @RequiredArgsConstructor(access = PRIVATE)
 public class BaseResponse<T> {
