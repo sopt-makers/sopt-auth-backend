@@ -6,12 +6,17 @@ import sopt.makers.authentication.domain.auth.PhoneVerificationType;
 import sopt.makers.authentication.usecase.auth.port.in.CreatePhoneVerificationUsecase.CreateVerificationCommand;
 import sopt.makers.authentication.usecase.auth.port.in.VerifyPhoneVerificationUsecase.VerifyVerificationCommand;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor(access = PRIVATE)
 public final class AuthRequest {
 
-  public record CreatePhoneVerification(String name, String number, String verificationTypeName) {
+  public record CreatePhoneVerification(
+      @JsonProperty("name") String name,
+      @JsonProperty("phone") String number,
+      @JsonProperty("type") String verificationTypeName) {
     public CreateVerificationCommand toCommand() {
       return new CreateVerificationCommand(
           this.name, this.number, PhoneVerificationType.valueOf(this.verificationTypeName));
@@ -19,7 +24,10 @@ public final class AuthRequest {
   }
 
   public record VerifyPhoneVerification(
-      String name, String number, String code, String verificationTypeName) {
+      @JsonProperty("name") String name,
+      @JsonProperty("phone") String number,
+      @JsonProperty("code") String code,
+      @JsonProperty("type") String verificationTypeName) {
     public VerifyVerificationCommand toCommand() {
       return new VerifyVerificationCommand(
           this.name,
