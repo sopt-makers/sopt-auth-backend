@@ -26,6 +26,6 @@ public class UserRepositoryImpl implements UserRepository {
 
   @Override
   public User findByPhone(String phone) {
-    return null;
+    return userRetriever.findByPhone(phone);
   }
 }
