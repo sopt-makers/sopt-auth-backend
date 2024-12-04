@@ -9,6 +9,7 @@ import sopt.makers.authentication.usecase.auth.port.in.VerifyPhoneVerificationUs
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,20 +26,21 @@ public class AuthApiController implements AuthApi {
   @Override
   @PostMapping("/phone")
   public ResponseEntity<BaseResponse<?>> createPhoneVerification(
-      AuthRequest.CreatePhoneVerification createPhoneVerificationRequest) {
+      @RequestBody AuthRequest.CreatePhoneVerification createPhoneVerificationRequest) {
     createVerificationUsecase.create(createPhoneVerificationRequest.toCommand());
     return ResponseEntity.status(AuthSuccess.CREATE_PHONE_VERIFICATION.getStatus().value())
         .body(BaseResponse.ofSuccess(AuthSuccess.CREATE_PHONE_VERIFICATION));
   }
 
   @Override
-  @PostMapping("/verify/phone")
+  @PostMapping(value = "/verify/phone")
   public ResponseEntity<BaseResponse<?>> verifyPhoneVerification(
-      AuthRequest.VerifyPhoneVerification phoneVerification) {
+      @RequestBody AuthRequest.VerifyPhoneVerification phoneVerification) {
+    System.out.println(phoneVerification.toCommand());
     boolean result = verifyVerificationUsecase.verify(phoneVerification.toCommand());
-    return ResponseEntity.status(AuthSuccess.CREATE_PHONE_VERIFICATION.getStatus().value())
+    return ResponseEntity.status(AuthSuccess.VERIFY_PHONE_VERIFICATION.getStatus().value())
         .body(
             BaseResponse.ofSuccess(
-                AuthSuccess.CREATE_PHONE_VERIFICATION, new AuthResponse.VerifyResult(result)));
+                AuthSuccess.VERIFY_PHONE_VERIFICATION, new AuthResponse.VerifyResult(result)));
   }
 }
