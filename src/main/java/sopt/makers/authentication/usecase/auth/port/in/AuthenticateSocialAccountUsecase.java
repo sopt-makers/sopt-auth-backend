@@ -11,5 +11,9 @@ public interface AuthenticateSocialAccountUsecase {
     }
   }
 
-  record AuthenticateSocialAccountCommand(AuthPlatform authPlatform, String code) {}
+  record AuthenticateSocialAccountCommand(AuthPlatform authPlatform, String code) {
+    public static AuthenticateSocialAccountCommand of(AuthPlatform authPlatform, String code) {
+      return new AuthenticateSocialAccountCommand(authPlatform, code);
+    }
+  }
 }
