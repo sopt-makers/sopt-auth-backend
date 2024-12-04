@@ -23,7 +23,7 @@ public final class AuthRequest {
 
   public record AuthenticateSocialAuthInfo(String code, String authPlatform) {
     public AuthenticateSocialAccountCommand toCommand() {
-      return new AuthenticateSocialAccountCommand(AuthPlatform.find(authPlatform), code);
+      return AuthenticateSocialAccountCommand.of(AuthPlatform.find(authPlatform), code);
     }
   }
 }
