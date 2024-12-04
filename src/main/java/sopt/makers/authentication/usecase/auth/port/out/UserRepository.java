@@ -9,4 +9,6 @@ public interface UserRepository {
   Long findIdByUser(User user);
 
   User findByPhone(String phone);
+
+  User save(Long id, User user);
 }
