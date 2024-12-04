@@ -14,7 +14,7 @@ public class VerifyVerificationService implements VerifyPhoneVerificationUsecase
   private final PhoneVerificationRepository phoneVerificationRepository;
 
   @Override
-  public boolean verify(VerifyVerificationCommand command) {
+  public VerifyVerificationResult verify(VerifyVerificationCommand command) {
     PhoneVerification targetVerification =
         PhoneVerification.of(
             command.name(), command.phone(), command.verificationType(), command.code());
@@ -25,6 +25,6 @@ public class VerifyVerificationService implements VerifyPhoneVerificationUsecase
     if (isVerified) {
       phoneVerificationRepository.deletedByPhoneVerification(findVerification);
     }
-    return isVerified;
+    return new VerifyVerificationResult(isVerified);
   }
 }

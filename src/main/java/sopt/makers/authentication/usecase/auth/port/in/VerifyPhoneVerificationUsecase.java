@@ -4,8 +4,10 @@ import sopt.makers.authentication.domain.auth.PhoneVerificationType;
 
 public interface VerifyPhoneVerificationUsecase {
 
-  boolean verify(VerifyVerificationCommand command);
+  VerifyVerificationResult verify(VerifyVerificationCommand command);
 
   record VerifyVerificationCommand(
       String name, String phone, String code, PhoneVerificationType verificationType) {}
+
+  record VerifyVerificationResult(boolean isVerifySuccess) {}
 }
