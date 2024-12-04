@@ -22,12 +22,14 @@ public class OAuthAuthenticatorImpl implements OAuthAuthenticator {
   private final AppleAuthService appleAuthService;
   private final GoogleAuthService googleAuthService;
 
-  public String getAuthPlatformId(AuthPlatform authPlatform, String code) {
+  public String getAuthPlatformId(String authPlatform, String code) {
     IdTokenResponse idTokenResponse = getIdTokenByCode(authPlatform, code);
     return parseAuthPlatformId(idTokenResponse);
   }
 
-  public IdTokenResponse getIdTokenByCode(AuthPlatform type, String code) {
+  public IdTokenResponse getIdTokenByCode(String authPlatform, String code) {
+    AuthPlatform type = AuthPlatform.find(authPlatform);
+
     return switch (type) {
       case APPLE -> appleAuthService.getIdTokenByCode(code);
       case GOOGLE -> googleAuthService.getIdTokenByCode(code);

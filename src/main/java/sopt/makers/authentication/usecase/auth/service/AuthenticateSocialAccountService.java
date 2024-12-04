@@ -30,7 +30,7 @@ public class AuthenticateSocialAccountService implements AuthenticateSocialAccou
         oAuthAuthenticator.getAuthPlatformId(command.authPlatform(), command.code());
     User user =
         userRepository.findBySocialAccount(
-            SocialAccount.of(authPlatformId, command.authPlatform().name()));
+            SocialAccount.of(authPlatformId, command.authPlatform()));
     List<Role> roles = List.of(user.getActivities().getLastActivity().role());
     Long userId = userRepository.findIdByUser(user);
     CustomAuthentication customAuthentication = new CustomAuthentication(userId, roles);
