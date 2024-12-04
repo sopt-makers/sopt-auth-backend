@@ -1,9 +1,6 @@
 package sopt.makers.authentication.support.config;
 
-import sopt.makers.authentication.support.value.AuthProperty;
-import sopt.makers.authentication.support.value.GabiaProperty;
-import sopt.makers.authentication.support.value.JwtProperty;
-import sopt.makers.authentication.support.value.MakersProperty;
+import sopt.makers.authentication.support.value.*;
 
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -15,6 +12,8 @@ import org.springframework.context.annotation.Configuration;
   AuthProperty.class,
   GabiaProperty.class,
   JwtProperty.class,
-  MakersProperty.class
+  MakersProperty.class,
+  AppleProperty.class,
+  GoogleProperty.class
 })
 public class ApplicationConfig {}

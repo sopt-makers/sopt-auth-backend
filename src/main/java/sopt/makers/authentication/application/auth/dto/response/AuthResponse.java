@@ -15,6 +15,16 @@ public final class AuthResponse {
     public static VerifyResult from(
         VerifyPhoneVerificationUsecase.VerifyVerificationResult result) {
       return new VerifyResult(result.isVerifySuccess());
+      
+  public record AuthenticateSocialAuthInfoForWeb(String accessToken) {
+    public static AuthenticateSocialAuthInfoForWeb of(String accessToken) {
+      return new AuthenticateSocialAuthInfoForWeb(accessToken);
+    }
+  }
+
+  public record AuthenticateSocialAuthInfoForApp(String accessToken, String refreshToken) {
+    public static AuthenticateSocialAuthInfoForApp of(String accessToken, String refreshToken) {
+      return new AuthenticateSocialAuthInfoForApp(accessToken, refreshToken);
     }
   }
 }
