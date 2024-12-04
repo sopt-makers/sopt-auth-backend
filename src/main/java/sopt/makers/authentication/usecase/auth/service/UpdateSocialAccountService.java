@@ -18,7 +18,7 @@ public class UpdateSocialAccountService implements UpdateSocialAccountUsecase {
   public boolean update(UpdateSocialAccountCommand command) {
     User user = userRepository.findByPhone(command.phone());
     Long userId = userRepository.findIdByUser(user);
-    SocialAccount socialAccount = SocialAccount.of(command.code(), command.authPlatform().name());
+    SocialAccount socialAccount = SocialAccount.of(command.code(), command.authPlatform());
     user.updateSocialAccount(socialAccount);
     userRepository.save(userId, user);
     return true;
