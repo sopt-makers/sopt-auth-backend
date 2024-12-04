@@ -6,5 +6,5 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor(access = PRIVATE)
 public final class SocialAccountRequest {
-  public record UpdateSocialAccount(String number, String code, String authPlatform) {}
+  public record UpdateSocialAccount(String phone, String code, String authPlatform) {}
 }
