@@ -1,7 +1,9 @@
 package sopt.makers.authentication.application.auth.api;
 
 import sopt.makers.authentication.application.auth.dto.request.SocialAccountRequest;
+import sopt.makers.authentication.support.code.domain.success.SocialAccountSuccess;
 import sopt.makers.authentication.support.common.api.BaseResponse;
+import sopt.makers.authentication.support.util.ResponseUtil;
 import sopt.makers.authentication.usecase.auth.port.in.UpdateSocialAccountUsecase;
 
 import org.springframework.http.ResponseEntity;
@@ -22,6 +24,6 @@ public class SocialAccountApiController implements SocialAccountApi {
   public ResponseEntity<BaseResponse<?>> updateSocialAccount(
       SocialAccountRequest.UpdateSocialAccount socialAccountInfo) {
     updateSocialAccountUsecase.update(socialAccountInfo.toCommand());
-    return null;
+    return ResponseUtil.success(SocialAccountSuccess.UPDATE_SOCIAL_ACCOUNT);
   }
 }
