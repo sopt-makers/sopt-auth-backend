@@ -81,7 +81,7 @@ jobs:
         env:
           REGION: ${{ secrets.AWS_REGION }}
           S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
-          S3_ENV_FILE_NAME: ${{ secrets.ENV_FILE_NAME_PROD }}
+          S3_ENV_FILE_NAME: ${{ secrets.ENV_FILE_NAME_DEV }}
         run: |
           mkdir ./script
           aws s3 cp --region $REGION \
