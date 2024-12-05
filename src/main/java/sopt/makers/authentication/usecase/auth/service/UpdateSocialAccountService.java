@@ -22,9 +22,8 @@ public class UpdateSocialAccountService implements UpdateSocialAccountUsecase {
     Long userId = userRepository.findIdByUser(user);
     String authPlatformId =
         oAuthAuthenticator.getAuthPlatformId(command.authPlatform(), command.code());
-    SocialAccount socialAccount = SocialAccount.of(authPlatformId, command.authPlatform());
-    user.updateSocialAccount(socialAccount);
-    userRepository.save(userId, user);
+    SocialAccount updatedSocialAccount = SocialAccount.of(authPlatformId, command.authPlatform());
+    userRepository.update(userId, user, updatedSocialAccount);
     return true;
   }
 }
