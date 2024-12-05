@@ -7,10 +7,13 @@ spring:
       - classpath:external.yaml
       - classpath:jwt.yaml
   datasource:
-    url: ${DEV_DB_URL}
-    username: ${DEV_DB_USERNAME}
-    password: ${DEV_DB_PASSWORD}
-    driver-class-name: ${DEV_DB_DRIVER_CLASS}
-auth:
-  client:
-    url: ${DEV_AUTH_URL}
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: ${DB_DRIVER_CLASS}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
