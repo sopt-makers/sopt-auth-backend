@@ -85,17 +85,20 @@ jobs:
         run: |
           mkdir ./script
           aws s3 cp --region $REGION \
-            s3://$S3_BUCKET/dev/script/deploy.sh script/deploy.sh
+            s3://$S3_BUCKET/dev/script/deploy.sh ./script/deploy.sh
           aws s3 cp --region $REGION \
-            s3://$S3_BUCKET/dev/script/switch.sh script/switch.sh
+            s3://$S3_BUCKET/dev/script/switch.sh ./script/switch.sh
           aws s3 cp --region $REGION \
-            s3://$S3_BUCKET/dev/script/valid.sh script/valid.sh
+            s3://$S3_BUCKET/dev/script/valid.sh ./script/valid.sh
           
           aws s3 cp --region $REGION \
-            s3://$S3_BUCKET/dev/$S3_ENV_FILE_NAME application.env
+            s3://$S3_BUCKET/dev/$S3_ENV_FILE_NAME ./application.env
 
       - name: 📁 Make files to zip
-        run: zip -r ./$GITHUB_SHA.zip ./script ./pem ./key ./appspec.yml ./application.env
+        run: |
+          pwd
+          ls -l
+          zip -r ./$GITHUB_SHA.zip ./script ./pem ./key ./appspec.yml ./application.env
         shell: bash
 
       - name: 🚀 Upload Property Zip to S3 and Create Code Deploy
