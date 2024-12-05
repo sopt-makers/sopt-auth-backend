@@ -13,4 +13,5 @@ public final class SystemConstant {
   public static final String PATTERN_ERROR_PATH = "/error";
   public static final String PATTERN_AUTH = API_DEFAULT_PREFIX + "/auth" + PATTERN_ALL;
   public static final String PATTERN_TEST = API_DEFAULT_PREFIX + "/test" + PATTERN_ALL;
+  public static final String PATTERN_ROOT_PATH = "/";
 }

@@ -1,6 +1,11 @@
 package sopt.makers.authentication.support.constant;
 
-public abstract class OAuthConstant {
+import static lombok.AccessLevel.PRIVATE;
+
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor(access = PRIVATE)
+public final class OAuthConstant {
   public static final String CLIENT_ID = "client_id";
   public static final String CLIENT_SECRET = "client_secret";
   public static final String CODE = "code";
