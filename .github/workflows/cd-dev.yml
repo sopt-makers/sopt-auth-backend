@@ -52,6 +52,9 @@ jobs:
     needs: build-and-push-image
     runs-on: ubuntu-22.04
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
       - name: 🔒 Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
