@@ -1,0 +1,39 @@
+version: 0.0
+os: linux
+
+files:
+  - source: script/deploy.sh
+    destination: /home/ubuntu/script/auth
+    overwrite: yes
+  - source: script/switch.sh
+    destination: /home/ubuntu/script/auth
+    overwrite: yes
+  - source: script/valid.sh
+    destination: /home/ubuntu/script/auth
+    overwrite: yes
+  - source: pem
+    destination: /home/ubuntu/property/auth/pem
+  - source: key
+    destination: /home/ubuntu/property/auth/key
+  - source: application.env
+    destination: /home/ubuntu/env/auth
+file_exists_behavior: OVERWRITE
+
+permissions:
+  - object: /home/ubuntu
+    pattern: '**'
+    owner: ubuntu
+    group: ubuntu
+
+hooks:
+  AfterInstall:
+    - location: script/deploy.sh
+      timeout: 120
+      runas: root
+    - location: script/switch.sh
+      timeout: 120
+      runas: root
+  ValidateService:
+    - location: script/valid.sh
+      timeout: 60
+      runas: root

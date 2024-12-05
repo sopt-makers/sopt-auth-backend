@@ -19,7 +19,7 @@ public enum AuthFailure implements FailureCode {
   NOT_FOUND_PHONE_VERIFICATION(HttpStatus.NOT_FOUND, "존재하지 않는 번호 인증 이력입니다."),
   NOT_FOUND_USER_WITH_SOCIAL_ACCOUNT(HttpStatus.BAD_REQUEST, "소셜 계정 정보와 일치하는 회원이 없습니다"),
   ;
-  
+
   private final HttpStatus status;
   private final String message;
 }

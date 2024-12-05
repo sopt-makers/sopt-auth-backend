@@ -1,3 +1,5 @@
+import org.springframework.boot.gradle.tasks.bundling.BootJar
+
 val googleJavaFormatVersion = "1.18.1"
 
 plugins {
@@ -44,6 +46,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("org.springframework.boot:spring-boot-starter-validation")
 	implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
+	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("org.springframework.retry:spring-retry")
 
 	implementation("com.fasterxml.jackson.core:jackson-databind:${jacksonCoreVersion}")
@@ -99,7 +102,26 @@ tasks.named("compileJava") {
 	dependsOn("makeGitHooksExecutable")
 }
 
+val jarName = "authentication.jar"
+tasks.named<BootJar>("bootJar") {
+	archiveFileName.set(jarName)
+}
+
 // *-SNAPSHOT-plain.jar 생성 방지
 tasks.getByName<Jar>("jar"){
 	enabled=false
+}
+
+val profile: String = project.findProperty("profile") as? String ?: "test"
+println("Build Profile: $profile")
+
+tasks.register<Copy>("processProfileYaml") {
+	from("src/main/resources/application-$profile.yaml")
+	into("build/resources/main") // 빌드 시 사용할 리소스 경로
+	rename { "application.yaml" } // 모든 프로파일 파일을 application.yaml로 변경
+}
+
+// processResources 작업 후에 실행되도록 의존성 추가
+tasks.named("processResources") {
+	dependsOn("processProfileYaml")
 }

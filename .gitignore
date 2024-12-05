@@ -37,10 +37,16 @@ out/
 .vscode/
 
 ### Propety ###
+!gradle.properties
+**/src/main/resources/*.properties
+**/src/main/resources/**/*.env
 *.properties
 !gradle/wrapper/*.properties
+
 
 ### Key ###
 *.pem
 *p8
 
+### Deploy ###
+script/

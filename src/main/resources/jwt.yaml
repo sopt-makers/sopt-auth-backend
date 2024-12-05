@@ -1,6 +1,7 @@
 spring.config.activate.on-profile:
   - prod
   - dev
+  - local
 jwt:
   secret:
     rsa:
@@ -12,26 +13,14 @@ jwt:
     issuer:
       issuer-name: ${ISSUER}
 ---
-spring.config.activate.on-profile: local
-jwt:
-  secret:
-    rsa:
-      public-key: ${RSA_PUBLIC_KEY_PATH_ON_LOCAL}
-      private-key: ${RSA_PRIVATE_KEY_PATH_ON_LOCAL}
-    expiration:
-      access-token-expiration: ${ACCESS_TOKEN_EXPIRATION_TIME}
-      refresh-token-expiration: ${REFRESH_TOKEN_EXPIRATION_TIME}
-    issuer:
-      issuer-name: ${ISSUER_ON_LOCAL}
----
 spring.config.activate.on-profile: test
 jwt:
   secret:
     rsa:
-      public-key: ${RSA_PUBLIC_KEY_PATH_ON_TEST}
-      private-key: ${RSA_PRIVATE_KEY_PATH_ON_TEST}
+      public-key: test
+      private-key: test
     expiration:
-      access-token-expiration: ${ACCESS_TOKEN_EXPIRATION_TIME}
-      refresh-token-expiration: ${REFRESH_TOKEN_EXPIRATION_TIME}
+      access-token-expiration: 0
+      refresh-token-expiration: 0
     issuer:
-      issuer-name: ${ISSUER_ON_TEST}
+      issuer-name: test
