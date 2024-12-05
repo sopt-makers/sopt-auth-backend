@@ -18,6 +18,7 @@ public class VerifyVerificationService implements VerifyPhoneVerificationUsecase
     PhoneVerification targetVerification =
         PhoneVerification.of(
             command.name(), command.phone(), command.verificationType(), command.code());
+
     PhoneVerification findVerification =
         phoneVerificationRepository.findByPhoneVerification(targetVerification);
     boolean isVerified = targetVerification.equals(findVerification);
@@ -25,6 +26,6 @@ public class VerifyVerificationService implements VerifyPhoneVerificationUsecase
     if (isVerified) {
       phoneVerificationRepository.deletedByPhoneVerification(findVerification);
     }
-    return new VerifyVerificationResult(isVerified);
+    return new VerifyVerificationResult(isVerified, command.name(), command.phone());
   }
 }

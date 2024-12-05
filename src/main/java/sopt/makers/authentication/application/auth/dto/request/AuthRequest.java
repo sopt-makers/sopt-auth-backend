@@ -36,6 +36,8 @@ public final class AuthRequest {
           this.number,
           this.code,
           PhoneVerificationType.valueOf(this.verificationTypeName));
+    }
+  }
 
   public record AuthenticateSocialAuthInfo(String code, String authPlatform) {
     public AuthenticateSocialAccountCommand toCommand() {
