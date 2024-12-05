@@ -20,6 +20,11 @@ public class UserRepositoryImpl implements UserRepository {
   }
 
   @Override
+  public User findByPhone(String phone) {
+    return null;
+  }
+
+  @Override
   public Long findIdByUser(User user) {
     return userRetriever.findIdByUser(user);
   }
