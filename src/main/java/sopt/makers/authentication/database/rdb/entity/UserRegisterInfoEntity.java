@@ -3,6 +3,7 @@ package sopt.makers.authentication.database.rdb.entity;
 import static lombok.AccessLevel.PROTECTED;
 
 import sopt.makers.authentication.domain.user.Part;
+import sopt.makers.authentication.domain.user.UserRegisterInfo;
 
 import java.time.LocalDate;
 
@@ -36,4 +37,8 @@ public class UserRegisterInfoEntity {
   @NotNull
   @Enumerated(EnumType.STRING)
   private Part part;
+
+  public UserRegisterInfo toDomain() {
+    return UserRegisterInfo.of(this.name, this.phone, this.birthday, this.generation, this.part);
+  }
 }
