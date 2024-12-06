@@ -31,14 +31,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
   @Override
   protected boolean shouldNotFilter(HttpServletRequest request) {
-    return checkIsWhiteURI(request.getRequestURI());
+    return checkIsWhiteURI(request.getRequestURL().toString());
   }
 
   private boolean checkIsWhiteURI(String uri) {
     return uri.contains(PATH_ACTUATOR)
-        && uri.contains(PATH_AUTH)
-        && uri.contains(PATH_ERROR)
-        && uri.contains(PATH_TEST);
+        || uri.contains(PATH_AUTH)
+        || uri.contains(PATH_ERROR)
+        || uri.contains(PATH_TEST);
   }
 
   @Override
