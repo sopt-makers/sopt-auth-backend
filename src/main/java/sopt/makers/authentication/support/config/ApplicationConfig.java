@@ -9,7 +9,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration(value = "CustomApplicationConfig")
 @ConfigurationPropertiesScan(basePackages = {"sopt.makers.authentication.support.value"})
 @EnableConfigurationProperties({
-  AuthProperty.class,
   GabiaProperty.class,
   JwtProperty.class,
   MakersProperty.class,
