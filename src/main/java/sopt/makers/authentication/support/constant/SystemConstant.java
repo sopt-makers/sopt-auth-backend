@@ -9,10 +9,15 @@ public final class SystemConstant {
 
   public static final String API_DEFAULT_PREFIX = API_PATH_PREFIX + API_VERSION;
 
+  public static final String PATH_ACTUATOR = "/actuator";
+  public static final String PATH_AUTH = "/auth";
+  public static final String PATH_ERROR = "/error";
+  public static final String PATH_TEST = "/test";
+
   public static final String PATTERN_ALL = "/**";
-  public static final String PATTERN_ERROR_PATH = "/error";
-  public static final String PATTERN_ACTUATOR = "/actuator" + PATTERN_ALL;
-  public static final String PATTERN_AUTH = API_DEFAULT_PREFIX + "/auth" + PATTERN_ALL;
-  public static final String PATTERN_TEST = API_DEFAULT_PREFIX + "/test" + PATTERN_ALL;
+  public static final String PATTERN_ERROR_PATH = PATH_ERROR + PATTERN_ALL;
+  public static final String PATTERN_ACTUATOR = PATH_ACTUATOR + PATTERN_ALL;
+  public static final String PATTERN_AUTH = API_DEFAULT_PREFIX + PATH_AUTH + PATTERN_ALL;
+  public static final String PATTERN_TEST = API_DEFAULT_PREFIX + PATH_TEST + PATTERN_ALL;
   public static final String PATTERN_ROOT_PATH = "/";
 }
