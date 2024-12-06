@@ -35,8 +35,9 @@ spring.config.activate.on-profile:
   - test
 external:
   makers:
-    url: test
-    token: test
+    playground:
+      url: test
+      token: test
   gabia:
     sms:
       id: test
