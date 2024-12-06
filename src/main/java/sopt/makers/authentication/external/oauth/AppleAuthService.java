@@ -21,7 +21,7 @@ import sopt.makers.authentication.external.oauth.dto.IdTokenResponse;
 import sopt.makers.authentication.support.exception.external.ClientRequestException;
 import sopt.makers.authentication.support.exception.external.ClientResponseException;
 import sopt.makers.authentication.support.util.*;
-import sopt.makers.authentication.support.value.AppleProperty;
+import sopt.makers.authentication.support.value.AppleOAuthProperty;
 
 import java.io.IOException;
 import java.security.PrivateKey;
@@ -46,7 +46,7 @@ import okhttp3.ResponseBody;
 @RequiredArgsConstructor
 @Slf4j
 public class AppleAuthService implements OAuthService {
-  private final AppleProperty appleProperty;
+  private final AppleOAuthProperty appleOAuthProperty;
   private final Gson gson;
   private final OkHttpClient client;
 
@@ -60,7 +60,7 @@ public class AppleAuthService implements OAuthService {
   }
 
   private FormBody createTokenRequestFormBody(final String code) {
-    String clientId = appleProperty.apple().sub();
+    String clientId = appleOAuthProperty.sub();
     String clientSecret = createClientSecret();
     return new FormBody.Builder()
         .add(CLIENT_ID, clientId)
@@ -73,18 +73,17 @@ public class AppleAuthService implements OAuthService {
   private String createClientSecret() {
     Date now = new Date();
     PrivateKey privateKey =
-        KeyFileUtil.getPrivateKey(appleProperty.apple().key().path())
+        KeyFileUtil.getPrivateKey(appleOAuthProperty.key().path())
             .orElseThrow(() -> new ClientRequestException(FAIL_READ_APPLE_PRIVATE_KEY_FILE));
 
     return Jwts.builder() // 토큰 생성 로직은 tokenProvider? 근데 얘는 parse는 없음
-        .setHeaderParam(APPLE_KEY_ID_HEADER, appleProperty.apple().key().id())
+        .setHeaderParam(APPLE_KEY_ID_HEADER, appleOAuthProperty.key().id())
         .setHeaderParam(APPLE_ALGORITHM_HEADER, APPLE_ALGORITHM_VALUE)
         .setIssuedAt(now)
-        .setExpiration(
-            new Date(now.getTime() + appleProperty.apple().expiration().tokenExpiration()))
-        .setIssuer(appleProperty.apple().team().id())
-        .setAudience(appleProperty.apple().aud())
-        .setSubject(appleProperty.apple().sub())
+        .setExpiration(new Date(now.getTime() + appleOAuthProperty.expiration().tokenExpiration()))
+        .setIssuer(appleOAuthProperty.team().id())
+        .setAudience(appleOAuthProperty.aud())
+        .setSubject(appleOAuthProperty.sub())
         .signWith(privateKey, SignatureAlgorithm.ES256)
         .compact();
   }

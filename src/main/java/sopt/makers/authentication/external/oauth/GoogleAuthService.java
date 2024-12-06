@@ -17,7 +17,7 @@ import static sopt.makers.authentication.support.constant.OAuthConstant.REDIRECT
 import sopt.makers.authentication.external.oauth.dto.IdTokenResponse;
 import sopt.makers.authentication.support.exception.external.ClientRequestException;
 import sopt.makers.authentication.support.exception.external.ClientResponseException;
-import sopt.makers.authentication.support.value.GoogleProperty;
+import sopt.makers.authentication.support.value.GoogleOAuthProperty;
 
 import java.io.IOException;
 
@@ -35,7 +35,7 @@ import okhttp3.ResponseBody;
 @Component
 @RequiredArgsConstructor
 public class GoogleAuthService implements OAuthService {
-  private final GoogleProperty googleProperty;
+  private final GoogleOAuthProperty googleOAuthProperty;
   private final Gson gson;
   private final OkHttpClient client;
 
@@ -50,11 +50,11 @@ public class GoogleAuthService implements OAuthService {
 
   private FormBody createTokenRequestFormBody(String code) {
     return new FormBody.Builder()
-        .add(CLIENT_ID, googleProperty.google().client().id())
-        .add(CLIENT_SECRET, googleProperty.google().client().secret())
+        .add(CLIENT_ID, googleOAuthProperty.client().id())
+        .add(CLIENT_SECRET, googleOAuthProperty.client().secret())
         .add(CODE, code)
         .add(GRANT_TYPE, GRANT_TYPE_VALUE)
-        .add(REDIRECT_URI, googleProperty.google().redirect().url())
+        .add(REDIRECT_URI, googleOAuthProperty.redirect().url())
         .build();
   }
 
