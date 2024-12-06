@@ -4,8 +4,9 @@ spring.config.activate.on-profile:
   - local
 external:
   makers:
-    url: ${PLAYGROUND_URL}
-    token: ${PLAYGROUND_TOKEN}
+    playground:
+      url: ${PLAYGROUND_URL}
+      token: ${PLAYGROUND_TOKEN}
   gabia:
     sms:
       id: ${GABIA_SMS_ID}
