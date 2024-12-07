@@ -1,16 +1,18 @@
 package sopt.makers.authentication.support.util;
 
-import java.io.*;
-import java.nio.charset.*;
-import java.security.*;
-import java.util.*;
+import java.io.IOException;
+import java.io.StringReader;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.security.PrivateKey;
+import java.util.Optional;
 
-import org.bouncycastle.asn1.pkcs.*;
-import org.bouncycastle.openssl.*;
-import org.bouncycastle.openssl.jcajce.*;
-import org.springframework.core.io.*;
+import org.bouncycastle.asn1.pkcs.PrivateKeyInfo;
+import org.bouncycastle.openssl.PEMParser;
+import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter;
+import org.springframework.core.io.ClassPathResource;
 
-import lombok.extern.slf4j.*;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public final class KeyFileUtil {

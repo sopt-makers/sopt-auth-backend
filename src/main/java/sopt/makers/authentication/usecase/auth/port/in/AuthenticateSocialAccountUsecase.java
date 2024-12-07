@@ -1,7 +1,5 @@
 package sopt.makers.authentication.usecase.auth.port.in;
 
-import sopt.makers.authentication.domain.auth.AuthPlatform;
-
 public interface AuthenticateSocialAccountUsecase {
   AuthenticateTokenInfo authenticate(AuthenticateSocialAccountCommand command);
 
@@ -11,5 +9,9 @@ public interface AuthenticateSocialAccountUsecase {
     }
   }
 
-  record AuthenticateSocialAccountCommand(AuthPlatform authPlatform, String code) {}
+  record AuthenticateSocialAccountCommand(String authPlatform, String code) {
+    public static AuthenticateSocialAccountCommand of(String authPlatform, String code) {
+      return new AuthenticateSocialAccountCommand(authPlatform, code);
+    }
+  }
 }

@@ -1,12 +1,11 @@
 package sopt.makers.authentication.application.auth.api;
 
-import static sopt.makers.authentication.support.code.domain.success.AuthSuccess.AUTHENTICATE_SOCIAL_ACCOUNT;
-
 import sopt.makers.authentication.application.auth.dto.request.AuthRequest;
 import sopt.makers.authentication.application.auth.dto.response.AuthResponse;
 import sopt.makers.authentication.support.code.domain.success.AuthSuccess;
 import sopt.makers.authentication.support.common.api.BaseResponse;
 import sopt.makers.authentication.support.util.CookieUtil;
+import sopt.makers.authentication.support.util.ResponseUtil;
 import sopt.makers.authentication.usecase.auth.port.in.AuthenticateSocialAccountUsecase;
 import sopt.makers.authentication.usecase.auth.port.in.AuthenticateSocialAccountUsecase.AuthenticateTokenInfo;
 import sopt.makers.authentication.usecase.auth.port.in.CreatePhoneVerificationUsecase;
@@ -36,8 +35,7 @@ public class AuthApiController implements AuthApi {
   public ResponseEntity<BaseResponse<?>> createPhoneVerification(
       @RequestBody AuthRequest.CreatePhoneVerification createPhoneVerificationRequest) {
     createVerificationUsecase.create(createPhoneVerificationRequest.toCommand());
-    return ResponseEntity.status(AuthSuccess.CREATE_PHONE_VERIFICATION.getStatus().value())
-        .body(BaseResponse.ofSuccess(AuthSuccess.CREATE_PHONE_VERIFICATION));
+    return ResponseUtil.success(AuthSuccess.CREATE_PHONE_VERIFICATION);
   }
 
   @Override
@@ -60,12 +58,10 @@ public class AuthApiController implements AuthApi {
         authenticateSocialAccountUsecase.authenticate(socialAuthInfo.toCommand());
     HttpHeaders headers = cookieUtil.setRefreshToken(tokenInfo.refreshToken());
 
-    return ResponseEntity.ok()
-        .headers(headers)
-        .body(
-            BaseResponse.ofSuccess(
-                AUTHENTICATE_SOCIAL_ACCOUNT,
-                AuthResponse.AuthenticateSocialAuthInfoForWeb.of(tokenInfo.accessToken())));
+    return ResponseUtil.success(
+        AuthSuccess.AUTHENTICATE_SOCIAL_ACCOUNT,
+        headers,
+        AuthResponse.AuthenticateSocialAuthInfoForWeb.of(tokenInfo.accessToken()));
   }
 
   @Override
@@ -75,10 +71,9 @@ public class AuthApiController implements AuthApi {
     AuthenticateTokenInfo tokenInfo =
         authenticateSocialAccountUsecase.authenticate(socialAuthInfo.toCommand());
 
-    return ResponseEntity.ok(
-        BaseResponse.ofSuccess(
-            AUTHENTICATE_SOCIAL_ACCOUNT,
-            AuthResponse.AuthenticateSocialAuthInfoForApp.of(
-                tokenInfo.accessToken(), tokenInfo.refreshToken())));
+    return ResponseUtil.success(
+        AuthSuccess.AUTHENTICATE_SOCIAL_ACCOUNT,
+        AuthResponse.AuthenticateSocialAuthInfoForApp.of(
+            tokenInfo.accessToken(), tokenInfo.refreshToken()));
   }
 }

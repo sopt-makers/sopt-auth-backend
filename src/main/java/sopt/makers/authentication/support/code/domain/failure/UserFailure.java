@@ -15,13 +15,12 @@ public enum UserFailure implements FailureCode {
   // 400
   DUPLICATE_ACTIVITY(HttpStatus.BAD_REQUEST, "이미 존재하는 활동 정보입니다"),
   ROLE_REQUIRES_PART(HttpStatus.BAD_REQUEST, "해당 Role은 Part가 필수입니다"),
-
   // 404
-  NOT_FOUND_REGISTER_INFO(HttpStatus.NOT_FOUND, "존재하지 않는 가입 대상 정보입니다."),
-  NOT_FOUND_USER(HttpStatus.NOT_FOUND, "존재하지 않는 회원입니다."),
   NOT_FOUND_ROLE(HttpStatus.NOT_FOUND, "존재하지 않는 역할입니다"),
   NOT_FOUND_PART(HttpStatus.NOT_FOUND, "존재하지 않는 파트입니다"),
-  ;
+  NOT_FOUND_PHONE(HttpStatus.NOT_FOUND, "존재하지 않는 핸드폰 번호입니다"),
+  NOT_FOUND_USER(HttpStatus.NOT_FOUND, "존재하지 않는 회원입니다."),
+  NOT_FOUND_REGISTER_INFO(HttpStatus.NOT_FOUND, "존재하지 않는 가입 대상 정보입니다.");
   private final HttpStatus status;
   private final String message;
 }

@@ -2,6 +2,8 @@ package sopt.makers.authentication.support.util;
 
 import static sopt.makers.authentication.support.constant.SystemConstant.UTF_8;
 
+import sopt.makers.authentication.support.code.base.FailureCode;
+import sopt.makers.authentication.support.code.base.SuccessCode;
 import sopt.makers.authentication.support.common.api.BaseResponse;
 import sopt.makers.authentication.support.exception.base.BaseException;
 
@@ -9,7 +11,9 @@ import java.io.IOException;
 
 import jakarta.servlet.http.HttpServletResponse;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -26,5 +30,28 @@ public final class ResponseUtil {
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
     response.setCharacterEncoding(UTF_8);
     response.getWriter().write(bodyValue);
+  }
+
+  public static <T> ResponseEntity<BaseResponse<?>> success(SuccessCode code, T data) {
+    return ResponseEntity.status(code.getStatus()).body(BaseResponse.ofSuccess(code, data));
+  }
+
+  public static ResponseEntity<BaseResponse<?>> success(SuccessCode code) {
+    return ResponseEntity.status(code.getStatus()).body(BaseResponse.ofSuccess(code));
+  }
+
+  public static <T> ResponseEntity<BaseResponse<?>> success(
+      SuccessCode code, HttpHeaders headers, T data) {
+    return ResponseEntity.status(code.getStatus())
+        .headers(headers)
+        .body(BaseResponse.ofSuccess(code, data));
+  }
+
+  public static <T> ResponseEntity<BaseResponse<?>> failure(FailureCode code, T data) {
+    return ResponseEntity.status(code.getStatus()).body(BaseResponse.ofFailure(code, data));
+  }
+
+  public static ResponseEntity<BaseResponse<?>> failure(FailureCode code) {
+    return ResponseEntity.status(code.getStatus()).body(BaseResponse.ofFailure(code));
   }
 }

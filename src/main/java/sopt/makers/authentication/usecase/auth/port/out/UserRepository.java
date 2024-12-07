@@ -10,4 +10,6 @@ public interface UserRepository {
   User findByPhone(String phone);
 
   Long findIdByUser(User user);
+
+  User update(Long id, User user, SocialAccount socialAccount);
 }

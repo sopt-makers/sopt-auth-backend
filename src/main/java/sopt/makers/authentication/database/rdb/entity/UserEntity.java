@@ -55,6 +55,21 @@ public class UserEntity extends BaseEntity {
     this.authPlatformType = authPlatformType;
   }
 
+  public static UserEntity fromDomain(final Long id, User user) {
+    Profile profile = user.getProfile();
+    SocialAccount socialAccount = user.getSocialAccount();
+    UserEntity userEntity =
+        new UserEntity(
+            profile.name(),
+            profile.phone(),
+            profile.email().orElse(null),
+            profile.birthday(),
+            socialAccount.authPlatformId(),
+            socialAccount.authPlatformType());
+    userEntity.setId(id);
+    return userEntity;
+  }
+
   public static UserEntity fromDomain(final User user) {
     Profile profile = user.getProfile();
     SocialAccount socialAccount = user.getSocialAccount();
