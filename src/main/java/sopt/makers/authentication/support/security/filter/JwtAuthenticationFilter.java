@@ -5,10 +5,13 @@ import static sopt.makers.authentication.support.constant.SystemConstant.PATH_AU
 import static sopt.makers.authentication.support.constant.SystemConstant.PATH_ERROR;
 import static sopt.makers.authentication.support.constant.SystemConstant.PATH_TEST;
 
+
+import sopt.makers.authentication.support.constant.JwtConstant;
 import sopt.makers.authentication.support.jwt.provider.JwtAuthAccessTokenProvider;
 import sopt.makers.authentication.support.security.authentication.CustomAuthentication;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -29,22 +32,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
   private final JwtAuthAccessTokenProvider authTokenProvider;
 
-  @Override
-  protected boolean shouldNotFilter(HttpServletRequest request) {
-    return checkIsWhiteURI(request.getRequestURL().toString());
-  }
-
-  private boolean checkIsWhiteURI(String uri) {
-    return uri.contains(PATH_ACTUATOR)
-        || uri.contains(PATH_AUTH)
-        || uri.contains(PATH_ERROR)
-        || uri.contains(PATH_TEST);
-  }
 
   @Override
   protected void doFilterInternal(
       final HttpServletRequest request, final HttpServletResponse response, FilterChain filterChain)
       throws ServletException, IOException {
+
     String authorizationToken = getAuthorizationToken(request);
     CustomAuthentication authentication = authTokenProvider.parse(authorizationToken);
 
@@ -54,10 +47,35 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     filterChain.doFilter(request, response);
   }
 
+  @Override
+  public boolean shouldNotFilter(HttpServletRequest request) {
+    return isWhiteRequest(request) || isJwksRequest(request);
+  }
+  
+  private boolean isWhiteRequest(final HttpServletRequest request) {
+    String url = request.getRequestURL().toString();
+    return url.contains(PATH_ACTUATOR)
+        || url.contains(PATH_AUTH)
+        || url.contains(PATH_ERROR)
+        || url.contains(PATH_TEST);
+  }
+
+  /**
+   * @author 강현욱 @hyunw9
+   * @return JwtToken Authorization 헤더에서 "Bearer "를 제거하여 토큰을 추출합니다.
+   */
   private String getAuthorizationToken(final HttpServletRequest request) {
     String authorizationHeaderValue =
         request.getHeader(HttpHeaders.AUTHORIZATION).substring(HttpHeaders.AUTHORIZATION.length());
-    String authorizationToken = authorizationHeaderValue.trim();
-    return authorizationToken;
+    return authorizationHeaderValue.trim();
+  }
+
+  private static boolean isJwksRequest(HttpServletRequest request) {
+    boolean isCorrectUrl = request.getRequestURI().equals("/.well-known/jwks.json");
+    boolean isCorrectHeader =
+        Arrays.stream(JwtConstant.SERVICE_NAMES)
+            .anyMatch(request.getHeader(HttpHeaders.SERVER)::contains);
+
+    return isCorrectUrl && isCorrectHeader;
   }
 }

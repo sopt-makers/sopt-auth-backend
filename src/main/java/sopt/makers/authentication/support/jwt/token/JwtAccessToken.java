@@ -2,10 +2,11 @@ package sopt.makers.authentication.support.jwt.token;
 
 import static org.springframework.security.oauth2.jwt.JwtClaimNames.ISS;
 import static org.springframework.security.oauth2.jwt.JwtClaimNames.SUB;
-import static sopt.makers.authentication.support.code.support.failure.TokenFailure.INVALID_SUBJECT;
+import static sopt.makers.authentication.support.code.support.failure.ResourceFailure.INVALID_SUBJECT;
 import static sopt.makers.authentication.support.code.support.failure.TokenFailure.TOKEN_EXPIRED;
 import static sopt.makers.authentication.support.code.support.failure.TokenFailure.UNSUPPORTED_ISSUER;
 
+import sopt.makers.authentication.support.exception.support.ResourceException;
 import sopt.makers.authentication.support.exception.support.TokenException;
 import sopt.makers.authentication.support.security.authentication.CustomAuthentication;
 import sopt.makers.authentication.support.value.JwtProperty;
@@ -73,7 +74,7 @@ public class JwtAccessToken {
   private void validateSubject() {
     String subject = jwt.getClaim(SUB);
     if (subject == null) {
-      throw new TokenException(INVALID_SUBJECT);
+      throw new ResourceException(INVALID_SUBJECT);
     }
   }
 }
