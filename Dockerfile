@@ -24,4 +24,4 @@ COPY --from=builder /app-build/build/libs/authentication.jar /app-run/authentica
 
 EXPOSE 8080
 ENTRYPOINT ["java"]
-CMD ["-jar", "authentication.jar"]
+CMD ["-Dspring.config.additional-location=file:/app-run/", "-jar", "authentication.jar"]

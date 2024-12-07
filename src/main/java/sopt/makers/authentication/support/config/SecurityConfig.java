@@ -1,13 +1,12 @@
 package sopt.makers.authentication.support.config;
 
-import static sopt.makers.authentication.support.constant.SystemConstant.PATTERN_ALL;
+import static sopt.makers.authentication.support.constant.SystemConstant.PATTERN_ACTUATOR;
 import static sopt.makers.authentication.support.constant.SystemConstant.PATTERN_AUTH;
 import static sopt.makers.authentication.support.constant.SystemConstant.PATTERN_ERROR_PATH;
 import static sopt.makers.authentication.support.constant.SystemConstant.PATTERN_TEST;
 
 import sopt.makers.authentication.support.security.filter.JwtAuthenticationFilter;
 import sopt.makers.authentication.support.security.filter.JwtExceptionFilter;
-import sopt.makers.authentication.support.value.AuthProperty;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,9 +20,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import lombok.RequiredArgsConstructor;
 
@@ -36,7 +32,6 @@ public class SecurityConfig {
 
   private final JwtAuthenticationFilter jwtAuthenticationFilter;
   private final JwtExceptionFilter jwtExceptionFilter;
-  private final AuthProperty authProperty;
 
   @Bean
   public static PasswordEncoder passwordEncoder() {
@@ -75,7 +70,7 @@ public class SecurityConfig {
     http.httpBasic(AbstractHttpConfigurer::disable)
         .csrf(AbstractHttpConfigurer::disable)
         .formLogin(AbstractHttpConfigurer::disable)
-        .cors(configurer -> configurer.configurationSource(corsConfigurationSource()))
+        .cors(AbstractHttpConfigurer::disable)
         .sessionManagement(
             configurer -> configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
@@ -92,23 +87,9 @@ public class SecurityConfig {
                 .permitAll()
                 .requestMatchers(new AntPathRequestMatcher(PATTERN_ERROR_PATH))
                 .permitAll()
+                .requestMatchers(new AntPathRequestMatcher(PATTERN_ACTUATOR))
+                .permitAll()
                 .anyRequest()
                 .authenticated());
-  }
-
-  @Bean
-  public CorsConfigurationSource corsConfigurationSource() {
-    CorsConfiguration configuration = new CorsConfiguration();
-
-    configuration.addAllowedOrigin(authProperty.client().url());
-    configuration.addAllowedHeader(ALL);
-    configuration.addAllowedMethod(ALL);
-    configuration.setAllowCredentials(true);
-
-    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-
-    source.registerCorsConfiguration(PATTERN_ALL, configuration);
-
-    return source;
   }
 }
