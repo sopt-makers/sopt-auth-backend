@@ -5,7 +5,6 @@ import static sopt.makers.authentication.support.constant.SystemConstant.PATH_AU
 import static sopt.makers.authentication.support.constant.SystemConstant.PATH_ERROR;
 import static sopt.makers.authentication.support.constant.SystemConstant.PATH_TEST;
 
-
 import sopt.makers.authentication.support.constant.JwtConstant;
 import sopt.makers.authentication.support.jwt.provider.JwtAuthAccessTokenProvider;
 import sopt.makers.authentication.support.security.authentication.CustomAuthentication;
@@ -32,7 +31,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
   private final JwtAuthAccessTokenProvider authTokenProvider;
 
-
   @Override
   protected void doFilterInternal(
       final HttpServletRequest request, final HttpServletResponse response, FilterChain filterChain)
@@ -51,7 +49,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
   public boolean shouldNotFilter(HttpServletRequest request) {
     return isWhiteRequest(request) || isJwksRequest(request);
   }
-  
+
   private boolean isWhiteRequest(final HttpServletRequest request) {
     String url = request.getRequestURL().toString();
     return url.contains(PATH_ACTUATOR)
