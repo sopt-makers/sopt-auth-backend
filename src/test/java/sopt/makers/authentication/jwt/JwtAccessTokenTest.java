@@ -6,8 +6,11 @@ import static sopt.makers.authentication.support.jwt.provider.JwtTokenUtil.extra
 
 import sopt.makers.authentication.support.jwt.provider.JwtAuthAccessTokenProvider;
 import sopt.makers.authentication.support.security.authentication.CustomAuthentication;
+import sopt.makers.authentication.usecase.auth.port.in.JwksRetrieveUsecase;
 
 import java.io.IOException;
+import java.security.interfaces.RSAPublicKey;
+import java.text.ParseException;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,6 +23,13 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.test.context.ActiveProfiles;
 
+import com.nimbusds.jose.JOSEException;
+import com.nimbusds.jose.JWSVerifier;
+import com.nimbusds.jose.crypto.RSASSAVerifier;
+import com.nimbusds.jose.jwk.JWKSet;
+import com.nimbusds.jose.jwk.RSAKey;
+import com.nimbusds.jwt.SignedJWT;
+
 @SpringBootTest
 @ActiveProfiles("test")
 public class JwtAccessTokenTest {
@@ -30,6 +40,8 @@ public class JwtAccessTokenTest {
   @Autowired private JwtEncoder jwtEncoder;
 
   @Autowired private JwtDecoder jwtDecoder;
+
+  @Autowired private JwksRetrieveUsecase jwksRetrieveUsecase;
 
   @Test
   @DisplayName("AccessToken 생성")
@@ -104,5 +116,26 @@ public class JwtAccessTokenTest {
 
     // then
     assertThat(pureToken).isEqualTo(expectedToken);
+  }
+
+  @Test
+  @DisplayName("JwtAuthService로 Jwk를 조회하고, Public key로 AccessToken 디코딩")
+  void decode_jwt_access_token_with_public_key() throws ParseException, JOSEException {
+    // Arrange
+    CustomAuthentication customAuthentication = new CustomAuthentication("test", "test");
+    String accessTokenWithHeader = jwtAuthAccessTokenProvider.generate(customAuthentication);
+    String pureToken = extract(accessTokenWithHeader);
+
+    SignedJWT signedJWT = SignedJWT.parse(pureToken);
+    JWKSet info = jwksRetrieveUsecase.retrievePublicKey();
+    RSAKey rsaKey = (RSAKey) info.getKeyByKeyId("makers-auth-1");
+    RSAPublicKey publicKey = rsaKey.toRSAPublicKey();
+
+    // Act
+    JWSVerifier verifier = new RSASSAVerifier(publicKey);
+    boolean isValid = signedJWT.verify(verifier);
+
+    // Assert
+    assertThat(isValid).isTrue();
   }
 }
