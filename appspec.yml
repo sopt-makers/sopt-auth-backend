@@ -16,7 +16,8 @@ files:
   - source: key
     destination: /home/ubuntu/property/auth/key
   - source: application.env
-    destination: /home/ubuntu/env/auth
+    destination: /home/ubuntu/env/auth/application.env
+    overwrite: yes
 file_exists_behavior: OVERWRITE
 
 permissions:
