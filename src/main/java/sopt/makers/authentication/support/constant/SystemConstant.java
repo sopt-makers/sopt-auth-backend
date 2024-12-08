@@ -14,6 +14,8 @@ public final class SystemConstant {
   public static final String PATH_ERROR = "/error";
   public static final String PATH_TEST = "/test";
 
+  public static final String PATH_USER = API_DEFAULT_PREFIX + "/user";
+
   public static final String PATTERN_ALL = "/**";
   public static final String PATTERN_ERROR_PATH = PATH_ERROR + PATTERN_ALL;
   public static final String PATTERN_ACTUATOR = PATH_ACTUATOR + PATTERN_ALL;

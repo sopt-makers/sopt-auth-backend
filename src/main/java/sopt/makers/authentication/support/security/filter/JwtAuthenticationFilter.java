@@ -4,6 +4,7 @@ import static sopt.makers.authentication.support.constant.SystemConstant.PATH_AC
 import static sopt.makers.authentication.support.constant.SystemConstant.PATH_AUTH;
 import static sopt.makers.authentication.support.constant.SystemConstant.PATH_ERROR;
 import static sopt.makers.authentication.support.constant.SystemConstant.PATH_TEST;
+import static sopt.makers.authentication.support.constant.SystemConstant.PATH_USER;
 
 import sopt.makers.authentication.support.constant.JwtConstant;
 import sopt.makers.authentication.support.jwt.provider.JwtAuthAccessTokenProvider;
@@ -28,6 +29,7 @@ import lombok.RequiredArgsConstructor;
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
+  private static final String PATH_GET_REGISTER_SOCIAL_PLATFORM = PATH_USER + "/social";
 
   private final JwtAuthAccessTokenProvider authTokenProvider;
 
@@ -55,7 +57,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     return url.contains(PATH_ACTUATOR)
         || url.contains(PATH_AUTH)
         || url.contains(PATH_ERROR)
-        || url.contains(PATH_TEST);
+        || url.contains(PATH_TEST)
+        || url.contains(PATH_GET_REGISTER_SOCIAL_PLATFORM);
   }
 
   /**
