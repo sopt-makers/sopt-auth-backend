@@ -5,6 +5,8 @@ spring:
   jpa:
     hibernate:
       ddl-auto: none
+    database-platform: ${JPA_DATABASE_PLATFORM}
+    database: ${JPA_DATABASE}
 ---
 spring.config.activate.on-profile: local
 spring:
@@ -15,6 +17,8 @@ spring:
       hibernate:
         show_sql: true
         format_sql: true
+      database-platform: ${JPA_DATABASE_PLATFORM}
+      database: ${JPA_DATABASE}
 
 ---
 spring.config.activate.on-profile: test
