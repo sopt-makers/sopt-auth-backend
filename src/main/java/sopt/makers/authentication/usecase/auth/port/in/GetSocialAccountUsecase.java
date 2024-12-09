@@ -1,6 +1,6 @@
-package sopt.makers.authentication.usecase.user.port.in;
+package sopt.makers.authentication.usecase.auth.port.in;
 
-public interface GetSocialAccountPlatform {
+public interface GetSocialAccountUsecase {
 
   SocialAccountPlatformInfo getSocialAccountPlatform(GetSocialAccountPlatformCommand command);
 
