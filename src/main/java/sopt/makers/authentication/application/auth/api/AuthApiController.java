@@ -44,10 +44,8 @@ public class AuthApiController implements AuthApi {
       @RequestBody AuthRequest.VerifyPhoneVerification phoneVerification) {
     VerifyPhoneVerificationUsecase.VerifyVerificationResult result =
         verifyVerificationUsecase.verify(phoneVerification.toCommand());
-    return ResponseEntity.status(AuthSuccess.VERIFY_PHONE_VERIFICATION.getStatus().value())
-        .body(
-            BaseResponse.ofSuccess(
-                AuthSuccess.VERIFY_PHONE_VERIFICATION, AuthResponse.VerifyResult.from(result)));
+    return ResponseUtil.success(
+        AuthSuccess.VERIFY_PHONE_VERIFICATION, AuthResponse.VerifyResult.from(result));
   }
 
   @Override

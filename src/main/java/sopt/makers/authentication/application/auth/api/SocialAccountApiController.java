@@ -34,12 +34,9 @@ public class SocialAccountApiController implements SocialAccountApi {
     GetSocialAccountUsecase.SocialAccountPlatformInfo socialAccountPlatform =
         getSocialAccountUsecase.getSocialAccountPlatform(command);
 
-    return ResponseEntity.status(
-            SocialAccountSuccess.GET_SOCIAL_ACCOUNT_PLATFORM.getStatus().value())
-        .body(
-            BaseResponse.ofSuccess(
-                SocialAccountSuccess.GET_SOCIAL_ACCOUNT_PLATFORM,
-                AuthResponse.SocialAccountPlatform.from(socialAccountPlatform)));
+    return ResponseUtil.success(
+        SocialAccountSuccess.GET_SOCIAL_ACCOUNT_PLATFORM,
+        AuthResponse.SocialAccountPlatform.from(socialAccountPlatform));
   }
 
   @Override
