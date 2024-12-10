@@ -9,7 +9,11 @@ import sopt.makers.authentication.usecase.auth.port.in.GetSocialAccountUsecase;
 import sopt.makers.authentication.usecase.auth.port.in.UpdateSocialAccountUsecase;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 
