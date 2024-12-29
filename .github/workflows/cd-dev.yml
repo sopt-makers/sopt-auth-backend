@@ -110,13 +110,13 @@ jobs:
             mkdir -p /home/ubuntu/property/auth/pem
             mkdir -p /home/ubuntu/env/auth
             
-            mv /home/ubuntu/deploy-temp/auth/deploy.sh /home/ubuntu/script/auth/deploy.sh
-            mv /home/ubuntu/deploy-temp/auth/switch.sh /home/ubuntu/script/auth/switch.sh
-            mv /home/ubuntu/deploy-temp/auth/valid.sh /home/ubuntu/script/auth/valid.sh
-            mv /home/ubuntu/deploy-temp/auth/application.env /home/ubuntu/env/auth/application.env
-            mv /home/ubuntu/deploy-temp/auth/${{ secrets.APPLE_KEY_NAME }} /home/ubuntu/property/auth/key/${{ secrets.APPLE_KEY_NAME }}
-            mv /home/ubuntu/deploy-temp/auth/${{ secrets.JWT_PUBLIC_KEY }} /home/ubuntu/property/auth/pem/${{ secrets.JWT_PUBLIC_KEY }}
-            mv /home/ubuntu/deploy-temp/auth/${{ secrets.JWT_PRIVATE_KEY }} /home/ubuntu/property/auth/pem/${{ secrets.JWT_PRIVATE_KEY }}
+            cp -f /home/ubuntu/deploy-temp/auth/deploy.sh /home/ubuntu/script/auth/deploy.sh
+            cp -f /home/ubuntu/deploy-temp/auth/switch.sh /home/ubuntu/script/auth/switch.sh
+            cp -f /home/ubuntu/deploy-temp/auth/valid.sh /home/ubuntu/script/auth/valid.sh
+            cp -f /home/ubuntu/deploy-temp/auth/application.env /home/ubuntu/env/auth/application.env
+            cp -f /home/ubuntu/deploy-temp/auth/${{ secrets.APPLE_KEY }} /home/ubuntu/property/auth/key/${{ secrets.APPLE_KEY }}
+            cp -f /home/ubuntu/deploy-temp/auth/${{ secrets.JWT_PUBLIC_KEY }} /home/ubuntu/property/auth/pem/${{ secrets.JWT_PUBLIC_KEY }}
+            cp -f /home/ubuntu/deploy-temp/auth/${{ secrets.JWT_PRIVATE_KEY }} /home/ubuntu/property/auth/pem/${{ secrets.JWT_PRIVATE_KEY }}
             
             sudo chmod +x /home/ubuntu/script/auth/deploy.sh
             sudo chmod +x /home/ubuntu/script/auth/switch.sh
@@ -126,6 +126,6 @@ jobs:
             sudo chmod +r /home/ubuntu/property/auth/pem/${{ secrets.JWT_PUBLIC_KEY }}
             sudo chmod +r /home/ubuntu/property/auth/pem/${{ secrets.JWT_PRIVATE_KEY }}
             
-            /home/ubuntu/script/op/deploy.sh
-            /home/ubuntu/script/op/switch.sh
-            /home/ubuntu/script/op/valid.sh
+            /home/ubuntu/script/auth/deploy.sh
+            /home/ubuntu/script/auth/switch.sh
+            /home/ubuntu/script/auth/valid.sh
