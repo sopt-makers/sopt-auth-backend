@@ -1,6 +1,5 @@
 .idea
 *.md
-appspec.yml
 .github
 !.github/script/pre-commit
 .gitignore
