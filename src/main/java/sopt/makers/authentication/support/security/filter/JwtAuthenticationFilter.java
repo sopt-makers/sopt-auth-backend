@@ -1,9 +1,6 @@
 package sopt.makers.authentication.support.security.filter;
 
-import static sopt.makers.authentication.support.constant.SystemConstant.PATH_ACTUATOR;
-import static sopt.makers.authentication.support.constant.SystemConstant.PATH_AUTH;
-import static sopt.makers.authentication.support.constant.SystemConstant.PATH_ERROR;
-import static sopt.makers.authentication.support.constant.SystemConstant.PATH_TEST;
+import static sopt.makers.authentication.support.constant.SystemConstant.WHITE_PATHS;
 
 import sopt.makers.authentication.support.constant.JwtConstant;
 import sopt.makers.authentication.support.jwt.provider.JwtAuthAccessTokenProvider;
@@ -52,10 +49,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
   private boolean isWhiteRequest(final HttpServletRequest request) {
     String url = request.getRequestURL().toString();
-    return url.contains(PATH_ACTUATOR)
-        || url.contains(PATH_AUTH)
-        || url.contains(PATH_ERROR)
-        || url.contains(PATH_TEST);
+    return WHITE_PATHS.stream().anyMatch(url::contains);
   }
 
   /**
