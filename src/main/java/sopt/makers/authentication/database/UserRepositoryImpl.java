@@ -28,6 +28,12 @@ public class UserRepositoryImpl implements UserRepository {
   }
 
   @Override
+  public void save(User user) {
+    UserEntity userEntity = UserEntity.fromDomain(user);
+    userRegister.save(userEntity);
+  }
+
+  @Override
   public User findByPhone(String phone) {
     return userRetriever.findByPhone(phone);
   }

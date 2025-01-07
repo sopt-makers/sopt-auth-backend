@@ -11,5 +11,7 @@ public interface UserRepository {
 
   Long findIdByUser(User user);
 
+  void save(User user);
+
   User update(Long id, User user, SocialAccount socialAccount);
 }
