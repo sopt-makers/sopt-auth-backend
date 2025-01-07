@@ -37,7 +37,7 @@ public class OAuthAuthenticatorImpl implements OAuthAuthenticator {
     };
   }
 
-  public String getIdTokenByCode(String authPlatform, String code) {
+  private String getIdTokenByCode(String authPlatform, String code) {
     AuthPlatform type = AuthPlatform.find(authPlatform);
 
     return switch (type) {
