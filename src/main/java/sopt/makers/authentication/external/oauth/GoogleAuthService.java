@@ -1,98 +1,85 @@
 package sopt.makers.authentication.external.oauth;
 
-import static sopt.makers.authentication.support.code.external.failure.ClientError.GOOGLE_RESPONSE_UNAVAILABLE;
-import static sopt.makers.authentication.support.code.external.failure.ClientError.INVALID_GOOGLE_AUTH_CODE;
-import static sopt.makers.authentication.support.constant.OAuthConstant.ACCEPT;
-import static sopt.makers.authentication.support.constant.OAuthConstant.ACCEPT_VALUE;
-import static sopt.makers.authentication.support.constant.OAuthConstant.CLIENT_ID;
-import static sopt.makers.authentication.support.constant.OAuthConstant.CLIENT_SECRET;
-import static sopt.makers.authentication.support.constant.OAuthConstant.CODE;
-import static sopt.makers.authentication.support.constant.OAuthConstant.CONTENT_TYPE;
-import static sopt.makers.authentication.support.constant.OAuthConstant.CONTENT_TYPE_VALUE;
-import static sopt.makers.authentication.support.constant.OAuthConstant.GOOGLE_TOKEN_URL;
-import static sopt.makers.authentication.support.constant.OAuthConstant.GRANT_TYPE;
-import static sopt.makers.authentication.support.constant.OAuthConstant.GRANT_TYPE_VALUE;
-import static sopt.makers.authentication.support.constant.OAuthConstant.REDIRECT_URI;
+import static sopt.makers.authentication.support.code.external.failure.ClientError.*;
+import static sopt.makers.authentication.support.constant.OAuthConstant.*;
 
+import sopt.makers.authentication.external.oauth.client.GoogleAuthClient;
 import sopt.makers.authentication.external.oauth.dto.IdTokenResponse;
-import sopt.makers.authentication.support.exception.external.ClientRequestException;
-import sopt.makers.authentication.support.exception.external.ClientResponseException;
+import sopt.makers.authentication.support.code.domain.failure.AuthFailure;
+import sopt.makers.authentication.support.code.support.failure.TokenFailure;
+import sopt.makers.authentication.support.exception.domain.AuthException;
+import sopt.makers.authentication.support.exception.support.TokenException;
 import sopt.makers.authentication.support.value.GoogleOAuthProperty;
 
-import java.io.IOException;
+import java.text.ParseException;
+import java.time.Instant;
+import java.util.Date;
 
 import org.springframework.stereotype.Component;
 
 import com.google.gson.Gson;
+import com.nimbusds.jose.JOSEException;
+import com.nimbusds.jose.JWSVerifier;
+import com.nimbusds.jose.crypto.ECDSAVerifier;
+import com.nimbusds.jose.jwk.JWK;
+import com.nimbusds.jose.jwk.JWKSet;
+import com.nimbusds.jwt.JWTClaimsSet;
+import com.nimbusds.jwt.SignedJWT;
 
 import lombok.RequiredArgsConstructor;
-import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-import okhttp3.ResponseBody;
 
 @Component
 @RequiredArgsConstructor
 public class GoogleAuthService implements OAuthService {
   private final GoogleOAuthProperty googleOAuthProperty;
+  private final GoogleAuthClient googleAuthClient;
   private final Gson gson;
   private final OkHttpClient client;
 
   @Override
   public IdTokenResponse getIdTokenByCode(String code) {
-    FormBody formBody = createTokenRequestFormBody(code);
-    Request request = createHttpRequest(formBody);
-    Response response = executeRequest(request);
-
-    return parseResponseBody(response);
+    return googleAuthClient.getIdToken(googleOAuthProperty.client().secret(), code);
   }
 
-  private FormBody createTokenRequestFormBody(String code) {
-    return new FormBody.Builder()
-        .add(CLIENT_ID, googleOAuthProperty.client().id())
-        .add(CLIENT_SECRET, googleOAuthProperty.client().secret())
-        .add(CODE, code)
-        .add(GRANT_TYPE, GRANT_TYPE_VALUE)
-        .add(REDIRECT_URI, googleOAuthProperty.redirect().url())
-        .build();
-  }
-
-  private static Request createHttpRequest(FormBody formBody) {
-    return new Request.Builder()
-        .url(GOOGLE_TOKEN_URL)
-        .post(formBody)
-        .addHeader(CONTENT_TYPE, CONTENT_TYPE_VALUE)
-        .addHeader(ACCEPT, ACCEPT_VALUE)
-        .build();
-  }
-
-  private Response executeRequest(Request request) {
+  public String getIdentifierByToken(final String token) {
     try {
-      Response response = client.newCall(request).execute();
+      SignedJWT signedJWT = SignedJWT.parse(token);
+      JWK targetJwk = findMatchJWK(signedJWT);
 
-      validateResponse(response);
-      return response;
-    } catch (IOException e) {
-      throw new ClientResponseException(GOOGLE_RESPONSE_UNAVAILABLE);
+      verifyAppleIdTokenJwt(signedJWT, targetJwk);
+      String identifier = signedJWT.getJWTClaimsSet().getSubject();
+      return identifier;
+    } catch (ParseException e) {
+      throw new TokenException(TokenFailure.TOKEN_PARSE_FAILED);
     }
   }
 
-  private void validateResponse(Response response) {
-    boolean isNotSuccessResponse = !response.isSuccessful();
-
-    if (isNotSuccessResponse) {
-      throw new ClientRequestException(INVALID_GOOGLE_AUTH_CODE);
-    }
+  private JWK findMatchJWK(final SignedJWT jwt) {
+    JWKSet loadedJWKSet = googleAuthClient.getPublicKeySet();
+    String keyID = jwt.getHeader().getKeyID();
+    return loadedJWKSet.getKeys().stream()
+        .filter(jwk -> jwk.getKeyID().equals(keyID))
+        .findFirst()
+        .orElseThrow(() -> new AuthException(AuthFailure.NOT_FOUND_AVAILABLE_PUBLIC_KEY_SET));
   }
 
-  private IdTokenResponse parseResponseBody(Response response) {
-    ResponseBody responseBody = response.body();
-    boolean isBodyNull = responseBody == null;
+  private void verifyAppleIdTokenJwt(final SignedJWT jwt, JWK jwk) throws ParseException {
+    try {
+      JWTClaimsSet jwtClaimsSet = jwt.getJWTClaimsSet();
+      JWSVerifier verifier = new ECDSAVerifier(jwk.toECKey());
 
-    if (isBodyNull) {
-      throw new ClientResponseException(GOOGLE_RESPONSE_UNAVAILABLE);
+      boolean isVerifiedSignature = jwt.verify(verifier);
+      boolean isCorrectIssuer = jwtClaimsSet.getIssuer().equals(GOOGLE_ISSUER);
+      boolean isCorrectAudience =
+          jwtClaimsSet.getAudience().contains(googleOAuthProperty.client().id());
+      boolean isNotExpired = jwtClaimsSet.getExpirationTime().after(Date.from(Instant.now()));
+
+      if (!(isVerifiedSignature && isCorrectIssuer && isCorrectAudience && isNotExpired)) {
+        throw new AuthException(AuthFailure.INVALID_ID_TOKEN);
+      }
+    } catch (JOSEException e) {
+      throw new AuthException(AuthFailure.INVALID_ID_TOKEN);
     }
-    return gson.fromJson(responseBody.toString(), IdTokenResponse.class);
   }
 }
