@@ -79,8 +79,8 @@ public class AuthApiController implements AuthApi {
 
   @Override
   @PostMapping("/signup")
-  public ResponseEntity<BaseResponse<?>> signUp(AuthRequest.SignUp signUp) {
-    signUpUsecase.signUp(signUp.toCommand());
+  public ResponseEntity<BaseResponse<?>> signUp(AuthRequest.SignUpInfo signUpInfo) {
+    signUpUsecase.signUp(signUpInfo.toCommand());
     return ResponseUtil.success(AuthSuccess.CREATE_SIGN_UP_USER);
   }
 }

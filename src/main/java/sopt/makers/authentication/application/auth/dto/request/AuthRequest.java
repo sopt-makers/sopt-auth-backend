@@ -46,14 +46,14 @@ public final class AuthRequest {
     }
   }
 
-  public record SignUp(
+  public record SignUpInfo(
       @JsonProperty("name") String name,
       @JsonProperty("phone") String phone,
-      @JsonProperty("code") String code,
+      @JsonProperty("token") String token,
       @JsonProperty("authPlatform") String authPlatform) {
     public SignUpCommand toCommand() {
       return new SignUpCommand(
-          this.name, this.phone, this.code, AuthPlatform.find(this.authPlatform));
+          this.name, this.phone, this.token, AuthPlatform.find(this.authPlatform));
     }
   }
 }
