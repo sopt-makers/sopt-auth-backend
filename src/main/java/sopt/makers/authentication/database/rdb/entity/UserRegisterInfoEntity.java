@@ -29,6 +29,7 @@ public class UserRegisterInfoEntity {
 
   @NotNull private String name;
   @NotNull private String phone;
+  @NotNull private String email;
   @NotNull private LocalDate birthday;
 
   @Min(1)
@@ -39,6 +40,7 @@ public class UserRegisterInfoEntity {
   private Part part;
 
   public UserRegisterInfo toDomain() {
-    return UserRegisterInfo.of(this.name, this.phone, this.birthday, this.generation, this.part);
+    return UserRegisterInfo.of(
+        this.name, this.phone, this.email, this.birthday, this.generation, this.part);
   }
 }
