@@ -39,4 +39,15 @@ public class AuthenticateSocialAccountService implements AuthenticateSocialAccou
 
     return AuthenticateTokenInfo.of(accessToken, refreshToken);
   }
+
+  @Override
+  public AuthenticateTokenInfo refresh(AuthenticateTokenInfo command) {
+    String refreshToken = command.refreshToken();
+    jwtAuthRefreshTokenProvider.parse(refreshToken);
+    CustomAuthentication customAuthentication =
+        jwtAuthAccessTokenProvider.parse(command.accessToken());
+    String renewedAccessToken = jwtAuthAccessTokenProvider.generate(customAuthentication);
+    String renewedRefreshToken = jwtAuthRefreshTokenProvider.generate(renewedAccessToken);
+    return AuthenticateTokenInfo.of(renewedAccessToken, renewedRefreshToken);
+  }
 }
