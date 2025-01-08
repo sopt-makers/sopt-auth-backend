@@ -8,7 +8,6 @@ import sopt.makers.authentication.support.jwt.token.JwtAccessToken;
 import sopt.makers.authentication.support.security.authentication.CustomAuthentication;
 import sopt.makers.authentication.support.value.JwtProperty;
 
-import java.io.IOException;
 import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -53,7 +52,7 @@ public class JwtAuthAccessTokenProvider implements JwtProvider<CustomAuthenticat
   }
 
   @Override
-  public CustomAuthentication parse(String requestToken) throws IOException {
+  public CustomAuthentication parse(String requestToken) {
     String token = extract(requestToken);
     Jwt accessToken = jwtDecoder.decode(token);
     JwtAccessToken jwtAccessToken = JwtAccessToken.createJwtAccessToken(accessToken);
