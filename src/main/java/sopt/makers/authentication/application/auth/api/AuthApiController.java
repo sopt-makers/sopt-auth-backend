@@ -74,4 +74,18 @@ public class AuthApiController implements AuthApi {
         AuthResponse.AuthenticateSocialAuthInfoForApp.of(
             tokenInfo.accessToken(), tokenInfo.refreshToken()));
   }
+
+  @Override
+  @PostMapping("/refresh")
+  public ResponseEntity<BaseResponse<?>> refreshToken(
+      AuthRequest.AuthenticationTokenInfo authenticationTokenInfo) {
+
+    AuthenticateTokenInfo tokenInfo =
+        authenticateSocialAccountUsecase.refresh(authenticationTokenInfo.toCommand());
+
+    return ResponseUtil.success(
+        AuthSuccess.AUTHENTICATE_SOCIAL_ACCOUNT,
+        AuthResponse.AuthenticateSocialAuthInfo.of(
+            tokenInfo.accessToken(), tokenInfo.refreshToken()));
+  }
 }

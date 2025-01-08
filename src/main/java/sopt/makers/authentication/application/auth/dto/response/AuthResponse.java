@@ -34,6 +34,12 @@ public final class AuthResponse {
     }
   }
 
+  public record AuthenticateSocialAuthInfo(String accessToken, String refreshToken) {
+    public static AuthenticateSocialAuthInfo of(String accessToken, String refreshToken) {
+      return new AuthenticateSocialAuthInfo(accessToken, refreshToken);
+    }
+  }
+
   public record SocialAccountPlatform(@JsonProperty("platform") String platformName) {
     public static SocialAccountPlatform from(
         GetSocialAccountUsecase.SocialAccountPlatformInfo info) {
