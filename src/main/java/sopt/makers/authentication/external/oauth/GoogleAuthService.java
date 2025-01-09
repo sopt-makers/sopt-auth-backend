@@ -1,6 +1,5 @@
 package sopt.makers.authentication.external.oauth;
 
-import static sopt.makers.authentication.support.code.external.failure.ClientError.*;
 import static sopt.makers.authentication.support.constant.OAuthConstant.*;
 
 import sopt.makers.authentication.external.oauth.client.GoogleAuthClient;
@@ -17,7 +16,6 @@ import java.util.Date;
 
 import org.springframework.stereotype.Component;
 
-import com.google.gson.Gson;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWSVerifier;
 import com.nimbusds.jose.crypto.ECDSAVerifier;
@@ -27,15 +25,12 @@ import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 
 import lombok.RequiredArgsConstructor;
-import okhttp3.OkHttpClient;
 
 @Component
 @RequiredArgsConstructor
 public class GoogleAuthService implements OAuthService {
   private final GoogleOAuthProperty googleOAuthProperty;
   private final GoogleAuthClient googleAuthClient;
-  private final Gson gson;
-  private final OkHttpClient client;
 
   @Override
   public IdTokenResponse getIdTokenByCode(String code) {
@@ -47,7 +42,7 @@ public class GoogleAuthService implements OAuthService {
       SignedJWT signedJWT = SignedJWT.parse(token);
       JWK targetJwk = findMatchJWK(signedJWT);
 
-      verifyAppleIdTokenJwt(signedJWT, targetJwk);
+      verifyGoogleIdTokenJwt(signedJWT, targetJwk);
       String identifier = signedJWT.getJWTClaimsSet().getSubject();
       return identifier;
     } catch (ParseException e) {
@@ -64,7 +59,7 @@ public class GoogleAuthService implements OAuthService {
         .orElseThrow(() -> new AuthException(AuthFailure.NOT_FOUND_AVAILABLE_PUBLIC_KEY_SET));
   }
 
-  private void verifyAppleIdTokenJwt(final SignedJWT jwt, JWK jwk) throws ParseException {
+  private void verifyGoogleIdTokenJwt(final SignedJWT jwt, JWK jwk) throws ParseException {
     try {
       JWTClaimsSet jwtClaimsSet = jwt.getJWTClaimsSet();
       JWSVerifier verifier = new ECDSAVerifier(jwk.toECKey());

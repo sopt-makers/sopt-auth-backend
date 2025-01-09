@@ -1,11 +1,9 @@
 package sopt.makers.authentication.external.oauth;
 
-import static sopt.makers.authentication.domain.auth.AuthPlatform.APPLE;
-import static sopt.makers.authentication.domain.auth.AuthPlatform.GOOGLE;
 import static sopt.makers.authentication.support.code.external.failure.ClientError.INVALID_ID_TOKEN;
 
 import sopt.makers.authentication.domain.auth.AuthPlatform;
-import sopt.makers.authentication.support.exception.external.*;
+import sopt.makers.authentication.support.exception.external.ClientResponseException;
 import sopt.makers.authentication.usecase.auth.port.out.OAuthAuthenticator;
 
 import java.text.ParseException;
