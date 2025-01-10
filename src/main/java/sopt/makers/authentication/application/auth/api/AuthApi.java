@@ -18,4 +18,6 @@ public interface AuthApi {
 
   ResponseEntity<BaseResponse<?>> authenticateSocialAuthInfoFromApp(
       AuthRequest.AuthenticateSocialAuthInfo socialAuthInfo);
+
+  ResponseEntity<BaseResponse<?>> signUp(AuthRequest.SignUpInfo signUp);
 }
