@@ -4,6 +4,7 @@ import sopt.makers.authentication.application.auth.dto.request.AuthRequest;
 import sopt.makers.authentication.support.common.api.BaseResponse;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 public interface AuthApi {
 
@@ -18,6 +19,13 @@ public interface AuthApi {
 
   ResponseEntity<BaseResponse<?>> authenticateSocialAuthInfoFromApp(
       AuthRequest.AuthenticateSocialAuthInfo socialAuthInfo);
+
+  ResponseEntity<BaseResponse<?>> refreshTokenFromApp(
+      AuthRequest.AuthenticationTokenInfo authenticationTokenInfo);
+
+  ResponseEntity<BaseResponse<?>> refreshTokenFromWeb(
+      @RequestHeader("accessToken") String accessToken,
+      @RequestHeader("refreshToken") String refreshToken);
 
   ResponseEntity<BaseResponse<?>> signUp(AuthRequest.SignUpInfo signUp);
 }

@@ -5,6 +5,7 @@ import static lombok.AccessLevel.PRIVATE;
 import sopt.makers.authentication.domain.auth.AuthPlatform;
 import sopt.makers.authentication.domain.auth.PhoneVerificationType;
 import sopt.makers.authentication.usecase.auth.port.in.AuthenticateSocialAccountUsecase.AuthenticateSocialAccountCommand;
+import sopt.makers.authentication.usecase.auth.port.in.AuthenticateSocialAccountUsecase.AuthenticateTokenInfo;
 import sopt.makers.authentication.usecase.auth.port.in.CreatePhoneVerificationUsecase.CreateVerificationCommand;
 import sopt.makers.authentication.usecase.auth.port.in.SignUpUsecase.SignUpCommand;
 import sopt.makers.authentication.usecase.auth.port.in.VerifyPhoneVerificationUsecase.VerifyVerificationCommand;
@@ -55,6 +56,12 @@ public final class AuthRequest {
     public SignUpCommand toCommand() {
       return new SignUpCommand(
           this.name, this.phone, this.token, AuthPlatform.find(this.authPlatform));
+    }
+  }
+
+  public record AuthenticationTokenInfo(String accessToken, String refreshToken) {
+    public AuthenticateTokenInfo toCommand() {
+      return AuthenticateTokenInfo.of(accessToken, refreshToken);
     }
   }
 }

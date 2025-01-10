@@ -16,6 +16,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -77,10 +78,42 @@ public class AuthApiController implements AuthApi {
             tokenInfo.accessToken(), tokenInfo.refreshToken()));
   }
 
-  @Override
   @PostMapping("/signup")
   public ResponseEntity<BaseResponse<?>> signUp(AuthRequest.SignUpInfo signUpInfo) {
     signUpUsecase.signUp(signUpInfo.toCommand());
     return ResponseUtil.success(AuthSuccess.CREATE_SIGN_UP_USER);
+  }
+
+  @Override
+  @PostMapping("/refresh/app")
+  public ResponseEntity<BaseResponse<?>> refreshTokenFromApp(
+      AuthRequest.AuthenticationTokenInfo authenticationTokenInfo) {
+
+    AuthenticateTokenInfo tokenInfo =
+        authenticateSocialAccountUsecase.refresh(authenticationTokenInfo.toCommand());
+
+    return ResponseUtil.success(
+        AuthSuccess.AUTHENTICATE_SOCIAL_ACCOUNT,
+        AuthResponse.AuthenticateSocialAuthInfoForApp.of(
+            tokenInfo.accessToken(), tokenInfo.refreshToken()));
+  }
+
+  @Override
+  @PostMapping("/refresh/web")
+  public ResponseEntity<BaseResponse<?>> refreshTokenFromWeb(
+      @RequestHeader("accessToken") String accessToken,
+      @RequestHeader("refreshToken") String refreshToken) {
+
+    AuthRequest.AuthenticationTokenInfo authenticationTokenInfo =
+        new AuthRequest.AuthenticationTokenInfo(accessToken, refreshToken);
+
+    AuthenticateTokenInfo tokenInfo =
+        authenticateSocialAccountUsecase.refresh(authenticationTokenInfo.toCommand());
+    HttpHeaders headers = cookieUtil.setRefreshToken(tokenInfo.refreshToken());
+
+    return ResponseUtil.success(
+        AuthSuccess.AUTHENTICATE_SOCIAL_ACCOUNT,
+        headers,
+        AuthResponse.AuthenticateSocialAuthInfoForWeb.of(tokenInfo.accessToken()));
   }
 }
