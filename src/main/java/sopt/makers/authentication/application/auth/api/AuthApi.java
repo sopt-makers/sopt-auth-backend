@@ -4,6 +4,7 @@ import sopt.makers.authentication.application.auth.dto.request.AuthRequest;
 import sopt.makers.authentication.support.common.api.BaseResponse;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 public interface AuthApi {
 
@@ -23,5 +24,6 @@ public interface AuthApi {
       AuthRequest.AuthenticationTokenInfo authenticationTokenInfo);
 
   ResponseEntity<BaseResponse<?>> refreshTokenFromWeb(
-      AuthRequest.AuthenticationTokenInfo authenticationTokenInfo);
+      @RequestHeader("accessToken") String accessToken,
+      @RequestHeader("refreshToken") String refreshToken);
 }

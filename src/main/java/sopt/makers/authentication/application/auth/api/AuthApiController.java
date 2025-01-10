@@ -15,6 +15,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -85,14 +86,18 @@ public class AuthApiController implements AuthApi {
 
     return ResponseUtil.success(
         AuthSuccess.AUTHENTICATE_SOCIAL_ACCOUNT,
-        AuthResponse.AuthenticateSocialAuthInfo.of(
+        AuthResponse.AuthenticateSocialAuthInfoForApp.of(
             tokenInfo.accessToken(), tokenInfo.refreshToken()));
   }
 
   @Override
   @PostMapping("/refresh/web")
   public ResponseEntity<BaseResponse<?>> refreshTokenFromWeb(
-      AuthRequest.AuthenticationTokenInfo authenticationTokenInfo) {
+      @RequestHeader("accessToken") String accessToken,
+      @RequestHeader("refreshToken") String refreshToken) {
+
+    AuthRequest.AuthenticationTokenInfo authenticationTokenInfo =
+        new AuthRequest.AuthenticationTokenInfo(accessToken, refreshToken);
 
     AuthenticateTokenInfo tokenInfo =
         authenticateSocialAccountUsecase.refresh(authenticationTokenInfo.toCommand());
