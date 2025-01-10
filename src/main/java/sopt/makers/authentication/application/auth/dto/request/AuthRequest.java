@@ -40,9 +40,10 @@ public final class AuthRequest {
     }
   }
 
-  public record AuthenticateSocialAuthInfo(String code, String authPlatform) {
+  public record AuthenticateSocialAuthInfo(
+      @JsonProperty("token") String token, @JsonProperty("authPlatform") String authPlatform) {
     public AuthenticateSocialAccountCommand toCommand() {
-      return AuthenticateSocialAccountCommand.of(authPlatform, code);
+      return AuthenticateSocialAccountCommand.of(this.token, AuthPlatform.find(this.authPlatform));
     }
   }
 
