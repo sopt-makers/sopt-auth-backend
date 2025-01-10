@@ -16,7 +16,6 @@ import org.springframework.stereotype.Component;
 import com.nimbusds.jose.jwk.JWKSet;
 
 import lombok.RequiredArgsConstructor;
-import okhttp3.*;
 
 @Component
 @RequiredArgsConstructor
@@ -26,9 +25,9 @@ public class GoogleAuthClient {
     try {
       return JWKSet.load(new URI(GOOGLE_PUBLIC_KEY_SET_URL).toURL());
     } catch (URISyntaxException e) {
-      throw new ClientRequestException(INVALID_APPLE_REQUEST_URL);
+      throw new ClientRequestException(INVALID_GOOGLE_REQUEST_URL);
     } catch (IOException | ParseException e) {
-      throw new ClientResponseException(APPLE_REQUEST_FAIL);
+      throw new ClientResponseException(GOOGLE_REQUEST_FAIL);
     }
   }
 }
