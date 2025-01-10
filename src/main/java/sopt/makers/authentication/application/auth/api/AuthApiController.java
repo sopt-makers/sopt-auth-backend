@@ -76,8 +76,8 @@ public class AuthApiController implements AuthApi {
   }
 
   @Override
-  @PostMapping("/refresh")
-  public ResponseEntity<BaseResponse<?>> refreshToken(
+  @PostMapping("/refresh/app")
+  public ResponseEntity<BaseResponse<?>> refreshTokenFromApp(
       AuthRequest.AuthenticationTokenInfo authenticationTokenInfo) {
 
     AuthenticateTokenInfo tokenInfo =
@@ -87,5 +87,20 @@ public class AuthApiController implements AuthApi {
         AuthSuccess.AUTHENTICATE_SOCIAL_ACCOUNT,
         AuthResponse.AuthenticateSocialAuthInfo.of(
             tokenInfo.accessToken(), tokenInfo.refreshToken()));
+  }
+
+  @Override
+  @PostMapping("/refresh/web")
+  public ResponseEntity<BaseResponse<?>> refreshTokenFromWeb(
+      AuthRequest.AuthenticationTokenInfo authenticationTokenInfo) {
+
+    AuthenticateTokenInfo tokenInfo =
+        authenticateSocialAccountUsecase.refresh(authenticationTokenInfo.toCommand());
+    HttpHeaders headers = cookieUtil.setRefreshToken(tokenInfo.refreshToken());
+
+    return ResponseUtil.success(
+        AuthSuccess.AUTHENTICATE_SOCIAL_ACCOUNT,
+        headers,
+        AuthResponse.AuthenticateSocialAuthInfoForWeb.of(tokenInfo.accessToken()));
   }
 }

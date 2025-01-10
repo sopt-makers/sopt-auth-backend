@@ -19,5 +19,9 @@ public interface AuthApi {
   ResponseEntity<BaseResponse<?>> authenticateSocialAuthInfoFromApp(
       AuthRequest.AuthenticateSocialAuthInfo socialAuthInfo);
 
-  ResponseEntity<BaseResponse<?>> refreshToken(AuthRequest.AuthenticationTokenInfo tokenInfo);
+  ResponseEntity<BaseResponse<?>> refreshTokenFromApp(
+      AuthRequest.AuthenticationTokenInfo authenticationTokenInfo);
+
+  ResponseEntity<BaseResponse<?>> refreshTokenFromWeb(
+      AuthRequest.AuthenticationTokenInfo authenticationTokenInfo);
 }
