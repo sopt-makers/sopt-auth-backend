@@ -14,12 +14,13 @@ import lombok.RequiredArgsConstructor;
 public class UserRegisterInfo {
   private final String name;
   private final String phone;
+  private final String email;
   private final LocalDate birthday;
   private final int generation;
   private final Part part;
 
   public static UserRegisterInfo of(
-      String name, String phone, LocalDate birthday, int generation, Part part) {
-    return new UserRegisterInfo(name, phone, birthday, generation, part);
+      String name, String phone, String email, LocalDate birthday, int generation, Part part) {
+    return new UserRegisterInfo(name, phone, email, birthday, generation, part);
   }
 }

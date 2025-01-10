@@ -1,18 +1,9 @@
 package sopt.makers.authentication.external.oauth;
 
-import static sopt.makers.authentication.support.code.external.failure.ClientError.INVALID_ID_TOKEN;
-
 import sopt.makers.authentication.domain.auth.AuthPlatform;
-import sopt.makers.authentication.external.oauth.dto.IdTokenResponse;
-import sopt.makers.authentication.support.exception.external.*;
 import sopt.makers.authentication.usecase.auth.port.out.OAuthAuthenticator;
 
-import java.text.ParseException;
-
 import org.springframework.stereotype.Component;
-
-import com.nimbusds.jwt.JWTClaimsSet;
-import com.nimbusds.jwt.SignedJWT;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,29 +13,11 @@ public class OAuthAuthenticatorImpl implements OAuthAuthenticator {
   private final AppleAuthService appleAuthService;
   private final GoogleAuthService googleAuthService;
 
-  public String getAuthPlatformId(String authPlatform, String code) {
-    IdTokenResponse idTokenResponse = getIdTokenByCode(authPlatform, code);
-    return parseAuthPlatformId(idTokenResponse);
-  }
-
-  public IdTokenResponse getIdTokenByCode(String authPlatform, String code) {
-    AuthPlatform type = AuthPlatform.find(authPlatform);
-
-    return switch (type) {
-      case APPLE -> appleAuthService.getIdTokenByCode(code);
-      case GOOGLE -> googleAuthService.getIdTokenByCode(code);
+  @Override
+  public String getIdentifier(String idToken, AuthPlatform platform) {
+    return switch (platform) {
+      case APPLE -> appleAuthService.getIdentifierByToken(idToken);
+      case GOOGLE -> googleAuthService.getIdentifierByToken(idToken);
     };
-  }
-
-  private String parseAuthPlatformId(IdTokenResponse tokenResponse) {
-    String idToken = tokenResponse.idToken();
-    try {
-      SignedJWT signedJWT = SignedJWT.parse(idToken);
-      JWTClaimsSet payload = signedJWT.getJWTClaimsSet();
-
-      return payload.getSubject();
-    } catch (ParseException e) {
-      throw new ClientResponseException(INVALID_ID_TOKEN);
-    }
   }
 }

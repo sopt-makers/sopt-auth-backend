@@ -18,6 +18,7 @@ public enum AuthSuccess implements SuccessCode {
 
   // 201
   CREATE_PHONE_VERIFICATION(HttpStatus.CREATED, "번호 인증 생성에 성공했습니다."),
+  CREATE_SIGN_UP_USER(HttpStatus.CREATED, "회원 가입에 성공했습니다."),
   ;
 
   private final HttpStatus status;

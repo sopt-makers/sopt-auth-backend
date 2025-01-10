@@ -22,4 +22,10 @@ public class UserRegisterInfoRepositoryImpl implements UserRegisterInfoRepositor
     UserRegisterInfoEntity targetRegisterInfo = retriever.findByPhone(phone);
     return targetRegisterInfo.toDomain();
   }
+
+  @Override
+  public void delete(UserRegisterInfo userRegisterInfo) {
+    UserRegisterInfoEntity registerInfoEntity = retriever.findByPhone(userRegisterInfo.getPhone());
+    remover.remove(registerInfoEntity);
+  }
 }

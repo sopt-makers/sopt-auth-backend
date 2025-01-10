@@ -9,6 +9,7 @@ import sopt.makers.authentication.support.util.ResponseUtil;
 import sopt.makers.authentication.usecase.auth.port.in.AuthenticateSocialAccountUsecase;
 import sopt.makers.authentication.usecase.auth.port.in.AuthenticateSocialAccountUsecase.AuthenticateTokenInfo;
 import sopt.makers.authentication.usecase.auth.port.in.CreatePhoneVerificationUsecase;
+import sopt.makers.authentication.usecase.auth.port.in.SignUpUsecase;
 import sopt.makers.authentication.usecase.auth.port.in.VerifyPhoneVerificationUsecase;
 
 import org.springframework.http.HttpHeaders;
@@ -29,6 +30,7 @@ public class AuthApiController implements AuthApi {
   private final CreatePhoneVerificationUsecase createVerificationUsecase;
   private final VerifyPhoneVerificationUsecase verifyVerificationUsecase;
   private final AuthenticateSocialAccountUsecase authenticateSocialAccountUsecase;
+  private final SignUpUsecase signUpUsecase;
   private final CookieUtil cookieUtil;
 
   @Override
@@ -74,6 +76,12 @@ public class AuthApiController implements AuthApi {
         AuthSuccess.AUTHENTICATE_SOCIAL_ACCOUNT,
         AuthResponse.AuthenticateSocialAuthInfoForApp.of(
             tokenInfo.accessToken(), tokenInfo.refreshToken()));
+  }
+
+  @PostMapping("/signup")
+  public ResponseEntity<BaseResponse<?>> signUp(AuthRequest.SignUpInfo signUpInfo) {
+    signUpUsecase.signUp(signUpInfo.toCommand());
+    return ResponseUtil.success(AuthSuccess.CREATE_SIGN_UP_USER);
   }
 
   @Override
