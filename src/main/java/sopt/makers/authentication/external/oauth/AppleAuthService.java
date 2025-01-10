@@ -96,7 +96,7 @@ public class AppleAuthService implements OAuthService {
         KeyFileUtil.getPrivateKey(appleOAuthProperty.key().path())
             .orElseThrow(() -> new ClientRequestException(FAIL_READ_APPLE_PRIVATE_KEY_FILE));
 
-    return Jwts.builder() // 토큰 생성 로직은 tokenProvider? 근데 얘는 parse는 없음
+    return Jwts.builder()
         .setHeaderParam(APPLE_KEY_ID_HEADER, appleOAuthProperty.key().id())
         .setHeaderParam(APPLE_ALGORITHM_HEADER, APPLE_ALGORITHM_VALUE)
         .setIssuedAt(now)
