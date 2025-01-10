@@ -7,7 +7,6 @@ import static sopt.makers.authentication.support.constant.OAuthConstant.APPLE_IS
 import static sopt.makers.authentication.support.constant.OAuthConstant.APPLE_KEY_ID_HEADER;
 
 import sopt.makers.authentication.external.oauth.client.AppleAuthClient;
-import sopt.makers.authentication.external.oauth.dto.IdTokenResponse;
 import sopt.makers.authentication.support.code.domain.failure.AuthFailure;
 import sopt.makers.authentication.support.code.support.failure.TokenFailure;
 import sopt.makers.authentication.support.exception.domain.AuthException;
@@ -44,11 +43,6 @@ public class AppleAuthService implements OAuthService {
   private final AppleAuthClient appleAuthClient;
 
   @Override
-  public IdTokenResponse getIdTokenByCode(final String code) {
-    String clientSecret = createClientSecret();
-    return appleAuthClient.getIdToken(clientSecret, code);
-  }
-
   public String getIdentifierByToken(final String token) {
     try {
       SignedJWT signedJWT = SignedJWT.parse(token);
