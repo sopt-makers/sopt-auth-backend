@@ -3,7 +3,6 @@ package sopt.makers.authentication.external.oauth;
 import static sopt.makers.authentication.support.constant.OAuthConstant.*;
 
 import sopt.makers.authentication.external.oauth.client.GoogleAuthClient;
-import sopt.makers.authentication.external.oauth.dto.IdTokenResponse;
 import sopt.makers.authentication.support.code.domain.failure.AuthFailure;
 import sopt.makers.authentication.support.code.support.failure.TokenFailure;
 import sopt.makers.authentication.support.exception.domain.AuthException;
@@ -33,10 +32,6 @@ public class GoogleAuthService implements OAuthService {
   private final GoogleAuthClient googleAuthClient;
 
   @Override
-  public IdTokenResponse getIdTokenByCode(String code) {
-    return googleAuthClient.getIdToken(googleOAuthProperty.client().secret(), code);
-  }
-
   public String getIdentifierByToken(final String token) {
     try {
       SignedJWT signedJWT = SignedJWT.parse(token);

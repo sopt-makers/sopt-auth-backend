@@ -24,10 +24,11 @@ public class SignUpService implements SignUpUsecase {
 
   @Override
   public void signUp(SignUpCommand command) {
-    String identifier = oAuthAuthenticator.getIdentifier(command.token(), command.authPlatform());
+    String authPlatformId =
+        oAuthAuthenticator.getIdentifier(command.token(), command.authPlatform());
     UserRegisterInfo registerInfo = userRegisterInfoRepository.findByPhone(command.phone());
 
-    SocialAccount socialAccount = createSocialAccount(command.authPlatform(), identifier);
+    SocialAccount socialAccount = createSocialAccount(authPlatformId, command.authPlatform());
     Profile profile = createProfile(registerInfo);
     User newUser = User.createNewUser(socialAccount, profile);
 
@@ -35,10 +36,10 @@ public class SignUpService implements SignUpUsecase {
     userRegisterInfoRepository.delete(registerInfo);
   }
 
-  private SocialAccount createSocialAccount(AuthPlatform authPlatform, String identifier) {
+  private SocialAccount createSocialAccount(String authPlatformId, AuthPlatform authPlatform) {
     return switch (authPlatform) {
-      case GOOGLE -> SocialAccount.of(identifier, AuthPlatform.GOOGLE.name());
-      case APPLE -> SocialAccount.of(identifier, AuthPlatform.APPLE.name());
+      case GOOGLE -> SocialAccount.of(authPlatformId, AuthPlatform.GOOGLE);
+      case APPLE -> SocialAccount.of(authPlatformId, AuthPlatform.APPLE);
     };
   }
 

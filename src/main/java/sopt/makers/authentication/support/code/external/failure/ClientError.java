@@ -19,6 +19,7 @@ public enum ClientError implements FailureCode {
   GOOGLE_REQUEST_FAIL(HttpStatus.BAD_REQUEST, "Google 요청에 실패했습니다."),
   INVALID_APPLE_REQUEST_URL(HttpStatus.BAD_REQUEST, "유효하지 않은 Apple 요청 URL입니다."),
   INVALID_APPLE_AUTH_CODE(HttpStatus.BAD_REQUEST, "유효하지 않은 Apple 인증 token 입니다."),
+  INVALID_GOOGLE_REQUEST_URL(HttpStatus.BAD_REQUEST, "유효하지 않은 Apple 요청 URL입니다."),
   INVALID_GOOGLE_AUTH_CODE(HttpStatus.BAD_REQUEST, "유효하지 않은 Google 인증 token 입니다"),
 
   // 500 INTERNAL_SERVER_ERROR

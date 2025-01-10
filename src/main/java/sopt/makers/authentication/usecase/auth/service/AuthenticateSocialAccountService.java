@@ -27,7 +27,7 @@ public class AuthenticateSocialAccountService implements AuthenticateSocialAccou
   @Override
   public AuthenticateTokenInfo authenticate(AuthenticateSocialAccountCommand command) {
     String authPlatformId =
-        oAuthAuthenticator.getAuthPlatformId(command.authPlatform(), command.code());
+        oAuthAuthenticator.getIdentifier(command.token(), command.authPlatform());
     User user =
         userRepository.findBySocialAccount(
             SocialAccount.of(authPlatformId, command.authPlatform()));
