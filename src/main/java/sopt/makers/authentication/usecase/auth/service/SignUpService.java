@@ -37,8 +37,8 @@ public class SignUpService implements SignUpUsecase {
 
   private SocialAccount createSocialAccount(AuthPlatform authPlatform, String identifier) {
     return switch (authPlatform) {
-      case GOOGLE -> SocialAccount.of(identifier, AuthPlatform.GOOGLE.name());
-      case APPLE -> SocialAccount.of(identifier, AuthPlatform.APPLE.name());
+      case GOOGLE -> SocialAccount.of(identifier, AuthPlatform.GOOGLE);
+      case APPLE -> SocialAccount.of(identifier, AuthPlatform.APPLE);
     };
   }
 
