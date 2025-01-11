@@ -155,9 +155,9 @@ yaml 내 `${}` 정의된 변수명이 키 값이며 키 값에 해당하는 환�
         - 어플리케이션 실행 드롭다운 클릭 & [ **Edit Configurations...** ] 선택
         - [ Run ] 섹션의 [ **Modify options** ] 드룹다운 클릭
         - Operation System - [ **Environment variables** ] 선택
-          ![스크린샷 2025-01-11 오후 5.28.47.png](..%2F..%2F%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%202025-01-11%20%EC%98%A4%ED%9B%84%205.28.47.png)
+          ![run_application_with_png(1)](https://yummygyudon.notion.site/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F10896002-67a1-441c-9cea-b6f696faae26%2Fa3fd0f03-9fd2-4ab1-856f-c88867ecb88c%2F%25E1%2584%2589%25E1%2585%25B3%25E1%2584%258F%25E1%2585%25B3%25E1%2584%2585%25E1%2585%25B5%25E1%2586%25AB%25E1%2584%2589%25E1%2585%25A3%25E1%2586%25BA_2025-01-11_%25E1%2584%258B%25E1%2585%25A9%25E1%2584%2592%25E1%2585%25AE_5.28.47.png?table=block&id=17879bee-8167-801c-842d-e6c3e866f159&spaceId=10896002-67a1-441c-9cea-b6f696faae26&width=1420&userId=&cache=v2)
         - env 파일을 선택
-          ![스크린샷 2025-01-11 오후 5.26.57.png](..%2F..%2F%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%202025-01-11%20%EC%98%A4%ED%9B%84%205.26.57.png)
+          ![run_application_with_png(2)](https://yummygyudon.notion.site/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F10896002-67a1-441c-9cea-b6f696faae26%2Fe3234953-e1c1-45a4-901b-cdff84fdba21%2F%25E1%2584%2589%25E1%2585%25B3%25E1%2584%258F%25E1%2585%25B3%25E1%2584%2585%25E1%2585%25B5%25E1%2586%25AB%25E1%2584%2589%25E1%2585%25A3%25E1%2586%25BA_2025-01-11_%25E1%2584%258B%25E1%2585%25A9%25E1%2584%2592%25E1%2585%25AE_5.26.57.png?table=block&id=17879bee-8167-80ea-8e53-d3e86e3f3dec&spaceId=10896002-67a1-441c-9cea-b6f696faae26&width=1420&userId=&cache=v2)
     - Intellij **미사용** 시, 아래와 같이 실행합니다.
       ```shell
       # test 없이 build & Jar 생성
