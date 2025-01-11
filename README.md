@@ -60,7 +60,7 @@ SOPT 회원들이 SOPT makers 프로덕트를 사용하기 위한 **인증**과 
 
 <br/>
 
-### Branch Strategy
+### Branch Strategy 🌵
 기본적으로 "**Git Flow**" 전략을 바탕으로 적용했습니다.
 - `main`, `dev`, `feature` 브랜치 구성
 - `main` : **production**용 브랜치
@@ -110,5 +110,25 @@ SOPT 회원들이 SOPT makers 프로덕트를 사용하기 위한 **인증**과 
 
 
 ![server_architecture_img.png](https://yummygyudon.notion.site/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F10896002-67a1-441c-9cea-b6f696faae26%2F36522594-3b8d-4995-b24e-fded2b1779e9%2Fimage.png?table=block&id=17779bee-8167-8007-92c1-c4b1fc0800cf&spaceId=10896002-67a1-441c-9cea-b6f696faae26&width=1420&userId=&cache=v2)
+
+<br/>
+
+### Features ⚙️
+- **번호 인증**
+  - 목적 기능에 따라 Type이 분류됩니다 (`REGISTER`/`CHANGE`/`SEARCH`)
+- **회원 가입**
+- **로그인**
+- **가입 계정 플랫폼 조회**
+- **JWKS Public Key 조회**
+
+<br/>
+
+### Environment Variables 🔑
+환경변수의 경우, `.env` 파일을 통해 관리되며 주입됩니다.<br/>
+주입된 `.env` 파일은 Docker 실행 시에 `--env-files` 옵션을 통해 어플리케이션에 적용됩니다.<br/>
+yaml 내 `${}` 정의된 변수명이 키 값이며 키 값에 해당하는 환경변수가 적용됩니다. 
+
+`.env` 파일은 **Notion**과 **AWS S3**를 통해 관리됩니다.<br/>
+(자세한 내용은 플랫폼 팀 BE 구성원에게 문의 부탁드립니다.)
 
 <br/>
