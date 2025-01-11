@@ -132,3 +132,52 @@ yaml 내 `${}` 정의된 변수명이 키 값이며 키 값에 해당하는 환�
 (자세한 내용은 플랫폼 팀 BE 구성원에게 문의 부탁드립니다.)
 
 <br/>
+
+### Run Locally 🏃‍♂️‍➡️
+> `local.env` 파일이 필요합니다.
+
+1. Clone the project
+2. Open the project
+3. Install/Refresh dependencies
+   ```shell
+   ./gradlew dependencies --refresh-dependencies
+   ```
+4. Move `.env` file to un-versioned package
+   ```ignorelang
+   # 현재 gitignore 적용된 path
+   **/src/main/resources/**/*.env
+   ``` 
+5. Set property files
+    - Apple Key file : `./src/main/resources/key`
+    - JWT Pem Key file : `./src/main/resources`
+6. Run Application with `local.env`
+    - Itellij **사용** 시, 아래와 같이 실행합니다.
+        - 어플리케이션 실행 드롭다운 클릭 & [ **Edit Configurations...** ] 선택
+        - [ Run ] 섹션의 [ **Modify options** ] 드룹다운 클릭
+        - Operation System - [ **Environment variables** ] 선택
+          ![스크린샷 2025-01-11 오후 5.28.47.png](..%2F..%2F%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%202025-01-11%20%EC%98%A4%ED%9B%84%205.28.47.png)
+        - env 파일을 선택
+          ![스크린샷 2025-01-11 오후 5.26.57.png](..%2F..%2F%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%202025-01-11%20%EC%98%A4%ED%9B%84%205.26.57.png)
+    - Intellij **미사용** 시, 아래와 같이 실행합니다.
+      ```shell
+      # test 없이 build & Jar 생성
+      ./gradlew clean build -x test
+      
+      # env 파일 내용을 실행 환경 변수(xargs)로 정의한 후, Jar 실행
+      # `.env` path : 각자의 상황에 따른 반영 필요
+      export $(cat ./src/main/resources/env/local.env | xargs) && java -jar ./build/libs/authentication.jar
+      ```
+
+<br/>
+
+### Run Tests 🧪
+```bash
+# Run All Test
+./gradlew test
+
+# Run Specific Test Class
+./gradlew test --tests "sopt.makers.**.XXXClass"
+
+# Run Specific Test Method
+./gradlew test --tests "sopt.makers.**.XXXClass.XXXMethod"
+```
