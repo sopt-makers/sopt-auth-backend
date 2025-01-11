@@ -4,7 +4,6 @@
 
 SOPT 회원들이 SOPT makers 프로덕트를 사용하기 위한 **인증**과 **로그인/회원가입 기능**을 지원합니다.
 
-
 ## Tech Stack
 - **Language** : Java 21
 - **Framework** : Spring Framework
@@ -22,7 +21,6 @@ SOPT 회원들이 SOPT makers 프로덕트를 사용하기 위한 **인증**과 
 - **Client** : OKHttp
 
 <br/>
-
 
 ## Conventions
 **협업 프로세스**는 아래와 같습니다.
@@ -78,4 +76,12 @@ SOPT 회원들이 SOPT makers 프로덕트를 사용하기 위한 **인증**과 
 
 <br/>
 
+## Authors
+- 정동규 : [@yummygyudon](https://www.github.com/yummygyudon)
+- 김성은 : [@sung-silver](https://www.github.com/sung-silver)
+- 강현욱 : [@hyunw9](https://www.github.com/hyunw9)
+
+![Alt](https://repobeats.axiom.co/api/embed/7ecaed933101e79c17cea76035d79ea7afff6565.svg "Repobeats analytics image")
+
+<br/>
 
