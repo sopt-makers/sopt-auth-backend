@@ -24,7 +24,7 @@ public final class SystemConstant {
   public static final String PATTERN_ALL = "/**";
   public static final String PATTERN_ERROR_PATH = PATH_ERROR + PATTERN_ALL;
   public static final String PATTERN_ACTUATOR = PATH_ACTUATOR + PATTERN_ALL;
-  public static final String PATTERN_AUTH = API_DEFAULT_PREFIX + PATH_AUTH + PATTERN_ALL;
+  public static final String PATTERN_AUTH = PATH_AUTH + PATTERN_ALL;
   public static final String PATTERN_TEST = API_DEFAULT_PREFIX + PATH_TEST + PATTERN_ALL;
   public static final String PATTERN_ROOT_PATH = "/";
 }
