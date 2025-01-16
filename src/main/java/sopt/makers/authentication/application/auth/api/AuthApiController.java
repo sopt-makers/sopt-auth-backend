@@ -54,7 +54,7 @@ public class AuthApiController implements AuthApi {
   @Override
   @PostMapping("/login/web")
   public ResponseEntity<BaseResponse<?>> authenticateSocialAuthInfoFromWeb(
-      AuthRequest.AuthenticateSocialAuthInfo socialAuthInfo) {
+      @RequestBody AuthRequest.AuthenticateSocialAuthInfo socialAuthInfo) {
     AuthenticateTokenInfo tokenInfo =
         authenticateSocialAccountUsecase.authenticate(socialAuthInfo.toCommand());
     HttpHeaders headers = cookieUtil.setRefreshToken(tokenInfo.refreshToken());
@@ -68,7 +68,7 @@ public class AuthApiController implements AuthApi {
   @Override
   @PostMapping("/login/app")
   public ResponseEntity<BaseResponse<?>> authenticateSocialAuthInfoFromApp(
-      AuthRequest.AuthenticateSocialAuthInfo socialAuthInfo) {
+      @RequestBody AuthRequest.AuthenticateSocialAuthInfo socialAuthInfo) {
     AuthenticateTokenInfo tokenInfo =
         authenticateSocialAccountUsecase.authenticate(socialAuthInfo.toCommand());
 
@@ -79,7 +79,7 @@ public class AuthApiController implements AuthApi {
   }
 
   @PostMapping("/signup")
-  public ResponseEntity<BaseResponse<?>> signUp(AuthRequest.SignUpInfo signUpInfo) {
+  public ResponseEntity<BaseResponse<?>> signUp(@RequestBody AuthRequest.SignUpInfo signUpInfo) {
     signUpUsecase.signUp(signUpInfo.toCommand());
     return ResponseUtil.success(AuthSuccess.CREATE_SIGN_UP_USER);
   }
