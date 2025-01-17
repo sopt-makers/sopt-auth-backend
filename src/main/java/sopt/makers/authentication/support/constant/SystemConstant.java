@@ -9,7 +9,7 @@ public final class SystemConstant {
   private static final String API_PATH_PREFIX = "/api";
   private static final String API_VERSION = "/v1";
 
-  public static final String API_DEFAULT_PREFIX = API_PATH_PREFIX + API_VERSION;
+  private static final String API_DEFAULT_PREFIX = API_PATH_PREFIX + API_VERSION;
 
   private static final String PATH_ACTUATOR = "/actuator";
   public static final String PATH_AUTH = API_DEFAULT_PREFIX + "/auth";
