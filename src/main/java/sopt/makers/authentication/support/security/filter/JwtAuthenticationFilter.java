@@ -2,12 +2,10 @@ package sopt.makers.authentication.support.security.filter;
 
 import static sopt.makers.authentication.support.constant.SystemConstant.WHITE_PATHS;
 
-import sopt.makers.authentication.support.constant.JwtConstant;
 import sopt.makers.authentication.support.jwt.provider.JwtAuthAccessTokenProvider;
 import sopt.makers.authentication.support.security.authentication.CustomAuthentication;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -63,11 +61,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
   }
 
   private static boolean isJwksRequest(HttpServletRequest request) {
-    boolean isCorrectUrl = request.getRequestURI().equals("/.well-known/jwks.json");
-    boolean isCorrectHeader =
-        Arrays.stream(JwtConstant.SERVICE_NAMES)
-            .anyMatch(request.getHeader(HttpHeaders.SERVER)::contains);
-
-    return isCorrectUrl && isCorrectHeader;
+    return request.getRequestURI().equals("/.well-known/jwks.json");
   }
 }
