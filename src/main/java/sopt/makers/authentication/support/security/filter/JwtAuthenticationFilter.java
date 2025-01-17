@@ -8,6 +8,7 @@ import sopt.makers.authentication.support.security.authentication.CustomAuthenti
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Optional;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -32,6 +33,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
   protected void doFilterInternal(
       final HttpServletRequest request, final HttpServletResponse response, FilterChain filterChain)
       throws ServletException, IOException {
+
+    if (shouldNotFilter(request)) {
+      filterChain.doFilter(request, response);
+      return;
+    }
 
     String authorizationToken = getAuthorizationToken(request);
     CustomAuthentication authentication = authTokenProvider.parse(authorizationToken);
@@ -65,8 +71,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
   private static boolean isJwksRequest(HttpServletRequest request) {
     boolean isCorrectUrl = request.getRequestURI().equals("/.well-known/jwks.json");
     boolean isCorrectHeader =
-        Arrays.stream(JwtConstant.SERVICE_NAMES)
-            .anyMatch(request.getHeader(HttpHeaders.SERVER)::contains);
+        Optional.ofNullable(request.getHeader(HttpHeaders.SERVER))
+            .map(header -> Arrays.stream(JwtConstant.SERVICE_NAMES).anyMatch(header::contains))
+            .orElse(false);
 
     return isCorrectUrl && isCorrectHeader;
   }
