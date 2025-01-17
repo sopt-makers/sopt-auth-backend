@@ -66,7 +66,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
   }
 
   private static boolean isJwksRequest(HttpServletRequest request) {
-    boolean isCorrectUrl = request.getRequestURI().equals("/.well-known/jwks.json");
-    return isCorrectUrl;
+    return request.getRequestURI().equals("/.well-known/jwks.json");
   }
 }
