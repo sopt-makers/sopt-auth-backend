@@ -1,14 +1,11 @@
 package sopt.makers.authentication.support.security.filter;
 
-import static sopt.makers.authentication.support.constant.SystemConstant.WHITE_PATHS;
+import static sopt.makers.authentication.support.constant.SystemConstant.WHITELIST_WILDCARD;
 
-import sopt.makers.authentication.support.constant.JwtConstant;
 import sopt.makers.authentication.support.jwt.provider.JwtAuthAccessTokenProvider;
 import sopt.makers.authentication.support.security.authentication.CustomAuthentication;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Optional;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -54,8 +51,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
   }
 
   private boolean isWhiteRequest(final HttpServletRequest request) {
-    String url = request.getRequestURL().toString();
-    return WHITE_PATHS.stream().anyMatch(url::contains);
+    String uri = request.getRequestURI();
+    return WHITELIST_WILDCARD.stream().anyMatch(uri::startsWith);
   }
 
   /**
@@ -70,11 +67,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
   private static boolean isJwksRequest(HttpServletRequest request) {
     boolean isCorrectUrl = request.getRequestURI().equals("/.well-known/jwks.json");
-    boolean isCorrectHeader =
-        Optional.ofNullable(request.getHeader(HttpHeaders.SERVER))
-            .map(header -> Arrays.stream(JwtConstant.SERVICE_NAMES).anyMatch(header::contains))
-            .orElse(false);
-
-    return isCorrectUrl && isCorrectHeader;
+    return isCorrectUrl;
   }
 }
