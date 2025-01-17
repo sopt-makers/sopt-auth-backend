@@ -1,6 +1,6 @@
 package sopt.makers.authentication.support.security.filter;
 
-import static sopt.makers.authentication.support.constant.SystemConstant.WHITE_PATHS;
+import static sopt.makers.authentication.support.constant.SystemConstant.WHITELIST_WILDCARD;
 
 import sopt.makers.authentication.support.jwt.provider.JwtAuthAccessTokenProvider;
 import sopt.makers.authentication.support.security.authentication.CustomAuthentication;
@@ -31,6 +31,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       final HttpServletRequest request, final HttpServletResponse response, FilterChain filterChain)
       throws ServletException, IOException {
 
+    if (shouldNotFilter(request)) {
+      filterChain.doFilter(request, response);
+      return;
+    }
+
     String authorizationToken = getAuthorizationToken(request);
     CustomAuthentication authentication = authTokenProvider.parse(authorizationToken);
 
@@ -46,8 +51,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
   }
 
   private boolean isWhiteRequest(final HttpServletRequest request) {
-    String url = request.getRequestURL().toString();
-    return WHITE_PATHS.stream().anyMatch(url::contains);
+    String uri = request.getRequestURI();
+    return WHITELIST_WILDCARD.stream().anyMatch(uri::startsWith);
   }
 
   /**
