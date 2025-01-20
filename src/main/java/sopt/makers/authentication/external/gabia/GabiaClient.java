@@ -50,6 +50,7 @@ import okhttp3.Response;
 @RequiredArgsConstructor
 class GabiaClient {
 
+  public static final String COLON = " : ";
   private final GabiaProperty gabiaProperty;
 
   protected void sendSmsMessage(String receiver, String content) {
@@ -65,10 +66,11 @@ class GabiaClient {
             .addFormDataPart(FORM_DATA_NAME_REFERENCE_KEY, generateReferenceKey())
             .build();
 
-    Request request = buildPostRequest(URI_SEND_SMS, encodeAuthorization(authToken), requestBody);
+    Request request = buildPostRequest(URI_SEND_SMS, authToken, requestBody);
     Response response = executeRequest(request);
+    String fieldValue = extractSerializedDataIn(RESPONSE_SUCCESS_FLAG_FIELD, response);
 
-    validateResponse(response);
+    validateResponseData(fieldValue, RESPONSE_SUCCESS_FLAG_VALUE);
   }
 
   protected void sendLmsMessage(String receiver, String title, String content) {
@@ -85,26 +87,11 @@ class GabiaClient {
             .addFormDataPart(FORM_DATA_NAME_SUBJECT, title)
             .build();
 
-    Request request = buildPostRequest(URI_SEND_LMS, encodeAuthorization(authToken), requestBody);
+    Request request = buildPostRequest(URI_SEND_LMS, authToken, requestBody);
     Response response = executeRequest(request);
+    String fieldValue = extractSerializedDataIn(RESPONSE_SUCCESS_FLAG_FIELD, response);
 
-    validateResponse(response);
-  }
-
-  private void validateResponse(Response response) {
-    String successFlagValue = extractSerializedDataIn(RESPONSE_SUCCESS_FLAG_FIELD, response);
-    boolean isSuccessDataExistInResponse =
-        successFlagValue.trim().equals(RESPONSE_SUCCESS_FLAG_VALUE);
-
-    if (!isSuccessDataExistInResponse) {
-      ClientError error = ClientError.GABIA_RESPONSE_UNAVAILABLE;
-      error.addMessage(successFlagValue);
-      throw new ClientRequestException(error);
-    }
-  }
-
-  private String generateReferenceKey() {
-    return UUID.randomUUID().toString();
+    validateResponseData(fieldValue, RESPONSE_SUCCESS_FLAG_VALUE);
   }
 
   private String authenticate() {
@@ -116,21 +103,50 @@ class GabiaClient {
 
     Request request = buildPostRequest(URI_OAUTH_TOKEN, gabiaProperty.sms().key(), requestBody);
     Response response = executeRequest(request);
-    return extractSerializedDataIn(RESPONSE_ACCESS_TOKEN_FIELD, response);
+
+    String authValue = extractSerializedDataIn(RESPONSE_ACCESS_TOKEN_FIELD, response);
+    validateResponseData(authValue);
+    return authValue;
   }
 
   private String extractSerializedDataIn(String dataKey, Response response) {
     try {
       HashMap<String, String> result =
           new Gson().fromJson(Objects.requireNonNull(response.body()).string(), HashMap.class);
-      String data = result.get(dataKey);
-      if (data == null) {
-        throw new ClientResponseException(ClientError.GABIA_RESPONSE_UNAVAILABLE);
-      }
-      return data;
+      return result.get(dataKey);
     } catch (IOException | JsonSyntaxException | JsonIOException e) {
       throw new ClientResponseException(ClientError.GABIA_RESPONSE_BIND_FAIL);
     }
+  }
+
+  private void validateResponseData(String data) {
+    if (Objects.isNull(data)) {
+      ClientError error = ClientError.GABIA_REQUEST_INVALID_AUTH_DATA;
+      error.addMessage(String.join(COLON, RESPONSE_ACCESS_TOKEN_FIELD, null));
+      throw new ClientRequestException(error);
+    }
+  }
+
+  private void validateResponseData(String data, String dataExpected) {
+    boolean isExpectData = data.equals(dataExpected);
+    if (!isExpectData) {
+      ClientError error = ClientError.GABIA_REQUEST_INVALID_AUTH_DATA;
+      error.addMessage(String.join(COLON, RESPONSE_ACCESS_TOKEN_FIELD, data));
+      throw new ClientRequestException(error);
+    }
+  }
+
+  private String generateReferenceKey() {
+    return UUID.randomUUID().toString();
+  }
+
+  private Request buildPostRequest(
+      String requestUri, String authorizationValue, RequestBody requestBody) {
+    return new Request.Builder()
+        .url(gabiaProperty.sms().url() + requestUri)
+        .post(requestBody)
+        .headers(generateHeaderOfAuthorization(authorizationValue))
+        .build();
   }
 
   private Headers generateHeaderOfAuthorization(String authValue) {
@@ -146,15 +162,6 @@ class GabiaClient {
         .encodeToString(
             String.format(FORMAT_AUTHORIZATION, gabiaProperty.sms().id(), value)
                 .getBytes(StandardCharsets.UTF_8));
-  }
-
-  private Request buildPostRequest(
-      String requestUri, String authorizationValue, RequestBody requestBody) {
-    return new Request.Builder()
-        .url(gabiaProperty.sms().url() + requestUri)
-        .post(requestBody)
-        .headers(generateHeaderOfAuthorization(authorizationValue))
-        .build();
   }
 
   private Response executeRequest(Request request) {
