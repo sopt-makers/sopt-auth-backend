@@ -38,8 +38,7 @@ public class GoogleAuthService implements OAuthService {
       JWK targetJwk = findMatchJWK(signedJWT);
 
       verifyGoogleIdTokenJwt(signedJWT, targetJwk);
-      String identifier = signedJWT.getJWTClaimsSet().getSubject();
-      return identifier;
+      return signedJWT.getJWTClaimsSet().getSubject();
     } catch (ParseException e) {
       throw new TokenException(TokenFailure.TOKEN_PARSE_FAILED);
     }
