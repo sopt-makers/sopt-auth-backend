@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWSVerifier;
-import com.nimbusds.jose.crypto.ECDSAVerifier;
+import com.nimbusds.jose.crypto.*;
 import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jwt.JWTClaimsSet;
@@ -38,8 +38,7 @@ public class GoogleAuthService implements OAuthService {
       JWK targetJwk = findMatchJWK(signedJWT);
 
       verifyGoogleIdTokenJwt(signedJWT, targetJwk);
-      String identifier = signedJWT.getJWTClaimsSet().getSubject();
-      return identifier;
+      return signedJWT.getJWTClaimsSet().getSubject();
     } catch (ParseException e) {
       throw new TokenException(TokenFailure.TOKEN_PARSE_FAILED);
     }
@@ -48,6 +47,7 @@ public class GoogleAuthService implements OAuthService {
   private JWK findMatchJWK(final SignedJWT jwt) {
     JWKSet loadedJWKSet = googleAuthClient.getPublicKeySet();
     String keyID = jwt.getHeader().getKeyID();
+
     return loadedJWKSet.getKeys().stream()
         .filter(jwk -> jwk.getKeyID().equals(keyID))
         .findFirst()
@@ -57,8 +57,7 @@ public class GoogleAuthService implements OAuthService {
   private void verifyGoogleIdTokenJwt(final SignedJWT jwt, JWK jwk) throws ParseException {
     try {
       JWTClaimsSet jwtClaimsSet = jwt.getJWTClaimsSet();
-      JWSVerifier verifier = new ECDSAVerifier(jwk.toECKey());
-
+      JWSVerifier verifier = new RSASSAVerifier(jwk.toRSAKey());
       boolean isVerifiedSignature = jwt.verify(verifier);
       boolean isCorrectIssuer = jwtClaimsSet.getIssuer().equals(GOOGLE_ISSUER);
       boolean isCorrectAudience =
