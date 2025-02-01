@@ -71,22 +71,16 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      - name: 🔑 Copy Key File
+      - name: 🔑 Copy APPLE Key File
         env:
           REGION: ${{ secrets.AWS_REGION }}
           APPLE_KEY: ${{ secrets.APPLE_KEY }}
-          JWT_PUBLIC_KEY: ${{ secrets.JWT_PUBLIC_KEY }}
-          JWT_PRIVATE_KEY: ${{ secrets.JWT_PRIVATE_KEY }}
           S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
         run: |
           aws s3 cp --region $REGION \
-            s3://$S3_BUCKET/dev/static/$JWT_PUBLIC_KEY ./$JWT_PUBLIC_KEY
-          aws s3 cp --region $REGION \
-            s3://$S3_BUCKET/dev/static/$JWT_PRIVATE_KEY ./$JWT_PRIVATE_KEY
-          aws s3 cp --region $REGION \
             s3://$S3_BUCKET/dev/static/$APPLE_KEY ./$APPLE_KEY
 
-      - name: 📝 Copy Script and Property File
+      - name: 📝 ENV File and Key File Related to JWT
         env:
           REGION: ${{ secrets.AWS_REGION }}
           S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
@@ -94,6 +88,8 @@ jobs:
         run: |
           aws s3 cp --region $REGION \
             s3://$S3_BUCKET/dev/$S3_ENV_FILE_NAME ./application.env
+          aws s3 cp ./src/main/resources/jwt_private_key.pem s3://$S3_BUCKET/dev/static/jwt_private_key.pem --region $REGION
+          aws s3 cp ./src/main/resources/jwt_public_key.pem s3://$S3_BUCKET/dev/static/jwt_public_key.pem --region $REGION
 
       - name: 🔄 Transfer Files(KEY) to Server
         uses: appleboy/scp-action@master
