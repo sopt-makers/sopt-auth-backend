@@ -71,16 +71,22 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      - name: 🔑 Copy APPLE Key File
+      - name: 🔑 Copy Key File
         env:
           REGION: ${{ secrets.AWS_REGION }}
-          APPLE_KEY: ${{ secrets.APPLE_KEY }}
+          APPLE_KEY_PATH: ${{ secrets.APPLE_KEY_PATH }}
+          JWT_PUBLIC_KEY_PATH: ${{ secrets.JWT_PUBLIC_KEY_PATH }}
+          JWT_PRIVATE_KEY_PATH: ${{ secrets.JWT_PRIVATE_KEY_PATH }}
           S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
         run: |
           aws s3 cp --region $REGION \
-            s3://$S3_BUCKET/dev/static/$APPLE_KEY ./$APPLE_KEY
+            s3://$S3_BUCKET/dev/static/$JWT_PUBLIC_KEY_PATH ./$JWT_PUBLIC_KEY_PATH
+          aws s3 cp --region $REGION \
+            s3://$S3_BUCKET/dev/static/$JWT_PRIVATE_KEY_PATH ./$JWT_PRIVATE_KEY_PATH
+          aws s3 cp --region $REGION \
+            s3://$S3_BUCKET/dev/static/$APPLE_KEY_PATH ./$APPLE_KEY_PATH
 
-      - name: 📝 ENV File and Key File Related to JWT
+      - name: 📝 Copy Script and Property File
         env:
           REGION: ${{ secrets.AWS_REGION }}
           S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
@@ -88,8 +94,6 @@ jobs:
         run: |
           aws s3 cp --region $REGION \
             s3://$S3_BUCKET/dev/$S3_ENV_FILE_NAME ./application.env
-          aws s3 cp ./src/main/resources/jwt_private_key.pem s3://$S3_BUCKET/dev/static/jwt_private_key.pem --region $REGION
-          aws s3 cp ./src/main/resources/jwt_public_key.pem s3://$S3_BUCKET/dev/static/jwt_public_key.pem --region $REGION
 
       - name: 🔄 Transfer Files(KEY) to Server
         uses: appleboy/scp-action@master
@@ -98,7 +102,7 @@ jobs:
           username: ec2-user
           key: ${{ secrets.PEM_KEY_DEV }}
           port: 22
-          source: "${{ secrets.APPLE_KEY }},${{ secrets.JWT_PUBLIC_KEY }},${{ secrets.JWT_PRIVATE_KEY }}"
+          source: "${{ secrets.APPLE_KEY_PATH }},${{ secrets.JWT_PUBLIC_KEY_PATH }},${{ secrets.JWT_PRIVATE_KEY_PATH }}"
           target: /home/ec2-user/authentication/key
           overwrite: true
 
