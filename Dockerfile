@@ -12,4 +12,4 @@ COPY build/libs/authentication.jar /app-run/authentication.jar
 
 EXPOSE 8080
 ENTRYPOINT ["java"]
-CMD ["-Dspring.config.additional-location=file:/app-run/env/application.env", "-Dspring.profiles.active=${SPRING_PROFILES_ACTIVE}", "-jar", "authentication.jar"]
+CMD ["-Dspring.config.additional-location=file:/app-run/", "-Dspring.profiles.active=${SPRING_PROFILES_ACTIVE}", "-jar", "authentication.jar"]
