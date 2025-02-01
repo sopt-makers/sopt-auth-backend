@@ -13,12 +13,10 @@ import lombok.RequiredArgsConstructor;
 public final class AuthResponse {
 
   public record VerifyResult(
-      @JsonProperty("isVerified") boolean isVerified,
-      @JsonProperty("name") String name,
-      @JsonProperty("phone") String phone) {
+      @JsonProperty("name") String name, @JsonProperty("phone") String phone) {
     public static VerifyResult from(
         VerifyPhoneVerificationUsecase.VerifyVerificationResult result) {
-      return new VerifyResult(result.isSuccess(), result.targetName(), result.targetPhone());
+      return new VerifyResult(result.targetName(), result.targetPhone());
     }
   }
 
