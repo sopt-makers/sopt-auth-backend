@@ -45,7 +45,7 @@ class AuthApiControllerTest {
 
     // when
     when(verifyPhoneVerificationUsecase.verify(any(VerifyVerificationCommand.class)))
-        .thenReturn(new VerifyVerificationResult(true, "TEST", "01012345678"));
+        .thenReturn(new VerifyVerificationResult("TEST", "01012345678"));
     mockMvc
         .perform(
             post("/api/v1/auth/verify/phone")
@@ -56,7 +56,6 @@ class AuthApiControllerTest {
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.success").value("true"))
         .andExpect(jsonPath("$.message").value("번호 인증에 성공했습니다."))
-        .andExpect(jsonPath("$.data.isVerified").value("true"))
         .andExpect(jsonPath("$.data.name").value("TEST"))
         .andExpect(jsonPath("$.data.phone").value("01012345678"));
   }

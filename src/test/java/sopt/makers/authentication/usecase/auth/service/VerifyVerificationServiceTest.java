@@ -45,7 +45,7 @@ class VerifyVerificationServiceTest {
     VerifyVerificationResult result = verifyService.verify(givenCommand);
 
     // then
-    assertThat(result.isSuccess()).isTrue();
+    assertThat(result.targetPhone()).isEqualTo(givenVerifyPhone);
     assertThatThrownBy(() -> phoneVerificationRepository.findByPhoneVerification(givenVerification))
         .isInstanceOf(AuthException.class)
         .hasMessageContaining(AuthFailure.NOT_FOUND_PHONE_VERIFICATION.getMessage());

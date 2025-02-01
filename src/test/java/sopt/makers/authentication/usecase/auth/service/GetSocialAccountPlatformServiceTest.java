@@ -63,6 +63,7 @@ class GetSocialAccountPlatformServiceTest {
   void 주어진_Command에_대해_의도한_결과값을_반환한다(
       // given
       GetSocialAccountUsecase.GetSocialAccountPlatformCommand givenCommand, String expectedResult) {
+
     // when
     GetSocialAccountUsecase.SocialAccountPlatformInfo result =
         getSocialAccountPlatformService.getSocialAccountPlatform(givenCommand);
