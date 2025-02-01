@@ -7,8 +7,10 @@ spring:
       - classpath:external.yaml
       - classpath:jwt.yaml
   datasource:
-    url: jdbc:h2:mem:testdb
-    username: sa
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password:
+    driver-class-name: ${DB_DRIVER_CLASS}
 
 management:
   endpoints:

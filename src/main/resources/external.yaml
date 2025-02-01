@@ -2,6 +2,7 @@ spring.config.activate.on-profile:
   - prod
   - dev
   - local
+  - test
 external:
   makers:
     playground:
@@ -30,34 +31,3 @@ external:
       client:
         id: ${GOOGLE_CLIENT_ID}
         secret: ${GOOGLE_CLIENT_SECRET}
----
-spring.config.activate.on-profile:
-  - test
-external:
-  makers:
-    playground:
-      url: test
-      token: test
-  gabia:
-    sms:
-      id: test
-      key: test
-      url: test
-      phone: test
-  oauth:
-    apple:
-      aud: test
-      sub: test
-      key:
-        id: test
-        path: test
-      team:
-        id: test
-      expiration:
-        token-expiration: 0
-    google:
-      redirect:
-        url: test
-      client:
-        id: test
-        secret: test
