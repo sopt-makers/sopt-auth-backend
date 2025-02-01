@@ -29,6 +29,11 @@ jobs:
           
           echo "${{ secrets.PROPERTY_GRADLE }}" >> ./gradle.properties
 
+      - name: 🔑 Create Test Environment File
+        run: |
+          mkdir -p src/test/resources/env
+          echo "${{ secrets.TEST_ENV_FILE }}" > src/test/resources/env/test.env
+
       - name: 🧱 Build with Gradle
         run: docker build -t app-ci .
         shell: bash
