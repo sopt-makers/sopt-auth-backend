@@ -25,8 +25,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 
 @SpringBootTest
-@ActiveProfiles("local")
-@TestPropertySource(locations = {"classpath:env/local.env"})
+@ActiveProfiles("test")
+@TestPropertySource(locations = {"classpath:env/test.env"})
 class GetSocialAccountPlatformServiceTest {
   private static final String PLATFORM_NAME_GOOGLE = "GOOGLE";
   private static final String PLATFORM_NAME_APPLE = "APPLE";

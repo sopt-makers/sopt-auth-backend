@@ -1,16 +1,18 @@
 package sopt.makers.authentication.application.auth.api;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static sopt.makers.authentication.usecase.auth.port.in.VerifyPhoneVerificationUsecase.*;
 
 import sopt.makers.authentication.support.util.CookieUtil;
 import sopt.makers.authentication.usecase.auth.port.in.AuthenticateSocialAccountUsecase;
 import sopt.makers.authentication.usecase.auth.port.in.CreatePhoneVerificationUsecase;
+import sopt.makers.authentication.usecase.auth.port.in.SignUpUsecase;
 import sopt.makers.authentication.usecase.auth.port.in.VerifyPhoneVerificationUsecase;
+import sopt.makers.authentication.usecase.auth.port.in.VerifyPhoneVerificationUsecase.VerifyVerificationCommand;
+import sopt.makers.authentication.usecase.auth.port.in.VerifyPhoneVerificationUsecase.VerifyVerificationResult;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,6 +24,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
 @ExtendWith(MockitoExtension.class)
@@ -30,11 +33,13 @@ import org.springframework.test.web.servlet.MockMvc;
     controllers = {AuthApiController.class},
     excludeAutoConfiguration = {SecurityAutoConfiguration.class})
 @ActiveProfiles("test")
+@TestPropertySource(locations = {"classpath:env/test.env"})
 class AuthApiControllerTest {
   @Autowired MockMvc mockMvc;
   @MockBean VerifyPhoneVerificationUsecase verifyPhoneVerificationUsecase;
   @MockBean CreatePhoneVerificationUsecase createPhoneVerificationUsecase;
   @MockBean AuthenticateSocialAccountUsecase authenticateSocialAccountUsecase;
+  @MockBean SignUpUsecase signUpUsecase;
   @MockBean CookieUtil cookieUtil;
 
   @Test
