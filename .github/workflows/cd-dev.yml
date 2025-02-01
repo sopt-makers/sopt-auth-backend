@@ -32,6 +32,21 @@ jobs:
           touch ./gradle.properties
           echo "${{ secrets.PROPERTY_GRADLE }}" >> ./gradle.properties
 
+      - name: 🔑 Create Key File related JWT
+        run: |
+          mkdir -p ./src/main/resources
+          echo "${{ secrets.JWT_PRIVATE_KEY }}" > ./src/main/resources/jwt_private_key.pem
+          echo "${{ secrets.JWT_PUBLIC_KEY }}" > ./src/main/resources/jwt_public_key.pem
+
+      - name: 🔑 Create Test Environment File
+        run: |
+          mkdir -p ./src/main/resources/env
+          echo "${{ secrets.TEST_ENV_FILE }}" > ./src/main/resources/env/test.env
+
+      - name: 🧱 Build and Test with Gradle
+        run: ./gradlew build --no-daemon
+        shell: bash
+
       - name: 🧱 Build Image and Push to ECR
         env:
           AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
@@ -76,7 +91,7 @@ jobs:
           REGION: ${{ secrets.AWS_REGION }}
           S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
           S3_ENV_FILE_NAME: ${{ secrets.ENV_FILE_NAME_DEV }}
-        run: |      
+        run: |
           aws s3 cp --region $REGION \
             s3://$S3_BUCKET/dev/$S3_ENV_FILE_NAME ./application.env
 
