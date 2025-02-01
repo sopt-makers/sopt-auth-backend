@@ -26,7 +26,6 @@ jobs:
       - name: 🔑 Create Application Property File
         run: |
           touch ./gradle.properties
-          
           echo "${{ secrets.PROPERTY_GRADLE }}" >> ./gradle.properties
 
       - name: 🔑 Create Key File related JWT
@@ -39,6 +38,10 @@ jobs:
           mkdir -p src/main/resources/env
           echo "${{ secrets.TEST_ENV_FILE }}" > src/main/resources/env/test.env
 
-      - name: 🧱 Build with Gradle
+      - name: 🧱 Build and Test with Gradle
+        run: ./gradlew build --no-daemon
+        shell: bash
+
+      - name: 🐳 Build with Gradle
         run: docker build -t app-ci .
         shell: bash
