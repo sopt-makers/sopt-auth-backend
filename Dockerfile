@@ -10,7 +10,7 @@ WORKDIR /app-build
 COPY . /app-build
 
 # create .jar
-RUN echo "Build with PROFILE=${PROFILE}" && ./gradlew build -x test -Pprofile=${PROFILE} --no-daemon
+RUN echo "Build with PROFILE=${PROFILE}" && ./gradlew build -Pprofile=${PROFILE} --no-daemon
 
 # Run-Time Image Setting
 FROM openjdk:21-jdk-slim as production
