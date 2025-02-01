@@ -30,14 +30,14 @@ jobs:
 
       - name: 🔑 Create Key File related JWT
         run: |
-          mkdir -p ./sopt-auth-backend/src/main/resources
-          echo "${{ secrets.JWT_PRIVATE_KEY }}" > ./sopt-auth-backend/src/main/resources/jwt_private_key.pem
-          echo "${{ secrets.JWT_PUBLIC_KEY }}" > ./sopt-auth-backend/src/main/resources/jwt_public_key.pem
+          mkdir -p ./src/main/resources
+          echo "${{ secrets.JWT_PRIVATE_KEY }}" > ./src/main/resources/jwt_private_key.pem
+          echo "${{ secrets.JWT_PUBLIC_KEY }}" > ./src/main/resources/jwt_public_key.pem
 
       - name: 🔑 Create Test Environment File
         run: |
-          mkdir -p ./sopt-auth-backend/src/main/resources/env
-          echo "${{ secrets.TEST_ENV_FILE }}" > ./sopt-auth-backend/src/main/resources/env/test.env
+          mkdir -p ./src/main/resources/env
+          echo "${{ secrets.TEST_ENV_FILE }}" > ./src/main/resources/env/test.env
 
       - name: 🧱 Build and Test with Gradle
         run: ./gradlew build --no-daemon
