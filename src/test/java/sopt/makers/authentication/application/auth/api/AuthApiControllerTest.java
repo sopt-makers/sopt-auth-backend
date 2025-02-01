@@ -1,16 +1,18 @@
 package sopt.makers.authentication.application.auth.api;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static sopt.makers.authentication.usecase.auth.port.in.VerifyPhoneVerificationUsecase.*;
 
 import sopt.makers.authentication.support.util.CookieUtil;
 import sopt.makers.authentication.usecase.auth.port.in.AuthenticateSocialAccountUsecase;
 import sopt.makers.authentication.usecase.auth.port.in.CreatePhoneVerificationUsecase;
+import sopt.makers.authentication.usecase.auth.port.in.SignUpUsecase;
 import sopt.makers.authentication.usecase.auth.port.in.VerifyPhoneVerificationUsecase;
+import sopt.makers.authentication.usecase.auth.port.in.VerifyPhoneVerificationUsecase.VerifyVerificationCommand;
+import sopt.makers.authentication.usecase.auth.port.in.VerifyPhoneVerificationUsecase.VerifyVerificationResult;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,6 +24,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
 @ExtendWith(MockitoExtension.class)
@@ -30,11 +33,13 @@ import org.springframework.test.web.servlet.MockMvc;
     controllers = {AuthApiController.class},
     excludeAutoConfiguration = {SecurityAutoConfiguration.class})
 @ActiveProfiles("test")
+@TestPropertySource(locations = {"classpath:env/test.env"})
 class AuthApiControllerTest {
   @Autowired MockMvc mockMvc;
   @MockBean VerifyPhoneVerificationUsecase verifyPhoneVerificationUsecase;
   @MockBean CreatePhoneVerificationUsecase createPhoneVerificationUsecase;
   @MockBean AuthenticateSocialAccountUsecase authenticateSocialAccountUsecase;
+  @MockBean SignUpUsecase signUpUsecase;
   @MockBean CookieUtil cookieUtil;
 
   @Test
@@ -45,7 +50,7 @@ class AuthApiControllerTest {
 
     // when
     when(verifyPhoneVerificationUsecase.verify(any(VerifyVerificationCommand.class)))
-        .thenReturn(new VerifyVerificationResult(true, "TEST", "01012345678"));
+        .thenReturn(new VerifyVerificationResult("TEST", "01012345678"));
     mockMvc
         .perform(
             post("/api/v1/auth/verify/phone")
@@ -56,7 +61,6 @@ class AuthApiControllerTest {
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.success").value("true"))
         .andExpect(jsonPath("$.message").value("번호 인증에 성공했습니다."))
-        .andExpect(jsonPath("$.data.isVerified").value("true"))
         .andExpect(jsonPath("$.data.name").value("TEST"))
         .andExpect(jsonPath("$.data.phone").value("01012345678"));
   }

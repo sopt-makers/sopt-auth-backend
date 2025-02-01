@@ -25,8 +25,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 
 @SpringBootTest
-@ActiveProfiles("local")
-@TestPropertySource(locations = {"classpath:env/local.env"})
+@ActiveProfiles("test")
+@TestPropertySource(locations = {"classpath:env/test.env"})
 class GetSocialAccountPlatformServiceTest {
   private static final String PLATFORM_NAME_GOOGLE = "GOOGLE";
   private static final String PLATFORM_NAME_APPLE = "APPLE";
@@ -63,6 +63,7 @@ class GetSocialAccountPlatformServiceTest {
   void 주어진_Command에_대해_의도한_결과값을_반환한다(
       // given
       GetSocialAccountUsecase.GetSocialAccountPlatformCommand givenCommand, String expectedResult) {
+
     // when
     GetSocialAccountUsecase.SocialAccountPlatformInfo result =
         getSocialAccountPlatformService.getSocialAccountPlatform(givenCommand);

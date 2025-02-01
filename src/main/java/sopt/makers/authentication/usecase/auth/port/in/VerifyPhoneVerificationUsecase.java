@@ -9,5 +9,5 @@ public interface VerifyPhoneVerificationUsecase {
   record VerifyVerificationCommand(
       String name, String phone, String code, PhoneVerificationType verificationType) {}
 
-  record VerifyVerificationResult(boolean isSuccess, String targetName, String targetPhone) {}
+  record VerifyVerificationResult(String targetName, String targetPhone) {}
 }

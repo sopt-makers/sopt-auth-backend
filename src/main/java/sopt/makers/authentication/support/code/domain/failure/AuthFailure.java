@@ -15,6 +15,7 @@ public enum AuthFailure implements FailureCode {
   // 400
   INVALID_SOCIAL_PLATFORM(HttpStatus.BAD_REQUEST, "지원하지 않는 소셜 플랫폼입니다"),
   INVALID_ID_TOKEN(HttpStatus.BAD_REQUEST, "ID 토큰 유효성 검사에 실패했습니다."),
+  INVALID_PHONE_VERIFICATION_CODE(HttpStatus.BAD_REQUEST, "인증번호가 일치하지 않습니다."),
 
   // 404
   NOT_FOUND_PHONE_VERIFICATION(HttpStatus.NOT_FOUND, "존재하지 않는 번호 인증 이력입니다."),

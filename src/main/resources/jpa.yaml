@@ -26,3 +26,9 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create-drop
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+      database-platform: ${JPA_DATABASE_PLATFORM}
+      database: ${JPA_DATABASE}

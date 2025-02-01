@@ -14,14 +14,11 @@ import java.text.ParseException;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
-import org.springframework.security.oauth2.jwt.JwtEncoder;
-import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.*;
 
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWSVerifier;
@@ -32,12 +29,9 @@ import com.nimbusds.jwt.SignedJWT;
 
 @SpringBootTest
 @ActiveProfiles("test")
+@TestPropertySource(locations = {"classpath:env/test.env"})
 public class JwtAccessTokenTest {
-
-  private static final Logger log = LoggerFactory.getLogger(JwtAccessTokenTest.class);
   @Autowired private JwtAuthAccessTokenProvider jwtAuthAccessTokenProvider;
-
-  @Autowired private JwtEncoder jwtEncoder;
 
   @Autowired private JwtDecoder jwtDecoder;
 
@@ -70,7 +64,7 @@ public class JwtAccessTokenTest {
     Jwt jwt = jwtDecoder.decode(pureToken);
 
     // Then
-    assertThat(jwt.getClaims().get("iss")).isEqualTo("operation");
+    assertThat(jwt.getClaims().get("iss")).isEqualTo("authentication");
     assertThat(jwt.getClaims().get("sub")).isEqualTo("test");
   }
 

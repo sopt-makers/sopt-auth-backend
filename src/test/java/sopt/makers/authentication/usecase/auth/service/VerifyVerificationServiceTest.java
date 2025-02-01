@@ -15,9 +15,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestPropertySource;
 
 @SpringBootTest
 @ActiveProfiles("test")
+@TestPropertySource(locations = {"classpath:env/test.env"})
 class VerifyVerificationServiceTest {
 
   @Autowired private PhoneVerificationRepository phoneVerificationRepository;
@@ -45,7 +47,7 @@ class VerifyVerificationServiceTest {
     VerifyVerificationResult result = verifyService.verify(givenCommand);
 
     // then
-    assertThat(result.isSuccess()).isTrue();
+    assertThat(result.targetPhone()).isEqualTo(givenVerifyPhone);
     assertThatThrownBy(() -> phoneVerificationRepository.findByPhoneVerification(givenVerification))
         .isInstanceOf(AuthException.class)
         .hasMessageContaining(AuthFailure.NOT_FOUND_PHONE_VERIFICATION.getMessage());

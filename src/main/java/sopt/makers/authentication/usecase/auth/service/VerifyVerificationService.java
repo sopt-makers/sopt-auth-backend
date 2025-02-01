@@ -1,6 +1,9 @@
 package sopt.makers.authentication.usecase.auth.service;
 
+import static sopt.makers.authentication.support.code.domain.failure.AuthFailure.INVALID_PHONE_VERIFICATION_CODE;
+
 import sopt.makers.authentication.domain.auth.PhoneVerification;
+import sopt.makers.authentication.support.exception.domain.AuthException;
 import sopt.makers.authentication.usecase.auth.port.in.VerifyPhoneVerificationUsecase;
 import sopt.makers.authentication.usecase.auth.port.out.PhoneVerificationRepository;
 
@@ -18,14 +21,15 @@ public class VerifyVerificationService implements VerifyPhoneVerificationUsecase
     PhoneVerification targetVerification =
         PhoneVerification.of(
             command.name(), command.phone(), command.verificationType(), command.code());
-
     PhoneVerification findVerification =
         phoneVerificationRepository.findByPhoneVerification(targetVerification);
-    boolean isVerified = targetVerification.equals(findVerification);
+    boolean isNotVerified =
+        !targetVerification.getVerificationCode().equals(findVerification.getVerificationCode());
 
-    if (isVerified) {
-      phoneVerificationRepository.deletedByPhoneVerification(findVerification);
+    if (isNotVerified) {
+      throw new AuthException(INVALID_PHONE_VERIFICATION_CODE);
     }
-    return new VerifyVerificationResult(isVerified, command.name(), command.phone());
+    phoneVerificationRepository.deletedByPhoneVerification(findVerification);
+    return new VerifyVerificationResult(command.name(), command.phone());
   }
 }

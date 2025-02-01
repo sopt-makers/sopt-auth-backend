@@ -7,7 +7,6 @@ import static sopt.makers.authentication.support.jwt.provider.JwtTokenUtil.extra
 
 import sopt.makers.authentication.support.exception.support.TokenException;
 import sopt.makers.authentication.support.jwt.provider.JwtAuthRefreshTokenProvider;
-import sopt.makers.authentication.support.value.JwtProperty;
 
 import java.io.IOException;
 import java.time.Instant;
@@ -22,18 +21,16 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestPropertySource;
 
 @SpringBootTest
 @ActiveProfiles("test")
+@TestPropertySource(locations = {"classpath:env/test.env"})
 public class JwtRefreshTokenTest {
 
   @Autowired private JwtAuthRefreshTokenProvider jwtAuthRefreshTokenProvider;
-
   @Autowired private JwtEncoder jwtEncoder;
-
   @Autowired private JwtDecoder jwtDecoder;
-
-  @Autowired private JwtProperty jwtProperty;
 
   @Test
   @DisplayName("RefreshToken 생성")

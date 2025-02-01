@@ -26,9 +26,23 @@ jobs:
       - name: 🔑 Create Application Property File
         run: |
           touch ./gradle.properties
-          
           echo "${{ secrets.PROPERTY_GRADLE }}" >> ./gradle.properties
 
-      - name: 🧱 Build with Gradle
+      - name: 🔑 Create Key File related JWT
+        run: |
+          mkdir -p ./src/main/resources
+          echo "${{ secrets.JWT_PRIVATE_KEY }}" > ./src/main/resources/jwt_private_key.pem
+          echo "${{ secrets.JWT_PUBLIC_KEY }}" > ./src/main/resources/jwt_public_key.pem
+
+      - name: 🔑 Create Test Environment File
+        run: |
+          mkdir -p ./src/main/resources/env
+          echo "${{ secrets.TEST_ENV_FILE }}" > ./src/main/resources/env/test.env
+
+      - name: 🧱 Build and Test with Gradle
+        run: ./gradlew build --no-daemon
+        shell: bash
+
+      - name: 🐳 Build with Gradle
         run: docker build -t app-ci .
         shell: bash

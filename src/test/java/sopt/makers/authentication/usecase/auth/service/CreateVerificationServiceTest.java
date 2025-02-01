@@ -29,9 +29,11 @@ import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestPropertySource;
 
 @SpringBootTest
 @ActiveProfiles("test")
+@TestPropertySource(locations = {"classpath:env/test.env"})
 class CreateVerificationServiceTest {
   private static final String TEST_NAME_REGISTER_INFO = "TEST REGISTER INFO";
   private static final String TEST_NAME_USER = "TEST USER";
