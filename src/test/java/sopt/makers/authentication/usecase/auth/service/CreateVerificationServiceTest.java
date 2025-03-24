@@ -52,7 +52,7 @@ class CreateVerificationServiceTest {
     User mockedUser = mock(User.class);
     UserRegisterInfo mockedUserRegisterInfo = mock(UserRegisterInfo.class);
     when(mockedUser.getProfile())
-        .thenReturn(new Profile("TEST USER", null, "01012345678", LocalDate.now()));
+        .thenReturn(new Profile("TEST USER", null, "01012345678", LocalDate.now(), null));
     when(mockedUserRegisterInfo.getName()).thenReturn("TEST REGISTER INFO");
     when(mockedUserRegisterInfo.getPhone()).thenReturn("01087654321");
 
