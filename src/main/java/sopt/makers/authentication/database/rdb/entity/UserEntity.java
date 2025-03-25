@@ -89,7 +89,7 @@ public class UserEntity extends BaseEntity {
 
   public User toDomain() {
     SocialAccount socialAccount = SocialAccount.of(authPlatformId, authPlatformType);
-    Profile profile = Profile.of(name, email, phone, birthday, profileImage);
+    Profile profile = Profile.of(name, email, phone, birthday);
     return User.createNewUser(socialAccount, profile);
   }
 }

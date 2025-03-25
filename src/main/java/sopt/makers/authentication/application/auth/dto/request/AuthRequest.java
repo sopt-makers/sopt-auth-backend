@@ -52,15 +52,10 @@ public final class AuthRequest {
       @JsonProperty("name") String name,
       @JsonProperty("phone") String phone,
       @JsonProperty("token") String token,
-      @JsonProperty("authPlatform") String authPlatform,
-      @JsonProperty("profileImage") String profileImage) {
+      @JsonProperty("authPlatform") String authPlatform) {
     public SignUpCommand toCommand() {
       return new SignUpCommand(
-          this.name,
-          this.phone,
-          this.token,
-          AuthPlatform.find(this.authPlatform),
-          this.profileImage);
+          this.name, this.phone, this.token, AuthPlatform.find(this.authPlatform));
     }
   }
 

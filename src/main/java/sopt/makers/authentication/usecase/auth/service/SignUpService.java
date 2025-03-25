@@ -29,7 +29,7 @@ public class SignUpService implements SignUpUsecase {
     UserRegisterInfo registerInfo = userRegisterInfoRepository.findByPhone(command.phone());
 
     SocialAccount socialAccount = createSocialAccount(authPlatformId, command.authPlatform());
-    Profile profile = createProfile(registerInfo, command.profileImage());
+    Profile profile = createProfile(registerInfo);
     User newUser = User.createNewUser(socialAccount, profile);
 
     userRepository.save(newUser);
@@ -43,12 +43,11 @@ public class SignUpService implements SignUpUsecase {
     };
   }
 
-  private Profile createProfile(UserRegisterInfo registerInfo, String profileImage) {
+  private Profile createProfile(UserRegisterInfo registerInfo) {
     return Profile.of(
         registerInfo.getName(),
         registerInfo.getEmail(),
         registerInfo.getPhone(),
-        registerInfo.getBirthday(),
-        profileImage);
+        registerInfo.getBirthday());
   }
 }

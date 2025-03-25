@@ -12,10 +12,8 @@ public record Profile(
     @NotNull LocalDate birthday,
     Optional<String> profileImage) {
 
-  public static Profile of(
-      String name, String email, String phone, LocalDate birthday, String profileImage) {
-    return new Profile(
-        name, Optional.ofNullable(email), phone, birthday, Optional.ofNullable(profileImage));
+  public static Profile of(String name, String email, String phone, LocalDate birthday) {
+    return new Profile(name, Optional.ofNullable(email), phone, birthday, Optional.empty());
   }
 
   public Profile updateName(final String name) {

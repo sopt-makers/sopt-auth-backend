@@ -6,6 +6,5 @@ public interface SignUpUsecase {
 
   void signUp(SignUpCommand command);
 
-  record SignUpCommand(
-      String name, String phone, String token, AuthPlatform authPlatform, String profileImage) {}
+  record SignUpCommand(String name, String phone, String token, AuthPlatform authPlatform) {}
 }
