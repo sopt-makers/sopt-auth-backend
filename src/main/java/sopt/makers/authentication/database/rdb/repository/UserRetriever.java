@@ -11,12 +11,10 @@ import sopt.makers.authentication.support.exception.domain.AuthException;
 import sopt.makers.authentication.support.exception.domain.UserException;
 
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 
 @Component
-@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class UserRetriever {
   private final UserJpaRepository userJpaRepository;

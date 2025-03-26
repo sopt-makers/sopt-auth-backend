@@ -5,12 +5,10 @@ import sopt.makers.authentication.support.code.domain.failure.UserFailure;
 import sopt.makers.authentication.support.exception.domain.UserException;
 
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 
 @Component
-@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class UserRegisterInfoRetriever {
   private final UserRegisterInfoJpaRepository jpaRepository;
