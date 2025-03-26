@@ -6,10 +6,12 @@ import sopt.makers.authentication.domain.user.User;
 import sopt.makers.authentication.usecase.auth.port.out.UserRepository;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.*;
 
 import lombok.RequiredArgsConstructor;
 
 @Repository
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class UserRepositoryImpl implements UserRepository {
   private final UserRetriever userRetriever;
@@ -20,6 +22,7 @@ public class UserRepositoryImpl implements UserRepository {
     return userRetriever.findBySocialAccount(socialAccount);
   }
 
+  @Transactional
   @Override
   public void save(User user) {
     UserEntity userEntity = UserEntity.fromDomain(user);
@@ -31,6 +34,7 @@ public class UserRepositoryImpl implements UserRepository {
     return userRetriever.findByPhone(phone);
   }
 
+  @Transactional
   @Override
   public void update(User user, SocialAccount socialAccount) {
     user.updateSocialAccount(socialAccount);
