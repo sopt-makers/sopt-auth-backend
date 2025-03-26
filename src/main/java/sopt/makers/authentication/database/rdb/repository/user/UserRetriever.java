@@ -1,4 +1,4 @@
-package sopt.makers.authentication.database.rdb.repository;
+package sopt.makers.authentication.database.rdb.repository.user;
 
 import static sopt.makers.authentication.support.code.domain.failure.AuthFailure.NOT_FOUND_USER_WITH_SOCIAL_ACCOUNT;
 import static sopt.makers.authentication.support.code.domain.failure.UserFailure.NOT_FOUND_PHONE;

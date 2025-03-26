@@ -1,8 +1,6 @@
-package sopt.makers.authentication.database;
+package sopt.makers.authentication.database.rdb.repository.user;
 
 import sopt.makers.authentication.database.rdb.entity.*;
-import sopt.makers.authentication.database.rdb.repository.UserRegister;
-import sopt.makers.authentication.database.rdb.repository.UserRetriever;
 import sopt.makers.authentication.domain.auth.SocialAccount;
 import sopt.makers.authentication.domain.user.User;
 import sopt.makers.authentication.usecase.auth.port.out.UserRepository;

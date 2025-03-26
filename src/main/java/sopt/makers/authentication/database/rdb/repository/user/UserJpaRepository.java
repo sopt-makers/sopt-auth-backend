@@ -1,4 +1,4 @@
-package sopt.makers.authentication.database.rdb.repository;
+package sopt.makers.authentication.database.rdb.repository.user;
 
 import sopt.makers.authentication.database.rdb.entity.UserEntity;
 import sopt.makers.authentication.domain.auth.AuthPlatform;
