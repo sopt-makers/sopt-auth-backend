@@ -1,8 +1,6 @@
-package sopt.makers.authentication.database;
+package sopt.makers.authentication.database.rdb.repository.user.register;
 
 import sopt.makers.authentication.database.rdb.entity.UserRegisterInfoEntity;
-import sopt.makers.authentication.database.rdb.repository.UserRegisterInfoRemover;
-import sopt.makers.authentication.database.rdb.repository.UserRegisterInfoRetriever;
 import sopt.makers.authentication.domain.user.UserRegisterInfo;
 import sopt.makers.authentication.usecase.user.port.out.UserRegisterInfoRepository;
 

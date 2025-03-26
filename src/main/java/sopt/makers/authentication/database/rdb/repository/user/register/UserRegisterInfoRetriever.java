@@ -1,4 +1,4 @@
-package sopt.makers.authentication.database.rdb.repository;
+package sopt.makers.authentication.database.rdb.repository.user.register;
 
 import sopt.makers.authentication.database.rdb.entity.UserRegisterInfoEntity;
 import sopt.makers.authentication.support.code.domain.failure.UserFailure;

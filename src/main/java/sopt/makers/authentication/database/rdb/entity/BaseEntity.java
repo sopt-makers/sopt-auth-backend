@@ -1,4 +1,4 @@
-package sopt.makers.authentication.database;
+package sopt.makers.authentication.database.rdb.entity;
 
 import static lombok.AccessLevel.PROTECTED;
 
@@ -24,7 +24,6 @@ import lombok.Setter;
 @EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor(access = PROTECTED)
 public abstract class BaseEntity {
-
   @Id
   @Column(name = "id")
   @GeneratedValue(strategy = GenerationType.IDENTITY)
