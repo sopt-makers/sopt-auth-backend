@@ -34,6 +34,19 @@ public class User {
         .build();
   }
 
+  public static User createUser(
+      final Long id,
+      final SocialAccount socialAccount,
+      final Profile profile,
+      final ActivityList activities) {
+    return User.builder()
+        .id(id)
+        .socialAccount(socialAccount)
+        .profile(profile)
+        .activities(activities)
+        .build();
+  }
+
   public void updateSocialAccount(final SocialAccount socialAccount) {
     User.builder()
         .id(this.id)
