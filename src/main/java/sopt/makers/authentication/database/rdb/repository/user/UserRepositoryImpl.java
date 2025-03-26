@@ -37,8 +37,8 @@ public class UserRepositoryImpl implements UserRepository {
   @Transactional
   @Override
   public void update(User user, SocialAccount socialAccount) {
-    user.updateSocialAccount(socialAccount);
-    UserEntity userEntity = UserEntity.fromDomain(user);
+    User updatedUser = user.updateSocialAccount(socialAccount);
+    UserEntity userEntity = UserEntity.fromDomain(updatedUser);
     userRegister.save(userEntity);
   }
 }
