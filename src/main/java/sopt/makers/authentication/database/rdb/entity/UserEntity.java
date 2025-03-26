@@ -54,9 +54,10 @@ public class UserEntity extends BaseEntity {
     this.authPlatformType = authPlatformType;
   }
 
-  public static UserEntity fromDomain(final Long id, User user) {
+  public static UserEntity fromDomain(final User user) {
     Profile profile = user.getProfile();
     SocialAccount socialAccount = user.getSocialAccount();
+    boolean hasId = user.getId() != null;
     UserEntity userEntity =
         new UserEntity(
             profile.name(),
@@ -65,25 +66,15 @@ public class UserEntity extends BaseEntity {
             profile.birthday(),
             socialAccount.authPlatformId(),
             socialAccount.authPlatformType());
-    userEntity.setId(id);
+    if (hasId) {
+      userEntity.setId(user.getId());
+    }
     return userEntity;
-  }
-
-  public static UserEntity fromDomain(final User user) {
-    Profile profile = user.getProfile();
-    SocialAccount socialAccount = user.getSocialAccount();
-    return new UserEntity(
-        profile.name(),
-        profile.phone(),
-        profile.email().orElse(null),
-        profile.birthday(),
-        socialAccount.authPlatformId(),
-        socialAccount.authPlatformType());
   }
 
   public User toDomain() {
     SocialAccount socialAccount = SocialAccount.of(authPlatformId, authPlatformType);
     Profile profile = Profile.of(name, email, phone, birthday);
-    return User.createNewUser(socialAccount, profile);
+    return User.createUser(super.getId(), socialAccount, profile);
   }
 }
