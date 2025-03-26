@@ -2,7 +2,6 @@ package sopt.makers.authentication.database.rdb.entity;
 
 import static lombok.AccessLevel.PROTECTED;
 
-import sopt.makers.authentication.database.BaseEntity;
 import sopt.makers.authentication.domain.auth.AuthPlatform;
 import sopt.makers.authentication.domain.auth.SocialAccount;
 import sopt.makers.authentication.domain.user.Profile;

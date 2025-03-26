@@ -3,7 +3,6 @@ package sopt.makers.authentication.database.rdb.entity;
 import static lombok.AccessLevel.PRIVATE;
 import static lombok.AccessLevel.PROTECTED;
 
-import sopt.makers.authentication.database.BaseEntity;
 import sopt.makers.authentication.domain.auth.PhoneVerification;
 import sopt.makers.authentication.domain.auth.PhoneVerificationType;
 
