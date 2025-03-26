@@ -9,10 +9,7 @@ import sopt.makers.authentication.domain.user.User;
 
 import java.time.LocalDate;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
 import org.hibernate.annotations.ColumnDefault;
@@ -21,7 +18,13 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor(access = PROTECTED)
-@Table(name = "users")
+@Table(
+    name = "users",
+    uniqueConstraints = {
+      @UniqueConstraint(
+          name = "UK_AUTH_PLATFORM_ID_AND_AUTH_PLATFORM_TYPE",
+          columnNames = {"auth_platform_id", "auth_platform_type"})
+    })
 public class UserEntity extends BaseEntity {
 
   @NotNull String name;
