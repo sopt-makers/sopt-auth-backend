@@ -1,6 +1,6 @@
 package sopt.makers.authentication.database.rdb.repository.user;
 
-import sopt.makers.authentication.database.rdb.entity.*;
+import sopt.makers.authentication.database.rdb.entity.UserEntity;
 import sopt.makers.authentication.domain.auth.SocialAccount;
 import sopt.makers.authentication.domain.user.User;
 import sopt.makers.authentication.usecase.auth.port.out.UserRepository;
@@ -21,11 +21,6 @@ public class UserRepositoryImpl implements UserRepository {
   }
 
   @Override
-  public Long findIdByUser(User user) {
-    return userRetriever.findIdByUser(user);
-  }
-
-  @Override
   public void save(User user) {
     UserEntity userEntity = UserEntity.fromDomain(user);
     userRegister.save(userEntity);
@@ -37,11 +32,9 @@ public class UserRepositoryImpl implements UserRepository {
   }
 
   @Override
-  public User update(Long id, User user, SocialAccount socialAccount) {
+  public void update(User user, SocialAccount socialAccount) {
     user.updateSocialAccount(socialAccount);
     UserEntity userEntity = UserEntity.fromDomain(user);
-    userEntity.setId(id);
-    UserEntity updatedUserEntity = userRegister.save(userEntity);
-    return updatedUserEntity.toDomain();
+    userRegister.save(userEntity);
   }
 }

@@ -12,8 +12,5 @@ public interface UserJpaRepository extends JpaRepository<UserEntity, Long> {
   Optional<UserEntity> findByAuthPlatformTypeAndAuthPlatformId(
       AuthPlatform authPlatformType, String authPlatformId);
 
-  Optional<Long> findIdByAuthPlatformTypeAndAuthPlatformId(
-      AuthPlatform authPlatformType, String authPlatformId);
-
   Optional<UserEntity> findByPhone(String phone);
 }
