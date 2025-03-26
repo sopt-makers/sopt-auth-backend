@@ -1,4 +1,4 @@
-package sopt.makers.authentication.database.rdb.entity.auth;
+package sopt.makers.authentication.database.rdb.entity;
 
 import static lombok.AccessLevel.PRIVATE;
 import static lombok.AccessLevel.PROTECTED;

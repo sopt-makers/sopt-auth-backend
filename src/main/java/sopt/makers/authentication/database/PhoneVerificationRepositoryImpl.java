@@ -1,6 +1,6 @@
 package sopt.makers.authentication.database;
 
-import sopt.makers.authentication.database.rdb.entity.auth.PhoneVerificationEntity;
+import sopt.makers.authentication.database.rdb.entity.PhoneVerificationEntity;
 import sopt.makers.authentication.database.rdb.repository.auth.PhoneVerificationRegister;
 import sopt.makers.authentication.database.rdb.repository.auth.PhoneVerificationRemover;
 import sopt.makers.authentication.database.rdb.repository.auth.PhoneVerificationRetriever;

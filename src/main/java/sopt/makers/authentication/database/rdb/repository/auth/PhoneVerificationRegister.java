@@ -1,6 +1,6 @@
 package sopt.makers.authentication.database.rdb.repository.auth;
 
-import sopt.makers.authentication.database.rdb.entity.auth.PhoneVerificationEntity;
+import sopt.makers.authentication.database.rdb.entity.PhoneVerificationEntity;
 import sopt.makers.authentication.domain.auth.PhoneVerification;
 
 import org.springframework.stereotype.Component;
