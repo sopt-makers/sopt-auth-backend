@@ -34,8 +34,8 @@ public class User {
         .build();
   }
 
-  public User updateSocialAccount(final SocialAccount socialAccount) {
-    return User.builder()
+  public void updateSocialAccount(final SocialAccount socialAccount) {
+    User.builder()
         .id(this.id)
         .socialAccount(socialAccount)
         .profile(this.profile)
