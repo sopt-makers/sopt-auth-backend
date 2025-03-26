@@ -8,16 +8,7 @@ import sopt.makers.authentication.domain.user.Role;
 import sopt.makers.authentication.domain.user.Team;
 import sopt.makers.authentication.domain.user.User;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
@@ -25,7 +16,13 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor(access = PROTECTED)
-@Table(name = "user_activity_histories")
+@Table(
+    name = "user_activity_histories",
+    uniqueConstraints = {
+      @UniqueConstraint(
+          name = "UK_USER_ID_AND_GENERATION",
+          columnNames = {"user_id", "generation"})
+    })
 public class UserActivityHistoryEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
