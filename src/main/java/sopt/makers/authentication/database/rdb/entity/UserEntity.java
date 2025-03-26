@@ -32,6 +32,7 @@ public class UserEntity extends BaseEntity {
   String email;
   LocalDate birthday;
   @NotNull String authPlatformId;
+  String profileImage;
 
   @NotNull
   @Enumerated(EnumType.STRING)
@@ -46,6 +47,7 @@ public class UserEntity extends BaseEntity {
       String phone,
       String email,
       LocalDate birthday,
+      String profileImage,
       String authPlatformId,
       AuthPlatform authPlatformType) {
     super();
@@ -53,6 +55,7 @@ public class UserEntity extends BaseEntity {
     this.phone = phone;
     this.email = email;
     this.birthday = birthday;
+    this.profileImage = profileImage;
     this.authPlatformId = authPlatformId;
     this.authPlatformType = authPlatformType;
   }
@@ -67,6 +70,7 @@ public class UserEntity extends BaseEntity {
             profile.phone(),
             profile.email().orElse(null),
             profile.birthday(),
+            profile.profileImage().orElse(null),
             socialAccount.authPlatformId(),
             socialAccount.authPlatformType());
     if (hasId) {

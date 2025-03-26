@@ -11,7 +11,8 @@ public enum Role {
   PRESIDENT,
   VICE_PRESIDENT,
   TEAM_LEADER,
-  PART_LEADER;
+  PART_LEADER,
+  GENERAL_AFFAIRS;
 
   public static Role findRole(final String role) {
     return Arrays.stream(Role.values())
