@@ -11,6 +11,7 @@ import sopt.makers.authentication.usecase.auth.port.out.UserRepository;
 import sopt.makers.authentication.usecase.user.port.out.UserRegisterInfoRepository;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,6 +23,7 @@ public class SignUpService implements SignUpUsecase {
   private final UserRepository userRepository;
   private final UserRegisterInfoRepository userRegisterInfoRepository;
 
+  @Transactional
   @Override
   public void signUp(SignUpCommand command) {
     String authPlatformId =
