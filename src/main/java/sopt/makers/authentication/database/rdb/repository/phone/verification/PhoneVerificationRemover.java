@@ -1,4 +1,4 @@
-package sopt.makers.authentication.database.rdb.repository.auth;
+package sopt.makers.authentication.database.rdb.repository.phone.verification;
 
 import sopt.makers.authentication.domain.auth.PhoneVerification;
 
