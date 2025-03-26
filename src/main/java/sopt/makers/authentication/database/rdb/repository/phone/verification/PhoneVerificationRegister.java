@@ -17,9 +17,4 @@ public class PhoneVerificationRegister {
     PhoneVerificationEntity entity = PhoneVerificationEntity.fromDomain(phoneVerification);
     return jpaRepository.save(entity);
   }
-
-  public PhoneVerificationEntity register(final long id, PhoneVerification phoneVerification) {
-    PhoneVerificationEntity entity = PhoneVerificationEntity.fromDomain(id, phoneVerification);
-    return jpaRepository.save(entity);
-  }
 }
