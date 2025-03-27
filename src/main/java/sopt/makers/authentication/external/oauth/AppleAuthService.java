@@ -49,9 +49,11 @@ public class AppleAuthService implements OAuthService {
 
   private JWK findMatchJWK(final SignedJWT jwt) {
     JWKSet loadedJWKSet = appleAuthClient.getPublicKeySet();
-    String keyID = jwt.getHeader().getKeyID();
+    String kid = jwt.getHeader().getKeyID();
+    String alg = jwt.getHeader().getAlgorithm().getName();
+
     return loadedJWKSet.getKeys().stream()
-        .filter(jwk -> jwk.getKeyID().equals(keyID))
+        .filter(jwk -> jwk.getKeyID().equals(kid) && jwk.getAlgorithm().getName().equals(alg))
         .findFirst()
         .orElseThrow(() -> new AuthException(AuthFailure.NOT_FOUND_AVAILABLE_PUBLIC_KEY_SET));
   }
