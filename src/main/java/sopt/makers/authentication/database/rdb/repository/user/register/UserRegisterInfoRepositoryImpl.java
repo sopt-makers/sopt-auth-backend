@@ -1,17 +1,17 @@
-package sopt.makers.authentication.database;
+package sopt.makers.authentication.database.rdb.repository.user.register;
 
 import sopt.makers.authentication.database.rdb.entity.UserRegisterInfoEntity;
-import sopt.makers.authentication.database.rdb.repository.UserRegisterInfoRemover;
-import sopt.makers.authentication.database.rdb.repository.UserRegisterInfoRetriever;
 import sopt.makers.authentication.domain.user.UserRegisterInfo;
 import sopt.makers.authentication.usecase.user.port.out.UserRegisterInfoRepository;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 
 @Repository
 @RequiredArgsConstructor
+@Transactional
 public class UserRegisterInfoRepositoryImpl implements UserRegisterInfoRepository {
 
   private final UserRegisterInfoRetriever retriever;
@@ -23,6 +23,7 @@ public class UserRegisterInfoRepositoryImpl implements UserRegisterInfoRepositor
     return targetRegisterInfo.toDomain();
   }
 
+  @Transactional
   @Override
   public void delete(UserRegisterInfo userRegisterInfo) {
     UserRegisterInfoEntity registerInfoEntity = retriever.findByPhone(userRegisterInfo.getPhone());

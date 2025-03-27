@@ -11,7 +11,7 @@ import lombok.Getter;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(access = AccessLevel.PRIVATE)
 public class User {
-
+  private final Long id;
   private final Profile profile;
   private final SocialAccount socialAccount;
   private ActivityList activities;
@@ -24,8 +24,32 @@ public class User {
         .build();
   }
 
+  public static User createUser(
+      final Long id, final SocialAccount socialAccount, final Profile profile) {
+    return User.builder()
+        .id(id)
+        .socialAccount(socialAccount)
+        .profile(profile)
+        .activities(new ActivityList())
+        .build();
+  }
+
+  public static User createUser(
+      final Long id,
+      final SocialAccount socialAccount,
+      final Profile profile,
+      final ActivityList activities) {
+    return User.builder()
+        .id(id)
+        .socialAccount(socialAccount)
+        .profile(profile)
+        .activities(activities)
+        .build();
+  }
+
   public User updateSocialAccount(final SocialAccount socialAccount) {
     return User.builder()
+        .id(this.id)
         .socialAccount(socialAccount)
         .profile(this.profile)
         .activities(this.activities)

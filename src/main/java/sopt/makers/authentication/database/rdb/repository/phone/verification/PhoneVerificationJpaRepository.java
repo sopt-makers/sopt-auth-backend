@@ -1,6 +1,6 @@
-package sopt.makers.authentication.database.rdb.repository.auth;
+package sopt.makers.authentication.database.rdb.repository.phone.verification;
 
-import sopt.makers.authentication.database.rdb.entity.auth.PhoneVerificationEntity;
+import sopt.makers.authentication.database.rdb.entity.PhoneVerificationEntity;
 import sopt.makers.authentication.domain.auth.PhoneVerificationType;
 
 import java.util.Optional;

@@ -1,17 +1,16 @@
-package sopt.makers.authentication.database;
+package sopt.makers.authentication.database.rdb.repository.phone.verification;
 
-import sopt.makers.authentication.database.rdb.entity.auth.PhoneVerificationEntity;
-import sopt.makers.authentication.database.rdb.repository.auth.PhoneVerificationRegister;
-import sopt.makers.authentication.database.rdb.repository.auth.PhoneVerificationRemover;
-import sopt.makers.authentication.database.rdb.repository.auth.PhoneVerificationRetriever;
+import sopt.makers.authentication.database.rdb.entity.PhoneVerificationEntity;
 import sopt.makers.authentication.domain.auth.PhoneVerification;
 import sopt.makers.authentication.usecase.auth.port.out.PhoneVerificationRepository;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 
 @Repository
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class PhoneVerificationRepositoryImpl implements PhoneVerificationRepository {
 
@@ -19,6 +18,7 @@ public class PhoneVerificationRepositoryImpl implements PhoneVerificationReposit
   private final PhoneVerificationRetriever retriever;
   private final PhoneVerificationRemover remover;
 
+  @Transactional
   @Override
   public PhoneVerification create(PhoneVerification phoneVerification) {
     PhoneVerificationEntity createdEntity = register.register(phoneVerification);
@@ -31,6 +31,7 @@ public class PhoneVerificationRepositoryImpl implements PhoneVerificationReposit
     return phoneVerificationEntity.toDomain();
   }
 
+  @Transactional
   @Override
   public void deletedByPhoneVerification(PhoneVerification phoneVerification) {
     remover.remove(phoneVerification);

@@ -1,17 +1,17 @@
-package sopt.makers.authentication.database;
+package sopt.makers.authentication.database.rdb.repository.user;
 
-import sopt.makers.authentication.database.rdb.entity.*;
-import sopt.makers.authentication.database.rdb.repository.UserRegister;
-import sopt.makers.authentication.database.rdb.repository.UserRetriever;
+import sopt.makers.authentication.database.rdb.entity.UserEntity;
 import sopt.makers.authentication.domain.auth.SocialAccount;
 import sopt.makers.authentication.domain.user.User;
 import sopt.makers.authentication.usecase.auth.port.out.UserRepository;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.*;
 
 import lombok.RequiredArgsConstructor;
 
 @Repository
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class UserRepositoryImpl implements UserRepository {
   private final UserRetriever userRetriever;
@@ -22,11 +22,7 @@ public class UserRepositoryImpl implements UserRepository {
     return userRetriever.findBySocialAccount(socialAccount);
   }
 
-  @Override
-  public Long findIdByUser(User user) {
-    return userRetriever.findIdByUser(user);
-  }
-
+  @Transactional
   @Override
   public void save(User user) {
     UserEntity userEntity = UserEntity.fromDomain(user);
@@ -38,12 +34,11 @@ public class UserRepositoryImpl implements UserRepository {
     return userRetriever.findByPhone(phone);
   }
 
+  @Transactional
   @Override
-  public User update(Long id, User user, SocialAccount socialAccount) {
-    user.updateSocialAccount(socialAccount);
-    UserEntity userEntity = UserEntity.fromDomain(user);
-    userEntity.setId(id);
-    UserEntity updatedUserEntity = userRegister.save(userEntity);
-    return updatedUserEntity.toDomain();
+  public void update(User user, SocialAccount socialAccount) {
+    User updatedUser = user.updateSocialAccount(socialAccount);
+    UserEntity userEntity = UserEntity.fromDomain(updatedUser);
+    userRegister.save(userEntity);
   }
 }

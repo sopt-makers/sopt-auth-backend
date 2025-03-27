@@ -19,11 +19,10 @@ public class UpdateSocialAccountService implements UpdateSocialAccountUsecase {
   @Override
   public boolean update(UpdateSocialAccountCommand command) {
     User user = userRepository.findByPhone(command.phone());
-    Long userId = userRepository.findIdByUser(user);
     String authPlatformId =
         oAuthAuthenticator.getIdentifier(command.token(), command.authPlatform());
     SocialAccount updatedSocialAccount = SocialAccount.of(authPlatformId, command.authPlatform());
-    userRepository.update(userId, user, updatedSocialAccount);
+    userRepository.update(user, updatedSocialAccount);
     return true;
   }
 }
