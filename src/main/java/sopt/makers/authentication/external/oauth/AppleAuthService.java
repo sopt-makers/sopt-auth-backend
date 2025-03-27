@@ -40,8 +40,7 @@ public class AppleAuthService implements OAuthService {
       JWK targetJwk = findMatchJWK(signedJWT);
 
       verifyAppleIdTokenJwt(signedJWT, targetJwk);
-      String identifier = signedJWT.getJWTClaimsSet().getSubject();
-      return identifier;
+      return signedJWT.getJWTClaimsSet().getSubject();
     } catch (ParseException e) {
       throw new TokenException(TokenFailure.TOKEN_PARSE_FAILED);
     }
