@@ -5,7 +5,7 @@ import sopt.makers.authentication.domain.user.UserRegisterInfo;
 import sopt.makers.authentication.usecase.user.port.out.UserRegisterInfoRepository;
 
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.*;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 
