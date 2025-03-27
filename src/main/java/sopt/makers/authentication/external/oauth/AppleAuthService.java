@@ -1,6 +1,5 @@
 package sopt.makers.authentication.external.oauth;
 
-import static sopt.makers.authentication.support.code.external.failure.ClientError.*;
 import static sopt.makers.authentication.support.constant.OAuthConstant.APPLE_ISSUER;
 
 import sopt.makers.authentication.external.oauth.client.AppleAuthClient;
@@ -8,7 +7,6 @@ import sopt.makers.authentication.support.code.domain.failure.AuthFailure;
 import sopt.makers.authentication.support.code.support.failure.TokenFailure;
 import sopt.makers.authentication.support.exception.domain.AuthException;
 import sopt.makers.authentication.support.exception.support.TokenException;
-import sopt.makers.authentication.support.util.*;
 import sopt.makers.authentication.support.value.AppleOAuthProperty;
 
 import java.text.ParseException;
@@ -19,7 +17,7 @@ import org.springframework.stereotype.Component;
 
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWSVerifier;
-import com.nimbusds.jose.crypto.ECDSAVerifier;
+import com.nimbusds.jose.crypto.RSASSAVerifier;
 import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jwt.JWTClaimsSet;
@@ -61,7 +59,7 @@ public class AppleAuthService implements OAuthService {
   private void verifyAppleIdTokenJwt(final SignedJWT jwt, JWK jwk) throws ParseException {
     try {
       JWTClaimsSet jwtClaimsSet = jwt.getJWTClaimsSet();
-      JWSVerifier verifier = new ECDSAVerifier(jwk.toECKey());
+      JWSVerifier verifier = new RSASSAVerifier(jwk.toRSAKey());
 
       boolean isVerifiedSignature = jwt.verify(verifier);
       boolean isCorrectIssuer = jwtClaimsSet.getIssuer().equals(APPLE_ISSUER);
