@@ -46,10 +46,10 @@ public class GoogleAuthService implements OAuthService {
 
   private JWK findMatchJWK(final SignedJWT jwt) {
     JWKSet loadedJWKSet = googleAuthClient.getPublicKeySet();
-    String keyID = jwt.getHeader().getKeyID();
+    String kid = jwt.getHeader().getKeyID();
 
     return loadedJWKSet.getKeys().stream()
-        .filter(jwk -> jwk.getKeyID().equals(keyID))
+        .filter(jwk -> jwk.getKeyID().equals(kid))
         .findFirst()
         .orElseThrow(() -> new AuthException(AuthFailure.NOT_FOUND_AVAILABLE_PUBLIC_KEY_SET));
   }
