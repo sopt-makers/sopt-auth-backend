@@ -17,7 +17,6 @@ external:
   oauth:
     apple:
       aud: ${APPLE_AUD}
-      sub: ${APPLE_SUB}
       key:
         id: ${APPLE_KEY_ID}
         path: ${APPLE_KEY_PATH}
