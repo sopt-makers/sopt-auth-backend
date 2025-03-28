@@ -12,8 +12,6 @@ import java.time.LocalDate;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
-import org.hibernate.annotations.ColumnDefault;
-
 import lombok.NoArgsConstructor;
 
 @Entity
@@ -37,10 +35,6 @@ public class UserEntity extends BaseEntity {
   @NotNull
   @Enumerated(EnumType.STRING)
   AuthPlatform authPlatformType;
-
-  @NotNull
-  @ColumnDefault(value = "false")
-  Boolean isActive;
 
   private UserEntity(
       String name,
