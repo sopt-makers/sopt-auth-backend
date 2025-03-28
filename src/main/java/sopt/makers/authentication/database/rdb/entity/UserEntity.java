@@ -9,7 +9,11 @@ import sopt.makers.authentication.domain.user.User;
 
 import java.time.LocalDate;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotNull;
 
 import org.hibernate.annotations.ColumnDefault;
@@ -38,7 +42,6 @@ public class UserEntity extends BaseEntity {
   @Enumerated(EnumType.STRING)
   AuthPlatform authPlatformType;
 
-  @NotNull
   @ColumnDefault(value = "false")
   Boolean isActive;
 
