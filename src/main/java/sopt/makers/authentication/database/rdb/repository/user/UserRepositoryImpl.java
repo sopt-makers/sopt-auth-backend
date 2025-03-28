@@ -6,7 +6,7 @@ import sopt.makers.authentication.domain.user.User;
 import sopt.makers.authentication.usecase.auth.port.out.UserRepository;
 
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.*;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 
@@ -24,9 +24,10 @@ public class UserRepositoryImpl implements UserRepository {
 
   @Transactional
   @Override
-  public void save(User user) {
+  public User save(User user) {
     UserEntity userEntity = UserEntity.fromDomain(user);
     userRegister.save(userEntity);
+    return userEntity.toDomain();
   }
 
   @Override
