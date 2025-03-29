@@ -33,7 +33,7 @@ public class SignUpService implements SignUpUsecase {
         oAuthAuthenticator.getIdentifier(command.token(), command.authPlatform());
     UserRegisterInfo registerInfo = userRegisterInfoRepository.findByPhone(command.phone());
 
-    SocialAccount socialAccount = createSocialAccount("1234", command.authPlatform());
+    SocialAccount socialAccount = createSocialAccount(authPlatformId, command.authPlatform());
     Profile profile = createProfile(registerInfo);
     Activity activity = createActivity(registerInfo);
     User newUser = User.createNewUser(socialAccount, profile);
