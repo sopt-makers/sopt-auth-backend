@@ -8,10 +8,7 @@ import static org.mockito.Mockito.verify;
 import sopt.makers.authentication.domain.auth.AuthPlatform;
 import sopt.makers.authentication.domain.auth.SocialAccount;
 import sopt.makers.authentication.domain.user.Activity;
-import sopt.makers.authentication.domain.user.Part;
 import sopt.makers.authentication.domain.user.Profile;
-import sopt.makers.authentication.domain.user.Role;
-import sopt.makers.authentication.domain.user.Team;
 import sopt.makers.authentication.domain.user.User;
 import sopt.makers.authentication.domain.user.UserRegisterInfo;
 import sopt.makers.authentication.usecase.auth.port.in.SignUpUsecase.SignUpCommand;
@@ -49,12 +46,13 @@ class SignUpServiceTest {
   private final String TEST_PHONE = "01012345678";
   private final Long TEST_USER_ID = 42L;
 
+  private final int ACTIVITY_GENERATION = 35;
+
   @BeforeEach
   void setUpMocks() {
     SocialAccount socialAccount = SocialAccount.of("oauth-123", AuthPlatform.GOOGLE);
     Profile profile = Profile.of("테스터", "tester@sopt.org", TEST_PHONE, LocalDate.of(2000, 1, 1));
     User mockedUser = User.createNewUser(socialAccount, profile);
-    Activity mockedActivity = Activity.of(1, Team.MAKERS, Part.SERVER, Role.MEMBER);
 
     ReflectionTestUtils.setField(mockedUser, "id", TEST_USER_ID);
 
@@ -62,6 +60,7 @@ class SignUpServiceTest {
         .willReturn("oauth-123");
     given(userRegisterInfoRepository.findByPhone(TEST_PHONE)).willReturn(userRegisterInfo);
     given(userRepository.save(any(User.class))).willReturn(mockedUser);
+    given(userRegisterInfo.getGeneration()).willReturn(ACTIVITY_GENERATION);
   }
 
   @Test
@@ -83,6 +82,6 @@ class SignUpServiceTest {
     Activity capturedActivity = activityCaptor.getValue();
 
     assertThat(capturedUser.getId()).isEqualTo(TEST_USER_ID);
-    assertThat(capturedActivity).isNotNull();
+    assertThat(capturedActivity.generation()).isEqualTo(ACTIVITY_GENERATION);
   }
 }
