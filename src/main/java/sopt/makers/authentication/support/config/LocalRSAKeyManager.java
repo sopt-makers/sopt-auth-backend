@@ -6,7 +6,7 @@ import static sopt.makers.authentication.support.code.support.failure.ResourceFa
 
 import sopt.makers.authentication.support.exception.support.ResourceException;
 import sopt.makers.authentication.support.jwt.RSAKeyManager;
-import sopt.makers.authentication.support.value.JwtProperty;
+import sopt.makers.authentication.support.value.SecurityProperty;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -30,12 +30,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Component
-@EnableConfigurationProperties(JwtProperty.class)
+@EnableConfigurationProperties(SecurityProperty.class)
 @RequiredArgsConstructor
 @Slf4j
 public class LocalRSAKeyManager implements RSAKeyManager {
 
-  private final JwtProperty jwtProperty;
+  private final SecurityProperty jwtProperty;
   private final ResourceLoader resourceLoader;
 
   @Override

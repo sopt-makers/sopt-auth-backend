@@ -5,15 +5,12 @@ spring:
     import:
       - classpath:jpa.yaml
       - classpath:external.yaml
-      - classpath:jwt.yaml
+      - classpath:security.yaml
   datasource:
     url: ${DB_URL}
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
     driver-class-name: ${DB_DRIVER_CLASS}
-
-security:
-  x-api-key: ${X_API_KEY}
 
 management:
   endpoints:

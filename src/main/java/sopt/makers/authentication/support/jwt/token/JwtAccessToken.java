@@ -9,7 +9,7 @@ import static sopt.makers.authentication.support.code.support.failure.TokenFailu
 import sopt.makers.authentication.support.exception.support.ResourceException;
 import sopt.makers.authentication.support.exception.support.TokenException;
 import sopt.makers.authentication.support.security.authentication.CustomAuthentication;
-import sopt.makers.authentication.support.value.JwtProperty;
+import sopt.makers.authentication.support.value.SecurityProperty;
 
 import java.time.Instant;
 import java.util.List;
@@ -42,7 +42,7 @@ public class JwtAccessToken {
     return new CustomAuthentication(jwt.getSubject(), authorities);
   }
 
-  public void validate(JwtProperty jwtProperty) {
+  public void validate(SecurityProperty jwtProperty) {
     validateExpiration();
     validateIssuer(jwtProperty);
     validateSubject();
@@ -62,7 +62,7 @@ public class JwtAccessToken {
     }
   }
 
-  private void validateIssuer(JwtProperty jwtProperty) {
+  private void validateIssuer(SecurityProperty jwtProperty) {
     String issuerFromJwt = jwt.getClaim(ISS);
     boolean unsupportedIssuer = !issuerFromJwt.equals(jwtProperty.secret().issuer().issuerName());
 

@@ -6,7 +6,7 @@ import static sopt.makers.authentication.support.jwt.provider.JwtTokenUtil.extra
 import sopt.makers.authentication.support.jwt.JwtProvider;
 import sopt.makers.authentication.support.jwt.token.JwtAccessToken;
 import sopt.makers.authentication.support.security.authentication.CustomAuthentication;
-import sopt.makers.authentication.support.value.JwtProperty;
+import sopt.makers.authentication.support.value.SecurityProperty;
 
 import java.time.Instant;
 import java.util.List;
@@ -28,7 +28,7 @@ public class JwtAuthAccessTokenProvider implements JwtProvider<CustomAuthenticat
 
   private final JwtEncoder jwtEncoder;
   private final JwtDecoder jwtDecoder;
-  private final JwtProperty jwtProperty;
+  private final SecurityProperty jwtProperty;
 
   @Override
   public String generate(CustomAuthentication authentication) {

@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationPropertiesScan(basePackages = {"sopt.makers.authentication.support.value"})
 @EnableConfigurationProperties({
   GabiaProperty.class,
-  JwtProperty.class,
+  SecurityProperty.class,
   AppleOAuthProperty.class,
   GoogleOAuthProperty.class
 })

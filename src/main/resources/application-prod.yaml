@@ -5,7 +5,7 @@ spring:
     import:
       - classpath:jpa.yaml
       - classpath:external.yaml
-      - classpath:jwt.yaml
+      - classpath:security.yaml
   datasource:
     url: ${DB_URL}
     username: ${DB_USERNAME}

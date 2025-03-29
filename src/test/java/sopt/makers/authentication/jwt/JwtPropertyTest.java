@@ -2,7 +2,7 @@ package sopt.makers.authentication.jwt;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import sopt.makers.authentication.support.value.JwtProperty;
+import sopt.makers.authentication.support.value.SecurityProperty;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,7 +16,7 @@ import org.springframework.test.context.TestPropertySource;
 @TestPropertySource(locations = {"classpath:env/test.env"})
 public class JwtPropertyTest {
 
-  @Autowired private JwtProperty jwtProperty;
+  @Autowired private SecurityProperty jwtProperty;
 
   @Test
   @DisplayName("JwtProperty 값 확인")

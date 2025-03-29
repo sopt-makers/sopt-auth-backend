@@ -5,8 +5,8 @@ import static sopt.makers.authentication.support.jwt.provider.JwtTokenUtil.extra
 
 import sopt.makers.authentication.support.jwt.JwtProvider;
 import sopt.makers.authentication.support.jwt.token.JwtRefreshToken;
-import sopt.makers.authentication.support.value.JwtProperty.Secret.Expiration;
-import sopt.makers.authentication.support.value.JwtProperty.Secret.Issuer;
+import sopt.makers.authentication.support.value.SecurityProperty.Secret.Expiration;
+import sopt.makers.authentication.support.value.SecurityProperty.Secret.Issuer;
 
 import java.time.Instant;
 import java.util.UUID;

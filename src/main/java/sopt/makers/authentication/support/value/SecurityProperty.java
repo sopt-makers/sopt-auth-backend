@@ -3,7 +3,7 @@ package sopt.makers.authentication.support.value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties(prefix = "jwt")
-public record JwtProperty(Secret secret) {
+public record SecurityProperty(Secret secret) {
 
   @ConfigurationProperties(prefix = "jwt.secret")
   public record Secret(Rsa rsa, Expiration expiration, Issuer issuer) {

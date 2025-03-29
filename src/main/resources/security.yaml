@@ -1,0 +1,22 @@
+spring.config.activate.on-profile:
+  - prod
+  - dev
+  - local
+  - test
+
+security:
+  api:
+    key: ${X_API_KEY}
+    secured-endpoints:
+      - ${GET_PUBLIC_KEY}
+
+  jwt:
+    secret:
+      rsa:
+        public-key: ${RSA_PUBLIC_KEY_PATH}
+        private-key: ${RSA_PRIVATE_KEY_PATH}
+      expiration:
+        access-token-expiration: ${ACCESS_TOKEN_EXPIRATION_TIME}
+        refresh-token-expiration: ${REFRESH_TOKEN_EXPIRATION_TIME}
+      issuer:
+        issuer-name: ${ISSUER}
