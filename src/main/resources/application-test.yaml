@@ -12,6 +12,9 @@ spring:
     password:
     driver-class-name: ${DB_DRIVER_CLASS}
 
+security:
+  x-api-key: ${X_API_KEY}
+
 management:
   endpoints:
     web:
