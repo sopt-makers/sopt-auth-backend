@@ -11,7 +11,6 @@ import org.springframework.context.annotation.Configuration;
 @EnableConfigurationProperties({
   GabiaProperty.class,
   JwtProperty.class,
-  MakersProperty.class,
   AppleOAuthProperty.class,
   GoogleOAuthProperty.class
 })
