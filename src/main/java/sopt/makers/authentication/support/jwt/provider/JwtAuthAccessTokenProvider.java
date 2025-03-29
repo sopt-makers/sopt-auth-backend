@@ -28,15 +28,16 @@ public class JwtAuthAccessTokenProvider implements JwtProvider<CustomAuthenticat
 
   private final JwtEncoder jwtEncoder;
   private final JwtDecoder jwtDecoder;
-  private final SecurityProperty jwtProperty;
+  private final SecurityProperty securityProperty;
 
   @Override
   public String generate(CustomAuthentication authentication) {
 
     String subject = authentication.getPrincipal().toString();
-    String issuer = jwtProperty.secret().issuer().issuerName();
+    String issuer = securityProperty.jwt().secret().issuer().issuerName();
     Instant now = Instant.now();
-    Instant expiration = now.plusSeconds(jwtProperty.secret().expiration().accessTokenExpiration());
+    Instant expiration =
+        now.plusSeconds(securityProperty.jwt().secret().expiration().accessTokenExpiration());
     List<String> roles =
         authentication.getAuthorities().stream()
             .map(GrantedAuthority::getAuthority)
@@ -47,7 +48,7 @@ public class JwtAuthAccessTokenProvider implements JwtProvider<CustomAuthenticat
         JwtAccessToken.createJwtAccessToken(
             jwtEncoder.encode(JwtEncoderParameters.from(claimsSet)));
 
-    jwtAccessToken.validate(jwtProperty);
+    jwtAccessToken.validate(securityProperty);
     return addPrefix(jwtAccessToken.getToken());
   }
 

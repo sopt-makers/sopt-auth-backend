@@ -35,7 +35,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class LocalRSAKeyManager implements RSAKeyManager {
 
-  private final SecurityProperty jwtProperty;
+  private final SecurityProperty securityProperty;
   private final ResourceLoader resourceLoader;
 
   @Override
@@ -69,7 +69,7 @@ public class LocalRSAKeyManager implements RSAKeyManager {
   }
 
   private Resource loadPublicKeyResource() {
-    return resourceLoader.getResource(jwtProperty.secret().rsa().publicKey());
+    return resourceLoader.getResource(securityProperty.jwt().secret().rsa().publicKey());
   }
 
   private PemObject readPublicPemFile(final Resource resource) throws IOException {
@@ -88,7 +88,7 @@ public class LocalRSAKeyManager implements RSAKeyManager {
   }
 
   private Resource loadPrivateKeyResource() {
-    return resourceLoader.getResource(jwtProperty.secret().rsa().privateKey());
+    return resourceLoader.getResource(securityProperty.jwt().secret().rsa().privateKey());
   }
 
   private PemObject readPrivatePemFile(final Resource resource) throws IOException {

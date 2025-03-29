@@ -1,20 +1,29 @@
 package sopt.makers.authentication.support.value;
 
+import java.util.*;
+
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-@ConfigurationProperties(prefix = "jwt")
-public record SecurityProperty(Secret secret) {
+@ConfigurationProperties(prefix = "security")
+public record SecurityProperty(Api api, Jwt jwt) {
 
-  @ConfigurationProperties(prefix = "jwt.secret")
-  public record Secret(Rsa rsa, Expiration expiration, Issuer issuer) {
+  @ConfigurationProperties(prefix = "security.api")
+  public record Api(String key, List<String> securedEndpoints) {}
 
-    @ConfigurationProperties(prefix = "jwt.secret.rsa")
-    public record Rsa(String publicKey, String privateKey) {}
+  @ConfigurationProperties(prefix = "security.jwt")
+  public record Jwt(Secret secret) {
 
-    @ConfigurationProperties(prefix = "jwt.secret.expiration")
-    public record Expiration(long accessTokenExpiration, long refreshTokenExpiration) {}
+    @ConfigurationProperties(prefix = "security.jwt.secret")
+    public record Secret(Rsa rsa, Expiration expiration, Issuer issuer) {
 
-    @ConfigurationProperties(prefix = "jwt.secret.issuer")
-    public record Issuer(String issuerName) {}
+      @ConfigurationProperties(prefix = "security.jwt.secret.rsa")
+      public record Rsa(String publicKey, String privateKey) {}
+
+      @ConfigurationProperties(prefix = "security.jwt.secret.expiration")
+      public record Expiration(long accessTokenExpiration, long refreshTokenExpiration) {}
+
+      @ConfigurationProperties(prefix = "security.jwt.secret.issuer")
+      public record Issuer(String issuerName) {}
+    }
   }
 }

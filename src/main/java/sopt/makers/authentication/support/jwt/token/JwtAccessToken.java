@@ -62,9 +62,10 @@ public class JwtAccessToken {
     }
   }
 
-  private void validateIssuer(SecurityProperty jwtProperty) {
+  private void validateIssuer(SecurityProperty securityProperty) {
     String issuerFromJwt = jwt.getClaim(ISS);
-    boolean unsupportedIssuer = !issuerFromJwt.equals(jwtProperty.secret().issuer().issuerName());
+    boolean unsupportedIssuer =
+        !issuerFromJwt.equals(securityProperty.jwt().secret().issuer().issuerName());
 
     if (unsupportedIssuer) {
       throw new TokenException(UNSUPPORTED_ISSUER);

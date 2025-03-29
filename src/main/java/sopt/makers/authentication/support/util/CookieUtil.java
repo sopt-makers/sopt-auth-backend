@@ -16,11 +16,11 @@ import lombok.RequiredArgsConstructor;
 @Configuration
 @RequiredArgsConstructor
 public class CookieUtil {
-  private final SecurityProperty jwtProperty;
+  private final SecurityProperty securityProperty;
   private static final String SAME_SITE_NONE = "None";
 
   public HttpHeaders setRefreshToken(String refreshToken) {
-    long durationMillis = jwtProperty.secret().expiration().refreshTokenExpiration();
+    long durationMillis = securityProperty.jwt().secret().expiration().refreshTokenExpiration();
     Duration duration = Duration.ofMillis(durationMillis);
     ResponseCookie cookie =
         ResponseCookie.from(REFRESH_TOKEN_HEADER, refreshToken)
