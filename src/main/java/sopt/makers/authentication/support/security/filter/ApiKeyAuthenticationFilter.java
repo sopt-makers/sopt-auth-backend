@@ -1,32 +1,49 @@
 package sopt.makers.authentication.support.security.filter;
 
-import java.io.*;
+import static sopt.makers.authentication.support.code.support.failure.CommonFailure.INVALID_API_KEY;
+import static sopt.makers.authentication.support.util.ResponseUtil.generateErrorResponse;
 
-import jakarta.servlet.*;
-import jakarta.servlet.http.*;
+import sopt.makers.authentication.support.exception.support.FilterException;
+import sopt.makers.authentication.support.value.SecurityProperty;
 
-import org.springframework.web.filter.*;
+import java.io.IOException;
+import java.util.List;
 
-// public class ApiKeyAuthenticationFilter extends OncePerRequestFilter {
-//
-//  private static final String API_KEY_HEADER = "x-api-key";
-//
-//  @Override
-//  protected void doFilterInternal(
-//      HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-//      throws ServletException, IOException {
-//    String requestUri = request.getRequestURI();
-//
-//    // API Key 검증이 필요한 엔드포인트인지 확인
-//    if (requestUri.startsWith("/api/public-key")) {
-//      String apiKey = request.getHeader(API_KEY_HEADER);
-//
-//      if (apiKey == null || !apiKey.equals(validApiKey)) {
-//        response.sendError(HttpServletResponse.SC_FORBIDDEN, "Invalid API Key");
-//        return;
-//      }
-//    }
-//
-//    filterChain.doFilter(request, response);
-//  }
-// }
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
+import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
+
+import lombok.RequiredArgsConstructor;
+
+@Component
+@RequiredArgsConstructor
+public class ApiKeyAuthenticationFilter extends OncePerRequestFilter {
+  private static final String API_KEY_HEADER = "x-api-key";
+  private final SecurityProperty securityProperty;
+
+  @Override
+  protected void doFilterInternal(
+      HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+      throws ServletException, IOException {
+    String requestUri = request.getRequestURI();
+    List<String> securedEndpoints = securityProperty.api().securedEndpoints();
+
+    for (String endpoint : securedEndpoints) {
+      if (requestUri.startsWith(endpoint)) {
+        String apiKey = request.getHeader(API_KEY_HEADER);
+        boolean isApiKeyInvalid = apiKey == null || !apiKey.equals(securityProperty.api().key());
+
+        if (isApiKeyInvalid) {
+          generateErrorResponse(response, new FilterException(INVALID_API_KEY));
+          return;
+        }
+        break;
+      }
+    }
+    filterChain.doFilter(request, response);
+  }
+}
