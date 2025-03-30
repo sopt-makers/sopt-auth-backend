@@ -4,6 +4,7 @@ import static sopt.makers.authentication.support.code.support.failure.CommonFail
 import static sopt.makers.authentication.support.util.ResponseUtil.generateErrorResponse;
 
 import sopt.makers.authentication.support.exception.support.FilterException;
+import sopt.makers.authentication.support.security.authentication.ApiKeyAuthentication;
 import sopt.makers.authentication.support.value.SecurityProperty;
 
 import java.io.IOException;
@@ -14,6 +15,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -23,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ApiKeyAuthenticationFilter extends OncePerRequestFilter {
   private static final String API_KEY_HEADER = "x-api-key";
+  private static final String PRODUCT = "product";
   private final SecurityProperty securityProperty;
 
   @Override
@@ -35,12 +38,15 @@ public class ApiKeyAuthenticationFilter extends OncePerRequestFilter {
     for (String endpoint : securedEndpoints) {
       if (requestUri.startsWith(endpoint)) {
         String apiKey = request.getHeader(API_KEY_HEADER);
+        String product = request.getHeader(PRODUCT);
         boolean isApiKeyInvalid = apiKey == null || !apiKey.equals(securityProperty.api().key());
 
         if (isApiKeyInvalid) {
           generateErrorResponse(response, new FilterException(INVALID_API_KEY));
           return;
         }
+        SecurityContextHolder.getContext()
+            .setAuthentication(new ApiKeyAuthentication(apiKey, product));
         break;
       }
     }
