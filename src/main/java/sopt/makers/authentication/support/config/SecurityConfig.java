@@ -5,6 +5,7 @@ import static sopt.makers.authentication.support.constant.SystemConstant.PATTERN
 import static sopt.makers.authentication.support.constant.SystemConstant.PATTERN_ERROR_PATH;
 import static sopt.makers.authentication.support.constant.SystemConstant.PATTERN_TEST;
 
+import sopt.makers.authentication.support.security.filter.ApiKeyAuthenticationFilter;
 import sopt.makers.authentication.support.security.filter.JwtAuthenticationFilter;
 import sopt.makers.authentication.support.security.filter.JwtExceptionFilter;
 
@@ -30,6 +31,7 @@ public class SecurityConfig {
 
   private static final String ALL = "*";
 
+  private final ApiKeyAuthenticationFilter apiKeyAuthenticationFilter;
   private final JwtAuthenticationFilter jwtAuthenticationFilter;
   private final JwtExceptionFilter jwtExceptionFilter;
 
@@ -73,6 +75,7 @@ public class SecurityConfig {
         .cors(AbstractHttpConfigurer::disable)
         .sessionManagement(
             configurer -> configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        .addFilterBefore(apiKeyAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
         .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
         .addFilterBefore(jwtExceptionFilter, JwtAuthenticationFilter.class);
   }
