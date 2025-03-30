@@ -9,7 +9,7 @@ public interface UserRepository {
 
   User findByPhone(String phone);
 
-  void save(User user);
+  User save(User user);
 
   void update(User user, SocialAccount socialAccount);
 }

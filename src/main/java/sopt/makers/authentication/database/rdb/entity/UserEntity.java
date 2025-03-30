@@ -16,8 +16,6 @@ import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotNull;
 
-import org.hibernate.annotations.ColumnDefault;
-
 import lombok.NoArgsConstructor;
 
 @Entity
@@ -41,9 +39,6 @@ public class UserEntity extends BaseEntity {
   @NotNull
   @Enumerated(EnumType.STRING)
   AuthPlatform authPlatformType;
-
-  @ColumnDefault(value = "false")
-  Boolean isActive;
 
   private UserEntity(
       String name,
