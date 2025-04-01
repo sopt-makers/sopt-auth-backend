@@ -1,6 +1,6 @@
 package sopt.makers.authentication.support.value;
 
-import java.util.*;
+import java.util.List;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
