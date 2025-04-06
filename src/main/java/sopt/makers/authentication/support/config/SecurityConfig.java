@@ -6,8 +6,8 @@ import static sopt.makers.authentication.support.constant.SystemConstant.PATTERN
 import static sopt.makers.authentication.support.constant.SystemConstant.PATTERN_TEST;
 
 import sopt.makers.authentication.support.security.filter.ApiKeyAuthenticationFilter;
+import sopt.makers.authentication.support.security.filter.AuthenticationExceptionFilter;
 import sopt.makers.authentication.support.security.filter.JwtAuthenticationFilter;
-import sopt.makers.authentication.support.security.filter.JwtExceptionFilter;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -33,7 +33,7 @@ public class SecurityConfig {
 
   private final ApiKeyAuthenticationFilter apiKeyAuthenticationFilter;
   private final JwtAuthenticationFilter jwtAuthenticationFilter;
-  private final JwtExceptionFilter jwtExceptionFilter;
+  private final AuthenticationExceptionFilter authenticationExceptionFilter;
 
   @Bean
   public static PasswordEncoder passwordEncoder() {
@@ -75,9 +75,9 @@ public class SecurityConfig {
         .cors(AbstractHttpConfigurer::disable)
         .sessionManagement(
             configurer -> configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        .addFilterBefore(authenticationExceptionFilter, ApiKeyAuthenticationFilter.class)
         .addFilterBefore(apiKeyAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-        .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-        .addFilterBefore(jwtExceptionFilter, JwtAuthenticationFilter.class);
+        .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
   }
 
   private void setSecuredHttp(HttpSecurity http) throws Exception {
