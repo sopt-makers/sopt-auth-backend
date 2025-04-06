@@ -28,9 +28,6 @@ import lombok.RequiredArgsConstructor;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-
-  private static final String ALL = "*";
-
   private final ApiKeyAuthenticationFilter apiKeyAuthenticationFilter;
   private final JwtAuthenticationFilter jwtAuthenticationFilter;
   private final AuthenticationExceptionFilter authenticationExceptionFilter;
@@ -75,9 +72,9 @@ public class SecurityConfig {
         .cors(AbstractHttpConfigurer::disable)
         .sessionManagement(
             configurer -> configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-        .addFilterBefore(authenticationExceptionFilter, ApiKeyAuthenticationFilter.class)
-        .addFilterBefore(apiKeyAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-        .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+        .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+        .addFilterBefore(apiKeyAuthenticationFilter, JwtAuthenticationFilter.class)
+        .addFilterBefore(authenticationExceptionFilter, ApiKeyAuthenticationFilter.class);
   }
 
   private void setSecuredHttp(HttpSecurity http) throws Exception {
