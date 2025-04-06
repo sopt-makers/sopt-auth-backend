@@ -35,22 +35,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       @NonNull final HttpServletResponse response,
       @NonNull final FilterChain filterChain)
       throws ServletException, IOException {
-    if (isApiKeyAuthenticationExists()) {
-      filterChain.doFilter(request, response);
-      return;
-    }
-
     String authorizationToken = getAuthorizationToken(request);
     CustomAuthentication authentication = authTokenProvider.parse(authorizationToken);
 
     authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
     SecurityContextHolder.getContext().setAuthentication(authentication);
     filterChain.doFilter(request, response);
-  }
-
-  private boolean isApiKeyAuthenticationExists() {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    return authentication instanceof ApiKeyAuthentication;
   }
 
   /**
@@ -65,7 +55,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
   @Override
   public boolean shouldNotFilter(HttpServletRequest request) {
-    return isWhiteRequest(request);
+    return isWhiteRequest(request) || isApiKeyAuthenticationExists();
+  }
+
+  private boolean isApiKeyAuthenticationExists() {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    return authentication instanceof ApiKeyAuthentication;
   }
 
   private boolean isWhiteRequest(final HttpServletRequest request) {
