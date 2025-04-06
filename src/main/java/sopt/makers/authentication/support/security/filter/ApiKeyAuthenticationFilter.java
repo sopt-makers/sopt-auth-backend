@@ -1,9 +1,8 @@
 package sopt.makers.authentication.support.security.filter;
 
-import static sopt.makers.authentication.support.code.support.failure.CommonFailure.INVALID_API_KEY;
-import static sopt.makers.authentication.support.util.ResponseUtil.generateErrorResponse;
+import static sopt.makers.authentication.support.code.domain.failure.AuthFailure.INVALID_API_KEY;
 
-import sopt.makers.authentication.support.exception.support.FilterException;
+import sopt.makers.authentication.support.exception.domain.AuthException;
 import sopt.makers.authentication.support.security.authentication.ApiKeyAuthentication;
 import sopt.makers.authentication.support.value.SecurityProperty;
 
@@ -15,6 +14,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+import org.springframework.lang.NonNull;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -30,7 +30,9 @@ public class ApiKeyAuthenticationFilter extends OncePerRequestFilter {
 
   @Override
   protected void doFilterInternal(
-      HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+      @NonNull final HttpServletRequest request,
+      @NonNull final HttpServletResponse response,
+      @NonNull final FilterChain filterChain)
       throws ServletException, IOException {
     String requestUri = request.getRequestURI();
     List<String> securedEndpoints = securityProperty.api().securedEndpoints();
@@ -42,8 +44,7 @@ public class ApiKeyAuthenticationFilter extends OncePerRequestFilter {
         boolean isApiKeyInvalid = apiKey == null || !apiKey.equals(securityProperty.api().key());
 
         if (isApiKeyInvalid) {
-          generateErrorResponse(response, new FilterException(INVALID_API_KEY));
-          return;
+          throw new AuthException(INVALID_API_KEY);
         }
         SecurityContextHolder.getContext()
             .setAuthentication(new ApiKeyAuthentication(apiKey, product));
