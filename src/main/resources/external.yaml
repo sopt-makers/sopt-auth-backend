@@ -4,10 +4,6 @@ spring.config.activate.on-profile:
   - local
   - test
 external:
-  makers:
-    playground:
-      url: ${PLAYGROUND_URL}
-      token: ${PLAYGROUND_TOKEN}
   gabia:
     sms:
       id: ${GABIA_SMS_ID}
@@ -17,16 +13,6 @@ external:
   oauth:
     apple:
       aud: ${APPLE_AUD}
-      key:
-        id: ${APPLE_KEY_ID}
-        path: ${APPLE_KEY_PATH}
-      team:
-        id: ${APPLE_TEAM_ID}
-      expiration:
-        token-expiration: ${APPLE_TOKEN_EXPIRATION_TIME}
     google:
-      redirect:
-        url: ${GOOGLE_REDIRECT_URL}
       client:
         id: ${GOOGLE_CLIENT_ID}
-        secret: ${GOOGLE_CLIENT_SECRET}

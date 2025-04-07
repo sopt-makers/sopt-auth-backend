@@ -3,7 +3,7 @@ package sopt.makers.authentication.support.util;
 import static sopt.makers.authentication.support.constant.JwtConstant.REFRESH_TOKEN_HEADER;
 import static sopt.makers.authentication.support.constant.SystemConstant.PATTERN_ROOT_PATH;
 
-import sopt.makers.authentication.support.value.JwtProperty;
+import sopt.makers.authentication.support.value.SecurityProperty;
 
 import java.time.Duration;
 
@@ -16,11 +16,11 @@ import lombok.RequiredArgsConstructor;
 @Configuration
 @RequiredArgsConstructor
 public class CookieUtil {
-  private final JwtProperty jwtProperty;
+  private final SecurityProperty securityProperty;
   private static final String SAME_SITE_NONE = "None";
 
   public HttpHeaders setRefreshToken(String refreshToken) {
-    long durationMillis = jwtProperty.secret().expiration().refreshTokenExpiration();
+    long durationMillis = securityProperty.jwt().secret().expiration().refreshTokenExpiration();
     Duration duration = Duration.ofMillis(durationMillis);
     ResponseCookie cookie =
         ResponseCookie.from(REFRESH_TOKEN_HEADER, refreshToken)

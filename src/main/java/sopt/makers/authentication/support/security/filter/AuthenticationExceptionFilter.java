@@ -16,13 +16,13 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 @Component
-public class JwtExceptionFilter extends OncePerRequestFilter {
+public class AuthenticationExceptionFilter extends OncePerRequestFilter {
 
   @Override
   protected void doFilterInternal(
       @NonNull final HttpServletRequest request,
       @NonNull final HttpServletResponse response,
-      final FilterChain filterChain)
+      @NonNull final FilterChain filterChain)
       throws ServletException, IOException {
     try {
       filterChain.doFilter(request, response);

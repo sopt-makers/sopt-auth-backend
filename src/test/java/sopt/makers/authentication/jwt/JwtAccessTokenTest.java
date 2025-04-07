@@ -15,10 +15,12 @@ import java.text.ParseException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
-import org.springframework.test.context.*;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestPropertySource;
 
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWSVerifier;
@@ -32,10 +34,11 @@ import com.nimbusds.jwt.SignedJWT;
 @TestPropertySource(locations = {"classpath:env/test.env"})
 public class JwtAccessTokenTest {
   @Autowired private JwtAuthAccessTokenProvider jwtAuthAccessTokenProvider;
-
   @Autowired private JwtDecoder jwtDecoder;
-
   @Autowired private JwksRetrieveUsecase jwksRetrieveUsecase;
+
+  @Value("${security.jwt.secret.rsa.key-id}")
+  private String keyId;
 
   @Test
   @DisplayName("AccessToken 생성")
@@ -122,7 +125,7 @@ public class JwtAccessTokenTest {
 
     SignedJWT signedJWT = SignedJWT.parse(pureToken);
     JWKSet info = jwksRetrieveUsecase.retrievePublicKey();
-    RSAKey rsaKey = (RSAKey) info.getKeyByKeyId("makers-auth-1");
+    RSAKey rsaKey = (RSAKey) info.getKeyByKeyId(keyId);
     RSAPublicKey publicKey = rsaKey.toRSAPublicKey();
 
     // Act

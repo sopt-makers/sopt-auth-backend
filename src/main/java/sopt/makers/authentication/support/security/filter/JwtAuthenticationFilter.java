@@ -3,6 +3,7 @@ package sopt.makers.authentication.support.security.filter;
 import static sopt.makers.authentication.support.constant.SystemConstant.WHITELIST_WILDCARD;
 
 import sopt.makers.authentication.support.jwt.provider.JwtAuthAccessTokenProvider;
+import sopt.makers.authentication.support.security.authentication.ApiKeyAuthentication;
 import sopt.makers.authentication.support.security.authentication.CustomAuthentication;
 
 import java.io.IOException;
@@ -13,6 +14,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import org.springframework.http.HttpHeaders;
+import org.springframework.lang.NonNull;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
@@ -28,31 +31,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
   @Override
   protected void doFilterInternal(
-      final HttpServletRequest request, final HttpServletResponse response, FilterChain filterChain)
+      @NonNull final HttpServletRequest request,
+      @NonNull final HttpServletResponse response,
+      @NonNull final FilterChain filterChain)
       throws ServletException, IOException {
-
-    if (shouldNotFilter(request)) {
-      filterChain.doFilter(request, response);
-      return;
-    }
-
     String authorizationToken = getAuthorizationToken(request);
     CustomAuthentication authentication = authTokenProvider.parse(authorizationToken);
 
     authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
     SecurityContextHolder.getContext().setAuthentication(authentication);
-
     filterChain.doFilter(request, response);
-  }
-
-  @Override
-  public boolean shouldNotFilter(HttpServletRequest request) {
-    return isWhiteRequest(request) || isJwksRequest(request);
-  }
-
-  private boolean isWhiteRequest(final HttpServletRequest request) {
-    String uri = request.getRequestURI();
-    return WHITELIST_WILDCARD.stream().anyMatch(uri::startsWith);
   }
 
   /**
@@ -65,7 +53,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     return authorizationHeaderValue.trim();
   }
 
-  private static boolean isJwksRequest(HttpServletRequest request) {
-    return request.getRequestURI().equals("/.well-known/jwks.json");
+  @Override
+  public boolean shouldNotFilter(HttpServletRequest request) {
+    return isWhiteRequest(request) || isApiKeyAuthenticationExists();
+  }
+
+  private boolean isApiKeyAuthenticationExists() {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    return authentication instanceof ApiKeyAuthentication;
+  }
+
+  private boolean isWhiteRequest(final HttpServletRequest request) {
+    String uri = request.getRequestURI();
+    return WHITELIST_WILDCARD.stream().anyMatch(uri::startsWith);
   }
 }
