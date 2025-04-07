@@ -17,7 +17,7 @@ public record SecurityProperty(Api api, Jwt jwt) {
     public record Secret(Rsa rsa, Expiration expiration, Issuer issuer) {
 
       @ConfigurationProperties(prefix = "security.jwt.secret.rsa")
-      public record Rsa(String publicKey, String privateKey) {}
+      public record Rsa(String keyId, String publicKey, String privateKey) {}
 
       @ConfigurationProperties(prefix = "security.jwt.secret.expiration")
       public record Expiration(long accessTokenExpiration, long refreshTokenExpiration) {}

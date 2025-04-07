@@ -4,6 +4,7 @@ import static com.nimbusds.jose.JWSAlgorithm.RS512;
 import static com.nimbusds.jose.jwk.KeyUse.SIGNATURE;
 
 import sopt.makers.authentication.support.jwt.RSAKeyManager;
+import sopt.makers.authentication.support.value.*;
 import sopt.makers.authentication.usecase.auth.port.in.JwksRetrieveUsecase;
 
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 public class JwksRetrieveService implements JwksRetrieveUsecase {
 
   private final RSAKeyManager rsaKeyManager;
+  private final SecurityProperty securityProperty;
 
   public JWKSet retrievePublicKey() {
 
@@ -25,7 +27,7 @@ public class JwksRetrieveService implements JwksRetrieveUsecase {
         new RSAKey.Builder(rsaKeyManager.getPublicKey())
             .keyUse(SIGNATURE)
             .algorithm(RS512)
-            .keyID("makers-auth-1")
+            .keyID(securityProperty.jwt().secret().rsa().keyId())
             .build();
     return new JWKSet(jwk);
   }
