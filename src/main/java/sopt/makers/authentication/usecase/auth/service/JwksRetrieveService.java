@@ -4,7 +4,7 @@ import static com.nimbusds.jose.JWSAlgorithm.RS512;
 import static com.nimbusds.jose.jwk.KeyUse.SIGNATURE;
 
 import sopt.makers.authentication.support.jwt.RSAKeyManager;
-import sopt.makers.authentication.support.value.*;
+import sopt.makers.authentication.support.value.SecurityProperty;
 import sopt.makers.authentication.usecase.auth.port.in.JwksRetrieveUsecase;
 
 import org.springframework.stereotype.Service;
