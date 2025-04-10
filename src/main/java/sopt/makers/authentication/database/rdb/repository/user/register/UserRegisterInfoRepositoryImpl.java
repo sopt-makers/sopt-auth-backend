@@ -4,6 +4,8 @@ import sopt.makers.authentication.database.rdb.entity.UserRegisterInfoEntity;
 import sopt.makers.authentication.domain.user.UserRegisterInfo;
 import sopt.makers.authentication.usecase.user.port.out.UserRegisterInfoRepository;
 
+import java.util.*;
+
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,15 +20,15 @@ public class UserRegisterInfoRepositoryImpl implements UserRegisterInfoRepositor
   private final UserRegisterInfoRemover remover;
 
   @Override
-  public UserRegisterInfo findByPhone(String phone) {
-    UserRegisterInfoEntity targetRegisterInfo = retriever.findByPhone(phone);
-    return targetRegisterInfo.toDomain();
+  public Optional<UserRegisterInfo> findByPhone(String phone) {
+    return retriever.findByPhone(phone).map(UserRegisterInfoEntity::toDomain);
   }
 
   @Transactional
   @Override
   public void delete(UserRegisterInfo userRegisterInfo) {
-    UserRegisterInfoEntity registerInfoEntity = retriever.findByPhone(userRegisterInfo.getPhone());
-    remover.remove(registerInfoEntity);
+    Optional<UserRegisterInfoEntity> registerInfoEntity =
+        retriever.findByPhone(userRegisterInfo.getPhone());
+    registerInfoEntity.ifPresent(remover::remove);
   }
 }
