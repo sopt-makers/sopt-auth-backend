@@ -33,7 +33,7 @@ class PhoneVerificationRepositoryImplTest {
   void flushTestPhoneVerification() {
     PhoneVerification testVerification =
         PhoneVerification.of(null, "01012345678", PhoneVerificationType.REGISTER, "123456");
-    phoneVerificationRepository.deletedByPhoneVerification(testVerification);
+    phoneVerificationRepository.deleteByPhoneVerification(testVerification);
   }
 
   @Test

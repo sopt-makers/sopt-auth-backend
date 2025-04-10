@@ -33,7 +33,7 @@ public class PhoneVerificationRepositoryImpl implements PhoneVerificationReposit
 
   @Transactional
   @Override
-  public void deletedByPhoneVerification(PhoneVerification phoneVerification) {
+  public void deleteByPhoneVerification(PhoneVerification phoneVerification) {
     remover.remove(phoneVerification);
   }
 }
