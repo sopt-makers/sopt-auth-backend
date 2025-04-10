@@ -32,4 +32,8 @@ public class UserRetriever {
         userJpaRepository.findByPhone(phone).orElseThrow(() -> new UserException(NOT_FOUND_PHONE));
     return userEntity.toDomain();
   }
+
+  public boolean existsByPhone(String phone) {
+    return userJpaRepository.existsByPhone(phone);
+  }
 }
