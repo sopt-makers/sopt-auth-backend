@@ -20,6 +20,7 @@ import sopt.makers.authentication.usecase.message.port.out.MessageSendPort;
 import sopt.makers.authentication.usecase.user.port.out.UserRegisterInfoRepository;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -57,7 +58,8 @@ class CreateVerificationServiceTest {
     when(mockedUserRegisterInfo.getPhone()).thenReturn("01087654321");
 
     when(userRepository.findByPhone(anyString())).thenReturn(mockedUser);
-    when(userRegisterInfoRepository.findByPhone(anyString())).thenReturn(mockedUserRegisterInfo);
+    when(userRegisterInfoRepository.findByPhone(anyString()))
+        .thenReturn(Optional.of(mockedUserRegisterInfo));
     doNothing().when(sendPort).sendMessage(isA(Message.class));
 
     usecase =
