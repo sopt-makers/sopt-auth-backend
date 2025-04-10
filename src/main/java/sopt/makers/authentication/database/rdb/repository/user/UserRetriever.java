@@ -1,7 +1,7 @@
 package sopt.makers.authentication.database.rdb.repository.user;
 
 import static sopt.makers.authentication.support.code.domain.failure.AuthFailure.NOT_FOUND_USER_WITH_SOCIAL_ACCOUNT;
-import static sopt.makers.authentication.support.code.domain.failure.UserFailure.NOT_FOUND_PHONE;
+import static sopt.makers.authentication.support.code.domain.failure.UserFailure.NOT_FOUND_USER;
 
 import sopt.makers.authentication.database.rdb.entity.UserEntity;
 import sopt.makers.authentication.domain.auth.SocialAccount;
@@ -29,7 +29,7 @@ public class UserRetriever {
 
   public User findByPhone(String phone) {
     UserEntity userEntity =
-        userJpaRepository.findByPhone(phone).orElseThrow(() -> new UserException(NOT_FOUND_PHONE));
+        userJpaRepository.findByPhone(phone).orElseThrow(() -> new UserException(NOT_FOUND_USER));
     return userEntity.toDomain();
   }
 
