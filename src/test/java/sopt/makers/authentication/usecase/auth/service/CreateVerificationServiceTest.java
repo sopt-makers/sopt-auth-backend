@@ -1,11 +1,13 @@
 package sopt.makers.authentication.usecase.auth.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.isA;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static sopt.makers.authentication.support.code.domain.failure.AuthFailure.ALREADY_REGISTER_PHONE_NUMBER;
 import static sopt.makers.authentication.usecase.auth.port.in.CreatePhoneVerificationUsecase.CreateVerificationCommand;
 
 import sopt.makers.authentication.domain.auth.PhoneVerification;
@@ -14,6 +16,7 @@ import sopt.makers.authentication.domain.message.Message;
 import sopt.makers.authentication.domain.user.Profile;
 import sopt.makers.authentication.domain.user.User;
 import sopt.makers.authentication.domain.user.UserRegisterInfo;
+import sopt.makers.authentication.support.exception.domain.*;
 import sopt.makers.authentication.usecase.auth.port.out.PhoneVerificationRepository;
 import sopt.makers.authentication.usecase.auth.port.out.UserRepository;
 import sopt.makers.authentication.usecase.message.port.out.MessageSendPort;
@@ -81,6 +84,23 @@ class CreateVerificationServiceTest {
     // then
     assertThat(resultPhoneVerification.getName()).isEqualTo(TEST_NAME_REGISTER_INFO);
     assertThat(resultPhoneVerification.getPhone()).isEqualTo(TEST_PHONE_REGISTER_INFO);
+  }
+
+  @Test
+  @DisplayName("인증 유형이 REGISTER 일 경우, 이미 회원인 사람은 예외가 발생해야 합니다")
+  void createVerificationRegisterForExistUser() {
+    // given
+    PhoneVerificationType givenType = PhoneVerificationType.REGISTER;
+    CreateVerificationCommand givenCommand =
+        new CreateVerificationCommand(null, TEST_PHONE_REGISTER_INFO, givenType);
+    when(userRegisterInfoRepository.findByPhone(TEST_PHONE_REGISTER_INFO))
+        .thenReturn(Optional.empty());
+    when(userRepository.existsByPhone(TEST_PHONE_REGISTER_INFO)).thenReturn(true);
+
+    // when & then
+    assertThatThrownBy(() -> usecase.create(givenCommand))
+        .isInstanceOf(AuthException.class)
+        .hasMessageContaining(ALREADY_REGISTER_PHONE_NUMBER.getMessage());
   }
 
   @Test
