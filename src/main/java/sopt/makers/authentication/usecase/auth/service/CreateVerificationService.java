@@ -19,6 +19,7 @@ import sopt.makers.authentication.usecase.user.port.out.UserRegisterInfoReposito
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.*;
 
 import lombok.RequiredArgsConstructor;
 
@@ -34,6 +35,7 @@ public class CreateVerificationService implements CreatePhoneVerificationUsecase
   private final MessageSendPort messageSendPort;
 
   @Override
+  @Transactional
   public PhoneVerification create(CreateVerificationCommand command) {
     PhoneVerification phoneVerification = createPhoneVerificationByCommand(command);
 
