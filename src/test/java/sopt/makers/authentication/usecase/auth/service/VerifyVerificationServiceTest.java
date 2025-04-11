@@ -33,7 +33,7 @@ class VerifyVerificationServiceTest {
   }
 
   @Test
-  void verifySuccessTest() {
+  void 번호인증시_정상적으로_인증이_완료된다() {
     // given
     String givenVerifyPhone = "01012345678";
     PhoneVerificationType givenVerifyType = PhoneVerificationType.REGISTER;
@@ -51,5 +51,24 @@ class VerifyVerificationServiceTest {
     assertThatThrownBy(() -> phoneVerificationRepository.findByPhoneVerification(givenVerification))
         .isInstanceOf(AuthException.class)
         .hasMessageContaining(AuthFailure.NOT_FOUND_PHONE_VERIFICATION.getMessage());
+  }
+
+  @Test
+  void 여러개의_인증이력이_존재하더라도_최신인증이력으로_검증한다() {
+    // given
+    PhoneVerification latestVerification =
+        PhoneVerification.of(null, "01012345678", PhoneVerificationType.REGISTER, "123457");
+    phoneVerificationRepository.create(latestVerification);
+    String givenVerifyPhone = "01012345678";
+    PhoneVerificationType givenVerifyType = PhoneVerificationType.REGISTER;
+    String givenCode = "123457";
+    VerifyVerificationCommand givenCommand =
+        new VerifyVerificationCommand(null, givenVerifyPhone, givenCode, givenVerifyType);
+
+    // when
+    VerifyVerificationResult result = verifyService.verify(givenCommand);
+
+    // then
+    assertThat(result.targetPhone()).isEqualTo(givenVerifyPhone);
   }
 }
