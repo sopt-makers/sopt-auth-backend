@@ -82,6 +82,6 @@ class SignUpServiceTest {
     Activity capturedActivity = activityCaptor.getValue();
 
     assertThat(capturedUser.getId()).isEqualTo(TEST_USER_ID);
-    assertThat(capturedActivity.generation()).isEqualTo(ACTIVITY_GENERATION);
+    assertThat(capturedActivity.getGeneration()).isEqualTo(ACTIVITY_GENERATION);
   }
 }

@@ -31,7 +31,7 @@ public class AuthenticateSocialAccountService implements AuthenticateSocialAccou
     User user =
         userRepository.findBySocialAccount(
             SocialAccount.of(authPlatformId, command.authPlatform()));
-    List<Role> roles = List.of(user.getActivities().getLastActivity().role());
+    List<Role> roles = List.of(user.getActivities().getLastActivity().getRole());
     CustomAuthentication customAuthentication = new CustomAuthentication(user.getId(), roles);
     String accessToken = jwtAuthAccessTokenProvider.generate(customAuthentication);
     String refreshToken = jwtAuthRefreshTokenProvider.generate(accessToken);

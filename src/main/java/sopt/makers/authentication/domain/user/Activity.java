@@ -6,22 +6,47 @@ import sopt.makers.authentication.support.exception.domain.UserException;
 
 import java.util.Optional;
 
-import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
 
-public record Activity(
-    int generation, Optional<Team> team, Optional<Part> part, @NotNull Role role) {
+@Getter
+public class Activity {
+  private Long id;
+  private final int generation;
+  private final Team team;
+  private final Part part;
+  private final Role role;
+
+  private Activity(Long id, int generation, Team team, Part part, Role role) {
+    this.id = id;
+    this.generation = generation;
+    this.team = team;
+    this.part = part;
+    this.role = role;
+  }
 
   public static Activity of(int generation, final Team team, final Part part) {
-    return new Activity(
-        generation, Optional.ofNullable(team), Optional.ofNullable(part), Role.MEMBER);
+    return new Activity(null, generation, team, part, Role.MEMBER);
   }
 
   public static Activity of(int generation, final Team team, final Part part, final Role role) {
-    return new Activity(generation, Optional.ofNullable(team), Optional.ofNullable(part), role);
+    return new Activity(null, generation, team, part, role);
+  }
+
+  public static Activity ofWithId(
+      Long id, int generation, final Team team, final Part part, final Role role) {
+    return new Activity(id, generation, team, part, role);
+  }
+
+  public Optional<Team> optionalTeam() {
+    return Optional.ofNullable(team);
+  }
+
+  public Optional<Part> optionalPart() {
+    return Optional.ofNullable(part);
   }
 
   public void validateActivityContentsEmpty() {
-    boolean isActivityContentsEmpty = this.role.isPartRequired() && this.part.isEmpty();
+    boolean isActivityContentsEmpty = this.role.isPartRequired() && this.part == null;
 
     if (isActivityContentsEmpty) {
       throw new UserException(ROLE_REQUIRES_PART);
