@@ -5,16 +5,17 @@ import static sopt.makers.authentication.support.code.domain.failure.AuthFailure
 import static sopt.makers.authentication.support.code.domain.failure.AuthFailure.NOT_FOUND_REGISTER_INFO;
 
 import sopt.makers.authentication.domain.auth.PhoneVerification;
+import sopt.makers.authentication.domain.auth.PhoneVerificationCreatedEvent;
 import sopt.makers.authentication.domain.auth.PhoneVerificationType;
-import sopt.makers.authentication.domain.message.Message;
+import sopt.makers.authentication.domain.message.MessageType;
 import sopt.makers.authentication.domain.user.User;
 import sopt.makers.authentication.support.exception.domain.AuthException;
 import sopt.makers.authentication.usecase.auth.port.in.CreatePhoneVerificationUsecase;
 import sopt.makers.authentication.usecase.auth.port.out.PhoneVerificationRepository;
 import sopt.makers.authentication.usecase.auth.port.out.UserRepository;
-import sopt.makers.authentication.usecase.message.port.out.MessageSendPort;
 import sopt.makers.authentication.usecase.user.port.out.UserRegisterInfoRepository;
 
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.*;
 
@@ -23,26 +24,25 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class CreateVerificationService implements CreatePhoneVerificationUsecase {
-
   private static final String FORMAT_VERIFICATION_MESSAGE = "[SOPT makers]\n인증번호 [%s]를 입력해주세요.";
-
   private final UserRepository userRepository;
   private final UserRegisterInfoRepository userRegisterInfoRepository;
   private final PhoneVerificationRepository verificationRepository;
-  private final MessageSendPort messageSendPort;
+  private final ApplicationEventPublisher eventPublisher;
 
   @Override
   @Transactional
   public PhoneVerification create(CreateVerificationCommand command) {
     PhoneVerification phoneVerification = createPhoneVerificationByCommand(command);
 
-    Message verificationMessage =
-        Message.sms(
-            command.phone(),
-            convertCodeToMessage(phoneVerification.getVerificationCode().getCode()));
+    PhoneVerification savedPhoneVerification = verificationRepository.create(phoneVerification);
 
-    messageSendPort.sendMessage(verificationMessage);
-    return verificationRepository.create(phoneVerification);
+    eventPublisher.publishEvent(
+        new PhoneVerificationCreatedEvent(
+            savedPhoneVerification.getPhone(),
+            savedPhoneVerification.getVerificationCode().getCode(),
+            MessageType.SMS));
+    return savedPhoneVerification;
   }
 
   private PhoneVerification createPhoneVerificationByCommand(CreateVerificationCommand command) {

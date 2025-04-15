@@ -32,6 +32,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 
@@ -48,6 +49,7 @@ class CreateVerificationServiceTest {
   @Mock UserRegisterInfoRepository userRegisterInfoRepository;
   @Mock MessageSendPort sendPort;
   @Autowired PhoneVerificationRepository verificationRepository;
+  @Mock ApplicationEventPublisher eventPublisher;
 
   @InjectMocks CreateVerificationService usecase;
 
@@ -67,7 +69,7 @@ class CreateVerificationServiceTest {
 
     usecase =
         new CreateVerificationService(
-            userRepository, userRegisterInfoRepository, verificationRepository, sendPort);
+            userRepository, userRegisterInfoRepository, verificationRepository, eventPublisher);
   }
 
   @Test
