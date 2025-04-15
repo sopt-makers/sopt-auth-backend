@@ -15,8 +15,6 @@ import sopt.makers.authentication.usecase.auth.port.out.UserRepository;
 import sopt.makers.authentication.usecase.user.port.out.UserActivityHistoryRepository;
 import sopt.makers.authentication.usecase.user.port.out.UserRegisterInfoRepository;
 
-import java.util.Optional;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,22 +34,19 @@ public class SignUpService implements SignUpUsecase {
   public void signUp(SignUpCommand command) {
     String authPlatformId =
         oAuthAuthenticator.getIdentifier(command.token(), command.authPlatform());
-    Optional<UserRegisterInfo> targetRegisterInfo =
-        userRegisterInfoRepository.findByPhone(command.phone());
+    UserRegisterInfo targetRegisterInfo =
+        userRegisterInfoRepository
+            .findByPhone(command.phone())
+            .orElseThrow(() -> new AuthException(NOT_FOUND_REGISTER_INFO));
 
-    if (targetRegisterInfo.isEmpty()) {
-      throw new AuthException(NOT_FOUND_REGISTER_INFO);
-    }
-
-    UserRegisterInfo registerInfo = targetRegisterInfo.get();
     SocialAccount socialAccount = createSocialAccount(authPlatformId, command.authPlatform());
-    Profile profile = createProfile(registerInfo);
-    Activity activity = createActivity(registerInfo);
+    Profile profile = createProfile(targetRegisterInfo);
+    Activity activity = createActivity(targetRegisterInfo);
     User newUser = User.createNewUser(socialAccount, profile);
     User savedUser = userRepository.save(newUser);
 
     userActivityHistoryRepository.save(savedUser, activity);
-    userRegisterInfoRepository.delete(registerInfo);
+    userRegisterInfoRepository.delete(targetRegisterInfo);
   }
 
   private SocialAccount createSocialAccount(String authPlatformId, AuthPlatform authPlatform) {
