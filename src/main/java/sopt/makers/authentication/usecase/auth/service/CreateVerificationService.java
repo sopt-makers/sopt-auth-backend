@@ -34,14 +34,12 @@ public class CreateVerificationService implements CreatePhoneVerificationUsecase
   @Transactional
   public PhoneVerification create(CreateVerificationCommand command) {
     PhoneVerification phoneVerification = createPhoneVerificationByCommand(command);
-
     PhoneVerification savedPhoneVerification = verificationRepository.create(phoneVerification);
+    String content = convertCodeToMessage(savedPhoneVerification.getVerificationCode().getCode());
 
     eventPublisher.publishEvent(
         new PhoneVerificationCreatedEvent(
-            savedPhoneVerification.getPhone(),
-            savedPhoneVerification.getVerificationCode().getCode(),
-            MessageType.SMS));
+            savedPhoneVerification.getPhone(), content, MessageType.SMS));
     return savedPhoneVerification;
   }
 
