@@ -89,6 +89,6 @@ public class UserActivityHistoryEntity {
   }
 
   public Activity toDomain() {
-    return Activity.ofWithId(id, generation, team, part, role);
+    return Activity.of(id, generation, team, part, role);
   }
 }
