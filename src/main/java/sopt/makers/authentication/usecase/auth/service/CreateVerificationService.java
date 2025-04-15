@@ -8,15 +8,12 @@ import sopt.makers.authentication.domain.auth.PhoneVerification;
 import sopt.makers.authentication.domain.auth.PhoneVerificationType;
 import sopt.makers.authentication.domain.message.Message;
 import sopt.makers.authentication.domain.user.User;
-import sopt.makers.authentication.domain.user.UserRegisterInfo;
 import sopt.makers.authentication.support.exception.domain.AuthException;
 import sopt.makers.authentication.usecase.auth.port.in.CreatePhoneVerificationUsecase;
 import sopt.makers.authentication.usecase.auth.port.out.PhoneVerificationRepository;
 import sopt.makers.authentication.usecase.auth.port.out.UserRepository;
 import sopt.makers.authentication.usecase.message.port.out.MessageSendPort;
 import sopt.makers.authentication.usecase.user.port.out.UserRegisterInfoRepository;
-
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.*;
@@ -56,18 +53,17 @@ public class CreateVerificationService implements CreatePhoneVerificationUsecase
   }
 
   private PhoneVerification handleRegister(String phone) {
-    Optional<UserRegisterInfo> targetRegisterInfo = userRegisterInfoRepository.findByPhone(phone);
-
-    if (targetRegisterInfo.isPresent()) {
-      UserRegisterInfo registerInfo = targetRegisterInfo.get();
-      return PhoneVerification.create(registerInfo.getName(), registerInfo.getPhone(), REGISTER);
-    }
-
-    boolean existUser = userRepository.existsByPhone(phone);
-    if (existUser) {
-      throw new AuthException(ALREADY_REGISTER_PHONE_NUMBER);
-    }
-    throw new AuthException(NOT_FOUND_REGISTER_INFO);
+    return userRegisterInfoRepository
+        .findByPhone(phone)
+        .map(info -> PhoneVerification.create(info.getName(), info.getPhone(), REGISTER))
+        .orElseThrow(
+            () -> {
+              boolean existUser = userRepository.existsByPhone(phone);
+              if (existUser) {
+                return new AuthException(ALREADY_REGISTER_PHONE_NUMBER);
+              }
+              return new AuthException(NOT_FOUND_REGISTER_INFO);
+            });
   }
 
   private PhoneVerification handleChangeOrSearch(String phone, PhoneVerificationType type) {
