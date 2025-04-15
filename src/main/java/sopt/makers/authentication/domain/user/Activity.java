@@ -41,10 +41,6 @@ public class Activity {
     return Optional.ofNullable(team);
   }
 
-  public Optional<Part> optionalPart() {
-    return Optional.ofNullable(part);
-  }
-
   public void validateActivityContentsEmpty() {
     boolean isActivityContentsEmpty = this.role.isPartRequired() && this.part == null;
 

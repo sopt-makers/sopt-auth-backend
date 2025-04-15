@@ -79,7 +79,7 @@ public class UserActivityHistoryEntity {
             userEntity,
             activity.getGeneration(),
             activity.optionalTeam().orElse(null),
-            activity.optionalPart().orElse(null),
+            activity.getPart(),
             activity.getRole());
 
     if (activity.getId() != null) {
