@@ -2,7 +2,7 @@ package sopt.makers.authentication.database.rdb.repository.user.register;
 
 import sopt.makers.authentication.database.rdb.entity.UserRegisterInfoEntity;
 
-import java.util.*;
+import java.util.Optional;
 
 import org.springframework.stereotype.Component;
 

@@ -2,7 +2,7 @@ package sopt.makers.authentication.usecase.user.port.out;
 
 import sopt.makers.authentication.domain.user.UserRegisterInfo;
 
-import java.util.*;
+import java.util.Optional;
 
 public interface UserRegisterInfoRepository {
 
