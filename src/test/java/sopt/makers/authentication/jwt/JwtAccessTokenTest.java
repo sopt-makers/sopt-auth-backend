@@ -52,7 +52,6 @@ public class JwtAccessTokenTest {
     String accessToken = jwtAuthAccessTokenProvider.generate(customAuthentication);
 
     // Then
-    System.out.println("AccessToken: [" + accessToken + "]");
     assertThat(accessToken).isNotNull();
   }
 
@@ -64,7 +63,6 @@ public class JwtAccessTokenTest {
     String accessToken = jwtAuthAccessTokenProvider.generate(customAuthentication);
 
     // When
-    System.out.println("PureToken: [" + accessToken + "]");
     Jwt jwt = jwtDecoder.decode(accessToken);
 
     // Then

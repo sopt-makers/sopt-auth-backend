@@ -72,7 +72,6 @@ public class JwtRefreshTokenTest {
     String refreshedToken = jwtAuthRefreshTokenProvider.parse(TOKEN_HEADER + token);
 
     // then
-    System.out.println("RefreshedToken: [" + refreshedToken + "]");
     assertThat(refreshedToken).isNotEqualTo(token);
   }
 
@@ -84,7 +83,6 @@ public class JwtRefreshTokenTest {
         JwtClaimsSet.builder().expiresAt(Instant.now().minusSeconds(1)).build();
     Jwt jwt = jwtEncoder.encode(JwtEncoderParameters.from(jwtClaimsSet));
     String token = addPrefix(jwt.getTokenValue());
-    System.out.println("Token: [" + token + "]");
 
     // When & then
     assertThatThrownBy(() -> jwtAuthRefreshTokenProvider.parse(token))
