@@ -1,6 +1,5 @@
 package sopt.makers.authentication.support.jwt.provider;
 
-import static sopt.makers.authentication.support.jwt.provider.JwtTokenUtil.addPrefix;
 import static sopt.makers.authentication.support.jwt.provider.JwtTokenUtil.extract;
 
 import sopt.makers.authentication.support.jwt.JwtProvider;
@@ -49,7 +48,7 @@ public class JwtAuthAccessTokenProvider implements JwtProvider<CustomAuthenticat
             jwtEncoder.encode(JwtEncoderParameters.from(claimsSet)));
 
     jwtAccessToken.validate(securityProperty);
-    return addPrefix(jwtAccessToken.getToken());
+    return jwtAccessToken.getToken();
   }
 
   @Override
