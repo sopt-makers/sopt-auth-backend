@@ -40,6 +40,8 @@ public class JwtAccessTokenTest {
   @Value("${security.jwt.secret.rsa.key-id}")
   private String keyId;
 
+  public final String TOKEN_HEADER = "Bearer ";
+
   @Test
   @DisplayName("AccessToken 생성")
   void create_jwt_access_token() {
@@ -60,11 +62,10 @@ public class JwtAccessTokenTest {
     // Given
     CustomAuthentication customAuthentication = new CustomAuthentication("test", "test");
     String accessToken = jwtAuthAccessTokenProvider.generate(customAuthentication);
-    String pureToken = extract(accessToken);
 
     // When
-    System.out.println("PureToken: [" + pureToken + "]");
-    Jwt jwt = jwtDecoder.decode(pureToken);
+    System.out.println("PureToken: [" + accessToken + "]");
+    Jwt jwt = jwtDecoder.decode(accessToken);
 
     // Then
     assertThat(jwt.getClaims().get("iss")).isEqualTo("authentication");
@@ -79,7 +80,8 @@ public class JwtAccessTokenTest {
     String accessToken = jwtAuthAccessTokenProvider.generate(customAuthentication);
 
     // when
-    CustomAuthentication parsedAuthentication = jwtAuthAccessTokenProvider.parse(accessToken);
+    CustomAuthentication parsedAuthentication =
+        jwtAuthAccessTokenProvider.parse(TOKEN_HEADER + accessToken);
 
     // then
     assertThat(parsedAuthentication).isNotNull();
@@ -120,10 +122,9 @@ public class JwtAccessTokenTest {
   void decode_jwt_access_token_with_public_key() throws ParseException, JOSEException {
     // Arrange
     CustomAuthentication customAuthentication = new CustomAuthentication("test", "test");
-    String accessTokenWithHeader = jwtAuthAccessTokenProvider.generate(customAuthentication);
-    String pureToken = extract(accessTokenWithHeader);
+    String accessToken = jwtAuthAccessTokenProvider.generate(customAuthentication);
 
-    SignedJWT signedJWT = SignedJWT.parse(pureToken);
+    SignedJWT signedJWT = SignedJWT.parse(accessToken);
     JWKSet info = jwksRetrieveUsecase.retrievePublicKey();
     RSAKey rsaKey = (RSAKey) info.getKeyByKeyId(keyId);
     RSAPublicKey publicKey = rsaKey.toRSAPublicKey();
