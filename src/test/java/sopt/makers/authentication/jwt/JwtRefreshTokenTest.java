@@ -3,7 +3,6 @@ package sopt.makers.authentication.jwt;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static sopt.makers.authentication.support.jwt.provider.JwtTokenUtil.addPrefix;
-import static sopt.makers.authentication.support.jwt.provider.JwtTokenUtil.extract;
 
 import sopt.makers.authentication.support.exception.support.TokenException;
 import sopt.makers.authentication.support.jwt.provider.JwtAuthRefreshTokenProvider;
@@ -31,6 +30,7 @@ public class JwtRefreshTokenTest {
   @Autowired private JwtAuthRefreshTokenProvider jwtAuthRefreshTokenProvider;
   @Autowired private JwtEncoder jwtEncoder;
   @Autowired private JwtDecoder jwtDecoder;
+  public final String TOKEN_HEADER = "Bearer ";
 
   @Test
   @DisplayName("RefreshToken 생성")
@@ -53,10 +53,9 @@ public class JwtRefreshTokenTest {
     // Given
     String accessToken = "Bearer ey.d.d";
     String refreshToken = jwtAuthRefreshTokenProvider.generate(accessToken);
-    String pureToken = extract(refreshToken);
 
     // When
-    Jwt jwt = jwtDecoder.decode(pureToken);
+    Jwt jwt = jwtDecoder.decode(refreshToken);
 
     // then
     assertThat(jwt.getClaims()).isNotNull();
@@ -70,10 +69,9 @@ public class JwtRefreshTokenTest {
     String token = jwtAuthRefreshTokenProvider.generate(accessToken);
 
     // When
-    String refreshedToken = jwtAuthRefreshTokenProvider.parse(token);
+    String refreshedToken = jwtAuthRefreshTokenProvider.parse(TOKEN_HEADER + token);
 
     // then
-    System.out.println("RefreshedToken: [" + refreshedToken + "]");
     assertThat(refreshedToken).isNotEqualTo(token);
   }
 
@@ -85,7 +83,6 @@ public class JwtRefreshTokenTest {
         JwtClaimsSet.builder().expiresAt(Instant.now().minusSeconds(1)).build();
     Jwt jwt = jwtEncoder.encode(JwtEncoderParameters.from(jwtClaimsSet));
     String token = addPrefix(jwt.getTokenValue());
-    System.out.println("Token: [" + token + "]");
 
     // When & then
     assertThatThrownBy(() -> jwtAuthRefreshTokenProvider.parse(token))

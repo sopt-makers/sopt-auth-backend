@@ -34,7 +34,8 @@ public class JwtAuthRefreshTokenProvider implements JwtProvider<String> {
     JwtClaimsSet claimsSet = generateClaimSet();
     Jwt jwt = jwtEncoder.encode(JwtEncoderParameters.from(claimsSet));
     JwtRefreshToken jwtRefreshToken = JwtRefreshToken.createRefreshToken(jwt);
-    return addPrefix(jwtRefreshToken.getToken());
+
+    return jwtRefreshToken.getToken();
   }
 
   @Override

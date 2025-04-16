@@ -1,6 +1,7 @@
 package sopt.makers.authentication.usecase.auth.service;
 
 import sopt.makers.authentication.domain.auth.SocialAccount;
+import sopt.makers.authentication.domain.user.ActivityList;
 import sopt.makers.authentication.domain.user.Role;
 import sopt.makers.authentication.domain.user.User;
 import sopt.makers.authentication.support.jwt.provider.JwtAuthAccessTokenProvider;
@@ -9,8 +10,7 @@ import sopt.makers.authentication.support.security.authentication.CustomAuthenti
 import sopt.makers.authentication.usecase.auth.port.in.AuthenticateSocialAccountUsecase;
 import sopt.makers.authentication.usecase.auth.port.out.OAuthAuthenticator;
 import sopt.makers.authentication.usecase.auth.port.out.UserRepository;
-
-import java.util.List;
+import sopt.makers.authentication.usecase.user.port.out.UserActivityHistoryRepository;
 
 import org.springframework.stereotype.Service;
 
@@ -21,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 public class AuthenticateSocialAccountService implements AuthenticateSocialAccountUsecase {
   private final OAuthAuthenticator oAuthAuthenticator;
   private final UserRepository userRepository;
+  private final UserActivityHistoryRepository userActivityHistoryRepository;
   private final JwtAuthAccessTokenProvider jwtAuthAccessTokenProvider;
   private final JwtAuthRefreshTokenProvider jwtAuthRefreshTokenProvider;
 
@@ -31,8 +32,10 @@ public class AuthenticateSocialAccountService implements AuthenticateSocialAccou
     User user =
         userRepository.findBySocialAccount(
             SocialAccount.of(authPlatformId, command.authPlatform()));
-    List<Role> roles = List.of(user.getActivities().getLastActivity().getRole());
-    CustomAuthentication customAuthentication = new CustomAuthentication(user.getId(), roles);
+    ActivityList activityList = userActivityHistoryRepository.findByUser(user.getId());
+    Role role = activityList.getLastActivity().getRole();
+
+    CustomAuthentication customAuthentication = new CustomAuthentication(user.getId(), role);
     String accessToken = jwtAuthAccessTokenProvider.generate(customAuthentication);
     String refreshToken = jwtAuthRefreshTokenProvider.generate(accessToken);
 

@@ -29,6 +29,10 @@ public class ActivityList {
     return new ActivityList(updatedActivities);
   }
 
+  public static ActivityList of(List<Activity> activities) {
+    return new ActivityList(activities);
+  }
+
   public Activity getFirstActivity() {
     return activities.getFirst();
   }
