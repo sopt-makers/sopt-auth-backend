@@ -29,7 +29,7 @@ public class VerifyVerificationService implements VerifyPhoneVerificationUsecase
     if (isNotVerified) {
       throw new AuthException(INVALID_PHONE_VERIFICATION_CODE);
     }
-    phoneVerificationRepository.deletedByPhoneVerification(findVerification);
+    phoneVerificationRepository.deleteByPhoneVerification(findVerification);
     return new VerifyVerificationResult(command.name(), command.phone());
   }
 }

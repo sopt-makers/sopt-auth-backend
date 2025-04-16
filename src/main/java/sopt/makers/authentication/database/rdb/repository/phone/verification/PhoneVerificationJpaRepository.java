@@ -9,7 +9,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 interface PhoneVerificationJpaRepository extends JpaRepository<PhoneVerificationEntity, Long> {
 
-  Optional<PhoneVerificationEntity> findByPhoneAndType(String phone, PhoneVerificationType type);
+  Optional<PhoneVerificationEntity> findTopByPhoneAndTypeOrderByCreatedAtDesc(
+      String phone, PhoneVerificationType type);
 
   void deleteByNameAndPhoneAndCodeAndType(
       String name, String phone, String code, PhoneVerificationType type);

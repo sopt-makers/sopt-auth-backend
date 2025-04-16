@@ -1,11 +1,14 @@
 package sopt.makers.authentication.usecase.auth.service;
 
+import static sopt.makers.authentication.support.code.domain.failure.AuthFailure.NOT_FOUND_REGISTER_INFO;
+
 import sopt.makers.authentication.domain.auth.AuthPlatform;
 import sopt.makers.authentication.domain.auth.SocialAccount;
 import sopt.makers.authentication.domain.user.Activity;
 import sopt.makers.authentication.domain.user.Profile;
 import sopt.makers.authentication.domain.user.User;
 import sopt.makers.authentication.domain.user.UserRegisterInfo;
+import sopt.makers.authentication.support.exception.domain.AuthException;
 import sopt.makers.authentication.usecase.auth.port.in.SignUpUsecase;
 import sopt.makers.authentication.usecase.auth.port.out.OAuthAuthenticator;
 import sopt.makers.authentication.usecase.auth.port.out.UserRepository;
@@ -31,16 +34,19 @@ public class SignUpService implements SignUpUsecase {
   public void signUp(SignUpCommand command) {
     String authPlatformId =
         oAuthAuthenticator.getIdentifier(command.token(), command.authPlatform());
-    UserRegisterInfo registerInfo = userRegisterInfoRepository.findByPhone(command.phone());
+    UserRegisterInfo targetRegisterInfo =
+        userRegisterInfoRepository
+            .findByPhone(command.phone())
+            .orElseThrow(() -> new AuthException(NOT_FOUND_REGISTER_INFO));
 
     SocialAccount socialAccount = createSocialAccount(authPlatformId, command.authPlatform());
-    Profile profile = createProfile(registerInfo);
-    Activity activity = createActivity(registerInfo);
+    Profile profile = createProfile(targetRegisterInfo);
+    Activity activity = createActivity(targetRegisterInfo);
     User newUser = User.createNewUser(socialAccount, profile);
-
     User savedUser = userRepository.save(newUser);
+
     userActivityHistoryRepository.save(savedUser, activity);
-    userRegisterInfoRepository.delete(registerInfo);
+    userRegisterInfoRepository.delete(targetRegisterInfo);
   }
 
   private SocialAccount createSocialAccount(String authPlatformId, AuthPlatform authPlatform) {
