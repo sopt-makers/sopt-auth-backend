@@ -18,6 +18,7 @@ import sopt.makers.authentication.usecase.user.port.out.UserActivityHistoryRepos
 import sopt.makers.authentication.usecase.user.port.out.UserRegisterInfoRepository;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -58,7 +59,8 @@ class SignUpServiceTest {
 
     given(oAuthAuthenticator.getIdentifier(TEST_TOKEN, AuthPlatform.GOOGLE))
         .willReturn("oauth-123");
-    given(userRegisterInfoRepository.findByPhone(TEST_PHONE)).willReturn(userRegisterInfo);
+    given(userRegisterInfoRepository.findByPhone(TEST_PHONE))
+        .willReturn(Optional.of(userRegisterInfo));
     given(userRepository.save(any(User.class))).willReturn(mockedUser);
     given(userRegisterInfo.getGeneration()).willReturn(ACTIVITY_GENERATION);
   }
@@ -82,6 +84,6 @@ class SignUpServiceTest {
     Activity capturedActivity = activityCaptor.getValue();
 
     assertThat(capturedUser.getId()).isEqualTo(TEST_USER_ID);
-    assertThat(capturedActivity.generation()).isEqualTo(ACTIVITY_GENERATION);
+    assertThat(capturedActivity.getGeneration()).isEqualTo(ACTIVITY_GENERATION);
   }
 }

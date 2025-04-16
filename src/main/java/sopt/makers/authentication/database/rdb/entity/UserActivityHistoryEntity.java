@@ -23,6 +23,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @NoArgsConstructor(access = PROTECTED)
@@ -36,6 +37,7 @@ import lombok.NoArgsConstructor;
 public class UserActivityHistoryEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Setter(value = PROTECTED)
   private Long id;
 
   @NotNull
@@ -72,15 +74,21 @@ public class UserActivityHistoryEntity {
 
   public static UserActivityHistoryEntity fromDomain(final User user, final Activity activity) {
     UserEntity userEntity = UserEntity.fromDomain(user);
-    return new UserActivityHistoryEntity(
-        userEntity,
-        activity.generation(),
-        activity.team().orElse(null),
-        activity.part().orElse(null),
-        activity.role());
+    UserActivityHistoryEntity userActivityHistoryEntity =
+        new UserActivityHistoryEntity(
+            userEntity,
+            activity.getGeneration(),
+            activity.optionalTeam().orElse(null),
+            activity.getPart(),
+            activity.getRole());
+
+    if (activity.getId() != null) {
+      userActivityHistoryEntity.setId(activity.getId());
+    }
+    return userActivityHistoryEntity;
   }
 
   public Activity toDomain() {
-    return Activity.of(generation, team, part, role);
+    return Activity.of(id, generation, team, part, role);
   }
 }

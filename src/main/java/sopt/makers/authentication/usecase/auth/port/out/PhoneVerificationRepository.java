@@ -8,5 +8,5 @@ public interface PhoneVerificationRepository {
 
   PhoneVerification findByPhoneVerification(PhoneVerification phoneVerification);
 
-  void deletedByPhoneVerification(PhoneVerification phoneVerification);
+  void deleteByPhoneVerification(PhoneVerification phoneVerification);
 }

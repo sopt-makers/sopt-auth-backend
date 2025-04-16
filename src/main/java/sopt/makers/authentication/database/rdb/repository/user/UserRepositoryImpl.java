@@ -42,4 +42,9 @@ public class UserRepositoryImpl implements UserRepository {
     UserEntity userEntity = UserEntity.fromDomain(updatedUser);
     userRegister.save(userEntity);
   }
+
+  @Override
+  public boolean existsByPhone(String phone) {
+    return userRetriever.existsByPhone(phone);
+  }
 }

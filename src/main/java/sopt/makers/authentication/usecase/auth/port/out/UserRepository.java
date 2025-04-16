@@ -12,4 +12,6 @@ public interface UserRepository {
   User save(User user);
 
   void update(User user, SocialAccount socialAccount);
+
+  boolean existsByPhone(String phone);
 }
