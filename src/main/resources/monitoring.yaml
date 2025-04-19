@@ -1,0 +1,24 @@
+management:
+  server:
+    port: ${ACTUATOR_PORT}
+  health:
+    redis:
+      enabled: false
+  endpoints:
+    enabled-by-default: false
+    jmx:
+      exposure:
+        exclude: "*"
+    web:
+      exposure:
+        include: health, info, metrics, prometheus
+      base-path: ${ACTUATOR_PATH}
+  endpoint:
+    health:
+      enabled: true
+    info:
+      enabled: true
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
