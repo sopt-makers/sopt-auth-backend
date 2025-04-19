@@ -49,6 +49,8 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("org.springframework.retry:spring-retry")
 
+	implementation("io.micrometer:micrometer-registry-prometheus")
+
 	implementation("com.fasterxml.jackson.core:jackson-databind:${jacksonCoreVersion}")
 
 	implementation ("com.squareup.okhttp3:okhttp:${okHttpVersion}")
