@@ -1,6 +1,7 @@
 package sopt.makers.authentication.support.value;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -8,7 +9,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public record SecurityProperty(Api api, Jwt jwt) {
 
   @ConfigurationProperties(prefix = "security.api")
-  public record Api(String key, List<String> securedEndpoints) {}
+  public record Api(Map<String, String> keys, List<String> securedEndpoints) {}
 
   @ConfigurationProperties(prefix = "security.jwt")
   public record Jwt(Secret secret) {
