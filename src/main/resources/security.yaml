@@ -9,6 +9,7 @@ security:
     key: ${X_API_KEY}
     secured-endpoints:
       - ${GET_PUBLIC_KEY}
+      - ${ACTUATOR_PATH}
 
   jwt:
     secret:
