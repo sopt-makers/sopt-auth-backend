@@ -1,6 +1,5 @@
 package sopt.makers.authentication.support.config;
 
-import static sopt.makers.authentication.support.constant.SystemConstant.PATTERN_ACTUATOR;
 import static sopt.makers.authentication.support.constant.SystemConstant.PATTERN_AUTH;
 import static sopt.makers.authentication.support.constant.SystemConstant.PATTERN_ERROR_PATH;
 import static sopt.makers.authentication.support.constant.SystemConstant.PATTERN_TEST;
@@ -86,8 +85,6 @@ public class SecurityConfig {
                 .requestMatchers(new AntPathRequestMatcher(PATTERN_TEST))
                 .permitAll()
                 .requestMatchers(new AntPathRequestMatcher(PATTERN_ERROR_PATH))
-                .permitAll()
-                .requestMatchers(new AntPathRequestMatcher(PATTERN_ACTUATOR))
                 .permitAll()
                 .anyRequest()
                 .authenticated());
