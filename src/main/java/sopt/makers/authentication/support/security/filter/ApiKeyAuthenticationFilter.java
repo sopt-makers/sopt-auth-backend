@@ -23,8 +23,8 @@ import lombok.RequiredArgsConstructor;
 @Component
 @RequiredArgsConstructor
 public class ApiKeyAuthenticationFilter extends OncePerRequestFilter {
-  private static final String API_KEY_HEADER = "x-api-key";
-  private static final String SERVICE_NAME_HEADER = "x-service-name";
+  private static final String API_KEY_HEADER = "X-API-KEY";
+  private static final String SERVICE_NAME_HEADER = "X-SERVICE-NAME";
 
   private final SecurityProperty securityProperty;
 
