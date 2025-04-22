@@ -12,9 +12,3 @@ spring:
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
     driver-class-name: ${DB_DRIVER_CLASS}
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health
