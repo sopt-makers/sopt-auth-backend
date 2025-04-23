@@ -1,6 +1,8 @@
 package sopt.makers.authentication.support.security.filter;
 
 import static sopt.makers.authentication.support.code.domain.failure.AuthFailure.INVALID_API_KEY;
+import static sopt.makers.authentication.support.constant.SystemConstant.API_KEY_HEADER;
+import static sopt.makers.authentication.support.constant.SystemConstant.SERVICE_NAME_HEADER;
 
 import sopt.makers.authentication.support.exception.domain.AuthException;
 import sopt.makers.authentication.support.security.authentication.ApiKeyAuthentication;
@@ -23,8 +25,6 @@ import lombok.RequiredArgsConstructor;
 @Component
 @RequiredArgsConstructor
 public class ApiKeyAuthenticationFilter extends OncePerRequestFilter {
-  private static final String API_KEY_HEADER = "X-Api-Key";
-  private static final String SERVICE_NAME_HEADER = "X-Service-Name";
 
   private final SecurityProperty securityProperty;
 
