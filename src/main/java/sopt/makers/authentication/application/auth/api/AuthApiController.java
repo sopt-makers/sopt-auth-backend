@@ -1,6 +1,5 @@
 package sopt.makers.authentication.application.auth.api;
 
-import static sopt.makers.authentication.support.constant.JwtConstant.ACCESS_TOKEN_HEADER;
 import static sopt.makers.authentication.support.constant.JwtConstant.REFRESH_TOKEN_HEADER;
 
 import sopt.makers.authentication.application.auth.dto.request.AuthRequest;
@@ -91,7 +90,7 @@ public class AuthApiController implements AuthApi {
   @Override
   @PostMapping("/refresh/web")
   public ResponseEntity<BaseResponse<?>> refreshTokenFromWeb(
-      @RequestHeader(ACCESS_TOKEN_HEADER) String accessToken,
+      @RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken,
       @CookieValue(REFRESH_TOKEN_HEADER) String refreshToken) {
     AuthRequest.AuthenticationTokenInfo authenticationTokenInfo =
         new AuthRequest.AuthenticationTokenInfo(accessToken, refreshToken);
