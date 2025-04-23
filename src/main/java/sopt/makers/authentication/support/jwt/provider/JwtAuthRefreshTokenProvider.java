@@ -1,8 +1,5 @@
 package sopt.makers.authentication.support.jwt.provider;
 
-import static sopt.makers.authentication.support.jwt.provider.JwtTokenUtil.addPrefix;
-import static sopt.makers.authentication.support.jwt.provider.JwtTokenUtil.extract;
-
 import sopt.makers.authentication.support.jwt.JwtProvider;
 import sopt.makers.authentication.support.jwt.token.JwtRefreshToken;
 import sopt.makers.authentication.support.value.SecurityProperty.Jwt.Secret.Expiration;
@@ -40,14 +37,13 @@ public class JwtAuthRefreshTokenProvider implements JwtProvider<String> {
 
   @Override
   public String parse(String requestToken) {
-    String token = extract(requestToken);
-    Jwt jwt = jwtDecoder.decode(token);
+    Jwt jwt = jwtDecoder.decode(requestToken);
 
     JwtRefreshToken jwtRefreshToken = JwtRefreshToken.createRefreshToken(jwt);
     jwtRefreshToken.validateExpire();
     JwtRefreshToken refreshedToken = refresh();
 
-    return addPrefix(refreshedToken.getToken());
+    return refreshedToken.getToken();
   }
 
   private JwtRefreshToken refresh() {

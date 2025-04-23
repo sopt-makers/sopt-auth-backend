@@ -2,7 +2,6 @@ package sopt.makers.authentication.jwt;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static sopt.makers.authentication.support.jwt.provider.JwtTokenUtil.addPrefix;
 
 import sopt.makers.authentication.support.exception.support.TokenException;
 import sopt.makers.authentication.support.jwt.provider.JwtAuthRefreshTokenProvider;
@@ -69,7 +68,7 @@ public class JwtRefreshTokenTest {
     String token = jwtAuthRefreshTokenProvider.generate(accessToken);
 
     // When
-    String refreshedToken = jwtAuthRefreshTokenProvider.parse(TOKEN_HEADER + token);
+    String refreshedToken = jwtAuthRefreshTokenProvider.parse(token);
 
     // then
     assertThat(refreshedToken).isNotEqualTo(token);
@@ -82,7 +81,7 @@ public class JwtRefreshTokenTest {
     JwtClaimsSet jwtClaimsSet =
         JwtClaimsSet.builder().expiresAt(Instant.now().minusSeconds(1)).build();
     Jwt jwt = jwtEncoder.encode(JwtEncoderParameters.from(jwtClaimsSet));
-    String token = addPrefix(jwt.getTokenValue());
+    String token = jwt.getTokenValue();
 
     // When & then
     assertThatThrownBy(() -> jwtAuthRefreshTokenProvider.parse(token))

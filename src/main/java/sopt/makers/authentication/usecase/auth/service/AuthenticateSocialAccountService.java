@@ -46,11 +46,13 @@ public class AuthenticateSocialAccountService implements AuthenticateSocialAccou
   public AuthenticateTokenInfo refresh(AuthenticateTokenInfo command) {
     String refreshToken = command.refreshToken();
 
+    // 여기서 Bearer 없이 검증하도록하고
     jwtAuthRefreshTokenProvider.parse(refreshToken);
     CustomAuthentication customAuthentication =
         jwtAuthAccessTokenProvider.parse(command.accessToken());
 
     String renewedAccessToken = jwtAuthAccessTokenProvider.generate(customAuthentication);
+    // 새로 생성해도 Bearer 안붙이도
     String renewedRefreshToken = jwtAuthRefreshTokenProvider.generate(renewedAccessToken);
     return AuthenticateTokenInfo.of(renewedAccessToken, renewedRefreshToken);
   }
