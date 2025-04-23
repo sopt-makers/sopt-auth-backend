@@ -1,6 +1,4 @@
 management:
-  server:
-    port: ${ACTUATOR_PORT}
   health:
     redis:
       enabled: false
