@@ -1,5 +1,6 @@
 package sopt.makers.authentication.support.config;
 
+import static sopt.makers.authentication.support.constant.SystemConstant.INTERNAL_SERVICE;
 import static sopt.makers.authentication.support.constant.SystemConstant.PATTERN_ALL;
 import static sopt.makers.authentication.support.constant.SystemConstant.PATTERN_AUTH;
 import static sopt.makers.authentication.support.constant.SystemConstant.PATTERN_ERROR_PATH;
@@ -86,7 +87,7 @@ public class SecurityConfig {
           for (String endpoint : securedEndpoints) {
             authorize
                 .requestMatchers(new AntPathRequestMatcher(endpoint + PATTERN_ALL))
-                .hasRole("INTERNAL_SERVICE");
+                .hasRole(INTERNAL_SERVICE);
           }
 
           authorize.anyRequest().authenticated();

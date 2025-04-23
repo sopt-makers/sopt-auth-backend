@@ -21,6 +21,10 @@ public final class SystemConstant {
   public static final String PATTERN_ROOT_PATH = "/";
 
   public static final List<String> WHITELIST_WILDCARD = List.of(PATH_ERROR, PATH_AUTH, PATH_TEST);
+
   public static final String API_KEY_HEADER = "X-Api-Key";
   public static final String SERVICE_NAME_HEADER = "X-Service-Name";
+
+  public static final String ROLE = "ROLE_";
+  public static final String INTERNAL_SERVICE = "INTERNAL_SERVICE";
 }
