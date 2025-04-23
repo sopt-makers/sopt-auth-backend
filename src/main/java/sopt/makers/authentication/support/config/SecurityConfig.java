@@ -1,6 +1,7 @@
 package sopt.makers.authentication.support.config;
 
-import static sopt.makers.authentication.support.constant.SystemConstant.PATTERN_ACTUATOR;
+import static sopt.makers.authentication.support.constant.SystemConstant.INTERNAL_SERVICE;
+import static sopt.makers.authentication.support.constant.SystemConstant.PATTERN_ALL;
 import static sopt.makers.authentication.support.constant.SystemConstant.PATTERN_AUTH;
 import static sopt.makers.authentication.support.constant.SystemConstant.PATTERN_ERROR_PATH;
 import static sopt.makers.authentication.support.constant.SystemConstant.PATTERN_TEST;
@@ -8,6 +9,9 @@ import static sopt.makers.authentication.support.constant.SystemConstant.PATTERN
 import sopt.makers.authentication.support.security.filter.ApiKeyAuthenticationFilter;
 import sopt.makers.authentication.support.security.filter.AuthenticationExceptionFilter;
 import sopt.makers.authentication.support.security.filter.JwtAuthenticationFilter;
+import sopt.makers.authentication.support.value.SecurityProperty;
+
+import java.util.List;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,6 +35,7 @@ public class SecurityConfig {
   private final ApiKeyAuthenticationFilter apiKeyAuthenticationFilter;
   private final JwtAuthenticationFilter jwtAuthenticationFilter;
   private final AuthenticationExceptionFilter authenticationExceptionFilter;
+  private final SecurityProperty securityProperty;
 
   @Bean
   public static PasswordEncoder passwordEncoder() {
@@ -47,19 +52,8 @@ public class SecurityConfig {
   }
 
   @Bean
-  @Profile("dev")
+  @Profile({"dev", "prod"})
   public SecurityFilterChain filterChainDev(HttpSecurity http) throws Exception {
-    setDefaultHttp(http);
-    http.authorizeHttpRequests(
-        authorizeHttpRequests ->
-            authorizeHttpRequests.requestMatchers(new AntPathRequestMatcher("/v3/**")).permitAll());
-    setSecuredHttp(http);
-    return http.build();
-  }
-
-  @Bean
-  @Profile("prod")
-  public SecurityFilterChain filterChainProd(HttpSecurity http) throws Exception {
     setDefaultHttp(http);
     setSecuredHttp(http);
     return http.build();
@@ -78,18 +72,25 @@ public class SecurityConfig {
   }
 
   private void setSecuredHttp(HttpSecurity http) throws Exception {
+    List<String> securedEndpoints = securityProperty.api().securedEndpoints();
+
     http.authorizeHttpRequests(
-        authorizeHttpRequests ->
-            authorizeHttpRequests
-                .requestMatchers(new AntPathRequestMatcher(PATTERN_AUTH))
-                .permitAll()
-                .requestMatchers(new AntPathRequestMatcher(PATTERN_TEST))
-                .permitAll()
-                .requestMatchers(new AntPathRequestMatcher(PATTERN_ERROR_PATH))
-                .permitAll()
-                .requestMatchers(new AntPathRequestMatcher(PATTERN_ACTUATOR))
-                .permitAll()
-                .anyRequest()
-                .authenticated());
+        authorize -> {
+          authorize
+              .requestMatchers(new AntPathRequestMatcher(PATTERN_AUTH))
+              .permitAll()
+              .requestMatchers(new AntPathRequestMatcher(PATTERN_TEST))
+              .permitAll()
+              .requestMatchers(new AntPathRequestMatcher(PATTERN_ERROR_PATH))
+              .permitAll();
+
+          for (String endpoint : securedEndpoints) {
+            authorize
+                .requestMatchers(new AntPathRequestMatcher(endpoint + PATTERN_ALL))
+                .hasRole(INTERNAL_SERVICE);
+          }
+
+          authorize.anyRequest().authenticated();
+        });
   }
 }

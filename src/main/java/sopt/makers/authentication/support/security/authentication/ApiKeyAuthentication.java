@@ -1,25 +1,22 @@
 package sopt.makers.authentication.support.security.authentication;
 
-import java.util.Collection;
-import java.util.Collections;
+import static sopt.makers.authentication.support.constant.SystemConstant.INTERNAL_SERVICE;
+import static sopt.makers.authentication.support.constant.SystemConstant.ROLE;
 
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
+import java.util.List;
 
-public class ApiKeyAuthentication implements Authentication {
+import org.springframework.security.authentication.AbstractAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
+public class ApiKeyAuthentication extends AbstractAuthenticationToken {
   private final String apiKey;
-  private final String product;
-  private boolean authenticated = true;
+  private final String serviceName;
 
-  public ApiKeyAuthentication(String apiKey, String product) {
+  public ApiKeyAuthentication(String apiKey, String serviceName) {
+    super(List.of(new SimpleGrantedAuthority(ROLE + INTERNAL_SERVICE)));
     this.apiKey = apiKey;
-    this.product = product;
-  }
-
-  @Override
-  public Collection<? extends GrantedAuthority> getAuthorities() {
-    return Collections.emptyList();
+    this.serviceName = serviceName;
+    super.setAuthenticated(true);
   }
 
   @Override
@@ -28,27 +25,7 @@ public class ApiKeyAuthentication implements Authentication {
   }
 
   @Override
-  public Object getDetails() {
-    return null;
-  }
-
-  @Override
   public Object getPrincipal() {
-    return apiKey;
-  }
-
-  @Override
-  public boolean isAuthenticated() {
-    return authenticated;
-  }
-
-  @Override
-  public void setAuthenticated(boolean isAuthenticated) throws IllegalArgumentException {
-    this.authenticated = isAuthenticated;
-  }
-
-  @Override
-  public String getName() {
-    return product != null ? product : "Unknown";
+    return serviceName;
   }
 }

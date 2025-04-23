@@ -20,7 +20,7 @@ public class SecurityPropertyTest {
   @DisplayName("SecurityProperty 값 확인")
   void checkSecurityProperty() {
     assertThat(securityProperty).isNotNull();
-    assertThat(securityProperty.api().key()).isNotNull();
+    assertThat(securityProperty.api().keys()).isNotNull();
     assertThat(securityProperty.api().securedEndpoints()).isNotNull();
     assertThat(securityProperty.jwt().secret()).isNotNull();
     assertThat(securityProperty.jwt().secret().rsa()).isNotNull();

@@ -6,9 +6,16 @@ spring.config.activate.on-profile:
 
 security:
   api:
-    key: ${X_API_KEY}
+    keys:
+      playground: ${PLAYGROUND_X_API_KEY}
+      crew: ${CREW_X_API_KEY}
+      app: ${APP_X_API_KEY}
+      admin: ${ADMIN_X_API_KEY}
+      platform: ${PLATFORM_X_API_KEY}
+      monitoring: ${MONITORING_X_API_KEY}
     secured-endpoints:
       - ${GET_PUBLIC_KEY}
+      - ${ACTUATOR_PATH}
 
   jwt:
     secret:

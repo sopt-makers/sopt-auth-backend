@@ -6,14 +6,9 @@ spring:
       - classpath:jpa.yaml
       - classpath:external.yaml
       - classpath:security.yaml
+      - classpath:monitoring.yaml
   datasource:
     url: ${DB_URL}
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
     driver-class-name: ${DB_DRIVER_CLASS}
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health
