@@ -6,7 +6,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import sopt.makers.authentication.support.exception.support.TokenException;
 import sopt.makers.authentication.support.jwt.provider.JwtAuthRefreshTokenProvider;
 
-import java.io.IOException;
 import java.time.Instant;
 
 import org.junit.jupiter.api.DisplayName;
@@ -62,7 +61,7 @@ public class JwtRefreshTokenTest {
 
   @Test
   @DisplayName("RefreshToken 갱신")
-  public void refresh_jwt_refresh_token() throws IOException {
+  public void refresh_jwt_refresh_token() {
     // Given
     String accessToken = "Bearer ey.d.d";
     String token = jwtAuthRefreshTokenProvider.generate(accessToken);
@@ -76,7 +75,7 @@ public class JwtRefreshTokenTest {
 
   @Test
   @DisplayName("RefreshToken 만료시간 검증")
-  public void validate_jwt_refresh_token() throws IOException {
+  public void validate_jwt_refresh_token() {
     // Given
     JwtClaimsSet jwtClaimsSet =
         JwtClaimsSet.builder().expiresAt(Instant.now().minusSeconds(1)).build();
