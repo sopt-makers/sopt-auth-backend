@@ -1,5 +1,7 @@
 package sopt.makers.authentication.application.auth.api;
 
+import static sopt.makers.authentication.support.constant.JwtConstant.REFRESH_TOKEN_HEADER;
+
 import sopt.makers.authentication.application.auth.dto.request.AuthRequest;
 import sopt.makers.authentication.application.auth.dto.response.AuthResponse;
 import sopt.makers.authentication.support.code.domain.success.AuthSuccess;
@@ -14,6 +16,7 @@ import sopt.makers.authentication.usecase.auth.port.in.VerifyPhoneVerificationUs
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -85,25 +88,10 @@ public class AuthApiController implements AuthApi {
   }
 
   @Override
-  @PostMapping("/refresh/app")
-  public ResponseEntity<BaseResponse<?>> refreshTokenFromApp(
-      AuthRequest.AuthenticationTokenInfo authenticationTokenInfo) {
-
-    AuthenticateTokenInfo tokenInfo =
-        authenticateSocialAccountUsecase.refresh(authenticationTokenInfo.toCommand());
-
-    return ResponseUtil.success(
-        AuthSuccess.AUTHENTICATE_SOCIAL_ACCOUNT,
-        AuthResponse.AuthenticateSocialAuthInfoForApp.of(
-            tokenInfo.accessToken(), tokenInfo.refreshToken()));
-  }
-
-  @Override
   @PostMapping("/refresh/web")
   public ResponseEntity<BaseResponse<?>> refreshTokenFromWeb(
-      @RequestHeader("accessToken") String accessToken,
-      @RequestHeader("refreshToken") String refreshToken) {
-
+      @RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken,
+      @CookieValue(REFRESH_TOKEN_HEADER) String refreshToken) {
     AuthRequest.AuthenticationTokenInfo authenticationTokenInfo =
         new AuthRequest.AuthenticationTokenInfo(accessToken, refreshToken);
 
@@ -115,5 +103,19 @@ public class AuthApiController implements AuthApi {
         AuthSuccess.AUTHENTICATE_SOCIAL_ACCOUNT,
         headers,
         AuthResponse.AuthenticateSocialAuthInfoForWeb.of(tokenInfo.accessToken()));
+  }
+
+  @Override
+  @PostMapping("/refresh/app")
+  public ResponseEntity<BaseResponse<?>> refreshTokenFromApp(
+      AuthRequest.AuthenticationTokenInfo authenticationTokenInfo) {
+
+    AuthenticateTokenInfo tokenInfo =
+        authenticateSocialAccountUsecase.refresh(authenticationTokenInfo.toCommand());
+
+    return ResponseUtil.success(
+        AuthSuccess.AUTHENTICATE_SOCIAL_ACCOUNT,
+        AuthResponse.AuthenticateSocialAuthInfoForApp.of(
+            tokenInfo.accessToken(), tokenInfo.refreshToken()));
   }
 }
