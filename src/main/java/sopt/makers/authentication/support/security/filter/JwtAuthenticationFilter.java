@@ -28,6 +28,7 @@ import lombok.RequiredArgsConstructor;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
   private final JwtAuthAccessTokenProvider authTokenProvider;
+  private final int TOKEN_HEADER_LENGTH = 7;
 
   @Override
   protected void doFilterInternal(
@@ -36,7 +37,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       @NonNull final FilterChain filterChain)
       throws ServletException, IOException {
     String authorizationToken = getAuthorizationToken(request);
-    CustomAuthentication authentication = authTokenProvider.parse(authorizationToken);
+    CustomAuthentication authentication = authTokenProvider.parseToken(authorizationToken);
 
     authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
     SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -49,7 +50,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
    */
   private String getAuthorizationToken(final HttpServletRequest request) {
     String authorizationHeaderValue =
-        request.getHeader(HttpHeaders.AUTHORIZATION).substring(HttpHeaders.AUTHORIZATION.length());
+        request.getHeader(HttpHeaders.AUTHORIZATION).substring(TOKEN_HEADER_LENGTH);
     return authorizationHeaderValue.trim();
   }
 
