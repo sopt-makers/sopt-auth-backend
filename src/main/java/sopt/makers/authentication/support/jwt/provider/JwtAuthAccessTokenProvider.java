@@ -59,6 +59,12 @@ public class JwtAuthAccessTokenProvider implements JwtProvider<CustomAuthenticat
     return jwtAccessToken.parse();
   }
 
+  public CustomAuthentication parseToken(String token) {
+    Jwt accessToken = jwtDecoder.decode(token);
+    JwtAccessToken jwtAccessToken = JwtAccessToken.createJwtAccessToken(accessToken);
+    return jwtAccessToken.parse();
+  }
+
   private JwtClaimsSet generateClaimSet(
       String subject, String issuer, Instant issuedAt, Instant expiresAt, List<String> roles) {
     return JwtClaimsSet.builder()
