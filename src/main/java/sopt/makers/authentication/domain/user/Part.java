@@ -6,13 +6,20 @@ import sopt.makers.authentication.support.exception.domain.UserException;
 
 import java.util.Arrays;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
+@Getter
 public enum Part {
-  ANDROID,
-  IOS,
-  SERVER,
-  DESIGN,
-  PLAN,
-  WEB;
+  ANDROID("안드로이드"),
+  IOS("iOS"),
+  SERVER("서버"),
+  DESIGN("디자인"),
+  PLAN("기획"),
+  WEB("웹");
+
+  private final String name;
 
   public static Part findPart(final String part) {
 
