@@ -9,6 +9,8 @@ public interface UserRepository {
 
   User findByPhone(String phone);
 
+  User findById(long userId);
+
   User save(User user);
 
   void update(User user, SocialAccount socialAccount);

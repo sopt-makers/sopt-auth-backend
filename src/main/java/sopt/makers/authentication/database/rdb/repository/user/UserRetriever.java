@@ -33,6 +33,12 @@ public class UserRetriever {
     return userEntity.toDomain();
   }
 
+  public User findById(long userId) {
+    UserEntity userEntity =
+        userJpaRepository.findById(userId).orElseThrow(() -> new UserException(NOT_FOUND_USER));
+    return userEntity.toDomain();
+  }
+
   public boolean existsByPhone(String phone) {
     return userJpaRepository.existsByPhone(phone);
   }

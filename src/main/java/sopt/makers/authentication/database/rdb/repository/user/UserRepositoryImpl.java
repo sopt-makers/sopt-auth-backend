@@ -22,6 +22,11 @@ public class UserRepositoryImpl implements UserRepository {
     return userRetriever.findBySocialAccount(socialAccount);
   }
 
+  @Override
+  public User findById(long userId) {
+    return userRetriever.findById(userId);
+  }
+
   @Transactional
   @Override
   public User save(User user) {
