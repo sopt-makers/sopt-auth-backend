@@ -49,7 +49,7 @@ public class JwtAccessTokenTest {
     CustomAuthentication customAuthentication = new CustomAuthentication("test", "test");
 
     // When
-    String accessToken = jwtAuthAccessTokenProvider.generate(customAuthentication);
+    String accessToken = jwtAuthAccessTokenProvider.generateJwtAuthToken(customAuthentication);
 
     // Then
     assertThat(accessToken).isNotNull();
@@ -60,7 +60,7 @@ public class JwtAccessTokenTest {
   void decode_jwt_access_token() {
     // Given
     CustomAuthentication customAuthentication = new CustomAuthentication("test", "test");
-    String accessToken = jwtAuthAccessTokenProvider.generate(customAuthentication);
+    String accessToken = jwtAuthAccessTokenProvider.generateJwtAuthToken(customAuthentication);
 
     // When
     Jwt jwt = jwtDecoder.decode(accessToken);
@@ -75,7 +75,7 @@ public class JwtAccessTokenTest {
   void parse_jwt_access_token() throws IOException {
     // Given
     CustomAuthentication customAuthentication = new CustomAuthentication("test", "test");
-    String accessToken = jwtAuthAccessTokenProvider.generate(customAuthentication);
+    String accessToken = jwtAuthAccessTokenProvider.generateJwtAuthToken(customAuthentication);
 
     // when
     CustomAuthentication parsedAuthentication =
@@ -120,7 +120,7 @@ public class JwtAccessTokenTest {
   void decode_jwt_access_token_with_public_key() throws ParseException, JOSEException {
     // Arrange
     CustomAuthentication customAuthentication = new CustomAuthentication("test", "test");
-    String accessToken = jwtAuthAccessTokenProvider.generate(customAuthentication);
+    String accessToken = jwtAuthAccessTokenProvider.generateJwtAuthToken(customAuthentication);
 
     SignedJWT signedJWT = SignedJWT.parse(accessToken);
     JWKSet info = jwksRetrieveUsecase.retrievePublicKey();
