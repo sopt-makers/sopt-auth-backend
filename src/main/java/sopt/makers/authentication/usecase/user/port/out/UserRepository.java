@@ -1,7 +1,9 @@
-package sopt.makers.authentication.usecase.auth.port.out;
+package sopt.makers.authentication.usecase.user.port.out;
 
 import sopt.makers.authentication.domain.auth.SocialAccount;
 import sopt.makers.authentication.domain.user.User;
+
+import java.util.List;
 
 public interface UserRepository {
 
@@ -9,7 +11,7 @@ public interface UserRepository {
 
   User findByPhone(String phone);
 
-  User findById(long userId);
+  List<User> findAllById(List<Long> userId);
 
   User save(User user);
 

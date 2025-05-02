@@ -1,8 +1,8 @@
-package sopt.makers.authentication.application.auth.dto.response;
+package sopt.makers.authentication.application.user.dto.response;
 
 import static lombok.AccessLevel.PRIVATE;
 
-import sopt.makers.authentication.usecase.auth.port.in.GetUserInformationUsecase;
+import sopt.makers.authentication.usecase.user.port.in.GetUserInformationUsecase;
 
 import java.util.List;
 
@@ -31,6 +31,11 @@ public final class UserResponse {
           userProfileAndActivityInfo.phone(),
           userProfileAndActivityInfo.email(),
           soptActivities);
+    }
+
+    public static List<UserProfileAndActivity> from(
+        List<GetUserInformationUsecase.UserProfileAndActivityInfo> infoList) {
+      return infoList.stream().map(UserResponse.UserProfileAndActivity::from).toList();
     }
   }
 

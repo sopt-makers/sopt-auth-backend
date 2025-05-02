@@ -1,4 +1,4 @@
-package sopt.makers.authentication.support.jwt.provider;
+package sopt.makers.authentication.support.jwt.service;
 
 import static sopt.makers.authentication.support.jwt.provider.JwtTokenUtil.extract;
 
@@ -23,7 +23,7 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-public class JwtAuthAccessTokenProvider implements JwtProvider<CustomAuthentication> {
+public class JwtAuthAccessTokenService implements JwtProvider<CustomAuthentication> {
 
   private final JwtEncoder jwtEncoder;
   private final JwtDecoder jwtDecoder;
@@ -54,12 +54,6 @@ public class JwtAuthAccessTokenProvider implements JwtProvider<CustomAuthenticat
   @Override
   public CustomAuthentication parse(String requestToken) {
     String token = extract(requestToken);
-    Jwt accessToken = jwtDecoder.decode(token);
-    JwtAccessToken jwtAccessToken = JwtAccessToken.createJwtAccessToken(accessToken);
-    return jwtAccessToken.parse();
-  }
-
-  public CustomAuthentication parseToken(String token) {
     Jwt accessToken = jwtDecoder.decode(token);
     JwtAccessToken jwtAccessToken = JwtAccessToken.createJwtAccessToken(accessToken);
     return jwtAccessToken.parse();

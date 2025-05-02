@@ -18,9 +18,9 @@ import sopt.makers.authentication.domain.user.User;
 import sopt.makers.authentication.domain.user.UserRegisterInfo;
 import sopt.makers.authentication.support.exception.domain.*;
 import sopt.makers.authentication.usecase.auth.port.out.PhoneVerificationRepository;
-import sopt.makers.authentication.usecase.auth.port.out.UserRepository;
 import sopt.makers.authentication.usecase.message.port.out.MessageSendPort;
 import sopt.makers.authentication.usecase.user.port.out.UserRegisterInfoRepository;
+import sopt.makers.authentication.usecase.user.port.out.UserRepository;
 
 import java.time.LocalDate;
 import java.util.Optional;

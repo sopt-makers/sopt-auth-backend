@@ -1,4 +1,4 @@
-package sopt.makers.authentication.usecase.auth.port.in;
+package sopt.makers.authentication.usecase.user.port.in;
 
 import sopt.makers.authentication.domain.user.Activity;
 import sopt.makers.authentication.domain.user.ActivityList;
@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface GetUserInformationUsecase {
 
-  UserProfileAndActivityInfo getUserInformation(long userId);
+  List<UserProfileAndActivityInfo> getUserInformation(List<Long> userId);
 
   record UserProfileAndActivityInfo(
       String name,

@@ -9,7 +9,8 @@ import sopt.makers.authentication.domain.auth.AuthPlatform;
 import sopt.makers.authentication.domain.auth.SocialAccount;
 import sopt.makers.authentication.domain.user.User;
 import sopt.makers.authentication.usecase.auth.port.in.GetSocialAccountUsecase;
-import sopt.makers.authentication.usecase.auth.port.out.UserRepository;
+import sopt.makers.authentication.usecase.user.port.out.UserRepository;
+import sopt.makers.authentication.usecase.user.service.GetSocialAccountPlatformService;
 
 import java.util.stream.Stream;
 
