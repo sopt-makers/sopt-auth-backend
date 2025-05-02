@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static sopt.makers.authentication.support.jwt.provider.JwtTokenUtil.addPrefix;
 import static sopt.makers.authentication.support.jwt.provider.JwtTokenUtil.extract;
 
-import sopt.makers.authentication.support.jwt.provider.JwtAuthAccessTokenProvider;
+import sopt.makers.authentication.support.jwt.service.JwtAuthAccessTokenService;
 import sopt.makers.authentication.support.security.authentication.CustomAuthentication;
 import sopt.makers.authentication.usecase.auth.port.in.JwksRetrieveUsecase;
 
@@ -33,7 +33,7 @@ import com.nimbusds.jwt.SignedJWT;
 @ActiveProfiles("test")
 @TestPropertySource(locations = {"classpath:env/test.env"})
 public class JwtAccessTokenTest {
-  @Autowired private JwtAuthAccessTokenProvider jwtAuthAccessTokenProvider;
+  @Autowired private JwtAuthAccessTokenService jwtAuthAccessTokenProvider;
   @Autowired private JwtDecoder jwtDecoder;
   @Autowired private JwksRetrieveUsecase jwksRetrieveUsecase;
 
