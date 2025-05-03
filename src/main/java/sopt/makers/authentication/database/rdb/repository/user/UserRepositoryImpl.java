@@ -3,7 +3,9 @@ package sopt.makers.authentication.database.rdb.repository.user;
 import sopt.makers.authentication.database.rdb.entity.UserEntity;
 import sopt.makers.authentication.domain.auth.SocialAccount;
 import sopt.makers.authentication.domain.user.User;
-import sopt.makers.authentication.usecase.auth.port.out.UserRepository;
+import sopt.makers.authentication.usecase.user.port.out.UserRepository;
+
+import java.util.List;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,8 +25,8 @@ public class UserRepositoryImpl implements UserRepository {
   }
 
   @Override
-  public User findById(long userId) {
-    return userRetriever.findById(userId);
+  public List<User> findAllById(List<Long> userId) {
+    return userRetriever.findAllById(userId);
   }
 
   @Transactional

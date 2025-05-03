@@ -6,6 +6,9 @@ import sopt.makers.authentication.domain.user.ActivityList;
 import sopt.makers.authentication.domain.user.User;
 import sopt.makers.authentication.usecase.user.port.out.UserActivityHistoryRepository;
 
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,5 +32,10 @@ public class UserActivityHistoryRepositoryImpl implements UserActivityHistoryRep
 
   public ActivityList findByUser(Long userId) {
     return userActivityHistoryRetriever.findByUser(userId);
+  }
+
+  @Override
+  public Map<Long, ActivityList> findAllByUserIdIn(List<Long> userId) {
+    return userActivityHistoryRetriever.findAllByUserIdIn(userId);
   }
 }
