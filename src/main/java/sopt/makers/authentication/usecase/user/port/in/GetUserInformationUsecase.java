@@ -12,6 +12,7 @@ public interface GetUserInformationUsecase {
   List<UserProfileAndActivityInfo> getUserInformation(List<Long> userId);
 
   record UserProfileAndActivityInfo(
+      Long userId,
       String name,
       String profileImage,
       String birthday,
@@ -25,9 +26,13 @@ public interface GetUserInformationUsecase {
           activities.getActivities().stream().map(UserActivityinfo::of).toList();
 
       return new UserProfileAndActivityInfo(
-          profile.name(), profile.profileImage().orElse(null),
-          profile.birthday().toString(), profile.phone(),
-          profile.email().orElse(null), userActivityinfos);
+          user.getId(),
+          profile.name(),
+          profile.profileImage().orElse(null),
+          profile.birthday().toString(),
+          profile.phone(),
+          profile.email().orElse(null),
+          userActivityinfos);
     }
   }
 

@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor(access = PRIVATE)
 public final class UserResponse {
   public record UserProfileAndActivity(
+      Long userId,
       String name,
       String profileImage,
       String birthday,
@@ -25,6 +26,7 @@ public final class UserResponse {
               .toList();
 
       return new UserProfileAndActivity(
+          userProfileAndActivityInfo.userId(),
           userProfileAndActivityInfo.name(),
           userProfileAndActivityInfo.profileImage(),
           userProfileAndActivityInfo.birthday(),
