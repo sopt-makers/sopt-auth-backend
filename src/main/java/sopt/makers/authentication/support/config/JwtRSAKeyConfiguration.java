@@ -1,6 +1,7 @@
 package sopt.makers.authentication.support.config;
 
 import sopt.makers.authentication.support.jwt.RSAKeyManager;
+import sopt.makers.authentication.support.value.SecurityProperty;
 
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
@@ -26,13 +27,14 @@ import lombok.RequiredArgsConstructor;
 public class JwtRSAKeyConfiguration {
 
   private final RSAKeyManager keyManager;
+  private final SecurityProperty securityProperty;
 
   @Bean
   public JwtEncoder jwtEncoder() {
     RSAPublicKey publicKey = keyManager.getPublicKey();
     RSAPrivateKey privateKey = keyManager.getPrivateKey();
-
-    JWK jwk = new RSAKey.Builder(publicKey).privateKey(privateKey).build();
+    String keyId = securityProperty.jwt().secret().rsa().keyId();
+    JWK jwk = new RSAKey.Builder(publicKey).privateKey(privateKey).keyID(keyId).build();
     JWKSource<SecurityContext> jwks = new ImmutableJWKSet<>(new JWKSet(jwk));
     return new NimbusJwtEncoder(jwks);
   }
