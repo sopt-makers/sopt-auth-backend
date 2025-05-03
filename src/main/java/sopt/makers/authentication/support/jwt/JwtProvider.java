@@ -4,7 +4,7 @@ import java.io.IOException;
 
 public interface JwtProvider<T> {
 
-  String generateJwtAuthToken(final T value);
+  String generateJwt(final T value);
 
   T parse(final String token) throws IOException;
 }

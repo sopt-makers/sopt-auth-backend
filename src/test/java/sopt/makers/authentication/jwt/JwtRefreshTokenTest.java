@@ -35,10 +35,10 @@ public class JwtRefreshTokenTest {
   public void generate_jwt_refresh_token() {
     // Given
     String accessToken = "Bearer ey.d.d";
-    String givenToken = jwtAuthRefreshTokenProvider.generateJwtAuthToken(accessToken);
+    String givenToken = jwtAuthRefreshTokenProvider.generateJwt(accessToken);
 
     // When
-    String expectedToken = jwtAuthRefreshTokenProvider.generateJwtAuthToken(accessToken);
+    String expectedToken = jwtAuthRefreshTokenProvider.generateJwt(accessToken);
 
     // Then
     assertThat(givenToken).isNotNull();
@@ -50,7 +50,7 @@ public class JwtRefreshTokenTest {
   public void decode_jwt_refresh_token() {
     // Given
     String accessToken = "Bearer ey.d.d";
-    String refreshToken = jwtAuthRefreshTokenProvider.generateJwtAuthToken(accessToken);
+    String refreshToken = jwtAuthRefreshTokenProvider.generateJwt(accessToken);
 
     // When
     Jwt jwt = jwtDecoder.decode(refreshToken);
@@ -64,7 +64,7 @@ public class JwtRefreshTokenTest {
   public void refresh_jwt_refresh_token() {
     // Given
     String accessToken = "Bearer ey.d.d";
-    String token = jwtAuthRefreshTokenProvider.generateJwtAuthToken(accessToken);
+    String token = jwtAuthRefreshTokenProvider.generateJwt(accessToken);
 
     // When
     String refreshedToken = jwtAuthRefreshTokenProvider.parse(token);

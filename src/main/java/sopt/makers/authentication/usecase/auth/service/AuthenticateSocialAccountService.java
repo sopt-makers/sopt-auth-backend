@@ -40,8 +40,8 @@ public class AuthenticateSocialAccountService implements AuthenticateSocialAccou
     CustomAuthentication customAuthentication =
         new CustomAuthentication(
             user.getId(), null, List.of(new SimpleGrantedAuthority(role.name())));
-    String accessToken = jwtAuthAccessTokenProvider.generateJwtAuthToken(customAuthentication);
-    String refreshToken = jwtAuthRefreshTokenProvider.generateJwtAuthToken(accessToken);
+    String accessToken = jwtAuthAccessTokenProvider.generateJwt(customAuthentication);
+    String refreshToken = jwtAuthRefreshTokenProvider.generateJwt(accessToken);
 
     return AuthenticateTokenInfo.of(accessToken, refreshToken);
   }
@@ -54,10 +54,8 @@ public class AuthenticateSocialAccountService implements AuthenticateSocialAccou
     CustomAuthentication customAuthentication =
         jwtAuthAccessTokenProvider.parse(command.accessToken());
 
-    String renewedAccessToken =
-        jwtAuthAccessTokenProvider.generateJwtAuthToken(customAuthentication);
-    String renewedRefreshToken =
-        jwtAuthRefreshTokenProvider.generateJwtAuthToken(renewedAccessToken);
+    String renewedAccessToken = jwtAuthAccessTokenProvider.generateJwt(customAuthentication);
+    String renewedRefreshToken = jwtAuthRefreshTokenProvider.generateJwt(renewedAccessToken);
     return AuthenticateTokenInfo.of(renewedAccessToken, renewedRefreshToken);
   }
 }

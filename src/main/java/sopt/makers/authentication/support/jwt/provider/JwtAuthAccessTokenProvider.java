@@ -30,7 +30,7 @@ public class JwtAuthAccessTokenProvider implements JwtProvider<CustomAuthenticat
   private final SecurityProperty securityProperty;
 
   @Override
-  public String generateJwtAuthToken(CustomAuthentication authentication) {
+  public String generateJwt(CustomAuthentication authentication) {
     String subject = authentication.getPrincipal().toString();
     String issuer = securityProperty.jwt().secret().issuer().issuerName();
     Instant now = Instant.now();
