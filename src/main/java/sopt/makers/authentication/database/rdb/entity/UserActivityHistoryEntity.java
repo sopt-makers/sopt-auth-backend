@@ -91,8 +91,4 @@ public class UserActivityHistoryEntity {
   public Activity toDomain() {
     return Activity.of(id, generation, team, part, role);
   }
-
-  public Activity toDomainWithUser() {
-    return Activity.of(id, user.toDomain().getId(), generation, team, part, role);
-  }
 }
