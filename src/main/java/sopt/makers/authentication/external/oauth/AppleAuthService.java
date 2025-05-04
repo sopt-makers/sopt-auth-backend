@@ -12,6 +12,7 @@ import sopt.makers.authentication.support.value.AppleOAuthProperty;
 import java.text.ParseException;
 import java.time.Instant;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.stereotype.Component;
 
@@ -64,7 +65,7 @@ public class AppleAuthService implements OAuthService {
 
       boolean isVerifiedSignature = jwt.verify(verifier);
       boolean isCorrectIssuer = jwtClaimsSet.getIssuer().equals(APPLE_ISSUER);
-      boolean isCorrectAudience = jwtClaimsSet.getAudience().contains(appleOAuthProperty.aud());
+      boolean isCorrectAudience = verifyAudience(jwtClaimsSet.getAudience());
       boolean isNotExpired = jwtClaimsSet.getExpirationTime().after(Date.from(Instant.now()));
 
       if (!(isVerifiedSignature && isCorrectIssuer && isCorrectAudience && isNotExpired)) {
@@ -73,5 +74,10 @@ public class AppleAuthService implements OAuthService {
     } catch (JOSEException e) {
       throw new AuthException(AuthFailure.INVALID_ID_TOKEN);
     }
+  }
+
+  private boolean verifyAudience(List<String> audiences) {
+    return audiences.contains(appleOAuthProperty.webAud())
+        || audiences.contains(appleOAuthProperty.appAud());
   }
 }
