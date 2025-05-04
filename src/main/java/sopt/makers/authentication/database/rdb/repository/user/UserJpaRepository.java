@@ -12,13 +12,11 @@ import org.springframework.data.repository.query.Param;
 
 public interface UserJpaRepository extends JpaRepository<UserEntity, Long> {
   @Query(
-      """
-    SELECT DISTINCT u
-    FROM UserEntity u
-    JOIN FETCH u.userActivityHistoryList
-    WHERE u.authPlatformType = :authPlatformType
-      AND u.authPlatformId = :authPlatformId
-    """)
+      "SELECT DISTINCT u "
+          + "FROM UserEntity u "
+          + "JOIN FETCH u.userActivityHistoryList "
+          + "WHERE u.authPlatformType = :authPlatformType "
+          + "AND u.authPlatformId = :authPlatformId")
   Optional<UserEntity> findByAuthPlatformTypeAndAuthPlatformId(
       @Param("authPlatformType") AuthPlatform authPlatformType,
       @Param("authPlatformId") String authPlatformId);
