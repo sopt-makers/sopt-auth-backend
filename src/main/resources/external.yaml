@@ -12,7 +12,8 @@ external:
       phone: ${GABIA_SMS_PHONE}
   oauth:
     apple:
-      aud: ${APPLE_AUD}
+      web-aud: ${APPLE_AUD_WEB}
+      app-aud: ${APPLE_AUD_APP}
     google:
       client:
         id: ${GOOGLE_CLIENT_ID}
