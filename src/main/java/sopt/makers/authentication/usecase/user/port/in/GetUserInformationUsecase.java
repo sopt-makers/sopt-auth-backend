@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface GetUserInformationUsecase {
 
-  List<UserProfileAndActivityInfo> getUserInformation(List<Long> userId);
+  List<UserProfileAndActivityInfo> getUserInformation(List<Long> userIds);
 
   record UserProfileAndActivityInfo(
       Long userId,

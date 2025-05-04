@@ -32,11 +32,11 @@ public class UserApiController implements UserApi {
   public ResponseEntity<BaseResponse<?>> getUserInformation(
       @RequestHeader(API_KEY_HEADER) String apiKey,
       @RequestHeader(SERVICE_NAME_HEADER) String serviceName,
-      @RequestParam List<Long> userId) {
-    userIdValidator.validateUserIds(userId);
+      @RequestParam List<Long> userIds) {
+    userIdValidator.validateUserIds(userIds);
 
     List<GetUserInformationUsecase.UserProfileAndActivityInfo> userInformation =
-        getUserInformationUsecase.getUserInformation(userId);
+        getUserInformationUsecase.getUserInformation(userIds);
 
     return ResponseUtil.success(
         UserSuccess.GET_USER_INFORMATION,

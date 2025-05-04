@@ -11,7 +11,7 @@ public interface UserRepository {
 
   User findByPhone(String phone);
 
-  List<User> findAllById(List<Long> userId);
+  List<User> findAllById(List<Long> userIds);
 
   User save(User user);
 
