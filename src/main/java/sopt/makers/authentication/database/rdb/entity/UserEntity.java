@@ -4,14 +4,18 @@ import static lombok.AccessLevel.PROTECTED;
 
 import sopt.makers.authentication.domain.auth.AuthPlatform;
 import sopt.makers.authentication.domain.auth.SocialAccount;
+import sopt.makers.authentication.domain.user.Activity;
+import sopt.makers.authentication.domain.user.ActivityList;
 import sopt.makers.authentication.domain.user.Profile;
 import sopt.makers.authentication.domain.user.User;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotNull;
@@ -29,16 +33,19 @@ import lombok.NoArgsConstructor;
     })
 public class UserEntity extends BaseEntity {
 
-  @NotNull String name;
-  @NotNull String phone;
-  String email;
-  LocalDate birthday;
-  @NotNull String authPlatformId;
-  String profileImage;
+  @NotNull private String name;
+  @NotNull private String phone;
+  private String email;
+  private LocalDate birthday;
+  @NotNull private String authPlatformId;
+  private String profileImage;
 
   @NotNull
   @Enumerated(EnumType.STRING)
-  AuthPlatform authPlatformType;
+  private AuthPlatform authPlatformType;
+
+  @OneToMany(mappedBy = "user")
+  private List<UserActivityHistoryEntity> userActivityHistoryList;
 
   private UserEntity(
       String name,
@@ -80,6 +87,8 @@ public class UserEntity extends BaseEntity {
   public User toDomain() {
     SocialAccount socialAccount = SocialAccount.of(authPlatformId, authPlatformType);
     Profile profile = Profile.of(name, email, phone, birthday);
-    return User.createUser(super.getId(), socialAccount, profile);
+    List<Activity> activityList =
+        userActivityHistoryList.stream().map(UserActivityHistoryEntity::toDomain).toList();
+    return User.createUser(super.getId(), socialAccount, profile, ActivityList.of(activityList));
   }
 }
