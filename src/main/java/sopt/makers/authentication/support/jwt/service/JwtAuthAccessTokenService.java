@@ -24,31 +24,50 @@ import lombok.RequiredArgsConstructor;
 @Component
 @RequiredArgsConstructor
 public class JwtAuthAccessTokenService implements JwtProvider<CustomAuthentication> {
-
+  private static final String ROLES = "roles";
   private final JwtEncoder jwtEncoder;
   private final JwtDecoder jwtDecoder;
   private final SecurityProperty securityProperty;
 
   @Override
-  public String generate(CustomAuthentication authentication) {
-
+  public String generateJwt(CustomAuthentication authentication) {
     String subject = authentication.getPrincipal().toString();
     String issuer = securityProperty.jwt().secret().issuer().issuerName();
     Instant now = Instant.now();
-    Instant expiration =
-        now.plusSeconds(securityProperty.jwt().secret().expiration().accessTokenExpiration());
-    List<String> roles =
-        authentication.getAuthorities().stream()
-            .map(GrantedAuthority::getAuthority)
-            .collect(Collectors.toUnmodifiableList());
-
-    JwtClaimsSet claimsSet = generateClaimSet(subject, issuer, now, expiration, roles);
-    JwtAccessToken jwtAccessToken =
-        JwtAccessToken.createJwtAccessToken(
-            jwtEncoder.encode(JwtEncoderParameters.from(claimsSet)));
+    Instant expiration = calculateExpiration(now);
+    List<String> roles = extractRoles(authentication);
+    JwtClaimsSet claimsSet = generateClaimsSet(subject, issuer, now, expiration, roles);
+    JwtAccessToken jwtAccessToken = generateJwtAccessToken(claimsSet);
 
     jwtAccessToken.validate(securityProperty);
     return jwtAccessToken.getToken();
+  }
+
+  private Instant calculateExpiration(Instant now) {
+    long seconds = securityProperty.jwt().secret().expiration().accessTokenExpiration();
+    return now.plusSeconds(seconds);
+  }
+
+  private List<String> extractRoles(CustomAuthentication authentication) {
+    return authentication.getAuthorities().stream()
+        .map(GrantedAuthority::getAuthority)
+        .collect(Collectors.toUnmodifiableList());
+  }
+
+  private JwtClaimsSet generateClaimsSet(
+      String subject, String issuer, Instant issuedAt, Instant expiresAt, List<String> roles) {
+    return JwtClaimsSet.builder()
+        .subject(subject)
+        .issuer(issuer)
+        .issuedAt(issuedAt)
+        .expiresAt(expiresAt)
+        .claim(ROLES, roles)
+        .build();
+  }
+
+  private JwtAccessToken generateJwtAccessToken(JwtClaimsSet claims) {
+    Jwt jwt = jwtEncoder.encode(JwtEncoderParameters.from(claims));
+    return JwtAccessToken.createJwtAccessToken(jwt);
   }
 
   @Override
@@ -57,16 +76,5 @@ public class JwtAuthAccessTokenService implements JwtProvider<CustomAuthenticati
     Jwt accessToken = jwtDecoder.decode(token);
     JwtAccessToken jwtAccessToken = JwtAccessToken.createJwtAccessToken(accessToken);
     return jwtAccessToken.parse();
-  }
-
-  private JwtClaimsSet generateClaimSet(
-      String subject, String issuer, Instant issuedAt, Instant expiresAt, List<String> roles) {
-    return JwtClaimsSet.builder()
-        .subject(subject)
-        .issuer(issuer)
-        .issuedAt(issuedAt)
-        .expiresAt(expiresAt)
-        .claim("roles", roles)
-        .build();
   }
 }

@@ -12,6 +12,9 @@ import sopt.makers.authentication.usecase.auth.port.out.OAuthAuthenticator;
 import sopt.makers.authentication.usecase.user.port.out.UserActivityHistoryRepository;
 import sopt.makers.authentication.usecase.user.port.out.UserRepository;
 
+import java.util.List;
+
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -34,9 +37,11 @@ public class AuthenticateSocialAccountService implements AuthenticateSocialAccou
             SocialAccount.of(authPlatformId, command.authPlatform()));
     ActivityList activityList = user.getActivities();
     Role role = activityList.getLastActivity().getRole();
-    CustomAuthentication customAuthentication = new CustomAuthentication(user.getId(), role);
-    String accessToken = jwtAuthAccessTokenProvider.generate(customAuthentication);
-    String refreshToken = jwtAuthRefreshTokenProvider.generate(accessToken);
+    CustomAuthentication customAuthentication =
+        new CustomAuthentication(
+            user.getId(), null, List.of(new SimpleGrantedAuthority(role.name())));
+    String accessToken = jwtAuthAccessTokenProvider.generateJwt(customAuthentication);
+    String refreshToken = jwtAuthRefreshTokenProvider.generateJwt(accessToken);
 
     return AuthenticateTokenInfo.of(accessToken, refreshToken);
   }
@@ -49,8 +54,8 @@ public class AuthenticateSocialAccountService implements AuthenticateSocialAccou
     CustomAuthentication customAuthentication =
         jwtAuthAccessTokenProvider.parse(command.accessToken());
 
-    String renewedAccessToken = jwtAuthAccessTokenProvider.generate(customAuthentication);
-    String renewedRefreshToken = jwtAuthRefreshTokenProvider.generate(renewedAccessToken);
+    String renewedAccessToken = jwtAuthAccessTokenProvider.generateJwt(customAuthentication);
+    String renewedRefreshToken = jwtAuthRefreshTokenProvider.generateJwt(renewedAccessToken);
     return AuthenticateTokenInfo.of(renewedAccessToken, renewedRefreshToken);
   }
 }
