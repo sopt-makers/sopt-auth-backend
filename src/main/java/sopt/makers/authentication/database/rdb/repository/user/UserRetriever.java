@@ -9,6 +9,8 @@ import sopt.makers.authentication.domain.user.User;
 import sopt.makers.authentication.support.exception.domain.AuthException;
 import sopt.makers.authentication.support.exception.domain.UserException;
 
+import java.util.List;
+
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
@@ -31,6 +33,11 @@ public class UserRetriever {
     UserEntity userEntity =
         userJpaRepository.findByPhone(phone).orElseThrow(() -> new UserException(NOT_FOUND_USER));
     return userEntity.toDomain();
+  }
+
+  public List<User> findAllById(List<Long> userIds) {
+    List<UserEntity> userEntityList = userJpaRepository.findAllWithActivityHistoriesByIdIn(userIds);
+    return userEntityList.stream().map(UserEntity::toDomain).toList();
   }
 
   public boolean existsByPhone(String phone) {

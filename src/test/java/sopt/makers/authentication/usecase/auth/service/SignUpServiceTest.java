@@ -13,9 +13,9 @@ import sopt.makers.authentication.domain.user.User;
 import sopt.makers.authentication.domain.user.UserRegisterInfo;
 import sopt.makers.authentication.usecase.auth.port.in.SignUpUsecase.SignUpCommand;
 import sopt.makers.authentication.usecase.auth.port.out.OAuthAuthenticator;
-import sopt.makers.authentication.usecase.auth.port.out.UserRepository;
 import sopt.makers.authentication.usecase.user.port.out.UserActivityHistoryRepository;
 import sopt.makers.authentication.usecase.user.port.out.UserRegisterInfoRepository;
+import sopt.makers.authentication.usecase.user.port.out.UserRepository;
 
 import java.time.LocalDate;
 import java.util.Optional;

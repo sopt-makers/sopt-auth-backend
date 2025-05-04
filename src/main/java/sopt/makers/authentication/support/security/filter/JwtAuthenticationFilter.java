@@ -2,7 +2,7 @@ package sopt.makers.authentication.support.security.filter;
 
 import static sopt.makers.authentication.support.constant.SystemConstant.WHITELIST_WILDCARD;
 
-import sopt.makers.authentication.support.jwt.provider.JwtAuthAccessTokenProvider;
+import sopt.makers.authentication.support.jwt.service.JwtAuthAccessTokenService;
 import sopt.makers.authentication.support.security.authentication.ApiKeyAuthentication;
 import sopt.makers.authentication.support.security.authentication.CustomAuthentication;
 
@@ -27,7 +27,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-  private final JwtAuthAccessTokenProvider authTokenProvider;
+  private final JwtAuthAccessTokenService authTokenProvider;
 
   @Override
   protected void doFilterInternal(
@@ -48,8 +48,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
    * @return JwtToken Authorization 헤더에서 "Bearer "를 제거하여 토큰을 추출합니다.
    */
   private String getAuthorizationToken(final HttpServletRequest request) {
-    String authorizationHeaderValue =
-        request.getHeader(HttpHeaders.AUTHORIZATION).substring(HttpHeaders.AUTHORIZATION.length());
+    String authorizationHeaderValue = request.getHeader(HttpHeaders.AUTHORIZATION);
     return authorizationHeaderValue.trim();
   }
 

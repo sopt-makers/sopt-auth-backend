@@ -4,13 +4,13 @@ import sopt.makers.authentication.domain.auth.SocialAccount;
 import sopt.makers.authentication.domain.user.ActivityList;
 import sopt.makers.authentication.domain.user.Role;
 import sopt.makers.authentication.domain.user.User;
-import sopt.makers.authentication.support.jwt.provider.JwtAuthAccessTokenProvider;
-import sopt.makers.authentication.support.jwt.provider.JwtAuthRefreshTokenProvider;
+import sopt.makers.authentication.support.jwt.service.JwtAuthAccessTokenService;
+import sopt.makers.authentication.support.jwt.service.JwtAuthRefreshTokenService;
 import sopt.makers.authentication.support.security.authentication.CustomAuthentication;
 import sopt.makers.authentication.usecase.auth.port.in.AuthenticateSocialAccountUsecase;
 import sopt.makers.authentication.usecase.auth.port.out.OAuthAuthenticator;
-import sopt.makers.authentication.usecase.auth.port.out.UserRepository;
 import sopt.makers.authentication.usecase.user.port.out.UserActivityHistoryRepository;
+import sopt.makers.authentication.usecase.user.port.out.UserRepository;
 
 import java.util.List;
 
@@ -25,8 +25,8 @@ public class AuthenticateSocialAccountService implements AuthenticateSocialAccou
   private final OAuthAuthenticator oAuthAuthenticator;
   private final UserRepository userRepository;
   private final UserActivityHistoryRepository userActivityHistoryRepository;
-  private final JwtAuthAccessTokenProvider jwtAuthAccessTokenProvider;
-  private final JwtAuthRefreshTokenProvider jwtAuthRefreshTokenProvider;
+  private final JwtAuthAccessTokenService jwtAuthAccessTokenProvider;
+  private final JwtAuthRefreshTokenService jwtAuthRefreshTokenProvider;
 
   @Override
   public AuthenticateTokenInfo authenticate(AuthenticateSocialAccountCommand command) {
@@ -35,7 +35,7 @@ public class AuthenticateSocialAccountService implements AuthenticateSocialAccou
     User user =
         userRepository.findBySocialAccount(
             SocialAccount.of(authPlatformId, command.authPlatform()));
-    ActivityList activityList = userActivityHistoryRepository.findByUser(user.getId());
+    ActivityList activityList = user.getActivities();
     Role role = activityList.getLastActivity().getRole();
     CustomAuthentication customAuthentication =
         new CustomAuthentication(

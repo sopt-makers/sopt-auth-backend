@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import sopt.makers.authentication.support.exception.support.TokenException;
-import sopt.makers.authentication.support.jwt.provider.JwtAuthRefreshTokenProvider;
+import sopt.makers.authentication.support.jwt.service.JwtAuthRefreshTokenService;
 
 import java.time.Instant;
 
@@ -25,7 +25,7 @@ import org.springframework.test.context.TestPropertySource;
 @TestPropertySource(locations = {"classpath:env/test.env"})
 public class JwtRefreshTokenTest {
 
-  @Autowired private JwtAuthRefreshTokenProvider jwtAuthRefreshTokenProvider;
+  @Autowired private JwtAuthRefreshTokenService jwtAuthRefreshTokenProvider;
   @Autowired private JwtEncoder jwtEncoder;
   @Autowired private JwtDecoder jwtDecoder;
   public final String TOKEN_HEADER = "Bearer ";

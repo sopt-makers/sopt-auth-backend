@@ -16,6 +16,7 @@ security:
     secured-endpoints:
       - ${GET_PUBLIC_KEY}
       - ${ACTUATOR_PATH}
+      - ${USER_PATH}
 
   jwt:
     secret:

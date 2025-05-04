@@ -8,4 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 interface UserActivityHistoryJpaRepository extends JpaRepository<UserActivityHistoryEntity, Long> {
   List<UserActivityHistoryEntity> findByUserId(Long userId);
+
+  List<UserActivityHistoryEntity> findAllByUserIdIn(List<Long> userIds);
 }

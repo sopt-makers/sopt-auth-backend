@@ -28,10 +28,6 @@ public class Activity {
     return new Activity(null, generation, team, part, Role.MEMBER);
   }
 
-  public static Activity of(int generation, final Team team, final Part part, final Role role) {
-    return new Activity(null, generation, team, part, role);
-  }
-
   public static Activity of(
       Long id, int generation, final Team team, final Part part, final Role role) {
     return new Activity(id, generation, team, part, role);

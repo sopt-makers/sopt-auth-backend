@@ -1,4 +1,4 @@
-package sopt.makers.authentication.support.jwt.provider;
+package sopt.makers.authentication.support.jwt.service;
 
 import sopt.makers.authentication.support.jwt.JwtProvider;
 import sopt.makers.authentication.support.jwt.token.JwtRefreshToken;
@@ -19,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-public class JwtAuthRefreshTokenProvider implements JwtProvider<String> {
+public class JwtAuthRefreshTokenService implements JwtProvider<String> {
 
   private final JwtEncoder jwtEncoder;
   private final JwtDecoder jwtDecoder;

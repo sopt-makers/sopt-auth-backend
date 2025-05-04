@@ -12,8 +12,8 @@ import sopt.makers.authentication.domain.user.User;
 import sopt.makers.authentication.support.exception.domain.AuthException;
 import sopt.makers.authentication.usecase.auth.port.in.CreatePhoneVerificationUsecase;
 import sopt.makers.authentication.usecase.auth.port.out.PhoneVerificationRepository;
-import sopt.makers.authentication.usecase.auth.port.out.UserRepository;
 import sopt.makers.authentication.usecase.user.port.out.UserRegisterInfoRepository;
+import sopt.makers.authentication.usecase.user.port.out.UserRepository;
 
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;

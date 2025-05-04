@@ -1,4 +1,4 @@
-package sopt.makers.authentication.support.jwt.provider;
+package sopt.makers.authentication.support.jwt.service;
 
 import static sopt.makers.authentication.support.jwt.provider.JwtTokenUtil.extract;
 
@@ -23,7 +23,7 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-public class JwtAuthAccessTokenProvider implements JwtProvider<CustomAuthentication> {
+public class JwtAuthAccessTokenService implements JwtProvider<CustomAuthentication> {
   private static final String ROLES = "roles";
   private final JwtEncoder jwtEncoder;
   private final JwtDecoder jwtDecoder;

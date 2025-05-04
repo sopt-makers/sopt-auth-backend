@@ -4,7 +4,7 @@ import sopt.makers.authentication.domain.auth.SocialAccount;
 import sopt.makers.authentication.domain.user.User;
 import sopt.makers.authentication.usecase.auth.port.in.UpdateSocialAccountUsecase;
 import sopt.makers.authentication.usecase.auth.port.out.OAuthAuthenticator;
-import sopt.makers.authentication.usecase.auth.port.out.UserRepository;
+import sopt.makers.authentication.usecase.user.port.out.UserRepository;
 
 import org.springframework.stereotype.Service;
 
