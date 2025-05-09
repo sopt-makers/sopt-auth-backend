@@ -3,11 +3,6 @@
 # Move to the root directory (auth directory)
 cd "$(dirname "$0")/.."
 
-# Load environment variables from .env file
-set -a
-source .env
-set +a
-
 # Load modular deployment functions
 source ./scripts/check_running_container.sh
 source ./scripts/pull_and_run_container.sh
