@@ -19,7 +19,7 @@ jobs:
           distribution: 'corretto'
           cache: gradle
 
-      - name: 🤝 Grant execute permission for gradlew
+      - name: ⚙️ Grant execute permission for gradlew
         run: chmod +x ./gradlew
         shell: bash
 
