@@ -32,16 +32,23 @@ jobs:
           touch ./gradle.properties
           echo "${{ secrets.PROPERTY_GRADLE }}" >> ./gradle.properties
 
-      - name: 🔑 Create Key File related JWT
+      - name: 🔑 Download Key Files for JWT from S3
+        env:
+          REGION: ${{ secrets.AWS_REGION }}
+          S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+          JWT_PUBLIC_KEY_PATH: ${{ secrets.JWT_PUBLIC_KEY_PATH }}
+          JWT_PRIVATE_KEY_PATH: ${{ secrets.JWT_PRIVATE_KEY_PATH }}
         run: |
           mkdir -p ./src/main/resources
-          echo "${{ secrets.JWT_PRIVATE_KEY }}" > ./src/main/resources/jwt_private_key.pem
-          echo "${{ secrets.JWT_PUBLIC_KEY }}" > ./src/main/resources/jwt_public_key.pem
+          aws s3 cp s3://$S3_BUCKET/dev/static/$JWT_PUBLIC_KEY_PATH ./src/main/resources/jwt_public_key.pem --region $REGION
+          aws s3 cp s3://$S3_BUCKET/dev/static/$JWT_PRIVATE_KEY_PATH ./src/main/resources/jwt_private_key.pem --region $REGION
 
       - name: 🔑 Create Test Environment File
+        env:
+          TEST_ENV_PATH: ${{ secrets.TEST_ENV_FILE_PATH }}
         run: |
           mkdir -p ./src/main/resources/env
-          echo "${{ secrets.TEST_ENV_FILE }}" > ./src/main/resources/env/test.env
+          aws s3 cp s3://$S3_BUCKET/dev/$TEST_ENV_PATH ./src/main/resources/env/test.env --region $REGION
 
       - name: 🧱 Build and Test with Gradle
         run: ./gradlew build --no-daemon
@@ -61,63 +68,42 @@ jobs:
     needs: build-and-push-image
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: 📥 Checkout Source
         uses: actions/checkout@v3
 
-      - name: 🔒 Configure AWS credentials
+      - name: 🔒 Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      - name: 🔑 Copy Key File
+      - name: 📂 Download Keys and Env from S3
         env:
           REGION: ${{ secrets.AWS_REGION }}
-          APPLE_KEY_PATH: ${{ secrets.APPLE_KEY_PATH }}
+          S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
           JWT_PUBLIC_KEY_PATH: ${{ secrets.JWT_PUBLIC_KEY_PATH }}
           JWT_PRIVATE_KEY_PATH: ${{ secrets.JWT_PRIVATE_KEY_PATH }}
-          S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
-        run: |
-          aws s3 cp --region $REGION \
-            s3://$S3_BUCKET/dev/static/$JWT_PUBLIC_KEY_PATH ./$JWT_PUBLIC_KEY_PATH
-          aws s3 cp --region $REGION \
-            s3://$S3_BUCKET/dev/static/$JWT_PRIVATE_KEY_PATH ./$JWT_PRIVATE_KEY_PATH
-          aws s3 cp --region $REGION \
-            s3://$S3_BUCKET/dev/static/$APPLE_KEY_PATH ./$APPLE_KEY_PATH
-
-      - name: 📝 Copy Script and Property File
-        env:
-          REGION: ${{ secrets.AWS_REGION }}
-          S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+          APPLE_KEY_PATH: ${{ secrets.APPLE_KEY_PATH }}
           S3_ENV_FILE_NAME: ${{ secrets.ENV_FILE_NAME_DEV }}
         run: |
-          aws s3 cp --region $REGION \
-            s3://$S3_BUCKET/dev/$S3_ENV_FILE_NAME ./application.env
+          mkdir -p ./key
+          aws s3 cp s3://$S3_BUCKET/dev/static/$JWT_PUBLIC_KEY_PATH ./key/jwt_public_key.pem --region $REGION
+          aws s3 cp s3://$S3_BUCKET/dev/static/$JWT_PRIVATE_KEY_PATH ./key/jwt_private_key.pem --region $REGION
+          aws s3 cp s3://$S3_BUCKET/dev/$S3_ENV_FILE_NAME .env --region $REGION
 
-      - name: 🔄 Transfer Files(KEY) to Server
+      - name: 🔄 Transfer Deployment Files to EC2
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.HOST_DEV }}
           username: ec2-user
           key: ${{ secrets.PEM_KEY_DEV }}
           port: 22
-          source: "${{ secrets.APPLE_KEY_PATH }},${{ secrets.JWT_PUBLIC_KEY_PATH }},${{ secrets.JWT_PRIVATE_KEY_PATH }}"
-          target: /home/ec2-user/authentication/key
+          source: ".env,docker-compose.yml,scripts,key"
+          target: /home/ec2-user/authentication
           overwrite: true
 
-      - name: 🔄 Transfer Files(ENV) to Server
-        uses: appleboy/scp-action@master
-        with:
-          host: ${{ secrets.HOST_DEV }}
-          username: ec2-user
-          key: ${{ secrets.PEM_KEY_DEV }}
-          port: 22
-          source: "application.env"
-          target: /home/ec2-user/authentication/env
-          overwrite: true
-
-      - name: 🚀SSH command deploy
+      - name: 🚀 Remote SSH Deployment
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST_DEV }}
@@ -125,4 +111,5 @@ jobs:
           key: ${{ secrets.PEM_KEY_DEV }}
           port: 22
           script: |
-            /home/ec2-user/authentication/scripts/deploy.sh
+            cd /home/ec2-user/authentication/scripts
+            ./deploy.sh
