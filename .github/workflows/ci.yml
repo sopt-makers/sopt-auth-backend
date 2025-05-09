@@ -28,16 +28,23 @@ jobs:
           touch ./gradle.properties
           echo "${{ secrets.PROPERTY_GRADLE }}" >> ./gradle.properties
 
-      - name: 🔑 Create Key File related JWT
+      - name: 🔑 Download Key Files for JWT from S3
+        env:
+          REGION: ${{ secrets.AWS_REGION }}
+          S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+          JWT_PUBLIC_KEY_PATH: ${{ secrets.JWT_PUBLIC_KEY_PATH }}
+          JWT_PRIVATE_KEY_PATH: ${{ secrets.JWT_PRIVATE_KEY_PATH }}
         run: |
           mkdir -p ./src/main/resources
-          echo "${{ secrets.JWT_PRIVATE_KEY }}" > ./src/main/resources/jwt_private_key.pem
-          echo "${{ secrets.JWT_PUBLIC_KEY }}" > ./src/main/resources/jwt_public_key.pem
+          aws s3 cp s3://$S3_BUCKET/dev/static/$JWT_PUBLIC_KEY_PATH ./src/main/resources/jwt_public_key.pem --region $REGION
+          aws s3 cp s3://$S3_BUCKET/dev/static/$JWT_PRIVATE_KEY_PATH ./src/main/resources/jwt_private_key.pem --region $REGION
 
       - name: 🔑 Create Test Environment File
+        env:
+          TEST_ENV_PATH: ${{ secrets.TEST_ENV_FILE_PATH }}
         run: |
           mkdir -p ./src/main/resources/env
-          echo "${{ secrets.TEST_ENV_FILE }}" > ./src/main/resources/env/test.env
+          aws s3 cp s3://$S3_BUCKET/dev/static/$TEST_ENV_PATH ./src/main/resources/env/test.env --region $REGION
 
       - name: 🧱 Build and Test with Gradle
         run: ./gradlew build --no-daemon
