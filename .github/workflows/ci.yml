@@ -53,6 +53,11 @@ jobs:
         run: ./gradlew build --no-daemon
         shell: bash
 
+      - name: 🔍 Check if test.env is in the jar
+        run: |
+          echo "📦 Checking if test.env is included in the jar..."
+          jar tf build/libs/*.jar | grep test.env || echo "❌ test.env NOT found in jar!"
+
       - name: 🐳 Build with Gradle
         run: docker build -t app-ci .
         shell: bash
