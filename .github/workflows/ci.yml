@@ -44,7 +44,7 @@ jobs:
           TEST_ENV_PATH: ${{ secrets.TEST_ENV_FILE_PATH }}
         run: |
           mkdir -p ./src/main/resources/env
-          aws s3 cp s3://$S3_BUCKET/dev/static/$TEST_ENV_PATH ./src/main/resources/env/test.env --region $REGION
+          aws s3 cp s3://$S3_BUCKET/dev/$TEST_ENV_PATH ./src/main/resources/env/test.env --region $REGION
 
       - name: 🧱 Build and Test with Gradle
         run: ./gradlew build --no-daemon
