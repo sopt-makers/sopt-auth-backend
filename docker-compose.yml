@@ -1,0 +1,27 @@
+version: '3.8'
+
+x-auth-service-template: &auth-service-template
+  image: ${AUTH_ECR_REPO}
+  environment:
+    - TZ=Asia/Seoul
+  volumes:
+    - /home/ubuntu/auth/key/jwt_public_key.pem:/app-run/jwt_public_key.pem
+    - /home/ubuntu/auth/key/jwt_private_key.pem:/app-run/jwt_private_key.pem
+  logging:
+    driver: "json-file"
+    options:
+      max-size: "10m"
+      max-file: "3"
+
+services:
+  auth-blue:
+    <<: *auth-service-template
+    container_name: auth-blue
+    ports:
+      - "${AUTH_BLUE_PORT}:8080"
+
+  auth-green:
+    <<: *auth-service-template
+    container_name: auth-green
+    ports:
+      - "${AUTH_GREEN_PORT}:8080"
