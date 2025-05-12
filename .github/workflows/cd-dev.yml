@@ -125,4 +125,6 @@ jobs:
           key: ${{ secrets.PEM_KEY_DEV }}
           port: 22
           script: |
-            /home/ec2-user/authentication/scripts/deploy.sh
+            sudo chmod +x /home/ec2-user/authentication/scripts/*.sh
+            cd /home/ec2-user/authentication/scripts
+            ./deploy.sh
