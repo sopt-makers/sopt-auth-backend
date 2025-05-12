@@ -41,7 +41,7 @@ jobs:
           S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
           JWT_PUBLIC_KEY_PATH: ${{ secrets.JWT_PUBLIC_KEY_PATH }}
           JWT_PRIVATE_KEY_PATH: ${{ secrets.JWT_PRIVATE_KEY_PATH }}
-          TEST_ENV_PATH: ${{ secrets.TEST_ENV_FILE_PATH }}
+          TEST_ENV_PATH: ${{ secrets.ENV_FILE_NAME_TEST }}
         run: |
           mkdir -p ./src/main/resources
           aws s3 cp s3://$S3_BUCKET/dev/static/$JWT_PUBLIC_KEY_PATH ./src/main/resources/jwt_public_key.pem --region $REGION
@@ -52,11 +52,6 @@ jobs:
       - name: 🧱 Build and Test with Gradle
         run: ./gradlew build --no-daemon
         shell: bash
-
-      - name: 🔍 Check if test.env is in the jar
-        run: |
-          echo "📦 Checking if test.env is included in the jar..."
-          jar tf build/libs/*.jar | grep test.env || echo "❌ test.env NOT found in jar!"
 
       - name: 🐳 Build with Gradle
         run: docker build -t app-ci .
