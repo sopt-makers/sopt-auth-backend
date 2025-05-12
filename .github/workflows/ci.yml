@@ -41,7 +41,7 @@ jobs:
           S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
           JWT_PUBLIC_KEY_PATH: ${{ secrets.JWT_PUBLIC_KEY_PATH }}
           JWT_PRIVATE_KEY_PATH: ${{ secrets.JWT_PRIVATE_KEY_PATH }}
-          TEST_ENV_PATH: ${{ secrets.ENV_FILE_NAME_TEST }}
+          TEST_ENV_PATH: ${{ secrets.ENV_FILE_PATH_TEST }}
         run: |
           mkdir -p ./src/main/resources
           aws s3 cp s3://$S3_BUCKET/dev/static/$JWT_PUBLIC_KEY_PATH ./src/main/resources/jwt_public_key.pem --region $REGION

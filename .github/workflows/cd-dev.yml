@@ -32,21 +32,17 @@ jobs:
           touch ./gradle.properties
           echo "${{ secrets.PROPERTY_GRADLE }}" >> ./gradle.properties
 
-      - name: 🔑 Download Key Files for JWT from S3
+      - name: 📂 Download Keys and Env from S3
         env:
           REGION: ${{ secrets.AWS_REGION }}
           S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
           JWT_PUBLIC_KEY_PATH: ${{ secrets.JWT_PUBLIC_KEY_PATH }}
           JWT_PRIVATE_KEY_PATH: ${{ secrets.JWT_PRIVATE_KEY_PATH }}
+          TEST_ENV_PATH: ${{ secrets.ENV_FILE_PATH_TEST }}
         run: |
           mkdir -p ./src/main/resources
           aws s3 cp s3://$S3_BUCKET/dev/static/$JWT_PUBLIC_KEY_PATH ./src/main/resources/jwt_public_key.pem --region $REGION
           aws s3 cp s3://$S3_BUCKET/dev/static/$JWT_PRIVATE_KEY_PATH ./src/main/resources/jwt_private_key.pem --region $REGION
-
-      - name: 🔑 Create Test Environment File
-        env:
-          TEST_ENV_PATH: ${{ secrets.TEST_ENV_FILE_PATH }}
-        run: |
           mkdir -p ./src/main/resources/env
           aws s3 cp s3://$S3_BUCKET/dev/$TEST_ENV_PATH ./src/main/resources/env/test.env --region $REGION
 
@@ -85,7 +81,7 @@ jobs:
           JWT_PUBLIC_KEY_PATH: ${{ secrets.JWT_PUBLIC_KEY_PATH }}
           JWT_PRIVATE_KEY_PATH: ${{ secrets.JWT_PRIVATE_KEY_PATH }}
           APPLE_KEY_PATH: ${{ secrets.APPLE_KEY_PATH }}
-          S3_ENV_FILE_NAME: ${{ secrets.ENV_FILE_NAME_DEV }}
+          S3_ENV_FILE_NAME: ${{ secrets.ENV_FILE_PATH_DEV }}
         run: |
           mkdir -p ./key
           aws s3 cp s3://$S3_BUCKET/dev/static/$JWT_PUBLIC_KEY_PATH ./key/jwt_public_key.pem --region $REGION
