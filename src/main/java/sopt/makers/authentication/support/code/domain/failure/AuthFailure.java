@@ -17,6 +17,7 @@ public enum AuthFailure implements FailureCode {
   INVALID_ID_TOKEN(HttpStatus.BAD_REQUEST, "ID 토큰 유효성 검사에 실패했습니다."),
   INVALID_PHONE_VERIFICATION_CODE(HttpStatus.BAD_REQUEST, "인증번호가 일치하지 않습니다."),
   ALREADY_REGISTER_PHONE_NUMBER(HttpStatus.BAD_REQUEST, "이미 가입된 전화번호입니다."),
+  EXPIRED_PHONE_VERIFICATION(HttpStatus.BAD_REQUEST, "인증 시간이 만료되었습니다."),
 
   // 401
   INVALID_API_KEY(HttpStatus.UNAUTHORIZED, "API 키가 유효하지 않습니다"),
