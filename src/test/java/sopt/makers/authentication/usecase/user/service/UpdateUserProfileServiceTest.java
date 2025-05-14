@@ -57,7 +57,7 @@ class UpdateUserProfileServiceTest {
     when(mockedUser.getProfile()).thenReturn(originalProfile);
     when(originalProfile.updateProfile(email, phone, birthday, profileImage))
         .thenReturn(updatedProfile);
-    when(userRepository.findByPhone(phone)).thenReturn(mockedUser);
+    when(userRepository.findById(1L)).thenReturn(mockedUser);
   }
 
   @Test
@@ -68,9 +68,9 @@ class UpdateUserProfileServiceTest {
     ActivityList activityList = ActivityList.of(List.of(existingActivity));
     when(userActivityHistoryRepository.findByUser(1L)).thenReturn(activityList);
 
-    SoptActivityCommand activityCommand = SoptActivityCommand.of(1L, 33, "서버", "미디어팀");
+    SoptActivityCommand activityCommand = SoptActivityCommand.of(1L, "미디어팀");
     UserProfileCommand userProfileCommand =
-        UserProfileCommand.of(profileImage, birthday, phone, email, List.of(activityCommand));
+        UserProfileCommand.of(1L, profileImage, birthday, phone, email, List.of(activityCommand));
 
     // when
     updateUserProfileService.updateUserProfile(userProfileCommand);
