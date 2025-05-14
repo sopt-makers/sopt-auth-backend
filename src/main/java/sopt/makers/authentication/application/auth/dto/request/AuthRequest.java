@@ -18,12 +18,12 @@ import lombok.RequiredArgsConstructor;
 public final class AuthRequest {
 
   public record CreatePhoneVerification(
-      @JsonProperty("name") String name,
+      @JsonProperty("userId") Long userId,
       @JsonProperty("phone") String number,
       @JsonProperty("type") String verificationTypeName) {
     public CreateVerificationCommand toCommand() {
       return new CreateVerificationCommand(
-          this.name, this.number, PhoneVerificationType.valueOf(this.verificationTypeName));
+          this.userId, this.number, PhoneVerificationType.valueOf(this.verificationTypeName));
     }
   }
 
