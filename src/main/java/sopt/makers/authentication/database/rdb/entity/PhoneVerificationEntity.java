@@ -34,27 +34,35 @@ public class PhoneVerificationEntity extends BaseEntity {
   @Enumerated(EnumType.STRING)
   private PhoneVerificationType type;
 
+  @Column(name = "is_verified", nullable = false)
+  private boolean isVerified;
+
   private PhoneVerificationEntity(PhoneVerification verification) {
     super();
     this.name = verification.getName();
     this.phone = verification.getPhone();
     this.code = verification.getVerificationCode().getCode();
     this.type = verification.getVerificationType();
+    this.isVerified = verification.isVerified();
   }
 
   public static PhoneVerificationEntity fromDomain(PhoneVerification phoneVerification) {
-    return new PhoneVerificationEntity(phoneVerification);
-  }
-
-  public static PhoneVerificationEntity fromDomain(
-      final long id, PhoneVerification phoneVerification) {
     PhoneVerificationEntity phoneVerificationEntity =
         new PhoneVerificationEntity(phoneVerification);
-    phoneVerificationEntity.setId(id);
+    if (phoneVerification.getId() != null) {
+      phoneVerificationEntity.setId(phoneVerification.getId());
+    }
     return phoneVerificationEntity;
   }
 
   public PhoneVerification toDomain() {
-    return PhoneVerification.of(this.name, this.phone, this.type, this.code);
+    return PhoneVerification.of(
+        this.getId(),
+        this.name,
+        this.phone,
+        this.type,
+        this.code,
+        this.getCreatedAt(),
+        this.isVerified);
   }
 }
