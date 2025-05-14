@@ -8,5 +8,5 @@ public interface CreatePhoneVerificationUsecase {
   PhoneVerification create(CreateVerificationCommand command);
 
   record CreateVerificationCommand(
-      String name, String phone, PhoneVerificationType verificationType) {}
+      Long userId, String phone, PhoneVerificationType verificationType) {}
 }

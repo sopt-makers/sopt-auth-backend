@@ -46,7 +46,10 @@ public class CreateVerificationService implements CreatePhoneVerificationUsecase
   private PhoneVerification createPhoneVerificationByCommand(CreateVerificationCommand command) {
     return switch (command.verificationType()) {
       case REGISTER -> handleRegister(command.phone());
-      case CHANGE, SEARCH -> handleChangeOrSearch(command.phone(), command.verificationType());
+      case CHANGE_SOCIAL_PLATFORM, SEARCH_SOCIAL_PLATFORM -> handleSocialPlatform(
+          command.phone(), command.verificationType());
+      case CHANGE_PHONE_NUMBER -> handlePhoneNumber(
+          command.userId(), command.phone(), command.verificationType());
     };
   }
 
@@ -64,9 +67,15 @@ public class CreateVerificationService implements CreatePhoneVerificationUsecase
             });
   }
 
-  private PhoneVerification handleChangeOrSearch(String phone, PhoneVerificationType type) {
+  private PhoneVerification handleSocialPlatform(String phone, PhoneVerificationType type) {
     User user = userRepository.findByPhone(phone);
     return PhoneVerification.create(user.getProfile().name(), user.getProfile().phone(), type);
+  }
+
+  private PhoneVerification handlePhoneNumber(
+      Long userId, String phone, PhoneVerificationType type) {
+    User user = userRepository.findById(userId);
+    return PhoneVerification.create(user.getProfile().name(), phone, type);
   }
 
   private String convertCodeToMessage(String code) {
