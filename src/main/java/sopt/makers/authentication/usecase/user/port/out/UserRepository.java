@@ -10,6 +10,8 @@ public interface UserRepository {
 
   User findBySocialAccount(SocialAccount socialAccount);
 
+  User findById(Long userId);
+
   User findByPhone(String phone);
 
   List<User> findAllById(List<Long> userIds);
