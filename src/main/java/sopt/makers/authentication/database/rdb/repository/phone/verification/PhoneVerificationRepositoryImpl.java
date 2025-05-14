@@ -36,4 +36,10 @@ public class PhoneVerificationRepositoryImpl implements PhoneVerificationReposit
   public void deleteByPhoneVerification(PhoneVerification phoneVerification) {
     remover.remove(phoneVerification);
   }
+
+  @Transactional
+  @Override
+  public void update(PhoneVerification phoneVerification) {
+    register.register(phoneVerification);
+  }
 }
