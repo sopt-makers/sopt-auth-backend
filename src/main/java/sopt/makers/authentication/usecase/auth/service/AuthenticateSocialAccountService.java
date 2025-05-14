@@ -9,7 +9,6 @@ import sopt.makers.authentication.support.jwt.service.JwtAuthRefreshTokenService
 import sopt.makers.authentication.support.security.authentication.CustomAuthentication;
 import sopt.makers.authentication.usecase.auth.port.in.AuthenticateSocialAccountUsecase;
 import sopt.makers.authentication.usecase.auth.port.out.OAuthAuthenticator;
-import sopt.makers.authentication.usecase.user.port.out.UserActivityHistoryRepository;
 import sopt.makers.authentication.usecase.user.port.out.UserRepository;
 
 import java.util.List;
@@ -24,7 +23,6 @@ import lombok.RequiredArgsConstructor;
 public class AuthenticateSocialAccountService implements AuthenticateSocialAccountUsecase {
   private final OAuthAuthenticator oAuthAuthenticator;
   private final UserRepository userRepository;
-  private final UserActivityHistoryRepository userActivityHistoryRepository;
   private final JwtAuthAccessTokenService jwtAuthAccessTokenProvider;
   private final JwtAuthRefreshTokenService jwtAuthRefreshTokenProvider;
 
