@@ -22,12 +22,9 @@ public enum Part {
   private final String name;
 
   public static Part findPart(final String part) {
-    if (part != null) {
-      return Arrays.stream(Part.values())
-          .filter(p -> p.name.equals(part))
-          .findFirst()
-          .orElseThrow(() -> new UserException(NOT_FOUND_PART));
-    }
-    return null;
+    return Arrays.stream(Part.values())
+        .filter(p -> p.name.equals(part))
+        .findFirst()
+        .orElseThrow(() -> new UserException(NOT_FOUND_PART));
   }
 }

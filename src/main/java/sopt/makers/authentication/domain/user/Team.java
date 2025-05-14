@@ -19,12 +19,9 @@ public enum Team {
   private final String name;
 
   public static Team findTeam(final String team) {
-    if (team != null) {
-      return Arrays.stream(Team.values())
-          .filter(p -> p.name.equals(team))
-          .findFirst()
-          .orElseThrow(() -> new UserException(NOT_FOUND_TEAM));
-    }
-    return null;
+    return Arrays.stream(Team.values())
+        .filter(p -> p.name.equals(team))
+        .findFirst()
+        .orElseThrow(() -> new UserException(NOT_FOUND_TEAM));
   }
 }
