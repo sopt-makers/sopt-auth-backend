@@ -19,7 +19,10 @@ public enum UserFailure implements FailureCode {
   // 404
   NOT_FOUND_ROLE(HttpStatus.NOT_FOUND, "존재하지 않는 역할입니다"),
   NOT_FOUND_PART(HttpStatus.NOT_FOUND, "존재하지 않는 파트입니다"),
-  NOT_FOUND_USER(HttpStatus.NOT_FOUND, "존재하지 않는 회원입니다.");
+  NOT_FOUND_TEAM(HttpStatus.NOT_FOUND, "존재하지 않는 팀입니다"),
+  NOT_FOUND_USER(HttpStatus.NOT_FOUND, "존재하지 않는 회원입니다."),
+  NOT_FOUND_USER_ACTIVITY(HttpStatus.NOT_FOUND, "유저가 활동한 기수가 아닙니다.");
+
   private final HttpStatus status;
   private final String message;
 }

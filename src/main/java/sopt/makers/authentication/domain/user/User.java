@@ -56,6 +56,10 @@ public class User {
         .build();
   }
 
+  public User updateProfile(final Profile profile) {
+    return User.createUser(this.id, socialAccount, profile);
+  }
+
   public void joinActivity(final Activity activity) {
     this.activities = activities.addActivity(activity);
   }

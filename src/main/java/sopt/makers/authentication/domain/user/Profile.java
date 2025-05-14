@@ -16,6 +16,12 @@ public record Profile(
     return new Profile(name, Optional.ofNullable(email), phone, birthday, Optional.empty());
   }
 
+  public Profile updateProfile(
+      String email, String phone, LocalDate birthday, String profileImage) {
+    return new Profile(
+        this.name, Optional.ofNullable(email), phone, birthday, Optional.ofNullable(profileImage));
+  }
+
   public Profile updateName(final String name) {
     return new Profile(name, this.email, this.phone, this.birthday, this.profileImage);
   }

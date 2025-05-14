@@ -2,7 +2,7 @@ package sopt.makers.authentication.application.user.dto.response;
 
 import static lombok.AccessLevel.PRIVATE;
 
-import sopt.makers.authentication.usecase.user.port.in.GetUserInformationUsecase;
+import sopt.makers.authentication.usecase.user.port.in.GetUserProfileUsecase;
 
 import java.util.List;
 
@@ -19,7 +19,7 @@ public final class UserResponse {
       String email,
       List<UserActivityDetail> soptActivities) {
     public static UserProfileAndActivity from(
-        GetUserInformationUsecase.UserProfileAndActivityInfo userProfileAndActivityInfo) {
+        GetUserProfileUsecase.UserProfileAndActivityInfo userProfileAndActivityInfo) {
       List<UserActivityDetail> soptActivities =
           userProfileAndActivityInfo.soptActivities().stream()
               .map(UserActivityDetail::from)
@@ -36,14 +36,13 @@ public final class UserResponse {
     }
 
     public static List<UserProfileAndActivity> from(
-        List<GetUserInformationUsecase.UserProfileAndActivityInfo> infoList) {
+        List<GetUserProfileUsecase.UserProfileAndActivityInfo> infoList) {
       return infoList.stream().map(UserResponse.UserProfileAndActivity::from).toList();
     }
   }
 
   public record UserActivityDetail(long activityId, int generation, String part, String team) {
-    public static UserActivityDetail from(
-        GetUserInformationUsecase.UserActivityinfo userActivityInfo) {
+    public static UserActivityDetail from(GetUserProfileUsecase.UserActivityinfo userActivityInfo) {
       return new UserActivityDetail(
           userActivityInfo.activityId(),
           userActivityInfo.generation(),

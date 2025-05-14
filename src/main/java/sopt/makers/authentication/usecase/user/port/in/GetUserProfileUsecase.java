@@ -7,7 +7,7 @@ import sopt.makers.authentication.domain.user.User;
 
 import java.util.List;
 
-public interface GetUserInformationUsecase {
+public interface GetUserProfileUsecase {
 
   List<UserProfileAndActivityInfo> getUserInformation(List<Long> userIds);
 

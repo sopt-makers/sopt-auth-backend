@@ -35,10 +35,8 @@ public class UserRetriever {
     return userEntity.toDomain();
   }
 
-  public User findById(Long id) {
-    UserEntity userEntity =
-        userJpaRepository.findById(id).orElseThrow(() -> new UserException(NOT_FOUND_USER));
-    return userEntity.toDomain();
+  public UserEntity findById(Long userId) {
+    return userJpaRepository.findById(userId).orElseThrow(() -> new UserException(NOT_FOUND_USER));
   }
 
   public List<User> findAllById(List<Long> userIds) {

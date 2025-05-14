@@ -1,7 +1,7 @@
 package sopt.makers.authentication.usecase.user.service;
 
 import sopt.makers.authentication.domain.user.User;
-import sopt.makers.authentication.usecase.user.port.in.GetUserInformationUsecase;
+import sopt.makers.authentication.usecase.user.port.in.GetUserProfileUsecase;
 import sopt.makers.authentication.usecase.user.port.out.UserActivityHistoryRepository;
 import sopt.makers.authentication.usecase.user.port.out.UserRepository;
 
@@ -13,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class GetUserInformationService implements GetUserInformationUsecase {
+public class GetUserProfileService implements GetUserProfileUsecase {
 
   private final UserRepository userRepository;
   private final UserActivityHistoryRepository userActivityHistoryRepository;

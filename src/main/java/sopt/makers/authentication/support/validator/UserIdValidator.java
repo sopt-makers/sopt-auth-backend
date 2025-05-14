@@ -16,4 +16,10 @@ public class UserIdValidator {
       throw new UserException(NOT_VALID_USER_ID);
     }
   }
+
+  public void validateUserIds(Long userId) {
+    if (userId <= 0) {
+      throw new UserException(NOT_VALID_USER_ID);
+    }
+  }
 }
