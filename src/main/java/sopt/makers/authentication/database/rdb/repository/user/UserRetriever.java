@@ -35,6 +35,12 @@ public class UserRetriever {
     return userEntity.toDomain();
   }
 
+  public User findById(Long id) {
+    UserEntity userEntity =
+        userJpaRepository.findById(id).orElseThrow(() -> new UserException(NOT_FOUND_USER));
+    return userEntity.toDomain();
+  }
+
   public List<User> findAllById(List<Long> userIds) {
     List<UserEntity> userEntityList = userJpaRepository.findAllWithActivityHistoriesByIdIn(userIds);
     return userEntityList.stream().map(UserEntity::toDomain).toList();

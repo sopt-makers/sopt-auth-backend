@@ -42,6 +42,11 @@ public class UserRepositoryImpl implements UserRepository {
     return userRetriever.findByPhone(phone);
   }
 
+  @Override
+  public User findById(Long id) {
+    return userRetriever.findById(id);
+  }
+
   @Transactional
   @Override
   public void update(User user, SocialAccount socialAccount) {
