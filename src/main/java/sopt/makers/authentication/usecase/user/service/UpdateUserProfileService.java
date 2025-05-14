@@ -31,7 +31,7 @@ public class UpdateUserProfileService implements UpdateUserProfileUsecase {
   @Transactional
   @Override
   public void updateUserProfile(UserProfileCommand command) {
-    User user = userRepository.findByPhone(command.phone());
+    User user = userRepository.findById(command.userId());
     ActivityList activityList = userActivityHistoryRepository.findByUser(user.getId());
     Profile updatedProfile =
         user.getProfile()
@@ -62,7 +62,7 @@ public class UpdateUserProfileService implements UpdateUserProfileUsecase {
               return Activity.of(
                   c.activityId(),
                   existing.getGeneration(),
-                  Team.findTeam(c.team()),
+                  c.team() == null ? null : Team.findTeam(c.team()),
                   existing.getPart(),
                   existing.getRole());
             })
