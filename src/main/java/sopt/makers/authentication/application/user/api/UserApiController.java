@@ -36,7 +36,7 @@ public class UserApiController implements UserApi {
   private final UpdateUserProfileUsecase updateUserProfileUsecase;
   private final UserIdValidator userIdValidator;
 
-  @GetMapping("/")
+  @GetMapping("")
   public ResponseEntity<BaseResponse<?>> getUserProfile(
       @RequestHeader(API_KEY_HEADER) String apiKey,
       @RequestHeader(SERVICE_NAME_HEADER) String serviceName,
@@ -56,7 +56,7 @@ public class UserApiController implements UserApi {
       @PathVariable Long userId,
       @Valid @RequestBody UserRequest.UserProfileInfo userProfileInfo) {
     userIdValidator.validateUserIds(userId);
-    updateUserProfileUsecase.updateUserProfile(userProfileInfo.toCommand());
+    updateUserProfileUsecase.updateUserProfile(userProfileInfo.toCommand(userId));
 
     return ResponseUtil.success(UserSuccess.UPDATE_USER_PROFILE);
   }
