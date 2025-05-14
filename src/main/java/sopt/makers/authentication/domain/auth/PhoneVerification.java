@@ -2,6 +2,7 @@ package sopt.makers.authentication.domain.auth;
 
 import static lombok.AccessLevel.PRIVATE;
 
+import java.time.LocalDateTime;
 import java.util.Random;
 
 import lombok.Builder;
@@ -15,10 +16,35 @@ import lombok.RequiredArgsConstructor;
 @EqualsAndHashCode
 public class PhoneVerification {
 
+  private static final int VERIFICATION_EXPIRY_MINUTES = 3;
+
+  private final Long id;
   private final String name;
   private final String phone;
   private final PhoneVerificationType verificationType;
   private final VerificationCode verificationCode;
+  private final LocalDateTime createdAt;
+  private final boolean isVerified;
+
+  public static PhoneVerification of(
+      Long id,
+      String name,
+      String phone,
+      PhoneVerificationType type,
+      String code,
+      LocalDateTime createdAt,
+      boolean isVerified) {
+    VerificationCode verificationCode = VerificationCode.of(code);
+    return PhoneVerification.builder()
+        .id(id)
+        .name(name)
+        .phone(phone)
+        .verificationType(type)
+        .verificationCode(verificationCode)
+        .createdAt(createdAt)
+        .isVerified(isVerified)
+        .build();
+  }
 
   public static PhoneVerification of(
       String name, String phone, PhoneVerificationType type, String code) {
@@ -28,6 +54,8 @@ public class PhoneVerification {
         .phone(phone)
         .verificationType(type)
         .verificationCode(verificationCode)
+        .createdAt(null)
+        .isVerified(false)
         .build();
   }
 
@@ -38,6 +66,24 @@ public class PhoneVerification {
         .phone(phone)
         .verificationType(type)
         .verificationCode(randomCode)
+        .createdAt(LocalDateTime.now())
+        .isVerified(false)
+        .build();
+  }
+
+  public boolean isExpired() {
+    return LocalDateTime.now().isAfter(createdAt.plusMinutes(VERIFICATION_EXPIRY_MINUTES));
+  }
+
+  public PhoneVerification updateIsVerified() {
+    return PhoneVerification.builder()
+        .id(this.id)
+        .name(this.name)
+        .phone(this.phone)
+        .verificationType(this.verificationType)
+        .verificationCode(this.verificationCode)
+        .createdAt(this.createdAt)
+        .isVerified(true)
         .build();
   }
 
