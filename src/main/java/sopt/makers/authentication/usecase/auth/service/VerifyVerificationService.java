@@ -28,6 +28,7 @@ public class VerifyVerificationService implements VerifyPhoneVerificationUsecase
         phoneVerificationRepository.findByPhoneVerification(targetVerification);
 
     if (findVerification.isExpired()) {
+      phoneVerificationRepository.deleteByPhoneVerification(findVerification);
       throw new AuthException(EXPIRED_PHONE_VERIFICATION);
     }
 
