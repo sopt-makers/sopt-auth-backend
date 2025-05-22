@@ -1,13 +1,10 @@
 package sopt.makers.authentication.usecase.auth.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static sopt.makers.authentication.usecase.auth.port.in.VerifyPhoneVerificationUsecase.*;
 
 import sopt.makers.authentication.domain.auth.PhoneVerification;
 import sopt.makers.authentication.domain.auth.PhoneVerificationType;
-import sopt.makers.authentication.support.code.domain.failure.AuthFailure;
-import sopt.makers.authentication.support.exception.domain.AuthException;
 import sopt.makers.authentication.usecase.auth.port.out.PhoneVerificationRepository;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -48,9 +45,7 @@ class VerifyVerificationServiceTest {
 
     // then
     assertThat(result.targetPhone()).isEqualTo(givenVerifyPhone);
-    assertThatThrownBy(() -> phoneVerificationRepository.findByPhoneVerification(givenVerification))
-        .isInstanceOf(AuthException.class)
-        .hasMessageContaining(AuthFailure.NOT_FOUND_PHONE_VERIFICATION.getMessage());
+    assertThat(result.targetName()).isEqualTo(null);
   }
 
   @Test

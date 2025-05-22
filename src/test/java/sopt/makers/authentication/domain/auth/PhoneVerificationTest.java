@@ -2,6 +2,7 @@ package sopt.makers.authentication.domain.auth;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.time.LocalDateTime;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -22,7 +23,14 @@ class PhoneVerificationTest {
   @BeforeEach
   void setTestPhoneVerification() {
     this.testPhoneVerification =
-        PhoneVerification.of("test", "01012345678", PhoneVerificationType.REGISTER, "123456");
+        PhoneVerification.of(
+            1L,
+            "test",
+            "01012345678",
+            PhoneVerificationType.REGISTER,
+            "123456",
+            LocalDateTime.now(),
+            false);
   }
 
   @Test
@@ -31,10 +39,13 @@ class PhoneVerificationTest {
     // given
     PhoneVerification givenPhoneVerification =
         PhoneVerification.of(
+            1L,
             "test",
             "01012345678",
             PhoneVerificationType.REGISTER,
-            testPhoneVerification.getVerificationCode().getCode());
+            testPhoneVerification.getVerificationCode().getCode(),
+            testPhoneVerification.getCreatedAt(),
+            false);
 
     // when
     boolean result = testPhoneVerification.equals(givenPhoneVerification);
@@ -46,9 +57,7 @@ class PhoneVerificationTest {
   @ParameterizedTest
   @MethodSource("argsForNotEqualPhoneVerification")
   @DisplayName("한 개라도 필드의 값이 다를 경우, Equals 연산 시 거짓을 반환한다.")
-  void testEqualsFalse(
-      // given
-      PhoneVerification givenPhoneVerification) {
+  void testEqualsFalse(PhoneVerification givenPhoneVerification) {
     // when
     boolean result = testPhoneVerification.equals(givenPhoneVerification);
 
@@ -57,14 +66,77 @@ class PhoneVerificationTest {
   }
 
   static Stream<Arguments> argsForNotEqualPhoneVerification() {
+    LocalDateTime now = LocalDateTime.now();
     return Stream.of(
         Arguments.of(
-            PhoneVerification.of("testA", "01012345678", PhoneVerificationType.REGISTER, "123456")),
+            PhoneVerification.of(
+                1L, "testA", "01012345678", PhoneVerificationType.REGISTER, "123456", now, false)),
         Arguments.of(
-            PhoneVerification.of("test", "01011345678", PhoneVerificationType.REGISTER, "123456")),
+            PhoneVerification.of(
+                1L, "test", "01011345678", PhoneVerificationType.REGISTER, "123456", now, false)),
         Arguments.of(
-            PhoneVerification.of("test", "01012345678", PhoneVerificationType.CHANGE, "123456")),
-        Arguments.of(
-            PhoneVerification.of("test", "01012345678", PhoneVerificationType.REGISTER, "123455")));
+            PhoneVerification.of(
+                1L,
+                "test",
+                "01012345678",
+                PhoneVerificationType.CHANGE_SOCIAL_PLATFORM,
+                "123456",
+                now,
+                false),
+            Arguments.of(
+                PhoneVerification.of(
+                    1L,
+                    "test",
+                    "01012345678",
+                    PhoneVerificationType.REGISTER,
+                    "123455",
+                    now,
+                    false)),
+            Arguments.of(
+                PhoneVerification.of(
+                    2L,
+                    "test",
+                    "01012345678",
+                    PhoneVerificationType.REGISTER,
+                    "123456",
+                    now,
+                    false)),
+            Arguments.of(
+                PhoneVerification.of(
+                    1L,
+                    "test",
+                    "01012345678",
+                    PhoneVerificationType.REGISTER,
+                    "123456",
+                    now.plusMinutes(1),
+                    false)),
+            Arguments.of(
+                PhoneVerification.of(
+                    1L,
+                    "test",
+                    "01012345678",
+                    PhoneVerificationType.REGISTER,
+                    "123456",
+                    now,
+                    true))));
+  }
+
+  @Test
+  @DisplayName("updateIsVerified 메서드는 isVerified가 true인 새로운 인스턴스를 반환한다.")
+  void testUpdateIsVerified() {
+    // when
+    PhoneVerification updatedVerification = testPhoneVerification.updateIsVerified();
+
+    // then
+    assertThat(updatedVerification.isVerified()).isTrue();
+    assertThat(updatedVerification).isNotSameAs(testPhoneVerification);
+    assertThat(updatedVerification.getId()).isEqualTo(testPhoneVerification.getId());
+    assertThat(updatedVerification.getName()).isEqualTo(testPhoneVerification.getName());
+    assertThat(updatedVerification.getPhone()).isEqualTo(testPhoneVerification.getPhone());
+    assertThat(updatedVerification.getVerificationType())
+        .isEqualTo(testPhoneVerification.getVerificationType());
+    assertThat(updatedVerification.getVerificationCode())
+        .isEqualTo(testPhoneVerification.getVerificationCode());
+    assertThat(updatedVerification.getCreatedAt()).isEqualTo(testPhoneVerification.getCreatedAt());
   }
 }

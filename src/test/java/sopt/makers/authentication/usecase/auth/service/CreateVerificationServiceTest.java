@@ -2,6 +2,7 @@ package sopt.makers.authentication.usecase.auth.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.isA;
@@ -16,7 +17,7 @@ import sopt.makers.authentication.domain.message.Message;
 import sopt.makers.authentication.domain.user.Profile;
 import sopt.makers.authentication.domain.user.User;
 import sopt.makers.authentication.domain.user.UserRegisterInfo;
-import sopt.makers.authentication.support.exception.domain.*;
+import sopt.makers.authentication.support.exception.domain.AuthException;
 import sopt.makers.authentication.usecase.auth.port.out.PhoneVerificationRepository;
 import sopt.makers.authentication.usecase.message.port.out.MessageSendPort;
 import sopt.makers.authentication.usecase.user.port.out.UserRegisterInfoRepository;
@@ -63,6 +64,7 @@ class CreateVerificationServiceTest {
     when(mockedUserRegisterInfo.getPhone()).thenReturn("01087654321");
 
     when(userRepository.findByPhone(anyString())).thenReturn(mockedUser);
+    when(userRepository.findById(anyLong())).thenReturn(mockedUser);
     when(userRegisterInfoRepository.findByPhone(anyString()))
         .thenReturn(Optional.of(mockedUserRegisterInfo));
     doNothing().when(sendPort).sendMessage(isA(Message.class));
@@ -106,10 +108,10 @@ class CreateVerificationServiceTest {
   }
 
   @Test
-  @DisplayName("인증 유형이 CHANGE 일 경우, 기존에 존재하는 User 기반으로 인증 내역이 생성되어야 합니다.")
-  void createVerificationChange() {
+  @DisplayName("인증 유형이 CHANGE_SOCIAL_PLATFORM 일 경우, 기존에 존재하는 User 기반으로 인증 내역이 생성되어야 합니다.")
+  void createVerificationChangeSocialPlatform() {
     // given
-    PhoneVerificationType givenType = PhoneVerificationType.CHANGE;
+    PhoneVerificationType givenType = PhoneVerificationType.CHANGE_SOCIAL_PLATFORM;
     CreateVerificationCommand givenCommand =
         new CreateVerificationCommand(null, TEST_PHONE_USER, givenType);
 
@@ -122,10 +124,28 @@ class CreateVerificationServiceTest {
   }
 
   @Test
-  @DisplayName("인증 유형이 SEARCH 일 경우, 기존에 존재하는 User 기반으로 인증 내역이 생성되어야 합니다.")
+  @DisplayName("인증 유형이 CHANGE_PHONE_NUMBER 일 경우, 기존에 존재하는 User 이름과 새로운 전화번호로 인증 내역이 생성되어야 합니다.")
+  void createVerificationChangePhoneNumber() {
+    // given
+    PhoneVerificationType givenType = PhoneVerificationType.CHANGE_PHONE_NUMBER;
+    Long userId = 1L;
+    String newPhone = "01099999999";
+    CreateVerificationCommand givenCommand =
+        new CreateVerificationCommand(userId, newPhone, givenType);
+
+    // when
+    PhoneVerification resultPhoneVerification = usecase.create(givenCommand);
+
+    // then
+    assertThat(resultPhoneVerification.getName()).isEqualTo(TEST_NAME_USER);
+    assertThat(resultPhoneVerification.getPhone()).isEqualTo(newPhone);
+  }
+
+  @Test
+  @DisplayName("인증 유형이 SEARCH_SOCIAL_PLATFORM 일 경우, 기존에 존재하는 User 기반으로 인증 내역이 생성되어야 합니다.")
   void createVerificationSearch() {
     // given
-    PhoneVerificationType givenType = PhoneVerificationType.SEARCH;
+    PhoneVerificationType givenType = PhoneVerificationType.SEARCH_SOCIAL_PLATFORM;
     CreateVerificationCommand givenCommand =
         new CreateVerificationCommand(null, TEST_PHONE_USER, givenType);
 

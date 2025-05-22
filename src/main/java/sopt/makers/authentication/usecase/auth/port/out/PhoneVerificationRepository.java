@@ -9,4 +9,6 @@ public interface PhoneVerificationRepository {
   PhoneVerification findByPhoneVerification(PhoneVerification phoneVerification);
 
   void deleteByPhoneVerification(PhoneVerification phoneVerification);
+
+  void update(PhoneVerification phoneVerification);
 }

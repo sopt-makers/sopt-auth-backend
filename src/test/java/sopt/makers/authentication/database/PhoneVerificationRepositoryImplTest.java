@@ -20,35 +20,37 @@ import org.springframework.test.context.TestPropertySource;
 @TestPropertySource(locations = {"classpath:env/test.env"})
 class PhoneVerificationRepositoryImplTest {
 
+  private static final String TEST_PHONE = "01012345678";
+  private static final String TEST_CODE = "123456";
+  private static final PhoneVerificationType TEST_TYPE = PhoneVerificationType.REGISTER;
+
   @Autowired private PhoneVerificationRepository phoneVerificationRepository;
 
+  private PhoneVerification createTestVerification() {
+    return PhoneVerification.of(null, TEST_PHONE, TEST_TYPE, TEST_CODE);
+  }
+
   @BeforeEach
-  void initTestPhoneVerification() {
-    PhoneVerification testVerification =
-        PhoneVerification.of(null, "01012345678", PhoneVerificationType.REGISTER, "123456");
-    phoneVerificationRepository.create(testVerification);
+  void setUp() {
+    phoneVerificationRepository.create(createTestVerification());
   }
 
   @AfterEach
-  void flushTestPhoneVerification() {
-    PhoneVerification testVerification =
-        PhoneVerification.of(null, "01012345678", PhoneVerificationType.REGISTER, "123456");
-    phoneVerificationRepository.deleteByPhoneVerification(testVerification);
+  void tearDown() {
+    phoneVerificationRepository.deleteByPhoneVerification(createTestVerification());
   }
 
   @Test
   @DisplayName("Name이 Null이더라도 정상 조회가 가능하다.")
   void findByVerificationNameNull() {
     // given
-    PhoneVerification givenVerification =
-        PhoneVerification.of(null, "01012345678", PhoneVerificationType.REGISTER, "123456");
-    PhoneVerification findVerification =
-        phoneVerificationRepository.findByPhoneVerification(givenVerification);
+    PhoneVerification givenVerification = createTestVerification();
 
     // when
-    boolean result = givenVerification.equals(findVerification);
+    PhoneVerification found =
+        phoneVerificationRepository.findByPhoneVerification(givenVerification);
 
     // then
-    assertThat(result).isTrue();
+    assertThat(found).isNotNull();
   }
 }
