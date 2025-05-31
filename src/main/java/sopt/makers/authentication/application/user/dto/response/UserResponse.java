@@ -17,7 +17,7 @@ public final class UserResponse {
       String birthday,
       String phone,
       String email,
-      Integer latestGeneration,
+      Integer lastGeneration,
       List<UserActivityDetail> soptActivities) {
     public static UserProfileAndActivity from(
         GetUserProfileUsecase.UserProfileAndActivityInfo userProfileAndActivityInfo) {
@@ -33,7 +33,7 @@ public final class UserResponse {
           userProfileAndActivityInfo.birthday(),
           userProfileAndActivityInfo.phone(),
           userProfileAndActivityInfo.email(),
-          userProfileAndActivityInfo.latestGeneration(),
+          userProfileAndActivityInfo.lastGeneration(),
           soptActivities);
     }
 

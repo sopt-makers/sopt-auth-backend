@@ -18,7 +18,7 @@ public interface GetUserProfileUsecase {
       String birthday,
       String phone,
       String email,
-      Integer latestGeneration,
+      Integer lastGeneration,
       List<UserActivityinfo> soptActivities) {
 
     public static UserProfileAndActivityInfo of(User user, ActivityList activities) {
