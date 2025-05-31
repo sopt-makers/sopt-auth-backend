@@ -18,6 +18,7 @@ public interface GetUserProfileUsecase {
       String birthday,
       String phone,
       String email,
+      Integer lastGeneration,
       List<UserActivityinfo> soptActivities) {
 
     public static UserProfileAndActivityInfo of(User user, ActivityList activities) {
@@ -32,6 +33,7 @@ public interface GetUserProfileUsecase {
           profile.birthday().toString(),
           profile.phone(),
           profile.email().orElse(null),
+          activities.getLastActivity().getGeneration(),
           userActivityinfos);
     }
   }
