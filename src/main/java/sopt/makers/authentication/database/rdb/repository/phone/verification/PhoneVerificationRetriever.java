@@ -21,4 +21,13 @@ public class PhoneVerificationRetriever {
             phoneVerification.getPhone(), phoneVerification.getVerificationType())
         .orElseThrow(() -> new AuthException(AuthFailure.NOT_FOUND_PHONE_VERIFICATION));
   }
+
+  public PhoneVerificationEntity findLatestByPhoneNameType(PhoneVerification phoneVerification) {
+    return jpaRepository
+        .findTopByPhoneAndTypeAndNameOrderByCreatedAtDesc(
+            phoneVerification.getPhone(),
+            phoneVerification.getVerificationType(),
+            phoneVerification.getName())
+        .orElseThrow(() -> new AuthException(AuthFailure.NOT_FOUND_PHONE_VERIFICATION));
+  }
 }
