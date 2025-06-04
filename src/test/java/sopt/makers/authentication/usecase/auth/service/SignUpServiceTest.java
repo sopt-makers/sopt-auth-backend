@@ -11,6 +11,7 @@ import sopt.makers.authentication.domain.user.Activity;
 import sopt.makers.authentication.domain.user.Profile;
 import sopt.makers.authentication.domain.user.User;
 import sopt.makers.authentication.domain.user.UserRegisterInfo;
+import sopt.makers.authentication.support.validator.PhoneVerificationValidator;
 import sopt.makers.authentication.usecase.auth.port.in.SignUpUsecase.SignUpCommand;
 import sopt.makers.authentication.usecase.auth.port.out.OAuthAuthenticator;
 import sopt.makers.authentication.usecase.user.port.out.UserActivityHistoryRepository;
@@ -35,13 +36,13 @@ import org.springframework.test.util.ReflectionTestUtils;
 @TestPropertySource(locations = {"classpath:env/test.env"})
 @ExtendWith(MockitoExtension.class)
 class SignUpServiceTest {
-
   @InjectMocks private SignUpService signUpService;
   @Mock private OAuthAuthenticator oAuthAuthenticator;
   @Mock private UserRegisterInfoRepository userRegisterInfoRepository;
   @Mock private UserRepository userRepository;
   @Mock private UserActivityHistoryRepository userActivityHistoryRepository;
   @Mock private UserRegisterInfo userRegisterInfo;
+  @Mock private PhoneVerificationValidator phoneVerificationValidator;
 
   private final String TEST_TOKEN = "dummy-token";
   private final String TEST_PHONE = "01012345678";
