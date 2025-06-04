@@ -3,9 +3,10 @@ package sopt.makers.authentication.support.exception;
 import static sopt.makers.authentication.support.code.support.failure.CommonFailure.INTERNAL_SERVER_ERROR;
 
 import sopt.makers.authentication.support.common.api.BaseResponse;
-import sopt.makers.authentication.support.exception.base.*;
+import sopt.makers.authentication.support.exception.base.BaseException;
 
-import org.springframework.http.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
