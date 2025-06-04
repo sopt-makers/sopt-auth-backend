@@ -1,7 +1,9 @@
 package sopt.makers.authentication.support.security.filter;
 
+import static sopt.makers.authentication.support.code.domain.failure.AuthFailure.MISSING_AUTHORIZATION_HEADER;
 import static sopt.makers.authentication.support.constant.SystemConstant.WHITELIST_WILDCARD;
 
+import sopt.makers.authentication.support.exception.domain.AuthException;
 import sopt.makers.authentication.support.jwt.service.JwtAuthAccessTokenService;
 import sopt.makers.authentication.support.security.authentication.ApiKeyAuthentication;
 import sopt.makers.authentication.support.security.authentication.CustomAuthentication;
@@ -43,12 +45,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     filterChain.doFilter(request, response);
   }
 
-  /**
-   * @author 강현욱 @hyunw9
-   * @return JwtToken Authorization 헤더에서 "Bearer "를 제거하여 토큰을 추출합니다.
-   */
   private String getAuthorizationToken(final HttpServletRequest request) {
     String authorizationHeaderValue = request.getHeader(HttpHeaders.AUTHORIZATION);
+    if (authorizationHeaderValue == null) {
+      throw new AuthException(MISSING_AUTHORIZATION_HEADER);
+    }
     return authorizationHeaderValue.trim();
   }
 
