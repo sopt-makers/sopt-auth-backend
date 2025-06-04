@@ -1,13 +1,19 @@
 package sopt.makers.authentication.usecase.auth.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import sopt.makers.authentication.domain.auth.AuthPlatform;
+import sopt.makers.authentication.domain.auth.PhoneVerificationType;
 import sopt.makers.authentication.domain.auth.SocialAccount;
+import sopt.makers.authentication.domain.user.Profile;
 import sopt.makers.authentication.domain.user.User;
+import sopt.makers.authentication.support.validator.PhoneVerificationValidator;
 import sopt.makers.authentication.usecase.auth.port.in.GetSocialAccountUsecase;
 import sopt.makers.authentication.usecase.user.port.out.UserRepository;
 import sopt.makers.authentication.usecase.user.service.GetSocialAccountPlatformService;
@@ -37,12 +43,16 @@ class GetSocialAccountPlatformServiceTest {
 
   @MockBean UserRepository userRepository;
 
+  @MockBean PhoneVerificationValidator phoneVerificationValidator;
+
   @Autowired GetSocialAccountPlatformService getSocialAccountPlatformService;
 
   @BeforeEach
   void setMockUser() {
     User mockedUserForGoogle = mock(User.class);
     User mockedUserForApple = mock(User.class);
+    Profile mockProfile = mock(Profile.class);
+
     SocialAccount mockedSocialAccountForGoogle = mock(SocialAccount.class);
     SocialAccount mockedSocialAccountForApple = mock(SocialAccount.class);
 
@@ -51,11 +61,26 @@ class GetSocialAccountPlatformServiceTest {
     given(mockedSocialAccountForGoogle.authPlatformType()).willReturn(AuthPlatform.GOOGLE);
     given(mockedSocialAccountForApple.authPlatformType()).willReturn(AuthPlatform.APPLE);
 
+    given(mockedUserForGoogle.getProfile()).willReturn(mockProfile);
     given(mockedUserForGoogle.getSocialAccount()).willReturn(mockedSocialAccountForGoogle);
     given(mockedUserForApple.getSocialAccount()).willReturn(mockedSocialAccountForApple);
+    given(mockedUserForApple.getProfile()).willReturn(mockProfile);
 
     when(userRepository.findByPhone(TEST_USER_PHONE_FOR_GOOGLE)).thenReturn(mockedUserForGoogle);
     when(userRepository.findByPhone(TEST_USER_PHONE_FOR_APPLE)).thenReturn(mockedUserForApple);
+
+    doNothing()
+        .when(phoneVerificationValidator)
+        .validate(
+            anyString(),
+            eq(TEST_USER_PHONE_FOR_GOOGLE),
+            eq(PhoneVerificationType.SEARCH_SOCIAL_PLATFORM));
+    doNothing()
+        .when(phoneVerificationValidator)
+        .validate(
+            anyString(),
+            eq(TEST_USER_PHONE_FOR_APPLE),
+            eq(PhoneVerificationType.SEARCH_SOCIAL_PLATFORM));
   }
 
   @ParameterizedTest(name = "({index}) command : {0} -> result : {1}")
@@ -77,11 +102,11 @@ class GetSocialAccountPlatformServiceTest {
     return Stream.of(
         Arguments.of(
             new GetSocialAccountUsecase.GetSocialAccountPlatformCommand(
-                null, TEST_USER_PHONE_FOR_GOOGLE),
+                "", TEST_USER_PHONE_FOR_GOOGLE),
             PLATFORM_NAME_GOOGLE),
         Arguments.of(
             new GetSocialAccountUsecase.GetSocialAccountPlatformCommand(
-                null, TEST_USER_PHONE_FOR_APPLE),
+                "", TEST_USER_PHONE_FOR_APPLE),
             PLATFORM_NAME_APPLE));
   }
 }
