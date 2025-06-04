@@ -4,7 +4,7 @@ import static lombok.AccessLevel.PRIVATE;
 
 import sopt.makers.authentication.usecase.user.port.in.GetUserProfileUsecase;
 
-import java.time.*;
+import java.time.LocalDate;
 import java.util.List;
 
 import lombok.RequiredArgsConstructor;

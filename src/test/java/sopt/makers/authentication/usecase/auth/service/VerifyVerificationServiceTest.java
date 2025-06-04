@@ -1,7 +1,8 @@
 package sopt.makers.authentication.usecase.auth.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static sopt.makers.authentication.usecase.auth.port.in.VerifyPhoneVerificationUsecase.*;
+import static sopt.makers.authentication.usecase.auth.port.in.VerifyPhoneVerificationUsecase.VerifyVerificationCommand;
+import static sopt.makers.authentication.usecase.auth.port.in.VerifyPhoneVerificationUsecase.VerifyVerificationResult;
 
 import sopt.makers.authentication.domain.auth.PhoneVerification;
 import sopt.makers.authentication.domain.auth.PhoneVerificationType;

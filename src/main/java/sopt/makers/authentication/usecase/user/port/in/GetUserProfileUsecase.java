@@ -5,7 +5,7 @@ import sopt.makers.authentication.domain.user.ActivityList;
 import sopt.makers.authentication.domain.user.Profile;
 import sopt.makers.authentication.domain.user.User;
 
-import java.time.*;
+import java.time.LocalDate;
 import java.util.List;
 
 public interface GetUserProfileUsecase {

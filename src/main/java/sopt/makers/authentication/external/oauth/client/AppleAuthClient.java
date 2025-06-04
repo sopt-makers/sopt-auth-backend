@@ -1,7 +1,8 @@
 package sopt.makers.authentication.external.oauth.client;
 
-import static sopt.makers.authentication.support.code.external.failure.ClientError.*;
-import static sopt.makers.authentication.support.constant.OAuthConstant.*;
+import static sopt.makers.authentication.support.code.external.failure.ClientError.APPLE_REQUEST_FAIL;
+import static sopt.makers.authentication.support.code.external.failure.ClientError.INVALID_APPLE_REQUEST_URL;
+import static sopt.makers.authentication.support.constant.OAuthConstant.APPLE_PUBLIC_KEY_SET_URL;
 
 import sopt.makers.authentication.support.exception.external.ClientRequestException;
 import sopt.makers.authentication.support.exception.external.ClientResponseException;

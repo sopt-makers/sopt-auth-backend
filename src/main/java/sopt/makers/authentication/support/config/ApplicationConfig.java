@@ -1,6 +1,9 @@
 package sopt.makers.authentication.support.config;
 
-import sopt.makers.authentication.support.value.*;
+import sopt.makers.authentication.support.value.AppleOAuthProperty;
+import sopt.makers.authentication.support.value.GabiaProperty;
+import sopt.makers.authentication.support.value.GoogleOAuthProperty;
+import sopt.makers.authentication.support.value.SecurityProperty;
 
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
