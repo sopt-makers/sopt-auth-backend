@@ -5,6 +5,7 @@ import sopt.makers.authentication.domain.user.ActivityList;
 import sopt.makers.authentication.domain.user.Profile;
 import sopt.makers.authentication.domain.user.User;
 
+import java.time.*;
 import java.util.List;
 
 public interface GetUserProfileUsecase {
@@ -15,7 +16,7 @@ public interface GetUserProfileUsecase {
       Long userId,
       String name,
       String profileImage,
-      String birthday,
+      LocalDate birthday,
       String phone,
       String email,
       Integer lastGeneration,
@@ -30,7 +31,7 @@ public interface GetUserProfileUsecase {
           user.getId(),
           profile.name(),
           profile.profileImage().orElse(null),
-          profile.birthday().toString(),
+          profile.birthday(),
           profile.phone(),
           profile.email().orElse(null),
           activities.getLastActivity().getGeneration(),

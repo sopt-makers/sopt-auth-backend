@@ -4,6 +4,7 @@ import static lombok.AccessLevel.PRIVATE;
 
 import sopt.makers.authentication.usecase.user.port.in.GetUserProfileUsecase;
 
+import java.time.*;
 import java.util.List;
 
 import lombok.RequiredArgsConstructor;
@@ -14,7 +15,7 @@ public final class UserResponse {
       Long userId,
       String name,
       String profileImage,
-      String birthday,
+      LocalDate birthday,
       String phone,
       String email,
       Integer lastGeneration,
