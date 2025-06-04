@@ -2,7 +2,10 @@ package sopt.makers.authentication.usecase.user.service;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import sopt.makers.authentication.domain.user.Activity;
 import sopt.makers.authentication.domain.user.ActivityList;
@@ -11,6 +14,7 @@ import sopt.makers.authentication.domain.user.Profile;
 import sopt.makers.authentication.domain.user.Role;
 import sopt.makers.authentication.domain.user.Team;
 import sopt.makers.authentication.domain.user.User;
+import sopt.makers.authentication.support.validator.PhoneVerificationValidator;
 import sopt.makers.authentication.usecase.user.port.in.UpdateUserProfileUsecase.SoptActivityCommand;
 import sopt.makers.authentication.usecase.user.port.in.UpdateUserProfileUsecase.UserProfileCommand;
 import sopt.makers.authentication.usecase.user.port.out.UserActivityHistoryRepository;
@@ -31,12 +35,10 @@ import org.springframework.test.context.ActiveProfiles;
 @ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
 class UpdateUserProfileServiceTest {
-
   @InjectMocks private UpdateUserProfileService updateUserProfileService;
-
   @Mock private UserRepository userRepository;
-
   @Mock private UserActivityHistoryRepository userActivityHistoryRepository;
+  @Mock private PhoneVerificationValidator phoneVerificationValidator;
 
   private final String phone = "01012345678";
   private final String email = "test@example.com";
