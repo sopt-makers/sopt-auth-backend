@@ -35,8 +35,10 @@ public class UpdateUserProfileService implements UpdateUserProfileUsecase {
   @Override
   public void updateUserProfile(UserProfileCommand command) {
     User user = userRepository.findById(command.userId());
-    phoneVerificationValidator.validate(
-        user.getProfile().name(), command.phone(), PhoneVerificationType.CHANGE_PHONE_NUMBER);
+    if (!user.getProfile().phone().equals(command.phone())) {
+      phoneVerificationValidator.validate(
+          user.getProfile().name(), command.phone(), PhoneVerificationType.CHANGE_PHONE_NUMBER);
+    }
     ActivityList activityList = userActivityHistoryRepository.findByUser(user.getId());
     Profile updatedProfile =
         user.getProfile()
