@@ -55,6 +55,7 @@ class UpdateUserProfileServiceTest {
     originalProfile = mock(Profile.class);
     updatedProfile = mock(Profile.class);
 
+    when(originalProfile.phone()).thenReturn(phone);
     when(mockedUser.getId()).thenReturn(1L);
     when(mockedUser.getProfile()).thenReturn(originalProfile);
     when(originalProfile.updateProfile(email, phone, birthday, profileImage))
