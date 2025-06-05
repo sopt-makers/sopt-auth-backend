@@ -4,6 +4,7 @@ import static sopt.makers.authentication.support.constant.SystemConstant.INTERNA
 import static sopt.makers.authentication.support.constant.SystemConstant.PATTERN_ALL;
 import static sopt.makers.authentication.support.constant.SystemConstant.PATTERN_AUTH;
 import static sopt.makers.authentication.support.constant.SystemConstant.PATTERN_ERROR_PATH;
+import static sopt.makers.authentication.support.constant.SystemConstant.PATTERN_SOCIAL_ACCOUNT;
 import static sopt.makers.authentication.support.constant.SystemConstant.PATTERN_TEST;
 
 import sopt.makers.authentication.support.security.filter.ApiKeyAuthenticationFilter;
@@ -78,6 +79,8 @@ public class SecurityConfig {
         authorize -> {
           authorize
               .requestMatchers(new AntPathRequestMatcher(PATTERN_AUTH))
+              .permitAll()
+              .requestMatchers(new AntPathRequestMatcher(PATTERN_SOCIAL_ACCOUNT))
               .permitAll()
               .requestMatchers(new AntPathRequestMatcher(PATTERN_TEST))
               .permitAll()

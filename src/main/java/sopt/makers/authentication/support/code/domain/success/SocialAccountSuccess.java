@@ -2,11 +2,12 @@ package sopt.makers.authentication.support.code.domain.success;
 
 import static lombok.AccessLevel.PRIVATE;
 
-import sopt.makers.authentication.support.code.base.*;
+import sopt.makers.authentication.support.code.base.SuccessCode;
 
-import org.springframework.http.*;
+import org.springframework.http.HttpStatus;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor(access = PRIVATE)

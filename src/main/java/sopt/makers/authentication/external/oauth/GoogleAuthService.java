@@ -1,6 +1,6 @@
 package sopt.makers.authentication.external.oauth;
 
-import static sopt.makers.authentication.support.constant.OAuthConstant.*;
+import static sopt.makers.authentication.support.constant.OAuthConstant.GOOGLE_ISSUER;
 
 import sopt.makers.authentication.external.oauth.client.GoogleAuthClient;
 import sopt.makers.authentication.support.code.domain.failure.AuthFailure;
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWSVerifier;
-import com.nimbusds.jose.crypto.*;
+import com.nimbusds.jose.crypto.RSASSAVerifier;
 import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jwt.JWTClaimsSet;
