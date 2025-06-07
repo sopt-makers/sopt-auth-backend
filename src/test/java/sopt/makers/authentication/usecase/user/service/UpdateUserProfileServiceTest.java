@@ -14,6 +14,7 @@ import sopt.makers.authentication.domain.user.Profile;
 import sopt.makers.authentication.domain.user.Role;
 import sopt.makers.authentication.domain.user.Team;
 import sopt.makers.authentication.domain.user.User;
+import sopt.makers.authentication.support.validator.PhoneVerificationValidator;
 import sopt.makers.authentication.usecase.user.port.in.UpdateUserProfileUsecase.SoptActivityCommand;
 import sopt.makers.authentication.usecase.user.port.in.UpdateUserProfileUsecase.UserProfileCommand;
 import sopt.makers.authentication.usecase.user.port.out.UserActivityHistoryRepository;
@@ -34,12 +35,10 @@ import org.springframework.test.context.ActiveProfiles;
 @ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
 class UpdateUserProfileServiceTest {
-
   @InjectMocks private UpdateUserProfileService updateUserProfileService;
-
   @Mock private UserRepository userRepository;
-
   @Mock private UserActivityHistoryRepository userActivityHistoryRepository;
+  @Mock private PhoneVerificationValidator phoneVerificationValidator;
 
   private final String phone = "01012345678";
   private final String email = "test@example.com";
@@ -56,6 +55,7 @@ class UpdateUserProfileServiceTest {
     originalProfile = mock(Profile.class);
     updatedProfile = mock(Profile.class);
 
+    when(originalProfile.phone()).thenReturn(phone);
     when(mockedUser.getId()).thenReturn(1L);
     when(mockedUser.getProfile()).thenReturn(originalProfile);
     when(originalProfile.updateProfile(email, phone, birthday, profileImage))

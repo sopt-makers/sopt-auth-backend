@@ -14,4 +14,7 @@ interface PhoneVerificationJpaRepository extends JpaRepository<PhoneVerification
 
   void deleteByNameAndPhoneAndCodeAndType(
       String name, String phone, String code, PhoneVerificationType type);
+
+  Optional<PhoneVerificationEntity> findTopByPhoneAndTypeAndNameOrderByCreatedAtDesc(
+      String phone, PhoneVerificationType type, String name);
 }

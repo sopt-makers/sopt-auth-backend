@@ -23,6 +23,9 @@ public enum AuthFailure implements FailureCode {
   INVALID_API_KEY(HttpStatus.UNAUTHORIZED, "API 키가 유효하지 않습니다."),
   MISSING_AUTHORIZATION_HEADER(HttpStatus.UNAUTHORIZED, "Authorization 헤더가 없습니다."),
 
+  // 403
+  PHONE_NOT_VERIFIED(HttpStatus.FORBIDDEN, "번호 인증이 되지 않은 번호입니다."),
+
   // 404
   NOT_FOUND_PHONE_VERIFICATION(HttpStatus.NOT_FOUND, "존재하지 않는 번호 인증 이력입니다."),
   NOT_FOUND_USER_WITH_SOCIAL_ACCOUNT(HttpStatus.BAD_REQUEST, "소셜 계정 정보와 일치하는 회원이 없습니다."),

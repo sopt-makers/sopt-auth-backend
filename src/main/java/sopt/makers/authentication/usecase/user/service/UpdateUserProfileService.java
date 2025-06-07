@@ -2,12 +2,14 @@ package sopt.makers.authentication.usecase.user.service;
 
 import static sopt.makers.authentication.support.code.domain.failure.UserFailure.NOT_FOUND_USER_ACTIVITY;
 
+import sopt.makers.authentication.domain.auth.PhoneVerificationType;
 import sopt.makers.authentication.domain.user.Activity;
 import sopt.makers.authentication.domain.user.ActivityList;
 import sopt.makers.authentication.domain.user.Profile;
 import sopt.makers.authentication.domain.user.Team;
 import sopt.makers.authentication.domain.user.User;
 import sopt.makers.authentication.support.exception.domain.UserException;
+import sopt.makers.authentication.support.validator.PhoneVerificationValidator;
 import sopt.makers.authentication.usecase.user.port.in.UpdateUserProfileUsecase;
 import sopt.makers.authentication.usecase.user.port.out.UserActivityHistoryRepository;
 import sopt.makers.authentication.usecase.user.port.out.UserRepository;
@@ -27,11 +29,16 @@ import lombok.RequiredArgsConstructor;
 public class UpdateUserProfileService implements UpdateUserProfileUsecase {
   private final UserRepository userRepository;
   private final UserActivityHistoryRepository userActivityHistoryRepository;
+  private final PhoneVerificationValidator phoneVerificationValidator;
 
   @Transactional
   @Override
   public void updateUserProfile(UserProfileCommand command) {
     User user = userRepository.findById(command.userId());
+    if (!user.getProfile().phone().equals(command.phone())) {
+      phoneVerificationValidator.validate(
+          user.getProfile().name(), command.phone(), PhoneVerificationType.CHANGE_PHONE_NUMBER);
+    }
     ActivityList activityList = userActivityHistoryRepository.findByUser(user.getId());
     Profile updatedProfile =
         user.getProfile()

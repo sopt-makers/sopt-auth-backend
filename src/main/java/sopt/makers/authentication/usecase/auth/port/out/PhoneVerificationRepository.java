@@ -8,6 +8,8 @@ public interface PhoneVerificationRepository {
 
   PhoneVerification findByPhoneVerification(PhoneVerification phoneVerification);
 
+  PhoneVerification findLatestByPhoneNameType(PhoneVerification phoneVerification);
+
   void deleteByPhoneVerification(PhoneVerification phoneVerification);
 
   void update(PhoneVerification phoneVerification);
