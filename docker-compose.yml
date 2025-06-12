@@ -5,10 +5,10 @@ x-auth-service-template: &auth-service-template
   environment:
     - TZ=Asia/Seoul
   env_file:
-    - ./env/application.env
+    - .env
   volumes:
-    - /home/ubuntu/auth/key/jwt_public_key.pem:/app-run/jwt_public_key.pem
-    - /home/ubuntu/auth/key/jwt_private_key.pem:/app-run/jwt_private_key.pem
+    - ./key/jwt_public_key.pem:/app-run/jwt_public_key.pem
+    - ./key/jwt_private_key.pem:/app-run/jwt_private_key.pem
   logging:
     driver: "json-file"
     options:
