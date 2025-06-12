@@ -1,0 +1,111 @@
+name: Continuous Deployment for SOPT makers Authentication Production Server
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ prod ]
+
+jobs:
+
+  build-and-push-image:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: ✅ Set up JDK 21
+        uses: actions/setup-java@v3
+        with:
+          java-version: 21
+          distribution: 'corretto'
+          cache: gradle
+
+      - name: 🔒 Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: ⚙️ Create Property File
+        run: |
+          touch ./gradle.properties
+          echo "${{ secrets.PROPERTY_GRADLE }}" >> ./gradle.properties
+
+      - name: 📂 Download Keys and Env from S3
+        env:
+          REGION: ${{ secrets.AWS_REGION }}
+          S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+          JWT_PUBLIC_KEY_PATH: ${{ secrets.JWT_PUBLIC_KEY_PATH }}
+          JWT_PRIVATE_KEY_PATH: ${{ secrets.JWT_PRIVATE_KEY_PATH }}
+          TEST_ENV_PATH: ${{ secrets.ENV_FILE_PATH_TEST }}
+        run: |
+          mkdir -p ./src/main/resources
+          aws s3 cp s3://$S3_BUCKET/prod/static/$JWT_PUBLIC_KEY_PATH ./src/main/resources/jwt_public_key.pem --region $REGION
+          aws s3 cp s3://$S3_BUCKET/prod/static/$JWT_PRIVATE_KEY_PATH ./src/main/resources/jwt_private_key.pem --region $REGION
+          mkdir -p ./src/main/resources/env
+          aws s3 cp s3://$S3_BUCKET/prod/$TEST_ENV_PATH ./src/main/resources/env/test.env --region $REGION
+
+      - name: 🧱 Build and Test with Gradle
+        run: ./gradlew build --no-daemon
+        shell: bash
+
+      - name: 🧱 Build Image and Push to ECR
+        env:
+          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+          AWS_ECR_REPO: ${{ secrets.AWS_ECR_REPO_PROD }}
+        run: |
+          aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws
+          docker build --build-arg PROFILE=prod -t $AWS_ECR_REPO .
+          docker tag $AWS_ECR_REPO:latest public.ecr.aws/$AWS_ACCOUNT_ID/$AWS_ECR_REPO:latest
+          docker push public.ecr.aws/$AWS_ACCOUNT_ID/$AWS_ECR_REPO:latest
+
+  deploy:
+    needs: build-and-push-image
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout Source
+        uses: actions/checkout@v3
+
+      - name: 🔒 Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: 📂 Download Keys and Env from S3
+        env:
+          REGION: ${{ secrets.AWS_REGION }}
+          S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+          JWT_PUBLIC_KEY_PATH: ${{ secrets.JWT_PUBLIC_KEY_PATH }}
+          JWT_PRIVATE_KEY_PATH: ${{ secrets.JWT_PRIVATE_KEY_PATH }}
+          PROD_ENV_FILE_PATH: ${{ secrets.ENV_FILE_PATH_PROD }}
+        run: |
+          mkdir -p ./key
+          aws s3 cp s3://$S3_BUCKET/prod/static/$JWT_PUBLIC_KEY_PATH ./key/jwt_public_key.pem --region $REGION
+          aws s3 cp s3://$S3_BUCKET/prod/static/$JWT_PRIVATE_KEY_PATH ./key/jwt_private_key.pem --region $REGION
+          aws s3 cp s3://$S3_BUCKET/prod/$PROD_ENV_FILE_PATH .env --region $REGION
+
+      - name: 🔄 Transfer Deployment Files to EC2
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.HOST_PROD }}
+          username: ec2-user
+          key: ${{ secrets.PEM_KEY_PROD }}
+          port: 22
+          source: ".env,docker-compose.yml,scripts,key"
+          target: /home/ubuntu/authentication
+          overwrite: true
+
+      - name: 🚀 Remote SSH Deployment
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST_PROD }}
+          username: ubuntu
+          key: ${{ secrets.PEM_KEY_PROD }}
+          port: 22
+          script: |
+            sudo chmod +x /home/ubuntu/authentication/scripts/*.sh
+            cd /home/ubuntu/authentication/scripts
+            ./deploy.sh

@@ -1,0 +1,34 @@
+spring.config.activate.on-profile:
+  - prod
+  - dev
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: none
+    database-platform: ${JPA_DATABASE_PLATFORM}
+    database: ${JPA_DATABASE}
+---
+spring.config.activate.on-profile: local
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+      database-platform: ${JPA_DATABASE_PLATFORM}
+      database: ${JPA_DATABASE}
+
+---
+spring.config.activate.on-profile: test
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+      database-platform: ${JPA_DATABASE_PLATFORM}
+      database: ${JPA_DATABASE}

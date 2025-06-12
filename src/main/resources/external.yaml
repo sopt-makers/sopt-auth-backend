@@ -1,0 +1,19 @@
+spring.config.activate.on-profile:
+  - prod
+  - dev
+  - local
+  - test
+external:
+  gabia:
+    sms:
+      id: ${GABIA_SMS_ID}
+      key: ${GABIA_SMS_KEY}
+      url: ${GABIA_SMS_URL}
+      phone: ${GABIA_SMS_PHONE}
+  oauth:
+    apple:
+      web-aud: ${APPLE_AUD_WEB}
+      app-aud: ${APPLE_AUD_APP}
+    google:
+      client:
+        id: ${GOOGLE_CLIENT_ID}

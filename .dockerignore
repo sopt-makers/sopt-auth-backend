@@ -1,0 +1,7 @@
+.idea
+*.md
+.github
+!.github/script/pre-commit
+.gitignore
+.gitattributes
+script
