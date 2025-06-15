@@ -55,4 +55,8 @@ public class UserRetriever {
 
     return userEntityList.stream().map(UserEntity::toDomain).toList();
   }
+
+  public int countByGeneration(int generation) {
+    return userJpaRepository.countByGeneration(generation);
+  }
 }

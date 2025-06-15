@@ -53,4 +53,11 @@ public final class UserResponse {
           userActivityInfo.team());
     }
   }
+
+  public record UserCountByGeneration(int numberOfMembersAtGeneration) {
+    public static UserCountByGeneration from(
+        GetUserProfileUsecase.UserCountByGeneration userCountByGeneration) {
+      return new UserCountByGeneration(userCountByGeneration.count());
+    }
+  }
 }

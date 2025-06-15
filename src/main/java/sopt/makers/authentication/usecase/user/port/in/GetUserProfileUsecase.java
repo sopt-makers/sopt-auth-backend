@@ -15,6 +15,8 @@ public interface GetUserProfileUsecase {
 
   List<UserProfileAndActivityInfo> getUserInformationByActivity(Integer generation, Part part);
 
+  UserCountByGeneration getUserCountByGeneration(int generation);
+
   record UserProfileAndActivityInfo(
       Long userId,
       String name,
@@ -51,4 +53,6 @@ public interface GetUserProfileUsecase {
           activity.getTeam() != null ? activity.getTeam().getName() : null);
     }
   }
+
+  record UserCountByGeneration(int count) {}
 }

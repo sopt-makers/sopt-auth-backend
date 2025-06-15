@@ -40,4 +40,13 @@ public interface UserJpaRepository extends JpaRepository<UserEntity, Long> {
             """)
   List<UserEntity> findAllWithActivityHistoriesByGenerationAndPart(
       @Param("generation") Integer generation, @Param("part") Part part);
+
+  @Query(
+      """
+        SELECT COUNT(DISTINCT u.id)
+        FROM UserEntity u
+        JOIN u.userActivityHistoryList a
+        WHERE a.generation = :generation
+    """)
+  int countByGeneration(@Param("generation") int generation);
 }

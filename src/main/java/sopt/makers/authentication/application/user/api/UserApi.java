@@ -34,4 +34,9 @@ public interface UserApi {
       @RequestHeader(SERVICE_NAME_HEADER) String serviceName,
       @RequestParam(required = false) Integer generation,
       @RequestParam(required = false) Part part);
+
+  ResponseEntity<BaseResponse<?>> getUserCountByGeneration(
+      @RequestHeader(API_KEY_HEADER) String apiKey,
+      @RequestHeader(SERVICE_NAME_HEADER) String serviceName,
+      @RequestParam int generation);
 }

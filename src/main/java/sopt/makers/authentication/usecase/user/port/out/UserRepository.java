@@ -26,4 +26,6 @@ public interface UserRepository {
   boolean existsByPhone(String phone);
 
   List<User> findAllByActivity(Integer generation, Part part);
+
+  int countByGeneration(int generation);
 }

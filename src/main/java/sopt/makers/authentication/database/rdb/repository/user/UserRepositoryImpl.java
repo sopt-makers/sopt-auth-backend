@@ -74,4 +74,9 @@ public class UserRepositoryImpl implements UserRepository {
   public List<User> findAllByActivity(Integer generation, Part part) {
     return userRetriever.findAllByActivity(generation, part);
   }
+
+  @Override
+  public int countByGeneration(int generation) {
+    return userRetriever.countByGeneration(generation);
+  }
 }

@@ -77,4 +77,15 @@ public class UserApiController implements UserApi {
     return ResponseUtil.success(
         UserSuccess.GET_USER_PROFILE, UserResponse.UserProfileAndActivity.from(userInformation));
   }
+
+  @GetMapping("/count")
+  public ResponseEntity<BaseResponse<?>> getUserCountByGeneration(
+      @RequestHeader(API_KEY_HEADER) String apiKey,
+      @RequestHeader(SERVICE_NAME_HEADER) String serviceName,
+      @RequestParam int generation) {
+    GetUserProfileUsecase.UserCountByGeneration count =
+        getUserProfileUsecase.getUserCountByGeneration(generation);
+    return ResponseUtil.success(
+        UserSuccess.GET_USER_COUNT, UserResponse.UserCountByGeneration.from(count));
+  }
 }
