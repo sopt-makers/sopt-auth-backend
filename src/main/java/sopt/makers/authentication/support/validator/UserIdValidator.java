@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 public class UserIdValidator {
 
   public void validateUserIds(List<Long> userIds) {
-    if (userIds.stream().anyMatch(id -> id <= 0)) {
+    if (userIds != null && userIds.stream().anyMatch(id -> id <= 0)) {
       throw new UserException(NOT_VALID_USER_ID);
     }
   }
