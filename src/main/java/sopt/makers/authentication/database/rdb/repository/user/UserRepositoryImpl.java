@@ -2,6 +2,7 @@ package sopt.makers.authentication.database.rdb.repository.user;
 
 import sopt.makers.authentication.database.rdb.entity.UserEntity;
 import sopt.makers.authentication.domain.auth.SocialAccount;
+import sopt.makers.authentication.domain.user.Part;
 import sopt.makers.authentication.domain.user.Profile;
 import sopt.makers.authentication.domain.user.User;
 import sopt.makers.authentication.usecase.user.port.out.UserRepository;
@@ -67,5 +68,15 @@ public class UserRepositoryImpl implements UserRepository {
   @Override
   public boolean existsByPhone(String phone) {
     return userRetriever.existsByPhone(phone);
+  }
+
+  @Override
+  public List<User> findAllByGenerationAndPart(Integer generation, Part part) {
+    return userRetriever.findAllByActivity(generation, part);
+  }
+
+  @Override
+  public int countByGeneration(int generation) {
+    return userRetriever.countByGeneration(generation);
   }
 }

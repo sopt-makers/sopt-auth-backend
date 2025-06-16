@@ -5,6 +5,7 @@ import static sopt.makers.authentication.support.code.domain.failure.UserFailure
 
 import sopt.makers.authentication.database.rdb.entity.UserEntity;
 import sopt.makers.authentication.domain.auth.SocialAccount;
+import sopt.makers.authentication.domain.user.Part;
 import sopt.makers.authentication.domain.user.User;
 import sopt.makers.authentication.support.exception.domain.AuthException;
 import sopt.makers.authentication.support.exception.domain.UserException;
@@ -46,5 +47,16 @@ public class UserRetriever {
 
   public boolean existsByPhone(String phone) {
     return userJpaRepository.existsByPhone(phone);
+  }
+
+  public List<User> findAllByActivity(Integer generation, Part part) {
+    List<UserEntity> userEntityList =
+        userJpaRepository.findAllWithActivityHistoriesByGenerationAndPart(generation, part);
+
+    return userEntityList.stream().map(UserEntity::toDomain).toList();
+  }
+
+  public int countByGeneration(int generation) {
+    return userJpaRepository.countByGeneration(generation);
   }
 }
