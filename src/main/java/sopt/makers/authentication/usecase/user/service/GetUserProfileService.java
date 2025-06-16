@@ -29,7 +29,7 @@ public class GetUserProfileService implements GetUserProfileUsecase {
   @Override
   public List<UserProfileAndActivityInfo> getUserInformationByActivity(
       Integer generation, Part part) {
-    List<User> userList = userRepository.findAllByActivity(generation, part);
+    List<User> userList = userRepository.findAllByGenerationAndPart(generation, part);
     return userList.stream()
         .map(user -> UserProfileAndActivityInfo.of(user, user.getActivities()))
         .toList();
