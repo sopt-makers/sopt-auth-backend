@@ -2,6 +2,7 @@ package sopt.makers.authentication.usecase.user.port.in;
 
 import sopt.makers.authentication.domain.user.Activity;
 import sopt.makers.authentication.domain.user.ActivityList;
+import sopt.makers.authentication.domain.user.Part;
 import sopt.makers.authentication.domain.user.Profile;
 import sopt.makers.authentication.domain.user.User;
 
@@ -11,6 +12,10 @@ import java.util.List;
 public interface GetUserProfileUsecase {
 
   List<UserProfileAndActivityInfo> getUserInformation(List<Long> userIds);
+
+  List<UserProfileAndActivityInfo> getUserInformationByActivity(Integer generation, Part part);
+
+  UserCountByGeneration getUserCountByGeneration(int generation);
 
   record UserProfileAndActivityInfo(
       Long userId,
@@ -48,4 +53,6 @@ public interface GetUserProfileUsecase {
           activity.getTeam() != null ? activity.getTeam().getName() : null);
     }
   }
+
+  record UserCountByGeneration(int count) {}
 }

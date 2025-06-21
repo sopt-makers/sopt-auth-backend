@@ -1,6 +1,7 @@
 package sopt.makers.authentication.usecase.user.port.out;
 
 import sopt.makers.authentication.domain.auth.SocialAccount;
+import sopt.makers.authentication.domain.user.Part;
 import sopt.makers.authentication.domain.user.Profile;
 import sopt.makers.authentication.domain.user.User;
 
@@ -23,4 +24,8 @@ public interface UserRepository {
   void update(User user, Profile profile);
 
   boolean existsByPhone(String phone);
+
+  List<User> findAllByGenerationAndPart(Integer generation, Part part);
+
+  int countByGeneration(int generation);
 }
