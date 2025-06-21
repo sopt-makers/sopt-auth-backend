@@ -20,6 +20,7 @@ public enum CommonFailure implements FailureCode {
   MISSING_REQUEST_HEADER(HttpStatus.BAD_REQUEST, "필수 요청 헤더가 누락되었습니다"),
   INVALID_INPUT_VALUE(HttpStatus.BAD_REQUEST, "유효하지 않은 입력 값입니다"),
   METHOD_ARGUMENT_TYPE_MISMATCH(HttpStatus.BAD_REQUEST, "입력한 값의 타입이 잘못되었습니다"),
+  INVALID_REQUEST_BODY(HttpStatus.BAD_REQUEST, "요청 본문을 읽을 수 없습니다"),
 
   // 404
   NOT_FOUND_URL(HttpStatus.NOT_FOUND, "존재하지 않는 URL입니다"),
