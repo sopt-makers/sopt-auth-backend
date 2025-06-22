@@ -1,8 +1,8 @@
 package sopt.makers.authentication.application.service.auth;
 
 import static sopt.makers.authentication.domain.auth.PhoneVerificationType.REGISTER;
-import static sopt.makers.authentication.support.code.domain.failure.AuthFailure.ALREADY_REGISTER_PHONE_NUMBER;
-import static sopt.makers.authentication.support.code.domain.failure.AuthFailure.NOT_FOUND_REGISTER_INFO;
+import static sopt.makers.authentication.domain.auth.exception.AuthFailure.ALREADY_REGISTER_PHONE_NUMBER;
+import static sopt.makers.authentication.domain.auth.exception.AuthFailure.NOT_FOUND_REGISTER_INFO;
 
 import sopt.makers.authentication.application.port.in.auth.CreatePhoneVerificationUsecase;
 import sopt.makers.authentication.application.port.out.auth.PhoneVerificationRepository;
@@ -11,9 +11,9 @@ import sopt.makers.authentication.application.port.out.user.UserRepository;
 import sopt.makers.authentication.domain.auth.PhoneVerification;
 import sopt.makers.authentication.domain.auth.PhoneVerificationCreatedEvent;
 import sopt.makers.authentication.domain.auth.PhoneVerificationType;
+import sopt.makers.authentication.domain.auth.exception.AuthException;
 import sopt.makers.authentication.domain.message.MessageType;
 import sopt.makers.authentication.domain.user.User;
-import sopt.makers.authentication.support.exception.domain.AuthException;
 
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;

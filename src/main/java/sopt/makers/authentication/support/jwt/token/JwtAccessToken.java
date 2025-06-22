@@ -2,12 +2,12 @@ package sopt.makers.authentication.support.jwt.token;
 
 import static org.springframework.security.oauth2.jwt.JwtClaimNames.ISS;
 import static org.springframework.security.oauth2.jwt.JwtClaimNames.SUB;
-import static sopt.makers.authentication.support.code.support.failure.ResourceFailure.INVALID_SUBJECT;
-import static sopt.makers.authentication.support.code.support.failure.TokenFailure.TOKEN_EXPIRED;
-import static sopt.makers.authentication.support.code.support.failure.TokenFailure.UNSUPPORTED_ISSUER;
+import static sopt.makers.authentication.adapter.out.jwt.exception.ResourceFailure.INVALID_SUBJECT;
+import static sopt.makers.authentication.adapter.out.jwt.exception.TokenFailure.TOKEN_EXPIRED;
+import static sopt.makers.authentication.adapter.out.jwt.exception.TokenFailure.UNSUPPORTED_ISSUER;
 
-import sopt.makers.authentication.support.exception.support.ResourceException;
-import sopt.makers.authentication.support.exception.support.TokenException;
+import sopt.makers.authentication.adapter.out.jwt.exception.ResourceException;
+import sopt.makers.authentication.adapter.out.jwt.exception.TokenException;
 import sopt.makers.authentication.support.security.authentication.CustomAuthentication;
 import sopt.makers.authentication.support.value.SecurityProperty;
 

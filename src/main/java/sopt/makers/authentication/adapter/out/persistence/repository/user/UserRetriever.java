@@ -1,14 +1,14 @@
 package sopt.makers.authentication.adapter.out.persistence.repository.user;
 
-import static sopt.makers.authentication.support.code.domain.failure.AuthFailure.NOT_FOUND_USER_WITH_SOCIAL_ACCOUNT;
-import static sopt.makers.authentication.support.code.domain.failure.UserFailure.NOT_FOUND_USER;
+import static sopt.makers.authentication.domain.auth.exception.AuthFailure.NOT_FOUND_USER_WITH_SOCIAL_ACCOUNT;
+import static sopt.makers.authentication.domain.user.exception.UserFailure.NOT_FOUND_USER;
 
 import sopt.makers.authentication.adapter.out.persistence.entity.UserEntity;
 import sopt.makers.authentication.domain.auth.SocialAccount;
+import sopt.makers.authentication.domain.auth.exception.AuthException;
 import sopt.makers.authentication.domain.user.Part;
 import sopt.makers.authentication.domain.user.User;
-import sopt.makers.authentication.support.exception.domain.AuthException;
-import sopt.makers.authentication.support.exception.domain.UserException;
+import sopt.makers.authentication.domain.user.exception.UserException;
 
 import java.util.List;
 

@@ -1,6 +1,6 @@
 package sopt.makers.authentication.application.service.user;
 
-import static sopt.makers.authentication.support.code.domain.failure.UserFailure.NOT_FOUND_USER_ACTIVITY;
+import static sopt.makers.authentication.domain.user.exception.UserFailure.NOT_FOUND_USER_ACTIVITY;
 
 import sopt.makers.authentication.application.port.in.user.UpdateUserProfileUsecase;
 import sopt.makers.authentication.application.port.out.user.UserActivityHistoryRepository;
@@ -11,7 +11,7 @@ import sopt.makers.authentication.domain.user.ActivityList;
 import sopt.makers.authentication.domain.user.Profile;
 import sopt.makers.authentication.domain.user.Team;
 import sopt.makers.authentication.domain.user.User;
-import sopt.makers.authentication.support.exception.domain.UserException;
+import sopt.makers.authentication.domain.user.exception.UserException;
 import sopt.makers.authentication.support.validator.PhoneVerificationValidator;
 
 import java.util.List;

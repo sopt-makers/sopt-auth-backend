@@ -1,9 +1,9 @@
 package sopt.makers.authentication.support.security.filter;
 
-import static sopt.makers.authentication.support.code.domain.failure.AuthFailure.MISSING_AUTHORIZATION_HEADER;
+import static sopt.makers.authentication.domain.auth.exception.AuthFailure.MISSING_AUTHORIZATION_HEADER;
 import static sopt.makers.authentication.support.constant.SystemConstant.WHITELIST_WILDCARD;
 
-import sopt.makers.authentication.support.exception.domain.AuthException;
+import sopt.makers.authentication.domain.auth.exception.AuthException;
 import sopt.makers.authentication.support.jwt.service.JwtAuthAccessTokenService;
 import sopt.makers.authentication.support.security.authentication.ApiKeyAuthentication;
 import sopt.makers.authentication.support.security.authentication.CustomAuthentication;

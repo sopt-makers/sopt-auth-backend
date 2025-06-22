@@ -3,9 +3,9 @@ package sopt.makers.authentication.adapter.in.web.controller.user;
 import static sopt.makers.authentication.support.constant.SystemConstant.API_KEY_HEADER;
 import static sopt.makers.authentication.support.constant.SystemConstant.SERVICE_NAME_HEADER;
 
+import sopt.makers.authentication.adapter.in.web.common.BaseResponse;
 import sopt.makers.authentication.adapter.in.web.dto.user.request.UserRequest;
 import sopt.makers.authentication.domain.user.Part;
-import sopt.makers.authentication.support.common.api.BaseResponse;
 
 import java.util.List;
 

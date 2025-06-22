@@ -2,8 +2,8 @@ package sopt.makers.authentication.adapter.out.persistence.repository.phone.veri
 
 import sopt.makers.authentication.adapter.out.persistence.entity.PhoneVerificationEntity;
 import sopt.makers.authentication.domain.auth.PhoneVerification;
-import sopt.makers.authentication.support.code.domain.failure.AuthFailure;
-import sopt.makers.authentication.support.exception.domain.AuthException;
+import sopt.makers.authentication.domain.auth.exception.AuthException;
+import sopt.makers.authentication.domain.auth.exception.AuthFailure;
 
 import org.springframework.stereotype.Component;
 

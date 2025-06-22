@@ -3,10 +3,10 @@ package sopt.makers.authentication.adapter.out.external.oauth;
 import static sopt.makers.authentication.support.constant.OAuthConstant.APPLE_ISSUER;
 
 import sopt.makers.authentication.adapter.out.external.oauth.client.AppleAuthClient;
-import sopt.makers.authentication.support.code.domain.failure.AuthFailure;
-import sopt.makers.authentication.support.code.support.failure.TokenFailure;
-import sopt.makers.authentication.support.exception.domain.AuthException;
-import sopt.makers.authentication.support.exception.support.TokenException;
+import sopt.makers.authentication.adapter.out.jwt.exception.TokenException;
+import sopt.makers.authentication.adapter.out.jwt.exception.TokenFailure;
+import sopt.makers.authentication.domain.auth.exception.AuthException;
+import sopt.makers.authentication.domain.auth.exception.AuthFailure;
 import sopt.makers.authentication.support.value.AppleOAuthProperty;
 
 import java.text.ParseException;

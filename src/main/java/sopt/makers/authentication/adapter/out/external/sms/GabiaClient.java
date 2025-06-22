@@ -16,9 +16,9 @@ import static sopt.makers.authentication.support.constant.GabiaConstant.URI_OAUT
 import static sopt.makers.authentication.support.constant.GabiaConstant.URI_SEND_LMS;
 import static sopt.makers.authentication.support.constant.GabiaConstant.URI_SEND_SMS;
 
-import sopt.makers.authentication.support.code.external.failure.ClientError;
-import sopt.makers.authentication.support.exception.external.ClientRequestException;
-import sopt.makers.authentication.support.exception.external.ClientResponseException;
+import sopt.makers.authentication.adapter.out.external.exception.ClientError;
+import sopt.makers.authentication.adapter.out.external.exception.ClientRequestException;
+import sopt.makers.authentication.adapter.out.external.exception.ClientResponseException;
 import sopt.makers.authentication.support.value.GabiaProperty;
 
 import java.io.IOException;

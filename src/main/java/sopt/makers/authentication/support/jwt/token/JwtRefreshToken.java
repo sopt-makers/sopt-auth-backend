@@ -1,8 +1,8 @@
 package sopt.makers.authentication.support.jwt.token;
 
-import static sopt.makers.authentication.support.code.support.failure.TokenFailure.TOKEN_EXPIRED;
+import static sopt.makers.authentication.adapter.out.jwt.exception.TokenFailure.TOKEN_EXPIRED;
 
-import sopt.makers.authentication.support.exception.support.TokenException;
+import sopt.makers.authentication.adapter.out.jwt.exception.TokenException;
 
 import java.time.Instant;
 

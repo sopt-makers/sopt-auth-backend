@@ -1,8 +1,8 @@
 package sopt.makers.authentication.support.validator;
 
-import static sopt.makers.authentication.support.code.domain.failure.UserFailure.NOT_VALID_USER_ID;
+import static sopt.makers.authentication.domain.user.exception.UserFailure.NOT_VALID_USER_ID;
 
-import sopt.makers.authentication.support.exception.domain.UserException;
+import sopt.makers.authentication.domain.user.exception.UserException;
 
 import java.util.List;
 

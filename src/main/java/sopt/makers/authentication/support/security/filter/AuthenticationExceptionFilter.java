@@ -1,7 +1,7 @@
 package sopt.makers.authentication.support.security.filter;
 
-import sopt.makers.authentication.support.exception.domain.AuthException;
-import sopt.makers.authentication.support.exception.support.TokenException;
+import sopt.makers.authentication.adapter.out.jwt.exception.TokenException;
+import sopt.makers.authentication.domain.auth.exception.AuthException;
 import sopt.makers.authentication.support.util.ResponseUtil;
 
 import java.io.IOException;

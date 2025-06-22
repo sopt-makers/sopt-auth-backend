@@ -1,10 +1,10 @@
 package sopt.makers.authentication.config;
 
-import static sopt.makers.authentication.support.code.support.failure.ResourceFailure.INVALID_ALGORITHM;
-import static sopt.makers.authentication.support.code.support.failure.ResourceFailure.INVALID_LOCATION;
-import static sopt.makers.authentication.support.code.support.failure.ResourceFailure.INVALID_SUBJECT;
+import static sopt.makers.authentication.adapter.out.jwt.exception.ResourceFailure.INVALID_ALGORITHM;
+import static sopt.makers.authentication.adapter.out.jwt.exception.ResourceFailure.INVALID_LOCATION;
+import static sopt.makers.authentication.adapter.out.jwt.exception.ResourceFailure.INVALID_SUBJECT;
 
-import sopt.makers.authentication.support.exception.support.ResourceException;
+import sopt.makers.authentication.adapter.out.jwt.exception.ResourceException;
 import sopt.makers.authentication.support.jwt.RSAKeyManager;
 import sopt.makers.authentication.support.value.SecurityProperty;
 

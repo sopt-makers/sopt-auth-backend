@@ -1,9 +1,9 @@
 package sopt.makers.authentication.support.validator;
 
-import static sopt.makers.authentication.support.code.domain.failure.UserFailure.BAD_REQUEST_INVALID_USER_SEARCH_CONDITION;
+import static sopt.makers.authentication.domain.user.exception.UserFailure.BAD_REQUEST_INVALID_USER_SEARCH_CONDITION;
 
 import sopt.makers.authentication.domain.user.Part;
-import sopt.makers.authentication.support.exception.domain.UserException;
+import sopt.makers.authentication.domain.user.exception.UserException;
 
 import org.springframework.stereotype.Component;
 

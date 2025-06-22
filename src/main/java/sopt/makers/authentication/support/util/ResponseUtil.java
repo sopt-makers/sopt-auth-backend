@@ -2,10 +2,10 @@ package sopt.makers.authentication.support.util;
 
 import static sopt.makers.authentication.support.constant.SystemConstant.UTF_8;
 
-import sopt.makers.authentication.support.code.base.FailureCode;
-import sopt.makers.authentication.support.code.base.SuccessCode;
-import sopt.makers.authentication.support.common.api.BaseResponse;
-import sopt.makers.authentication.support.exception.base.BaseException;
+import sopt.makers.authentication.adapter.in.web.common.BaseResponse;
+import sopt.makers.authentication.common.code.FailureCode;
+import sopt.makers.authentication.common.code.SuccessCode;
+import sopt.makers.authentication.common.exception.BaseException;
 
 import java.io.IOException;
 

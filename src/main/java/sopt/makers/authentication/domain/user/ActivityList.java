@@ -1,8 +1,8 @@
 package sopt.makers.authentication.domain.user;
 
-import static sopt.makers.authentication.support.code.domain.failure.UserFailure.DUPLICATE_ACTIVITY;
+import static sopt.makers.authentication.domain.user.exception.UserFailure.DUPLICATE_ACTIVITY;
 
-import sopt.makers.authentication.support.exception.domain.UserException;
+import sopt.makers.authentication.domain.user.exception.UserException;
 
 import java.util.ArrayList;
 import java.util.List;

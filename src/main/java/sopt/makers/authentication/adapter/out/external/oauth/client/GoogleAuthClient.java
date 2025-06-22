@@ -1,11 +1,11 @@
 package sopt.makers.authentication.adapter.out.external.oauth.client;
 
-import static sopt.makers.authentication.support.code.external.failure.ClientError.GOOGLE_REQUEST_FAIL;
-import static sopt.makers.authentication.support.code.external.failure.ClientError.INVALID_GOOGLE_REQUEST_URL;
+import static sopt.makers.authentication.adapter.out.external.exception.ClientError.GOOGLE_REQUEST_FAIL;
+import static sopt.makers.authentication.adapter.out.external.exception.ClientError.INVALID_GOOGLE_REQUEST_URL;
 import static sopt.makers.authentication.support.constant.OAuthConstant.GOOGLE_PUBLIC_KEY_SET_URL;
 
-import sopt.makers.authentication.support.exception.external.ClientRequestException;
-import sopt.makers.authentication.support.exception.external.ClientResponseException;
+import sopt.makers.authentication.adapter.out.external.exception.ClientRequestException;
+import sopt.makers.authentication.adapter.out.external.exception.ClientResponseException;
 
 import java.io.IOException;
 import java.net.URI;

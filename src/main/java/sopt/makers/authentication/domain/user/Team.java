@@ -1,8 +1,8 @@
 package sopt.makers.authentication.domain.user;
 
-import static sopt.makers.authentication.support.code.domain.failure.UserFailure.NOT_FOUND_TEAM;
+import static sopt.makers.authentication.domain.user.exception.UserFailure.NOT_FOUND_TEAM;
 
-import sopt.makers.authentication.support.exception.domain.UserException;
+import sopt.makers.authentication.domain.user.exception.UserException;
 
 import java.util.Arrays;
 

@@ -1,12 +1,12 @@
 package sopt.makers.authentication.application.service.auth;
 
-import static sopt.makers.authentication.support.code.domain.failure.AuthFailure.EXPIRED_PHONE_VERIFICATION;
-import static sopt.makers.authentication.support.code.domain.failure.AuthFailure.INVALID_PHONE_VERIFICATION_CODE;
+import static sopt.makers.authentication.domain.auth.exception.AuthFailure.EXPIRED_PHONE_VERIFICATION;
+import static sopt.makers.authentication.domain.auth.exception.AuthFailure.INVALID_PHONE_VERIFICATION_CODE;
 
 import sopt.makers.authentication.application.port.in.auth.VerifyPhoneVerificationUsecase;
 import sopt.makers.authentication.application.port.out.auth.PhoneVerificationRepository;
 import sopt.makers.authentication.domain.auth.PhoneVerification;
-import sopt.makers.authentication.support.exception.domain.AuthException;
+import sopt.makers.authentication.domain.auth.exception.AuthException;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

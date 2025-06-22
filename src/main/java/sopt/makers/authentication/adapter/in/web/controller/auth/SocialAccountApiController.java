@@ -1,11 +1,11 @@
 package sopt.makers.authentication.adapter.in.web.controller.auth;
 
+import sopt.makers.authentication.adapter.in.web.common.BaseResponse;
+import sopt.makers.authentication.adapter.in.web.common.code.SocialAccountSuccess;
 import sopt.makers.authentication.adapter.in.web.dto.auth.request.SocialAccountRequest;
 import sopt.makers.authentication.adapter.in.web.dto.auth.response.AuthResponse;
 import sopt.makers.authentication.application.port.in.auth.GetSocialAccountUsecase;
 import sopt.makers.authentication.application.port.in.auth.UpdateSocialAccountUsecase;
-import sopt.makers.authentication.support.code.domain.success.SocialAccountSuccess;
-import sopt.makers.authentication.support.common.api.BaseResponse;
 import sopt.makers.authentication.support.util.ResponseUtil;
 
 import org.springframework.http.ResponseEntity;

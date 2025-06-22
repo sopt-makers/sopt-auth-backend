@@ -2,14 +2,14 @@ package sopt.makers.authentication.adapter.in.web.controller.auth;
 
 import static sopt.makers.authentication.support.constant.JwtConstant.REFRESH_TOKEN_HEADER;
 
+import sopt.makers.authentication.adapter.in.web.common.BaseResponse;
+import sopt.makers.authentication.adapter.in.web.common.code.AuthSuccess;
 import sopt.makers.authentication.adapter.in.web.dto.auth.request.AuthRequest;
 import sopt.makers.authentication.adapter.in.web.dto.auth.response.AuthResponse;
 import sopt.makers.authentication.application.port.in.auth.AuthenticateSocialAccountUsecase;
 import sopt.makers.authentication.application.port.in.auth.CreatePhoneVerificationUsecase;
 import sopt.makers.authentication.application.port.in.auth.SignUpUsecase;
 import sopt.makers.authentication.application.port.in.auth.VerifyPhoneVerificationUsecase;
-import sopt.makers.authentication.support.code.domain.success.AuthSuccess;
-import sopt.makers.authentication.support.common.api.BaseResponse;
 import sopt.makers.authentication.support.util.CookieUtil;
 import sopt.makers.authentication.support.util.ResponseUtil;
 

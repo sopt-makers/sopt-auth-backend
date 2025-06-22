@@ -1,6 +1,6 @@
 package sopt.makers.authentication.application.service.auth;
 
-import static sopt.makers.authentication.support.code.domain.failure.AuthFailure.NOT_FOUND_REGISTER_INFO;
+import static sopt.makers.authentication.domain.auth.exception.AuthFailure.NOT_FOUND_REGISTER_INFO;
 
 import sopt.makers.authentication.application.port.in.auth.SignUpUsecase;
 import sopt.makers.authentication.application.port.out.auth.OAuthAuthenticator;
@@ -10,11 +10,11 @@ import sopt.makers.authentication.application.port.out.user.UserRepository;
 import sopt.makers.authentication.domain.auth.AuthPlatform;
 import sopt.makers.authentication.domain.auth.PhoneVerificationType;
 import sopt.makers.authentication.domain.auth.SocialAccount;
+import sopt.makers.authentication.domain.auth.exception.AuthException;
 import sopt.makers.authentication.domain.user.Activity;
 import sopt.makers.authentication.domain.user.Profile;
 import sopt.makers.authentication.domain.user.User;
 import sopt.makers.authentication.domain.user.UserRegisterInfo;
-import sopt.makers.authentication.support.exception.domain.AuthException;
 import sopt.makers.authentication.support.validator.PhoneVerificationValidator;
 
 import org.springframework.stereotype.Service;

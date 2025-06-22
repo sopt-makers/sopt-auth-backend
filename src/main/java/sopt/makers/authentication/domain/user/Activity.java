@@ -1,8 +1,8 @@
 package sopt.makers.authentication.domain.user;
 
-import static sopt.makers.authentication.support.code.domain.failure.UserFailure.ROLE_REQUIRES_PART;
+import static sopt.makers.authentication.domain.user.exception.UserFailure.ROLE_REQUIRES_PART;
 
-import sopt.makers.authentication.support.exception.domain.UserException;
+import sopt.makers.authentication.domain.user.exception.UserException;
 
 import java.util.Optional;
 
