@@ -2,7 +2,7 @@ package sopt.makers.authentication.adapter.in.web.dto.user.response;
 
 import static lombok.AccessLevel.PRIVATE;
 
-import sopt.makers.authentication.usecase.user.port.in.GetUserProfileUsecase;
+import sopt.makers.authentication.application.port.in.user.GetUserProfileUsecase;
 
 import java.time.LocalDate;
 import java.util.List;

@@ -4,15 +4,14 @@ import static sopt.makers.authentication.support.constant.JwtConstant.REFRESH_TO
 
 import sopt.makers.authentication.adapter.in.web.dto.auth.request.AuthRequest;
 import sopt.makers.authentication.adapter.in.web.dto.auth.response.AuthResponse;
+import sopt.makers.authentication.application.port.in.auth.AuthenticateSocialAccountUsecase;
+import sopt.makers.authentication.application.port.in.auth.CreatePhoneVerificationUsecase;
+import sopt.makers.authentication.application.port.in.auth.SignUpUsecase;
+import sopt.makers.authentication.application.port.in.auth.VerifyPhoneVerificationUsecase;
 import sopt.makers.authentication.support.code.domain.success.AuthSuccess;
 import sopt.makers.authentication.support.common.api.BaseResponse;
 import sopt.makers.authentication.support.util.CookieUtil;
 import sopt.makers.authentication.support.util.ResponseUtil;
-import sopt.makers.authentication.usecase.auth.port.in.AuthenticateSocialAccountUsecase;
-import sopt.makers.authentication.usecase.auth.port.in.AuthenticateSocialAccountUsecase.AuthenticateTokenInfo;
-import sopt.makers.authentication.usecase.auth.port.in.CreatePhoneVerificationUsecase;
-import sopt.makers.authentication.usecase.auth.port.in.SignUpUsecase;
-import sopt.makers.authentication.usecase.auth.port.in.VerifyPhoneVerificationUsecase;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -58,7 +57,7 @@ public class AuthApiController implements AuthApi {
   @PostMapping("/login/web")
   public ResponseEntity<BaseResponse<?>> authenticateSocialAuthInfoFromWeb(
       @RequestBody AuthRequest.AuthenticateSocialAuthInfo socialAuthInfo) {
-    AuthenticateTokenInfo tokenInfo =
+    AuthenticateSocialAccountUsecase.AuthenticateTokenInfo tokenInfo =
         authenticateSocialAccountUsecase.authenticate(socialAuthInfo.toCommand());
     HttpHeaders headers = cookieUtil.setRefreshToken(tokenInfo.refreshToken());
 
@@ -72,7 +71,7 @@ public class AuthApiController implements AuthApi {
   @PostMapping("/login/app")
   public ResponseEntity<BaseResponse<?>> authenticateSocialAuthInfoFromApp(
       @RequestBody AuthRequest.AuthenticateSocialAuthInfo socialAuthInfo) {
-    AuthenticateTokenInfo tokenInfo =
+    AuthenticateSocialAccountUsecase.AuthenticateTokenInfo tokenInfo =
         authenticateSocialAccountUsecase.authenticate(socialAuthInfo.toCommand());
 
     return ResponseUtil.success(
@@ -95,7 +94,7 @@ public class AuthApiController implements AuthApi {
     AuthRequest.AuthenticationTokenInfo authenticationTokenInfo =
         new AuthRequest.AuthenticationTokenInfo(accessToken, refreshToken);
 
-    AuthenticateTokenInfo tokenInfo =
+    AuthenticateSocialAccountUsecase.AuthenticateTokenInfo tokenInfo =
         authenticateSocialAccountUsecase.refresh(authenticationTokenInfo.toCommand());
     HttpHeaders headers = cookieUtil.setRefreshToken(tokenInfo.refreshToken());
 
@@ -110,7 +109,7 @@ public class AuthApiController implements AuthApi {
   public ResponseEntity<BaseResponse<?>> refreshTokenFromApp(
       AuthRequest.AuthenticationTokenInfo authenticationTokenInfo) {
 
-    AuthenticateTokenInfo tokenInfo =
+    AuthenticateSocialAccountUsecase.AuthenticateTokenInfo tokenInfo =
         authenticateSocialAccountUsecase.refresh(authenticationTokenInfo.toCommand());
 
     return ResponseUtil.success(

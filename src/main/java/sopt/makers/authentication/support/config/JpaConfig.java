@@ -6,7 +6,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @Configuration
-@EntityScan(basePackages = {"sopt.makers.authentication.database.rdb.entity"})
 @EnableJpaAuditing
-@EnableJpaRepositories(basePackages = {"sopt.makers.authentication.database.rdb.repository"})
+@EntityScan(basePackages = {"sopt.makers.authentication.adapter.out.persistence.entity"})
+@EnableJpaRepositories(
+    basePackages = {"sopt.makers.authentication.adapter.out.persistence.repository"})
 public class JpaConfig {}

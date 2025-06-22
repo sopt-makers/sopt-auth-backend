@@ -1,8 +1,8 @@
 package sopt.makers.authentication.adapter.out.persistence.repository.phone.verification;
 
 import sopt.makers.authentication.adapter.out.persistence.entity.PhoneVerificationEntity;
+import sopt.makers.authentication.application.port.out.auth.PhoneVerificationRepository;
 import sopt.makers.authentication.domain.auth.PhoneVerification;
-import sopt.makers.authentication.usecase.auth.port.out.PhoneVerificationRepository;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;

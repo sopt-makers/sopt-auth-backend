@@ -5,14 +5,14 @@ import static sopt.makers.authentication.support.constant.SystemConstant.SERVICE
 
 import sopt.makers.authentication.adapter.in.web.dto.user.request.UserRequest;
 import sopt.makers.authentication.adapter.in.web.dto.user.response.UserResponse;
+import sopt.makers.authentication.application.port.in.user.GetUserProfileUsecase;
+import sopt.makers.authentication.application.port.in.user.UpdateUserProfileUsecase;
 import sopt.makers.authentication.domain.user.Part;
 import sopt.makers.authentication.support.code.domain.success.UserSuccess;
 import sopt.makers.authentication.support.common.api.BaseResponse;
 import sopt.makers.authentication.support.util.ResponseUtil;
 import sopt.makers.authentication.support.validator.UserIdValidator;
 import sopt.makers.authentication.support.validator.UserSearchConditionValidator;
-import sopt.makers.authentication.usecase.user.port.in.GetUserProfileUsecase;
-import sopt.makers.authentication.usecase.user.port.in.UpdateUserProfileUsecase;
 
 import java.util.List;
 

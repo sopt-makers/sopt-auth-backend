@@ -2,13 +2,13 @@ package sopt.makers.authentication.adapter.in.web.dto.auth.request;
 
 import static lombok.AccessLevel.PRIVATE;
 
+import sopt.makers.authentication.application.port.in.auth.AuthenticateSocialAccountUsecase.AuthenticateSocialAccountCommand;
+import sopt.makers.authentication.application.port.in.auth.AuthenticateSocialAccountUsecase.AuthenticateTokenInfo;
+import sopt.makers.authentication.application.port.in.auth.CreatePhoneVerificationUsecase.CreateVerificationCommand;
+import sopt.makers.authentication.application.port.in.auth.SignUpUsecase.SignUpCommand;
+import sopt.makers.authentication.application.port.in.auth.VerifyPhoneVerificationUsecase.VerifyVerificationCommand;
 import sopt.makers.authentication.domain.auth.AuthPlatform;
 import sopt.makers.authentication.domain.auth.PhoneVerificationType;
-import sopt.makers.authentication.usecase.auth.port.in.AuthenticateSocialAccountUsecase.AuthenticateSocialAccountCommand;
-import sopt.makers.authentication.usecase.auth.port.in.AuthenticateSocialAccountUsecase.AuthenticateTokenInfo;
-import sopt.makers.authentication.usecase.auth.port.in.CreatePhoneVerificationUsecase.CreateVerificationCommand;
-import sopt.makers.authentication.usecase.auth.port.in.SignUpUsecase.SignUpCommand;
-import sopt.makers.authentication.usecase.auth.port.in.VerifyPhoneVerificationUsecase.VerifyVerificationCommand;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

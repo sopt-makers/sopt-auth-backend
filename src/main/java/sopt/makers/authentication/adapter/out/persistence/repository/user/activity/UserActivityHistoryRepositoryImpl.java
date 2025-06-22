@@ -1,10 +1,10 @@
 package sopt.makers.authentication.adapter.out.persistence.repository.user.activity;
 
 import sopt.makers.authentication.adapter.out.persistence.entity.UserActivityHistoryEntity;
+import sopt.makers.authentication.application.port.out.user.UserActivityHistoryRepository;
 import sopt.makers.authentication.domain.user.Activity;
 import sopt.makers.authentication.domain.user.ActivityList;
 import sopt.makers.authentication.domain.user.User;
-import sopt.makers.authentication.usecase.user.port.out.UserActivityHistoryRepository;
 
 import java.util.List;
 

@@ -1,7 +1,7 @@
 package sopt.makers.authentication.adapter.out.external.sms;
 
+import sopt.makers.authentication.application.port.out.message.MessageSendPort;
 import sopt.makers.authentication.domain.message.Message;
-import sopt.makers.authentication.usecase.message.port.out.MessageSendPort;
 
 import org.springframework.stereotype.Service;
 

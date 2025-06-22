@@ -1,6 +1,6 @@
 package sopt.makers.authentication.adapter.in.web.controller.auth;
 
-import sopt.makers.authentication.usecase.auth.port.in.JwksRetrieveUsecase;
+import sopt.makers.authentication.application.port.in.auth.JwksRetrieveUsecase;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

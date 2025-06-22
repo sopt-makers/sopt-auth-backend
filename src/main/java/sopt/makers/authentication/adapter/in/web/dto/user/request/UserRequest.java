@@ -2,8 +2,8 @@ package sopt.makers.authentication.adapter.in.web.dto.user.request;
 
 import static lombok.AccessLevel.PRIVATE;
 
-import sopt.makers.authentication.usecase.user.port.in.UpdateUserProfileUsecase.SoptActivityCommand;
-import sopt.makers.authentication.usecase.user.port.in.UpdateUserProfileUsecase.UserProfileCommand;
+import sopt.makers.authentication.application.port.in.user.UpdateUserProfileUsecase.SoptActivityCommand;
+import sopt.makers.authentication.application.port.in.user.UpdateUserProfileUsecase.UserProfileCommand;
 
 import java.time.LocalDate;
 import java.util.List;

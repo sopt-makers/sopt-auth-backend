@@ -2,8 +2,8 @@ package sopt.makers.authentication.adapter.in.web.dto.auth.response;
 
 import static lombok.AccessLevel.PRIVATE;
 
-import sopt.makers.authentication.usecase.auth.port.in.GetSocialAccountUsecase;
-import sopt.makers.authentication.usecase.auth.port.in.VerifyPhoneVerificationUsecase;
+import sopt.makers.authentication.application.port.in.auth.GetSocialAccountUsecase;
+import sopt.makers.authentication.application.port.in.auth.VerifyPhoneVerificationUsecase;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

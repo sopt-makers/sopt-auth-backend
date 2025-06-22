@@ -1,11 +1,11 @@
 package sopt.makers.authentication.adapter.out.persistence.repository.user;
 
 import sopt.makers.authentication.adapter.out.persistence.entity.UserEntity;
+import sopt.makers.authentication.application.port.out.user.UserRepository;
 import sopt.makers.authentication.domain.auth.SocialAccount;
 import sopt.makers.authentication.domain.user.Part;
 import sopt.makers.authentication.domain.user.Profile;
 import sopt.makers.authentication.domain.user.User;
-import sopt.makers.authentication.usecase.user.port.out.UserRepository;
 
 import java.util.List;
 

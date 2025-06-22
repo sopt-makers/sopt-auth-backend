@@ -1,8 +1,8 @@
 package sopt.makers.authentication.adapter.out.persistence.repository.user.register;
 
 import sopt.makers.authentication.adapter.out.persistence.entity.UserRegisterInfoEntity;
+import sopt.makers.authentication.application.port.out.user.UserRegisterInfoRepository;
 import sopt.makers.authentication.domain.user.UserRegisterInfo;
-import sopt.makers.authentication.usecase.user.port.out.UserRegisterInfoRepository;
 
 import java.util.Optional;
 

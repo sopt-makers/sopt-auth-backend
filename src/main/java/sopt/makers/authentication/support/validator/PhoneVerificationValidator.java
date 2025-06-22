@@ -2,10 +2,10 @@ package sopt.makers.authentication.support.validator;
 
 import static sopt.makers.authentication.support.code.domain.failure.AuthFailure.PHONE_NOT_VERIFIED;
 
+import sopt.makers.authentication.application.port.out.auth.PhoneVerificationRepository;
 import sopt.makers.authentication.domain.auth.PhoneVerification;
 import sopt.makers.authentication.domain.auth.PhoneVerificationType;
 import sopt.makers.authentication.support.exception.domain.AuthException;
-import sopt.makers.authentication.usecase.auth.port.out.PhoneVerificationRepository;
 
 import org.springframework.stereotype.Component;
 

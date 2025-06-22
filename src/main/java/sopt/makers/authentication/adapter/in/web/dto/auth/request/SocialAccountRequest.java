@@ -2,8 +2,8 @@ package sopt.makers.authentication.adapter.in.web.dto.auth.request;
 
 import static lombok.AccessLevel.PRIVATE;
 
+import sopt.makers.authentication.application.port.in.auth.UpdateSocialAccountUsecase.UpdateSocialAccountCommand;
 import sopt.makers.authentication.domain.auth.AuthPlatform;
-import sopt.makers.authentication.usecase.auth.port.in.UpdateSocialAccountUsecase.UpdateSocialAccountCommand;
 
 import lombok.RequiredArgsConstructor;
 
