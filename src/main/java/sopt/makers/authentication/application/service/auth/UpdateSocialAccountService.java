@@ -3,10 +3,10 @@ package sopt.makers.authentication.application.service.auth;
 import sopt.makers.authentication.application.port.in.auth.UpdateSocialAccountUsecase;
 import sopt.makers.authentication.application.port.out.auth.OAuthAuthenticator;
 import sopt.makers.authentication.application.port.out.user.UserRepository;
+import sopt.makers.authentication.application.validator.auth.PhoneVerificationValidator;
 import sopt.makers.authentication.domain.auth.PhoneVerificationType;
 import sopt.makers.authentication.domain.auth.SocialAccount;
 import sopt.makers.authentication.domain.user.User;
-import sopt.makers.authentication.support.validator.PhoneVerificationValidator;
 
 import org.springframework.stereotype.Service;
 

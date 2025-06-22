@@ -1,16 +1,13 @@
 package sopt.makers.authentication.config;
 
-import sopt.makers.authentication.support.value.AppleOAuthProperty;
-import sopt.makers.authentication.support.value.GabiaProperty;
-import sopt.makers.authentication.support.value.GoogleOAuthProperty;
-import sopt.makers.authentication.support.value.SecurityProperty;
+import sopt.makers.authentication.adapter.out.external.oauth.AppleOAuthProperty;
+import sopt.makers.authentication.adapter.out.external.oauth.GoogleOAuthProperty;
+import sopt.makers.authentication.adapter.out.external.sms.GabiaProperty;
 
-import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
-@Configuration(value = "CustomApplicationConfig")
-@ConfigurationPropertiesScan(basePackages = {"sopt.makers.authentication.support.value"})
+@Configuration
 @EnableConfigurationProperties({
   GabiaProperty.class,
   SecurityProperty.class,

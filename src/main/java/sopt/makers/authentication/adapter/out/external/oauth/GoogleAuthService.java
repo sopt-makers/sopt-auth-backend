@@ -7,7 +7,6 @@ import sopt.makers.authentication.adapter.out.jwt.exception.TokenException;
 import sopt.makers.authentication.adapter.out.jwt.exception.TokenFailure;
 import sopt.makers.authentication.domain.auth.exception.AuthException;
 import sopt.makers.authentication.domain.auth.exception.AuthFailure;
-import sopt.makers.authentication.support.value.GoogleOAuthProperty;
 
 import java.text.ParseException;
 import java.time.Instant;

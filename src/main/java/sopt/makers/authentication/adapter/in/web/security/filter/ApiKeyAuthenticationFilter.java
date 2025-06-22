@@ -5,8 +5,8 @@ import static sopt.makers.authentication.common.constant.SystemConstant.SERVICE_
 import static sopt.makers.authentication.domain.auth.exception.AuthFailure.INVALID_API_KEY;
 
 import sopt.makers.authentication.adapter.in.web.security.authentication.ApiKeyAuthentication;
+import sopt.makers.authentication.config.SecurityProperty;
 import sopt.makers.authentication.domain.auth.exception.AuthException;
-import sopt.makers.authentication.support.value.SecurityProperty;
 
 import java.io.IOException;
 

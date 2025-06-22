@@ -10,9 +10,9 @@ import sopt.makers.authentication.adapter.in.web.dto.user.response.UserResponse;
 import sopt.makers.authentication.adapter.in.web.util.ResponseUtil;
 import sopt.makers.authentication.application.port.in.user.GetUserProfileUsecase;
 import sopt.makers.authentication.application.port.in.user.UpdateUserProfileUsecase;
+import sopt.makers.authentication.application.validator.user.UserIdValidator;
+import sopt.makers.authentication.application.validator.user.UserSearchConditionValidator;
 import sopt.makers.authentication.domain.user.Part;
-import sopt.makers.authentication.support.validator.UserIdValidator;
-import sopt.makers.authentication.support.validator.UserSearchConditionValidator;
 
 import java.util.List;
 

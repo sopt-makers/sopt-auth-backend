@@ -1,4 +1,4 @@
-package sopt.makers.authentication.support.validator;
+package sopt.makers.authentication.application.validator.user;
 
 import static sopt.makers.authentication.domain.user.exception.UserFailure.NOT_VALID_USER_ID;
 

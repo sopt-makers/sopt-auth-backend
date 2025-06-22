@@ -1,4 +1,4 @@
-package sopt.makers.authentication.support.value;
+package sopt.makers.authentication.adapter.out.external.oauth;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

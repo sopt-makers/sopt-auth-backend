@@ -1,4 +1,4 @@
-package sopt.makers.authentication.support.validator;
+package sopt.makers.authentication.application.validator.auth;
 
 import static sopt.makers.authentication.domain.auth.exception.AuthFailure.PHONE_NOT_VERIFIED;
 

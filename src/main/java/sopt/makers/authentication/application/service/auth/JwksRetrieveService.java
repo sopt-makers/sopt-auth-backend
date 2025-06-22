@@ -5,7 +5,7 @@ import static com.nimbusds.jose.jwk.KeyUse.SIGNATURE;
 
 import sopt.makers.authentication.adapter.out.jwt.RSAKeyManager;
 import sopt.makers.authentication.application.port.in.auth.JwksRetrieveUsecase;
-import sopt.makers.authentication.support.value.SecurityProperty;
+import sopt.makers.authentication.config.SecurityProperty;
 
 import org.springframework.stereotype.Service;
 

@@ -5,7 +5,7 @@ import static sopt.makers.authentication.adapter.out.jwt.provider.JwtTokenUtil.e
 import sopt.makers.authentication.adapter.in.web.security.authentication.CustomAuthentication;
 import sopt.makers.authentication.adapter.out.jwt.JwtProvider;
 import sopt.makers.authentication.adapter.out.jwt.token.JwtAccessToken;
-import sopt.makers.authentication.support.value.SecurityProperty;
+import sopt.makers.authentication.config.SecurityProperty;
 
 import java.time.Instant;
 import java.util.List;

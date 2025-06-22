@@ -1,4 +1,4 @@
-package sopt.makers.authentication.support.validator;
+package sopt.makers.authentication.application.validator.user;
 
 import static sopt.makers.authentication.domain.user.exception.UserFailure.BAD_REQUEST_INVALID_USER_SEARCH_CONDITION;
 

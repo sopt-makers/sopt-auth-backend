@@ -19,7 +19,6 @@ import static sopt.makers.authentication.adapter.out.external.sms.GabiaConstant.
 import sopt.makers.authentication.adapter.out.external.exception.ClientError;
 import sopt.makers.authentication.adapter.out.external.exception.ClientRequestException;
 import sopt.makers.authentication.adapter.out.external.exception.ClientResponseException;
-import sopt.makers.authentication.support.value.GabiaProperty;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;

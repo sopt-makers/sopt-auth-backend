@@ -7,6 +7,7 @@ import sopt.makers.authentication.application.port.out.auth.OAuthAuthenticator;
 import sopt.makers.authentication.application.port.out.user.UserActivityHistoryRepository;
 import sopt.makers.authentication.application.port.out.user.UserRegisterInfoRepository;
 import sopt.makers.authentication.application.port.out.user.UserRepository;
+import sopt.makers.authentication.application.validator.auth.PhoneVerificationValidator;
 import sopt.makers.authentication.domain.auth.AuthPlatform;
 import sopt.makers.authentication.domain.auth.PhoneVerificationType;
 import sopt.makers.authentication.domain.auth.SocialAccount;
@@ -15,7 +16,6 @@ import sopt.makers.authentication.domain.user.Activity;
 import sopt.makers.authentication.domain.user.Profile;
 import sopt.makers.authentication.domain.user.User;
 import sopt.makers.authentication.domain.user.UserRegisterInfo;
-import sopt.makers.authentication.support.validator.PhoneVerificationValidator;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

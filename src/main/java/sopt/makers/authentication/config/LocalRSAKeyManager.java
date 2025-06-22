@@ -6,7 +6,6 @@ import static sopt.makers.authentication.adapter.out.jwt.exception.ResourceFailu
 
 import sopt.makers.authentication.adapter.out.jwt.RSAKeyManager;
 import sopt.makers.authentication.adapter.out.jwt.exception.ResourceException;
-import sopt.makers.authentication.support.value.SecurityProperty;
 
 import java.io.IOException;
 import java.io.StringReader;

@@ -9,7 +9,7 @@ import static sopt.makers.authentication.adapter.out.jwt.exception.TokenFailure.
 import sopt.makers.authentication.adapter.in.web.security.authentication.CustomAuthentication;
 import sopt.makers.authentication.adapter.out.jwt.exception.ResourceException;
 import sopt.makers.authentication.adapter.out.jwt.exception.TokenException;
-import sopt.makers.authentication.support.value.SecurityProperty;
+import sopt.makers.authentication.config.SecurityProperty;
 
 import java.time.Instant;
 import java.util.List;

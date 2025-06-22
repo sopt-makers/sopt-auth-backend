@@ -2,8 +2,7 @@ package sopt.makers.authentication.adapter.out.jwt.service;
 
 import sopt.makers.authentication.adapter.out.jwt.JwtProvider;
 import sopt.makers.authentication.adapter.out.jwt.token.JwtRefreshToken;
-import sopt.makers.authentication.support.value.SecurityProperty.Jwt.Secret.Expiration;
-import sopt.makers.authentication.support.value.SecurityProperty.Jwt.Secret.Issuer;
+import sopt.makers.authentication.config.SecurityProperty;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -23,8 +22,7 @@ public class JwtAuthRefreshTokenService implements JwtProvider<String> {
 
   private final JwtEncoder jwtEncoder;
   private final JwtDecoder jwtDecoder;
-  private final Expiration tokenExpiration;
-  private final Issuer issuer;
+  private final SecurityProperty securityProperty;
 
   @Override
   public String generateJwt(String accessToken) {
@@ -55,11 +53,13 @@ public class JwtAuthRefreshTokenService implements JwtProvider<String> {
   private JwtClaimsSet generateClaimSet() {
     String id = UUID.randomUUID().toString();
     Instant issueDate = Instant.now();
-    Instant expirationDate = issueDate.plusSeconds(tokenExpiration.refreshTokenExpiration());
+    Instant expirationDate =
+        issueDate.plusSeconds(
+            securityProperty.jwt().secret().expiration().refreshTokenExpiration());
 
     return JwtClaimsSet.builder()
         .id(id)
-        .issuer(issuer.issuerName())
+        .issuer(securityProperty.jwt().secret().issuer().issuerName())
         .issuedAt(issueDate)
         .expiresAt(expirationDate)
         .build();

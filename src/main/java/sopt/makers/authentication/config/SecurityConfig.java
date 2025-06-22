@@ -10,7 +10,6 @@ import static sopt.makers.authentication.common.constant.SystemConstant.PATTERN_
 import sopt.makers.authentication.adapter.in.web.security.filter.ApiKeyAuthenticationFilter;
 import sopt.makers.authentication.adapter.in.web.security.filter.AuthenticationExceptionFilter;
 import sopt.makers.authentication.adapter.in.web.security.filter.JwtAuthenticationFilter;
-import sopt.makers.authentication.support.value.SecurityProperty;
 
 import java.util.List;
 
