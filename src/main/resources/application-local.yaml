@@ -12,3 +12,6 @@ spring:
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
     driver-class-name: ${DB_DRIVER_CLASS}
+  web:
+    resources:
+      add-mappings: false

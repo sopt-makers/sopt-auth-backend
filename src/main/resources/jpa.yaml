@@ -7,9 +7,6 @@ spring:
       ddl-auto: none
     database-platform: ${JPA_DATABASE_PLATFORM}
     database: ${JPA_DATABASE}
-  web:
-    resources:
-      add-mappings: false
 ---
 spring.config.activate.on-profile: local
 spring:
@@ -22,10 +19,6 @@ spring:
         format_sql: true
       database-platform: ${JPA_DATABASE_PLATFORM}
       database: ${JPA_DATABASE}
-  web:
-    resources:
-      add-mappings: false
-
 ---
 spring.config.activate.on-profile: test
 spring:
