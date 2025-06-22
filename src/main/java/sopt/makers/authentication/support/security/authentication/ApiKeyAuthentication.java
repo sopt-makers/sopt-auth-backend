@@ -1,7 +1,7 @@
 package sopt.makers.authentication.support.security.authentication;
 
-import static sopt.makers.authentication.support.constant.SystemConstant.INTERNAL_SERVICE;
-import static sopt.makers.authentication.support.constant.SystemConstant.ROLE;
+import static sopt.makers.authentication.common.constant.SystemConstant.INTERNAL_SERVICE;
+import static sopt.makers.authentication.common.constant.SystemConstant.ROLE;
 
 import java.util.List;
 

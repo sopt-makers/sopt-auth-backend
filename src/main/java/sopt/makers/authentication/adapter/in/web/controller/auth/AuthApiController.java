@@ -1,6 +1,6 @@
 package sopt.makers.authentication.adapter.in.web.controller.auth;
 
-import static sopt.makers.authentication.support.constant.JwtConstant.REFRESH_TOKEN_HEADER;
+import static sopt.makers.authentication.adapter.out.jwt.JwtConstant.REFRESH_TOKEN_HEADER;
 
 import sopt.makers.authentication.adapter.in.web.common.BaseResponse;
 import sopt.makers.authentication.adapter.in.web.common.code.AuthSuccess;

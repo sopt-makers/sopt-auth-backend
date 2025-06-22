@@ -1,6 +1,6 @@
 package sopt.makers.authentication.support.util;
 
-import static sopt.makers.authentication.support.constant.SystemConstant.UTF_8;
+import static sopt.makers.authentication.common.constant.SystemConstant.UTF_8;
 
 import sopt.makers.authentication.adapter.in.web.common.BaseResponse;
 import sopt.makers.authentication.common.code.FailureCode;

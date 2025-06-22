@@ -1,4 +1,4 @@
-package sopt.makers.authentication.support.jwt.token;
+package sopt.makers.authentication.adapter.out.jwt.token;
 
 import static sopt.makers.authentication.adapter.out.jwt.exception.TokenFailure.TOKEN_EXPIRED;
 

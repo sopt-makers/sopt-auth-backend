@@ -1,6 +1,6 @@
-package sopt.makers.authentication.support.jwt.provider;
+package sopt.makers.authentication.adapter.out.jwt.provider;
 
-import static sopt.makers.authentication.support.constant.JwtConstant.TOKEN_HEADER;
+import static sopt.makers.authentication.adapter.out.jwt.JwtConstant.TOKEN_HEADER;
 
 public final class JwtTokenUtil {
 

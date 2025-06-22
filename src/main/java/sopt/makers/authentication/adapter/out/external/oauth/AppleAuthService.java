@@ -1,6 +1,6 @@
 package sopt.makers.authentication.adapter.out.external.oauth;
 
-import static sopt.makers.authentication.support.constant.OAuthConstant.APPLE_ISSUER;
+import static sopt.makers.authentication.adapter.out.external.oauth.OAuthConstant.APPLE_ISSUER;
 
 import sopt.makers.authentication.adapter.out.external.oauth.client.AppleAuthClient;
 import sopt.makers.authentication.adapter.out.jwt.exception.TokenException;

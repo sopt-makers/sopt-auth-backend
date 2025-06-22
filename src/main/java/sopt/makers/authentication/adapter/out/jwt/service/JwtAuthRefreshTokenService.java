@@ -1,7 +1,7 @@
-package sopt.makers.authentication.support.jwt.service;
+package sopt.makers.authentication.adapter.out.jwt.service;
 
-import sopt.makers.authentication.support.jwt.JwtProvider;
-import sopt.makers.authentication.support.jwt.token.JwtRefreshToken;
+import sopt.makers.authentication.adapter.out.jwt.JwtProvider;
+import sopt.makers.authentication.adapter.out.jwt.token.JwtRefreshToken;
 import sopt.makers.authentication.support.value.SecurityProperty.Jwt.Secret.Expiration;
 import sopt.makers.authentication.support.value.SecurityProperty.Jwt.Secret.Issuer;
 

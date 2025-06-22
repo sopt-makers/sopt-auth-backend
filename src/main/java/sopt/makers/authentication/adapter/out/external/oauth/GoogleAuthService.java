@@ -1,6 +1,6 @@
 package sopt.makers.authentication.adapter.out.external.oauth;
 
-import static sopt.makers.authentication.support.constant.OAuthConstant.GOOGLE_ISSUER;
+import static sopt.makers.authentication.adapter.out.external.oauth.OAuthConstant.GOOGLE_ISSUER;
 
 import sopt.makers.authentication.adapter.out.external.oauth.client.GoogleAuthClient;
 import sopt.makers.authentication.adapter.out.jwt.exception.TokenException;

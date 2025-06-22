@@ -4,8 +4,8 @@ import static sopt.makers.authentication.adapter.out.jwt.exception.ResourceFailu
 import static sopt.makers.authentication.adapter.out.jwt.exception.ResourceFailure.INVALID_LOCATION;
 import static sopt.makers.authentication.adapter.out.jwt.exception.ResourceFailure.INVALID_SUBJECT;
 
+import sopt.makers.authentication.adapter.out.jwt.RSAKeyManager;
 import sopt.makers.authentication.adapter.out.jwt.exception.ResourceException;
-import sopt.makers.authentication.support.jwt.RSAKeyManager;
 import sopt.makers.authentication.support.value.SecurityProperty;
 
 import java.io.IOException;

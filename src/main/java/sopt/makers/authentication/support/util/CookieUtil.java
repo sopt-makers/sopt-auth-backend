@@ -1,7 +1,7 @@
 package sopt.makers.authentication.support.util;
 
-import static sopt.makers.authentication.support.constant.JwtConstant.REFRESH_TOKEN_HEADER;
-import static sopt.makers.authentication.support.constant.SystemConstant.PATTERN_ROOT_PATH;
+import static sopt.makers.authentication.adapter.out.jwt.JwtConstant.REFRESH_TOKEN_HEADER;
+import static sopt.makers.authentication.common.constant.SystemConstant.PATTERN_ROOT_PATH;
 
 import sopt.makers.authentication.support.value.SecurityProperty;
 

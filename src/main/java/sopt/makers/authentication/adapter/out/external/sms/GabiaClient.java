@@ -1,20 +1,20 @@
 package sopt.makers.authentication.adapter.out.external.sms;
 
-import static sopt.makers.authentication.support.constant.GabiaConstant.AUTHORIZATION_PREFIX;
-import static sopt.makers.authentication.support.constant.GabiaConstant.FORMAT_AUTHORIZATION;
-import static sopt.makers.authentication.support.constant.GabiaConstant.FORM_DATA_NAME_CALLBACK;
-import static sopt.makers.authentication.support.constant.GabiaConstant.FORM_DATA_NAME_GRANT_TYPE;
-import static sopt.makers.authentication.support.constant.GabiaConstant.FORM_DATA_NAME_MESSAGE;
-import static sopt.makers.authentication.support.constant.GabiaConstant.FORM_DATA_NAME_PHONE;
-import static sopt.makers.authentication.support.constant.GabiaConstant.FORM_DATA_NAME_REFERENCE_KEY;
-import static sopt.makers.authentication.support.constant.GabiaConstant.FORM_DATA_NAME_SUBJECT;
-import static sopt.makers.authentication.support.constant.GabiaConstant.FORM_DATA_VALUE_GRANT_TYPE;
-import static sopt.makers.authentication.support.constant.GabiaConstant.RESPONSE_ACCESS_TOKEN_FIELD;
-import static sopt.makers.authentication.support.constant.GabiaConstant.RESPONSE_SUCCESS_FLAG_FIELD;
-import static sopt.makers.authentication.support.constant.GabiaConstant.RESPONSE_SUCCESS_FLAG_VALUE;
-import static sopt.makers.authentication.support.constant.GabiaConstant.URI_OAUTH_TOKEN;
-import static sopt.makers.authentication.support.constant.GabiaConstant.URI_SEND_LMS;
-import static sopt.makers.authentication.support.constant.GabiaConstant.URI_SEND_SMS;
+import static sopt.makers.authentication.adapter.out.external.sms.GabiaConstant.AUTHORIZATION_PREFIX;
+import static sopt.makers.authentication.adapter.out.external.sms.GabiaConstant.FORMAT_AUTHORIZATION;
+import static sopt.makers.authentication.adapter.out.external.sms.GabiaConstant.FORM_DATA_NAME_CALLBACK;
+import static sopt.makers.authentication.adapter.out.external.sms.GabiaConstant.FORM_DATA_NAME_GRANT_TYPE;
+import static sopt.makers.authentication.adapter.out.external.sms.GabiaConstant.FORM_DATA_NAME_MESSAGE;
+import static sopt.makers.authentication.adapter.out.external.sms.GabiaConstant.FORM_DATA_NAME_PHONE;
+import static sopt.makers.authentication.adapter.out.external.sms.GabiaConstant.FORM_DATA_NAME_REFERENCE_KEY;
+import static sopt.makers.authentication.adapter.out.external.sms.GabiaConstant.FORM_DATA_NAME_SUBJECT;
+import static sopt.makers.authentication.adapter.out.external.sms.GabiaConstant.FORM_DATA_VALUE_GRANT_TYPE;
+import static sopt.makers.authentication.adapter.out.external.sms.GabiaConstant.RESPONSE_ACCESS_TOKEN_FIELD;
+import static sopt.makers.authentication.adapter.out.external.sms.GabiaConstant.RESPONSE_SUCCESS_FLAG_FIELD;
+import static sopt.makers.authentication.adapter.out.external.sms.GabiaConstant.RESPONSE_SUCCESS_FLAG_VALUE;
+import static sopt.makers.authentication.adapter.out.external.sms.GabiaConstant.URI_OAUTH_TOKEN;
+import static sopt.makers.authentication.adapter.out.external.sms.GabiaConstant.URI_SEND_LMS;
+import static sopt.makers.authentication.adapter.out.external.sms.GabiaConstant.URI_SEND_SMS;
 
 import sopt.makers.authentication.adapter.out.external.exception.ClientError;
 import sopt.makers.authentication.adapter.out.external.exception.ClientRequestException;

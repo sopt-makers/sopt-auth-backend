@@ -1,11 +1,11 @@
 package sopt.makers.authentication.config;
 
-import static sopt.makers.authentication.support.constant.SystemConstant.INTERNAL_SERVICE;
-import static sopt.makers.authentication.support.constant.SystemConstant.PATTERN_ALL;
-import static sopt.makers.authentication.support.constant.SystemConstant.PATTERN_AUTH;
-import static sopt.makers.authentication.support.constant.SystemConstant.PATTERN_ERROR_PATH;
-import static sopt.makers.authentication.support.constant.SystemConstant.PATTERN_SOCIAL_ACCOUNT;
-import static sopt.makers.authentication.support.constant.SystemConstant.PATTERN_TEST;
+import static sopt.makers.authentication.common.constant.SystemConstant.INTERNAL_SERVICE;
+import static sopt.makers.authentication.common.constant.SystemConstant.PATTERN_ALL;
+import static sopt.makers.authentication.common.constant.SystemConstant.PATTERN_AUTH;
+import static sopt.makers.authentication.common.constant.SystemConstant.PATTERN_ERROR_PATH;
+import static sopt.makers.authentication.common.constant.SystemConstant.PATTERN_SOCIAL_ACCOUNT;
+import static sopt.makers.authentication.common.constant.SystemConstant.PATTERN_TEST;
 
 import sopt.makers.authentication.support.security.filter.ApiKeyAuthenticationFilter;
 import sopt.makers.authentication.support.security.filter.AuthenticationExceptionFilter;

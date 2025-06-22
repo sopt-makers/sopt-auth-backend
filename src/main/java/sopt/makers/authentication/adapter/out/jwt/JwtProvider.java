@@ -1,4 +1,4 @@
-package sopt.makers.authentication.support.jwt;
+package sopt.makers.authentication.adapter.out.jwt;
 
 import java.io.IOException;
 

@@ -1,4 +1,4 @@
-package sopt.makers.authentication.support.constant;
+package sopt.makers.authentication.adapter.out.external.sms;
 
 import static lombok.AccessLevel.PRIVATE;
 

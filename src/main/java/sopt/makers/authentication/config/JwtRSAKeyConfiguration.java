@@ -1,6 +1,6 @@
 package sopt.makers.authentication.config;
 
-import sopt.makers.authentication.support.jwt.RSAKeyManager;
+import sopt.makers.authentication.adapter.out.jwt.RSAKeyManager;
 import sopt.makers.authentication.support.value.SecurityProperty;
 
 import java.security.interfaces.RSAPrivateKey;

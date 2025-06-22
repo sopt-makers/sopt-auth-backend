@@ -1,4 +1,4 @@
-package sopt.makers.authentication.support.constant;
+package sopt.makers.authentication.common.constant;
 
 import java.util.List;
 

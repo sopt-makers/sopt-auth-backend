@@ -1,4 +1,4 @@
-package sopt.makers.authentication.support.jwt.token;
+package sopt.makers.authentication.adapter.out.jwt.token;
 
 import static org.springframework.security.oauth2.jwt.JwtClaimNames.ISS;
 import static org.springframework.security.oauth2.jwt.JwtClaimNames.SUB;
