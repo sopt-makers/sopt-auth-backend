@@ -1,4 +1,4 @@
-package sopt.makers.authentication.support.config;
+package sopt.makers.authentication.config;
 
 import sopt.makers.authentication.support.value.AppleOAuthProperty;
 import sopt.makers.authentication.support.value.GabiaProperty;

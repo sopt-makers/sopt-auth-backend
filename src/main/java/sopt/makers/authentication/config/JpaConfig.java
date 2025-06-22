@@ -1,4 +1,4 @@
-package sopt.makers.authentication.support.config;
+package sopt.makers.authentication.config;
 
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Configuration;

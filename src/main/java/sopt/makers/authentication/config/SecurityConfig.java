@@ -1,4 +1,4 @@
-package sopt.makers.authentication.support.config;
+package sopt.makers.authentication.config;
 
 import static sopt.makers.authentication.support.constant.SystemConstant.INTERNAL_SERVICE;
 import static sopt.makers.authentication.support.constant.SystemConstant.PATTERN_ALL;

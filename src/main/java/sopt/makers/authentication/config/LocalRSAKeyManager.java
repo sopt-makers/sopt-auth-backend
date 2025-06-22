@@ -1,4 +1,4 @@
-package sopt.makers.authentication.support.config;
+package sopt.makers.authentication.config;
 
 import static sopt.makers.authentication.support.code.support.failure.ResourceFailure.INVALID_ALGORITHM;
 import static sopt.makers.authentication.support.code.support.failure.ResourceFailure.INVALID_LOCATION;
