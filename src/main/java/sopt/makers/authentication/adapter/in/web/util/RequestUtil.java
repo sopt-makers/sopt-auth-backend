@@ -1,4 +1,4 @@
-package sopt.makers.authentication.support.util;
+package sopt.makers.authentication.adapter.in.web.util;
 
 import java.util.Map;
 

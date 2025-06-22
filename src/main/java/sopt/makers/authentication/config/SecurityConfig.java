@@ -7,9 +7,9 @@ import static sopt.makers.authentication.common.constant.SystemConstant.PATTERN_
 import static sopt.makers.authentication.common.constant.SystemConstant.PATTERN_SOCIAL_ACCOUNT;
 import static sopt.makers.authentication.common.constant.SystemConstant.PATTERN_TEST;
 
-import sopt.makers.authentication.support.security.filter.ApiKeyAuthenticationFilter;
-import sopt.makers.authentication.support.security.filter.AuthenticationExceptionFilter;
-import sopt.makers.authentication.support.security.filter.JwtAuthenticationFilter;
+import sopt.makers.authentication.adapter.in.web.security.filter.ApiKeyAuthenticationFilter;
+import sopt.makers.authentication.adapter.in.web.security.filter.AuthenticationExceptionFilter;
+import sopt.makers.authentication.adapter.in.web.security.filter.JwtAuthenticationFilter;
 import sopt.makers.authentication.support.value.SecurityProperty;
 
 import java.util.List;

@@ -2,9 +2,9 @@ package sopt.makers.authentication.adapter.out.jwt.service;
 
 import static sopt.makers.authentication.adapter.out.jwt.provider.JwtTokenUtil.extract;
 
+import sopt.makers.authentication.adapter.in.web.security.authentication.CustomAuthentication;
 import sopt.makers.authentication.adapter.out.jwt.JwtProvider;
 import sopt.makers.authentication.adapter.out.jwt.token.JwtAccessToken;
-import sopt.makers.authentication.support.security.authentication.CustomAuthentication;
 import sopt.makers.authentication.support.value.SecurityProperty;
 
 import java.time.Instant;

@@ -6,9 +6,9 @@ import static sopt.makers.authentication.adapter.out.jwt.exception.ResourceFailu
 import static sopt.makers.authentication.adapter.out.jwt.exception.TokenFailure.TOKEN_EXPIRED;
 import static sopt.makers.authentication.adapter.out.jwt.exception.TokenFailure.UNSUPPORTED_ISSUER;
 
+import sopt.makers.authentication.adapter.in.web.security.authentication.CustomAuthentication;
 import sopt.makers.authentication.adapter.out.jwt.exception.ResourceException;
 import sopt.makers.authentication.adapter.out.jwt.exception.TokenException;
-import sopt.makers.authentication.support.security.authentication.CustomAuthentication;
 import sopt.makers.authentication.support.value.SecurityProperty;
 
 import java.time.Instant;

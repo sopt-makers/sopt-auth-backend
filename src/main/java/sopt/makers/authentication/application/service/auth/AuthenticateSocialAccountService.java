@@ -1,5 +1,6 @@
 package sopt.makers.authentication.application.service.auth;
 
+import sopt.makers.authentication.adapter.in.web.security.authentication.CustomAuthentication;
 import sopt.makers.authentication.adapter.out.jwt.service.JwtAuthAccessTokenService;
 import sopt.makers.authentication.adapter.out.jwt.service.JwtAuthRefreshTokenService;
 import sopt.makers.authentication.application.port.in.auth.AuthenticateSocialAccountUsecase;
@@ -9,7 +10,6 @@ import sopt.makers.authentication.domain.auth.SocialAccount;
 import sopt.makers.authentication.domain.user.ActivityList;
 import sopt.makers.authentication.domain.user.Role;
 import sopt.makers.authentication.domain.user.User;
-import sopt.makers.authentication.support.security.authentication.CustomAuthentication;
 
 import java.util.List;
 

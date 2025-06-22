@@ -1,11 +1,11 @@
-package sopt.makers.authentication.support.security.filter;
+package sopt.makers.authentication.adapter.in.web.security.filter;
 
 import static sopt.makers.authentication.common.constant.SystemConstant.API_KEY_HEADER;
 import static sopt.makers.authentication.common.constant.SystemConstant.SERVICE_NAME_HEADER;
 import static sopt.makers.authentication.domain.auth.exception.AuthFailure.INVALID_API_KEY;
 
+import sopt.makers.authentication.adapter.in.web.security.authentication.ApiKeyAuthentication;
 import sopt.makers.authentication.domain.auth.exception.AuthException;
-import sopt.makers.authentication.support.security.authentication.ApiKeyAuthentication;
 import sopt.makers.authentication.support.value.SecurityProperty;
 
 import java.io.IOException;

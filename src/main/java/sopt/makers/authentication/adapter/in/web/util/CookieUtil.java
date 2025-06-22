@@ -1,4 +1,4 @@
-package sopt.makers.authentication.support.util;
+package sopt.makers.authentication.adapter.in.web.util;
 
 import static sopt.makers.authentication.adapter.out.jwt.JwtConstant.REFRESH_TOKEN_HEADER;
 import static sopt.makers.authentication.common.constant.SystemConstant.PATTERN_ROOT_PATH;

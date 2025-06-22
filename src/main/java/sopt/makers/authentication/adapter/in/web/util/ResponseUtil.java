@@ -1,4 +1,4 @@
-package sopt.makers.authentication.support.util;
+package sopt.makers.authentication.adapter.in.web.util;
 
 import static sopt.makers.authentication.common.constant.SystemConstant.UTF_8;
 

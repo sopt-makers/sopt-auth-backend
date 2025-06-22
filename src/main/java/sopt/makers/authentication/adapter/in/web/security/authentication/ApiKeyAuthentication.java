@@ -1,4 +1,4 @@
-package sopt.makers.authentication.support.security.authentication;
+package sopt.makers.authentication.adapter.in.web.security.authentication;
 
 import static sopt.makers.authentication.common.constant.SystemConstant.INTERNAL_SERVICE;
 import static sopt.makers.authentication.common.constant.SystemConstant.ROLE;

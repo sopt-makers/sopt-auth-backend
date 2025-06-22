@@ -1,4 +1,4 @@
-package sopt.makers.authentication.support.security.authentication;
+package sopt.makers.authentication.adapter.in.web.security.authentication;
 
 import java.util.Collection;
 
