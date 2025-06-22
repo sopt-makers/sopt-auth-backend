@@ -34,6 +34,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestControllerAdvice
 public class ApplicationExceptionHandler {
+
+  private static final String VALIDATION_KEY_FORMAT = "valid_%s";
+
   @ExceptionHandler(Exception.class)
   ResponseEntity<BaseResponse<?>> handleInternalException(final Exception e) {
     log.error(e.getMessage());
@@ -82,7 +85,7 @@ public class ApplicationExceptionHandler {
     Map<String, String> errorDetails = new HashMap<>();
 
     for (FieldError error : errors.getFieldErrors()) {
-      String validKeyName = String.format("valid_%s", error.getField());
+      String validKeyName = String.format(VALIDATION_KEY_FORMAT, error.getField());
       errorDetails.put(validKeyName, error.getDefaultMessage());
     }
     return ResponseUtil.failure(INVALID_INPUT_VALUE, errorDetails);
