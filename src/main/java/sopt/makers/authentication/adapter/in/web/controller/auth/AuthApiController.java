@@ -99,7 +99,7 @@ public class AuthApiController implements AuthApi {
     HttpHeaders headers = cookieUtil.setRefreshToken(tokenInfo.refreshToken());
 
     return ResponseUtil.success(
-        AuthSuccess.AUTHENTICATE_SOCIAL_ACCOUNT,
+        AuthSuccess.REFRESH_TOKEN,
         headers,
         AuthResponse.AuthenticateSocialAuthInfoForWeb.of(tokenInfo.accessToken()));
   }
@@ -107,13 +107,13 @@ public class AuthApiController implements AuthApi {
   @Override
   @PostMapping("/refresh/app")
   public ResponseEntity<BaseResponse<?>> refreshTokenFromApp(
-      AuthRequest.AuthenticationTokenInfo authenticationTokenInfo) {
+      @RequestBody AuthRequest.AuthenticationTokenInfo authenticationTokenInfo) {
 
     AuthenticateSocialAccountUsecase.AuthenticateTokenInfo tokenInfo =
         authenticateSocialAccountUsecase.refresh(authenticationTokenInfo.toCommand());
 
     return ResponseUtil.success(
-        AuthSuccess.AUTHENTICATE_SOCIAL_ACCOUNT,
+        AuthSuccess.REFRESH_TOKEN,
         AuthResponse.AuthenticateSocialAuthInfoForApp.of(
             tokenInfo.accessToken(), tokenInfo.refreshToken()));
   }
