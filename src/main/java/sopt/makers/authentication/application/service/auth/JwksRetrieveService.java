@@ -3,8 +3,8 @@ package sopt.makers.authentication.application.service.auth;
 import static com.nimbusds.jose.JWSAlgorithm.RS512;
 import static com.nimbusds.jose.jwk.KeyUse.SIGNATURE;
 
-import sopt.makers.authentication.adapter.out.jwt.RSAKeyManager;
 import sopt.makers.authentication.application.port.in.auth.JwksRetrieveUsecase;
+import sopt.makers.authentication.application.port.out.auth.RSAKeyManager;
 import sopt.makers.authentication.config.SecurityProperty;
 
 import org.springframework.stereotype.Service;

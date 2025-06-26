@@ -1,12 +1,13 @@
-package sopt.makers.authentication.config;
+package sopt.makers.authentication.adapter.out.jwt;
 
 import static sopt.makers.authentication.adapter.out.jwt.exception.ResourceFailure.INVALID_ALGORITHM;
 import static sopt.makers.authentication.adapter.out.jwt.exception.ResourceFailure.INVALID_LOCATION;
 import static sopt.makers.authentication.adapter.out.jwt.exception.ResourceFailure.INVALID_SUBJECT;
 import static sopt.makers.authentication.common.constant.SystemConstant.RSA;
 
-import sopt.makers.authentication.adapter.out.jwt.RSAKeyManager;
 import sopt.makers.authentication.adapter.out.jwt.exception.ResourceException;
+import sopt.makers.authentication.application.port.out.auth.RSAKeyManager;
+import sopt.makers.authentication.config.SecurityProperty;
 
 import java.io.IOException;
 import java.io.StringReader;
