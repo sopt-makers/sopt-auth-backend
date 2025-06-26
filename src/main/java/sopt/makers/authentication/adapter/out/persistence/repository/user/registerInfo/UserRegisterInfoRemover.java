@@ -1,4 +1,4 @@
-package sopt.makers.authentication.adapter.out.persistence.repository.user.register;
+package sopt.makers.authentication.adapter.out.persistence.repository.user.registerInfo;
 
 import sopt.makers.authentication.adapter.out.persistence.entity.UserRegisterInfoEntity;
 
