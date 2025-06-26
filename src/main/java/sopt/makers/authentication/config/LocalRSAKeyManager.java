@@ -3,6 +3,7 @@ package sopt.makers.authentication.config;
 import static sopt.makers.authentication.adapter.out.jwt.exception.ResourceFailure.INVALID_ALGORITHM;
 import static sopt.makers.authentication.adapter.out.jwt.exception.ResourceFailure.INVALID_LOCATION;
 import static sopt.makers.authentication.adapter.out.jwt.exception.ResourceFailure.INVALID_SUBJECT;
+import static sopt.makers.authentication.common.constant.SystemConstant.RSA;
 
 import sopt.makers.authentication.adapter.out.jwt.RSAKeyManager;
 import sopt.makers.authentication.adapter.out.jwt.exception.ResourceException;
@@ -82,7 +83,7 @@ public class LocalRSAKeyManager implements RSAKeyManager {
       throws NoSuchAlgorithmException, InvalidKeySpecException {
     byte[] publicKeyBytes = pemObject.getContent();
     X509EncodedKeySpec keySpec = new X509EncodedKeySpec(publicKeyBytes);
-    KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+    KeyFactory keyFactory = KeyFactory.getInstance(RSA);
     return (RSAPublicKey) keyFactory.generatePublic(keySpec);
   }
 
@@ -101,7 +102,7 @@ public class LocalRSAKeyManager implements RSAKeyManager {
       throws NoSuchAlgorithmException, InvalidKeySpecException {
     byte[] privateKeyBytes = pemObject.getContent();
     PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(privateKeyBytes);
-    KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+    KeyFactory keyFactory = KeyFactory.getInstance(RSA);
     return (RSAPrivateKey) keyFactory.generatePrivate(keySpec);
   }
 }
