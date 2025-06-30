@@ -42,6 +42,7 @@ public class VerifyVerificationService implements VerifyPhoneVerificationUsecase
     PhoneVerification verifiedVerification = findVerification.updateIsVerified();
     phoneVerificationRepository.update(verifiedVerification);
 
-    return new VerifyVerificationResult(command.name(), command.phone());
+    return new VerifyVerificationResult(
+        verifiedVerification.getName(), verifiedVerification.getPhone());
   }
 }
