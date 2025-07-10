@@ -7,7 +7,7 @@ public interface VerifyPhoneVerificationUsecase {
   VerifyVerificationResult verify(VerifyVerificationCommand command);
 
   record VerifyVerificationCommand(
-      String name, String phone, String code, PhoneVerificationType verificationType) {}
+      String phone, String code, PhoneVerificationType verificationType) {}
 
   record VerifyVerificationResult(String targetName, String targetPhone) {}
 }

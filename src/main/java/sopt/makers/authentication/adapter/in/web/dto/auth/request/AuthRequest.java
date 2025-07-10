@@ -28,16 +28,12 @@ public final class AuthRequest {
   }
 
   public record VerifyPhoneVerification(
-      @JsonProperty("name") String name,
       @JsonProperty("phone") String number,
       @JsonProperty("code") String code,
       @JsonProperty("type") String verificationTypeName) {
     public VerifyVerificationCommand toCommand() {
       return new VerifyVerificationCommand(
-          this.name,
-          this.number,
-          this.code,
-          PhoneVerificationType.valueOf(this.verificationTypeName));
+          this.number, this.code, PhoneVerificationType.valueOf(this.verificationTypeName));
     }
   }
 

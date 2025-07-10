@@ -39,7 +39,6 @@ public class PhoneVerificationEntity extends BaseEntity {
 
   private PhoneVerificationEntity(PhoneVerification verification) {
     super();
-    this.name = verification.getName();
     this.phone = verification.getPhone();
     this.code = verification.getVerificationCode().getCode();
     this.type = verification.getVerificationType();
