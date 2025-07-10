@@ -22,8 +22,7 @@ public class VerifyVerificationService implements VerifyPhoneVerificationUsecase
   @Transactional
   public VerifyVerificationResult verify(VerifyVerificationCommand command) {
     PhoneVerification targetVerification =
-        PhoneVerification.of(
-            command.name(), command.phone(), command.verificationType(), command.code());
+        PhoneVerification.of(command.phone(), command.verificationType(), command.code());
     PhoneVerification findVerification =
         phoneVerificationRepository.findByPhoneVerification(targetVerification);
 
@@ -42,6 +41,7 @@ public class VerifyVerificationService implements VerifyPhoneVerificationUsecase
     PhoneVerification verifiedVerification = findVerification.updateIsVerified();
     phoneVerificationRepository.update(verifiedVerification);
 
-    return new VerifyVerificationResult(command.name(), command.phone());
+    return new VerifyVerificationResult(
+        verifiedVerification.getName(), verifiedVerification.getPhone());
   }
 }
