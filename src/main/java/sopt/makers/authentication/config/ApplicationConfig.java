@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Configuration;
   GabiaProperty.class,
   SecurityProperty.class,
   AppleOAuthProperty.class,
-  GoogleOAuthProperty.class
+  GoogleOAuthProperty.class,
+  MagicLoginProperty.class
 })
 public class ApplicationConfig {}
