@@ -4,11 +4,11 @@ import static sopt.makers.authentication.domain.auth.PhoneVerificationType.REGIS
 import static sopt.makers.authentication.domain.auth.exception.AuthFailure.ALREADY_REGISTER_PHONE_NUMBER;
 import static sopt.makers.authentication.domain.auth.exception.AuthFailure.NOT_FOUND_REGISTER_INFO;
 
+import sopt.makers.authentication.adapter.out.external.oauth.MagicLoginProperty;
 import sopt.makers.authentication.application.port.in.auth.CreatePhoneVerificationUsecase;
 import sopt.makers.authentication.application.port.out.auth.PhoneVerificationRepository;
 import sopt.makers.authentication.application.port.out.user.UserRegisterInfoRepository;
 import sopt.makers.authentication.application.port.out.user.UserRepository;
-import sopt.makers.authentication.config.MagicLoginProperty;
 import sopt.makers.authentication.domain.auth.PhoneVerification;
 import sopt.makers.authentication.domain.auth.PhoneVerificationCreatedEvent;
 import sopt.makers.authentication.domain.auth.PhoneVerificationType;

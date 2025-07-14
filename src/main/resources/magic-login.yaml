@@ -1,4 +1,0 @@
-magic-login:
-  phone: ${MAGIC_LOGIN_PHONE}
-  code: ${MAGIC_LOGIN_CODE}
-  name: ${MAGIC_LOGIN_NAME}
