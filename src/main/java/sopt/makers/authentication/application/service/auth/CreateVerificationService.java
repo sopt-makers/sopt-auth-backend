@@ -4,6 +4,7 @@ import static sopt.makers.authentication.domain.auth.PhoneVerificationType.REGIS
 import static sopt.makers.authentication.domain.auth.exception.AuthFailure.ALREADY_REGISTER_PHONE_NUMBER;
 import static sopt.makers.authentication.domain.auth.exception.AuthFailure.NOT_FOUND_REGISTER_INFO;
 
+import sopt.makers.authentication.adapter.out.external.oauth.MagicLoginProperty;
 import sopt.makers.authentication.application.port.in.auth.CreatePhoneVerificationUsecase;
 import sopt.makers.authentication.application.port.out.auth.PhoneVerificationRepository;
 import sopt.makers.authentication.application.port.out.user.UserRegisterInfoRepository;
@@ -29,10 +30,15 @@ public class CreateVerificationService implements CreatePhoneVerificationUsecase
   private final UserRegisterInfoRepository userRegisterInfoRepository;
   private final PhoneVerificationRepository verificationRepository;
   private final ApplicationEventPublisher eventPublisher;
+  private final MagicLoginProperty magicLoginProperty;
 
   @Override
   @Transactional
-  public PhoneVerification create(CreateVerificationCommand command) {
+  public void create(CreateVerificationCommand command) {
+    if (isMagicPhone(command.phone())) {
+      return;
+    }
+
     PhoneVerification phoneVerification = createPhoneVerificationByCommand(command);
     PhoneVerification savedPhoneVerification = verificationRepository.create(phoneVerification);
     String content = convertCodeToMessage(savedPhoneVerification.getVerificationCode().getCode());
@@ -40,7 +46,10 @@ public class CreateVerificationService implements CreatePhoneVerificationUsecase
     eventPublisher.publishEvent(
         new PhoneVerificationCreatedEvent(
             savedPhoneVerification.getPhone(), content, MessageType.SMS));
-    return savedPhoneVerification;
+  }
+
+  private boolean isMagicPhone(String phone) {
+    return (phone.equals(magicLoginProperty.phone()));
   }
 
   private PhoneVerification createPhoneVerificationByCommand(CreateVerificationCommand command) {
