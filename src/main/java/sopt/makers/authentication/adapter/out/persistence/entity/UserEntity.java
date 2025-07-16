@@ -86,7 +86,7 @@ public class UserEntity extends BaseEntity {
 
   public User toDomain() {
     SocialAccount socialAccount = SocialAccount.of(authPlatformId, authPlatformType);
-    Profile profile = Profile.of(name, email, phone, birthday);
+    Profile profile = Profile.of(name, email, phone, birthday, profileImage);
     if (userActivityHistoryList == null || userActivityHistoryList.isEmpty()) {
       return User.createUser(super.getId(), socialAccount, profile);
     }
