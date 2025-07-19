@@ -1,5 +1,7 @@
 package sopt.makers.authentication.config;
 
+import static sopt.makers.authentication.common.constant.SystemConstant.USER_CACHE_NAME;
+
 import java.time.Duration;
 
 import org.springframework.cache.CacheManager;
@@ -15,11 +17,10 @@ import com.github.benmanes.caffeine.cache.Caffeine;
 public class CacheConfig {
   private static final int EXPIRE_DAY = 1;
   private static final int MAXIMUM_SIZE = 3000;
-  private static final String CACHE_NAME = "users";
 
   @Bean
   public CacheManager cacheManager() {
-    CaffeineCacheManager cacheManager = new CaffeineCacheManager(CACHE_NAME);
+    CaffeineCacheManager cacheManager = new CaffeineCacheManager(USER_CACHE_NAME);
     cacheManager.setCaffeine(
         Caffeine.newBuilder()
             .expireAfterWrite(Duration.ofDays(EXPIRE_DAY))
