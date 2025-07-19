@@ -1,8 +1,13 @@
-spring.config.activate.on-profile:
-  - prod
-  - dev
-  - local
-  - test
+spring:
+  config:
+    activate.on-profile:
+      - prod
+      - dev
+      - local
+      - test
+  cache:
+    type: caffeine
+
 external:
   gabia:
     sms:
