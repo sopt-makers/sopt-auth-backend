@@ -5,8 +5,6 @@ spring:
       - dev
       - local
       - test
-  cache:
-    type: caffeine
 
 external:
   gabia:
