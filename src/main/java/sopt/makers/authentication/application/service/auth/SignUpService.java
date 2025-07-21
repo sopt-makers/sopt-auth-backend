@@ -2,6 +2,7 @@ package sopt.makers.authentication.application.service.auth;
 
 import static sopt.makers.authentication.domain.auth.exception.AuthFailure.NOT_FOUND_REGISTER_INFO;
 
+import sopt.makers.authentication.adapter.out.external.oauth.MagicLoginProperty;
 import sopt.makers.authentication.application.port.in.auth.SignUpUsecase;
 import sopt.makers.authentication.application.port.out.auth.OAuthAuthenticator;
 import sopt.makers.authentication.application.port.out.user.UserActivityHistoryRepository;
@@ -30,12 +31,15 @@ public class SignUpService implements SignUpUsecase {
   private final UserRegisterInfoRepository userRegisterInfoRepository;
   private final UserActivityHistoryRepository userActivityHistoryRepository;
   private final PhoneVerificationValidator phoneVerificationValidator;
+  private final MagicLoginProperty magicLoginProperty;
 
   @Transactional
   @Override
   public void signUp(SignUpCommand command) {
-    phoneVerificationValidator.validate(
-        command.name(), command.phone(), PhoneVerificationType.REGISTER);
+    if (!isMagicPhone(command.phone())) {
+      phoneVerificationValidator.validate(
+          command.name(), command.phone(), PhoneVerificationType.REGISTER);
+    }
     String authPlatformId =
         oAuthAuthenticator.getIdentifier(command.token(), command.authPlatform());
     UserRegisterInfo targetRegisterInfo =
@@ -49,6 +53,9 @@ public class SignUpService implements SignUpUsecase {
     User savedUser = userRepository.save(newUser);
 
     userActivityHistoryRepository.save(savedUser, activity);
+    if (isMagicPhone(command.phone())) {
+      return;
+    }
     userRegisterInfoRepository.delete(targetRegisterInfo);
   }
 
@@ -69,5 +76,9 @@ public class SignUpService implements SignUpUsecase {
 
   private Activity createActivity(UserRegisterInfo registerInfo) {
     return Activity.of(registerInfo.getGeneration(), null, registerInfo.getPart());
+  }
+
+  private boolean isMagicPhone(String phone) {
+    return (phone.equals(magicLoginProperty.phone()));
   }
 }
