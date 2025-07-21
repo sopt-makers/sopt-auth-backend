@@ -57,8 +57,7 @@ public class UserMapper {
   public Activity toActivity(CachedUserActivity cached) {
     Part part = Part.valueOf(cached.part());
     Team team = cached.team() != null ? Team.findTeam(cached.team()) : null;
-
-    return Activity.of(
-        cached.activityId(), cached.generation(), team, part, Role.findRole(cached.role()));
+    Role role = Role.valueOf(cached.role());
+    return Activity.of(cached.activityId(), cached.generation(), team, part, role);
   }
 }
