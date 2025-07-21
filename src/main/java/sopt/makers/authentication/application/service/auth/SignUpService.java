@@ -10,7 +10,6 @@ import sopt.makers.authentication.application.port.out.user.UserRegisterInfoRepo
 import sopt.makers.authentication.application.port.out.user.UserRepository;
 import sopt.makers.authentication.application.validator.auth.PhoneVerificationValidator;
 import sopt.makers.authentication.domain.auth.AuthPlatform;
-import sopt.makers.authentication.domain.auth.PhoneVerificationType;
 import sopt.makers.authentication.domain.auth.SocialAccount;
 import sopt.makers.authentication.domain.auth.exception.AuthException;
 import sopt.makers.authentication.domain.user.Activity;
@@ -36,26 +35,35 @@ public class SignUpService implements SignUpUsecase {
   @Transactional
   @Override
   public void signUp(SignUpCommand command) {
-    if (!isMagicPhone(command.phone())) {
-      phoneVerificationValidator.validate(
-          command.name(), command.phone(), PhoneVerificationType.REGISTER);
+    if (isMagicPhone(command.phone())) {
+      signUpForMagicNumber(command.token(), command.authPlatform());
+    } else {
+      signUpForSoptUser(command.phone(), command.authPlatform());
     }
-    String authPlatformId =
-        oAuthAuthenticator.getIdentifier(command.token(), command.authPlatform());
+  }
+
+  private void signUpForMagicNumber(String token, AuthPlatform authPlatform) {
+    User user = userRepository.findByPhone(magicLoginProperty.phone());
+    String authPlatformId = oAuthAuthenticator.getIdentifier(token, authPlatform);
+    SocialAccount updatedSocialAccount = createSocialAccount(authPlatformId, authPlatform);
+    User updatedUser = user.updateSocialAccount(updatedSocialAccount);
+    userRepository.save(updatedUser);
+  }
+
+  private void signUpForSoptUser(String phone, AuthPlatform authPlatform) {
+    //    String authPlatformId =
+    //            oAuthAuthenticator.getIdentifier(command.token(), command.authPlatform());
     UserRegisterInfo targetRegisterInfo =
         userRegisterInfoRepository
-            .findByPhone(command.phone())
+            .findByPhone(phone)
             .orElseThrow(() -> new AuthException(NOT_FOUND_REGISTER_INFO));
-    SocialAccount socialAccount = createSocialAccount(authPlatformId, command.authPlatform());
+    SocialAccount socialAccount = createSocialAccount(auth, authPlatform);
     Profile profile = createProfile(targetRegisterInfo);
     Activity activity = createActivity(targetRegisterInfo);
     User newUser = User.createNewUser(socialAccount, profile);
     User savedUser = userRepository.save(newUser);
 
     userActivityHistoryRepository.save(savedUser, activity);
-    if (isMagicPhone(command.phone())) {
-      return;
-    }
     userRegisterInfoRepository.delete(targetRegisterInfo);
   }
 
