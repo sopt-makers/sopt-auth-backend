@@ -9,8 +9,4 @@ public interface UserCacheRepository {
   Map<Long, User> getAllPresent(List<Long> userIds);
 
   void put(Long userId, User user);
-
-  void evict(Long userId);
-
-  void evictAll();
 }

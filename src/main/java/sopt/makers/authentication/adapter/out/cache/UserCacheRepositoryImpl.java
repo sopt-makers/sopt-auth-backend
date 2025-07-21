@@ -49,14 +49,4 @@ public class UserCacheRepositoryImpl implements UserCacheRepository {
   public void put(Long userId, User user) {
     cache.put(userId, userMapper.toCache(user));
   }
-
-  @Override
-  public void evict(Long userId) {
-    cache.invalidate(userId);
-  }
-
-  @Override
-  public void evictAll() {
-    cache.invalidateAll();
-  }
 }
