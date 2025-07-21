@@ -38,7 +38,7 @@ public class SignUpService implements SignUpUsecase {
     if (isMagicPhone(command.phone())) {
       signUpForMagicNumber(command.token(), command.authPlatform());
     } else {
-      signUpForSoptUser(command.phone(), command.authPlatform());
+      signUpForSoptUser(command.token(), command.phone(), command.authPlatform());
     }
   }
 
@@ -50,14 +50,13 @@ public class SignUpService implements SignUpUsecase {
     userRepository.save(updatedUser);
   }
 
-  private void signUpForSoptUser(String phone, AuthPlatform authPlatform) {
-    //    String authPlatformId =
-    //            oAuthAuthenticator.getIdentifier(command.token(), command.authPlatform());
+  private void signUpForSoptUser(String token, String phone, AuthPlatform authPlatform) {
+    String authPlatformId = oAuthAuthenticator.getIdentifier(token, authPlatform);
     UserRegisterInfo targetRegisterInfo =
         userRegisterInfoRepository
             .findByPhone(phone)
             .orElseThrow(() -> new AuthException(NOT_FOUND_REGISTER_INFO));
-    SocialAccount socialAccount = createSocialAccount(auth, authPlatform);
+    SocialAccount socialAccount = createSocialAccount(authPlatformId, authPlatform);
     Profile profile = createProfile(targetRegisterInfo);
     Activity activity = createActivity(targetRegisterInfo);
     User newUser = User.createNewUser(socialAccount, profile);
