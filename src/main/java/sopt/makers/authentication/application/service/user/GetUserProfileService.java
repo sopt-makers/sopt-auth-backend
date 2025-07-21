@@ -8,6 +8,7 @@ import sopt.makers.authentication.domain.user.User;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import org.springframework.stereotype.Service;
 
@@ -27,6 +28,7 @@ public class GetUserProfileService implements GetUserProfileUsecase {
     loadMissingUsers(userIds, cache);
     return userIds.stream()
         .map(cache::get)
+        .filter(Objects::nonNull)
         .map(user -> UserProfileAndActivityInfo.of(user, user.getActivities()))
         .toList();
   }
