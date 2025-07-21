@@ -29,11 +29,14 @@ public interface UserApi {
       @PathVariable Long userId,
       @Valid @RequestBody UserRequest.UserProfileInfo userProfileInfo);
 
-  ResponseEntity<BaseResponse<?>> getUserProfileByActivity(
+  ResponseEntity<BaseResponse<?>> getUserProfileByFilters(
       @RequestHeader(API_KEY_HEADER) String apiKey,
       @RequestHeader(SERVICE_NAME_HEADER) String serviceName,
       @RequestParam(required = false) Integer generation,
-      @RequestParam(required = false) Part part);
+      @RequestParam(required = false) Part part,
+      @RequestParam(required = false) String name,
+      @RequestParam(defaultValue = "0") Integer offset,
+      @RequestParam(defaultValue = "30") Integer limit);
 
   ResponseEntity<BaseResponse<?>> getUserCountByGeneration(
       @RequestHeader(API_KEY_HEADER) String apiKey,

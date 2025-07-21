@@ -7,6 +7,9 @@ import sopt.makers.authentication.domain.user.User;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 public interface UserRepository {
 
   User findBySocialAccount(SocialAccount socialAccount);
@@ -25,7 +28,8 @@ public interface UserRepository {
 
   boolean existsByPhone(String phone);
 
-  List<User> findAllByGenerationAndPart(Integer generation, Part part);
+  Page<User> findAllByGenerationAndPartAndName(
+      Integer generation, Part part, String name, Pageable pageable);
 
   int countByGeneration(int generation);
 }

@@ -12,6 +12,8 @@ import sopt.makers.authentication.domain.user.exception.UserException;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
@@ -49,11 +51,13 @@ public class UserRetriever {
     return userJpaRepository.existsByPhone(phone);
   }
 
-  public List<User> findAllByActivity(Integer generation, Part part) {
-    List<UserEntity> userEntityList =
-        userJpaRepository.findAllWithActivityHistoriesByGenerationAndPart(generation, part);
+  public Page<User> findAllByGenerationAndPartAndName(
+      Integer generation, Part part, String name, Pageable pageable) {
+    Page<UserEntity> userEntityPage =
+        userJpaRepository.findAllWithActivityHistoriesByGenerationAndPartAndName(
+            generation, part, name, pageable);
 
-    return userEntityList.stream().map(UserEntity::toDomain).toList();
+    return userEntityPage.map(UserEntity::toDomain);
   }
 
   public int countByGeneration(int generation) {

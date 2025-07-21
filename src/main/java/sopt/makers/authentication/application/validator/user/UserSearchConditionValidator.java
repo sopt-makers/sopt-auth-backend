@@ -10,8 +10,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserSearchConditionValidator {
 
-  public void validateUserSearchCondition(Integer generation, Part part) {
-    if (generation == null && part == null) {
+  public void validateUserSearchCondition(Integer generation, Part part, String name) {
+    if (generation == null && part == null && name == null) {
       throw new UserException(BAD_REQUEST_INVALID_USER_SEARCH_CONDITION);
     }
   }

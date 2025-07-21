@@ -13,7 +13,8 @@ public interface GetUserProfileUsecase {
 
   List<UserProfileAndActivityInfo> getUserInformation(List<Long> userIds);
 
-  List<UserProfileAndActivityInfo> getUserInformationByActivity(Integer generation, Part part);
+  PaginatedUserProfiles getUserInformationByFilters(
+      Integer generation, Part part, String name, Integer offset, Integer limit);
 
   UserCountByGeneration getUserCountByGeneration(int generation);
 
@@ -55,4 +56,7 @@ public interface GetUserProfileUsecase {
   }
 
   record UserCountByGeneration(int count) {}
+
+  record PaginatedUserProfiles(
+      List<UserProfileAndActivityInfo> profiles, boolean hasNext, int totalCount) {}
 }

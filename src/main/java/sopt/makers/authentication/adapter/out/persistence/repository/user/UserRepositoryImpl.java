@@ -9,6 +9,8 @@ import sopt.makers.authentication.domain.user.User;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -71,8 +73,9 @@ public class UserRepositoryImpl implements UserRepository {
   }
 
   @Override
-  public List<User> findAllByGenerationAndPart(Integer generation, Part part) {
-    return userRetriever.findAllByActivity(generation, part);
+  public Page<User> findAllByGenerationAndPartAndName(
+      Integer generation, Part part, String name, Pageable pageable) {
+    return userRetriever.findAllByGenerationAndPartAndName(generation, part, name, pageable);
   }
 
   @Override

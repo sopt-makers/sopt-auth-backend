@@ -60,4 +60,16 @@ public final class UserResponse {
       return new UserCountByGeneration(userCountByGeneration.count());
     }
   }
+
+  public record PaginatedUserProfiles(
+      List<UserProfileAndActivity> profiles, boolean hasNext, int totalCount) {
+    public static PaginatedUserProfiles from(
+        GetUserProfileUsecase.PaginatedUserProfiles paginatedData) {
+      List<UserProfileAndActivity> profiles =
+          paginatedData.profiles().stream().map(UserProfileAndActivity::from).toList();
+
+      return new PaginatedUserProfiles(
+          profiles, paginatedData.hasNext(), paginatedData.totalCount());
+    }
+  }
 }

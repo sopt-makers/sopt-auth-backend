@@ -65,17 +65,20 @@ public class UserApiController implements UserApi {
   }
 
   @GetMapping("/search")
-  public ResponseEntity<BaseResponse<?>> getUserProfileByActivity(
+  public ResponseEntity<BaseResponse<?>> getUserProfileByFilters(
       @RequestHeader(API_KEY_HEADER) String apiKey,
       @RequestHeader(SERVICE_NAME_HEADER) String serviceName,
       @RequestParam(required = false) Integer generation,
-      @RequestParam(required = false) Part part) {
-    userSearchConditionValidator.validateUserSearchCondition(generation, part);
-    List<GetUserProfileUsecase.UserProfileAndActivityInfo> userInformation =
-        getUserProfileUsecase.getUserInformationByActivity(generation, part);
+      @RequestParam(required = false) Part part,
+      @RequestParam(required = false) String name,
+      @RequestParam(defaultValue = "0") Integer offset,
+      @RequestParam(defaultValue = "30") Integer limit) {
+    userSearchConditionValidator.validateUserSearchCondition(generation, part, name);
+    GetUserProfileUsecase.PaginatedUserProfiles userInformation =
+        getUserProfileUsecase.getUserInformationByFilters(generation, part, name, offset, limit);
 
     return ResponseUtil.success(
-        UserSuccess.GET_USER_PROFILE, UserResponse.UserProfileAndActivity.from(userInformation));
+        UserSuccess.GET_USER_PROFILE, UserResponse.PaginatedUserProfiles.from(userInformation));
   }
 
   @GetMapping("/count")
