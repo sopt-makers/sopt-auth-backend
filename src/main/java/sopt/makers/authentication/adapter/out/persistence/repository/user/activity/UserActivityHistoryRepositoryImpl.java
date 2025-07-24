@@ -8,18 +8,19 @@ import sopt.makers.authentication.domain.user.User;
 
 import java.util.List;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 
 @Repository
-@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class UserActivityHistoryRepositoryImpl implements UserActivityHistoryRepository {
-
+  @PersistenceContext private final EntityManager entityManager;
   private final UserActivityHistoryRegister userActivityHistoryRegister;
-  private final UserActivityHistoryRetriever userActivityHistoryRetriever;
 
   @Transactional
   @Override
@@ -29,17 +30,14 @@ public class UserActivityHistoryRepositoryImpl implements UserActivityHistoryRep
     userActivityHistoryRegister.save(userActivityHistoryEntity);
   }
 
-  public ActivityList findByUser(Long userId) {
-    return userActivityHistoryRetriever.findByUser(userId);
-  }
-
-  @Transactional
   @Override
   public void update(User user, ActivityList activityList) {
-    List<UserActivityHistoryEntity> userActivityHistoryEntities =
+    List<UserActivityHistoryEntity> entities =
         activityList.getActivities().stream()
             .map(activity -> UserActivityHistoryEntity.fromDomain(user, activity))
             .toList();
-    userActivityHistoryRegister.saveAll(userActivityHistoryEntities);
+    userActivityHistoryRegister.saveAll(entities);
+    entityManager.flush();
+    entityManager.clear();
   }
 }
