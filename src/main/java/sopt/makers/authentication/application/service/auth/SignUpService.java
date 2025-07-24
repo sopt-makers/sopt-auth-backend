@@ -2,6 +2,7 @@ package sopt.makers.authentication.application.service.auth;
 
 import static sopt.makers.authentication.domain.auth.exception.AuthFailure.NOT_FOUND_REGISTER_INFO;
 
+import sopt.makers.authentication.adapter.out.external.oauth.MagicLoginProperty;
 import sopt.makers.authentication.application.port.in.auth.SignUpUsecase;
 import sopt.makers.authentication.application.port.out.auth.OAuthAuthenticator;
 import sopt.makers.authentication.application.port.out.user.UserActivityHistoryRepository;
@@ -9,7 +10,6 @@ import sopt.makers.authentication.application.port.out.user.UserRegisterInfoRepo
 import sopt.makers.authentication.application.port.out.user.UserRepository;
 import sopt.makers.authentication.application.validator.auth.PhoneVerificationValidator;
 import sopt.makers.authentication.domain.auth.AuthPlatform;
-import sopt.makers.authentication.domain.auth.PhoneVerificationType;
 import sopt.makers.authentication.domain.auth.SocialAccount;
 import sopt.makers.authentication.domain.auth.exception.AuthException;
 import sopt.makers.authentication.domain.user.Activity;
@@ -30,19 +30,33 @@ public class SignUpService implements SignUpUsecase {
   private final UserRegisterInfoRepository userRegisterInfoRepository;
   private final UserActivityHistoryRepository userActivityHistoryRepository;
   private final PhoneVerificationValidator phoneVerificationValidator;
+  private final MagicLoginProperty magicLoginProperty;
 
   @Transactional
   @Override
   public void signUp(SignUpCommand command) {
-    phoneVerificationValidator.validate(
-        command.name(), command.phone(), PhoneVerificationType.REGISTER);
-    String authPlatformId =
-        oAuthAuthenticator.getIdentifier(command.token(), command.authPlatform());
+    if (isMagicPhone(command.phone())) {
+      signUpForMagicNumber(command.token(), command.authPlatform());
+    } else {
+      signUpForSoptUser(command.token(), command.phone(), command.authPlatform());
+    }
+  }
+
+  private void signUpForMagicNumber(String token, AuthPlatform authPlatform) {
+    User user = userRepository.findByPhone(magicLoginProperty.phone());
+    String authPlatformId = oAuthAuthenticator.getIdentifier(token, authPlatform);
+    SocialAccount updatedSocialAccount = createSocialAccount(authPlatformId, authPlatform);
+    User updatedUser = user.updateSocialAccount(updatedSocialAccount);
+    userRepository.save(updatedUser);
+  }
+
+  private void signUpForSoptUser(String token, String phone, AuthPlatform authPlatform) {
+    String authPlatformId = oAuthAuthenticator.getIdentifier(token, authPlatform);
     UserRegisterInfo targetRegisterInfo =
         userRegisterInfoRepository
-            .findByPhone(command.phone())
+            .findByPhone(phone)
             .orElseThrow(() -> new AuthException(NOT_FOUND_REGISTER_INFO));
-    SocialAccount socialAccount = createSocialAccount(authPlatformId, command.authPlatform());
+    SocialAccount socialAccount = createSocialAccount(authPlatformId, authPlatform);
     Profile profile = createProfile(targetRegisterInfo);
     Activity activity = createActivity(targetRegisterInfo);
     User newUser = User.createNewUser(socialAccount, profile);
@@ -69,5 +83,9 @@ public class SignUpService implements SignUpUsecase {
 
   private Activity createActivity(UserRegisterInfo registerInfo) {
     return Activity.of(registerInfo.getGeneration(), null, registerInfo.getPart());
+  }
+
+  private boolean isMagicPhone(String phone) {
+    return (phone.equals(magicLoginProperty.phone()));
   }
 }
