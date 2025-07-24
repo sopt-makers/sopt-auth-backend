@@ -36,13 +36,11 @@ public class UpdateUserProfileService implements UpdateUserProfileUsecase {
   @Transactional
   @Override
   public void updateUserProfile(UserProfileCommand command) {
-    User user = userRepository.findById(command.userId());
+    User user = userRepository.findByIdWithHistories(command.userId());
     validatePhoneIfChanged(user, command);
 
-    ActivityList updatedActivityList = updateUserActivities(user, command);
-    Profile updatedProfile = updateUserProfileFields(user, command);
-
-    updateUserInDatabase(user, updatedProfile, updatedActivityList);
+    updateUser(user, command);
+    updateUserActivities(user, command);
     updateUserCache(user.getId());
   }
 
@@ -55,29 +53,22 @@ public class UpdateUserProfileService implements UpdateUserProfileUsecase {
     }
   }
 
-  private ActivityList updateUserActivities(User user, UserProfileCommand command) {
-    ActivityList activityList = userActivityHistoryRepository.findByUser(user.getId());
-    Map<Long, Activity> existingActivitiesById = findExistsActivities(activityList);
-    List<Activity> updatedActivities = updateActivities(command, existingActivitiesById);
-
-    userActivityHistoryRepository.update(user, ActivityList.of(updatedActivities));
-    return ActivityList.of(updatedActivities);
-  }
-
-  private Profile updateUserProfileFields(User user, UserProfileCommand command) {
-    return user.getProfile()
-        .updateProfile(
-            command.email(), command.phone(), command.birthday(), command.profileImage());
-  }
-
-  private void updateUserInDatabase(
-      User user, Profile updatedProfile, ActivityList updatedActivityList) {
+  private void updateUser(User user, UserProfileCommand command) {
+    Profile updatedProfile =
+        user.getProfile()
+            .updateProfile(
+                command.email(), command.phone(), command.birthday(), command.profileImage());
     userRepository.update(user, updatedProfile);
-    userActivityHistoryRepository.update(user, updatedActivityList);
+  }
+
+  private void updateUserActivities(User user, UserProfileCommand command) {
+    Map<Long, Activity> existingActivitiesById = findExistsActivities(user.getActivities());
+    List<Activity> updatedActivities = updateActivities(command, existingActivitiesById);
+    userActivityHistoryRepository.update(user, ActivityList.of(updatedActivities));
   }
 
   private void updateUserCache(Long userId) {
-    User updatedUser = userRepository.findById(userId);
+    User updatedUser = userRepository.findByIdWithHistories(userId);
     userCacheRepository.put(updatedUser.getId(), updatedUser);
   }
 
