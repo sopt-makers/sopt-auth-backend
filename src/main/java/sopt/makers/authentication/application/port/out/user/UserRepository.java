@@ -13,6 +13,8 @@ public interface UserRepository {
 
   User findById(Long userId);
 
+  User findByIdWithHistories(Long userId);
+
   User findByPhone(String phone);
 
   List<User> findAllById(List<Long> userIds);
