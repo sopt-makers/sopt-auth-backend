@@ -79,8 +79,8 @@ public class UserApiController implements UserApi {
       @RequestParam(required = false) Part part,
       @RequestParam(required = false) String name,
       @RequestParam(required = false) Team team,
-      @RequestParam(defaultValue = "" + DEFAULT_OFFSET) int offset,
-      @RequestParam(defaultValue = "" + DEFAULT_LIMIT) @Positive @Max(MAX_LIMIT) int limit,
+      @RequestParam(defaultValue = DEFAULT_OFFSET) int offset,
+      @RequestParam(defaultValue = DEFAULT_LIMIT) @Positive @Max(MAX_LIMIT) int limit,
       @RequestParam(defaultValue = DEFAULT_ORDER_BY) UserOrderBy orderBy) {
     userSearchConditionValidator.validateUserSearchCondition(generation, part, name, team);
     GetUserProfileUsecase.PaginatedUserProfiles userInformation =
