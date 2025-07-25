@@ -11,6 +11,7 @@ import sopt.makers.authentication.domain.user.Team;
 import java.util.List;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Positive;
 
 import org.springframework.http.ResponseEntity;
@@ -39,7 +40,7 @@ public interface UserApi {
       @RequestParam(required = false) String name,
       @RequestParam(required = false) Team team,
       @RequestParam(defaultValue = "0") Integer offset,
-      @RequestParam(defaultValue = "30") @Positive Integer limit);
+      @RequestParam(defaultValue = "30") @Positive @Max(30) Integer limit);
 
   ResponseEntity<BaseResponse<?>> getUserCountByGeneration(
       @RequestHeader(API_KEY_HEADER) String apiKey,
