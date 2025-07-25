@@ -6,6 +6,7 @@ import static sopt.makers.authentication.common.constant.SystemConstant.SERVICE_
 import sopt.makers.authentication.adapter.in.web.common.BaseResponse;
 import sopt.makers.authentication.adapter.in.web.dto.user.request.UserRequest;
 import sopt.makers.authentication.domain.user.Part;
+import sopt.makers.authentication.domain.user.Team;
 
 import java.util.List;
 
@@ -35,6 +36,7 @@ public interface UserApi {
       @RequestParam(required = false) Integer generation,
       @RequestParam(required = false) Part part,
       @RequestParam(required = false) String name,
+      @RequestParam(required = false) Team team,
       @RequestParam(defaultValue = "0") Integer offset,
       @RequestParam(defaultValue = "30") Integer limit);
 

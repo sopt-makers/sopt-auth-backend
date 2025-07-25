@@ -3,6 +3,7 @@ package sopt.makers.authentication.adapter.out.persistence.repository.user;
 import sopt.makers.authentication.adapter.out.persistence.entity.UserEntity;
 import sopt.makers.authentication.domain.auth.AuthPlatform;
 import sopt.makers.authentication.domain.user.Part;
+import sopt.makers.authentication.domain.user.Team;
 
 import java.util.List;
 import java.util.Optional;
@@ -38,11 +39,13 @@ public interface UserJpaRepository extends JpaRepository<UserEntity, Long> {
           + "JOIN FETCH u.userActivityHistoryList a "
           + "WHERE (:generation IS NULL OR a.generation = :generation) "
           + "AND (:part IS NULL OR a.part = :part) "
-          + "AND (:name IS NULL OR u.name LIKE %:name%)")
-  Page<UserEntity> findAllWithActivityHistoriesByGenerationAndPartAndName(
+          + "AND (:name IS NULL OR u.name LIKE %:name%) "
+          + "AND (:team IS NULL OR a.team = :team)")
+  Page<UserEntity> findAllWithActivityHistoriesByGenerationAndPartAndNameAndTeam(
       @Param("generation") Integer generation,
       @Param("part") Part part,
       @Param("name") String name,
+      @Param("team") Team team,
       Pageable pageable);
 
   @Query(

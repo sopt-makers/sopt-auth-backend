@@ -3,6 +3,7 @@ package sopt.makers.authentication.application.service.user;
 import sopt.makers.authentication.application.port.in.user.GetUserProfileUsecase;
 import sopt.makers.authentication.application.port.out.user.UserRepository;
 import sopt.makers.authentication.domain.user.Part;
+import sopt.makers.authentication.domain.user.Team;
 import sopt.makers.authentication.domain.user.User;
 
 import java.util.List;
@@ -32,10 +33,11 @@ public class GetUserProfileService implements GetUserProfileUsecase {
 
   @Override
   public PaginatedUserProfiles getUserInformationByFilters(
-      Integer generation, Part part, String name, Integer offset, Integer limit) {
+      Integer generation, Part part, String name, Team team, Integer offset, Integer limit) {
     Pageable pageable = PageRequest.of(offset / limit, limit, Sort.by("id").descending());
     Page<User> userEntityPage =
-        userRepository.findAllByGenerationAndPartAndName(generation, part, name, pageable);
+        userRepository.findAllByGenerationAndPartAndNameAndTeam(
+            generation, part, name, team, pageable);
 
     int totalCount = (int) userEntityPage.getTotalElements();
     boolean hasNext = userEntityPage.hasNext();

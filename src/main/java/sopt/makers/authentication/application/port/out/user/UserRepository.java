@@ -3,6 +3,7 @@ package sopt.makers.authentication.application.port.out.user;
 import sopt.makers.authentication.domain.auth.SocialAccount;
 import sopt.makers.authentication.domain.user.Part;
 import sopt.makers.authentication.domain.user.Profile;
+import sopt.makers.authentication.domain.user.Team;
 import sopt.makers.authentication.domain.user.User;
 
 import java.util.List;
@@ -28,8 +29,8 @@ public interface UserRepository {
 
   boolean existsByPhone(String phone);
 
-  Page<User> findAllByGenerationAndPartAndName(
-      Integer generation, Part part, String name, Pageable pageable);
+  Page<User> findAllByGenerationAndPartAndNameAndTeam(
+      Integer generation, Part part, String name, Team team, Pageable pageable);
 
   int countByGeneration(int generation);
 }

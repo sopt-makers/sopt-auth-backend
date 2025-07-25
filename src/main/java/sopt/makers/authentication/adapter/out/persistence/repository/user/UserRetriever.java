@@ -7,6 +7,7 @@ import sopt.makers.authentication.adapter.out.persistence.entity.UserEntity;
 import sopt.makers.authentication.domain.auth.SocialAccount;
 import sopt.makers.authentication.domain.auth.exception.AuthException;
 import sopt.makers.authentication.domain.user.Part;
+import sopt.makers.authentication.domain.user.Team;
 import sopt.makers.authentication.domain.user.User;
 import sopt.makers.authentication.domain.user.exception.UserException;
 
@@ -51,11 +52,11 @@ public class UserRetriever {
     return userJpaRepository.existsByPhone(phone);
   }
 
-  public Page<User> findAllByGenerationAndPartAndName(
-      Integer generation, Part part, String name, Pageable pageable) {
+  public Page<User> findAllByGenerationAndPartAndNameAndTeam(
+      Integer generation, Part part, String name, Team team, Pageable pageable) {
     Page<UserEntity> userEntityPage =
-        userJpaRepository.findAllWithActivityHistoriesByGenerationAndPartAndName(
-            generation, part, name, pageable);
+        userJpaRepository.findAllWithActivityHistoriesByGenerationAndPartAndNameAndTeam(
+            generation, part, name, team, pageable);
 
     return userEntityPage.map(UserEntity::toDomain);
   }

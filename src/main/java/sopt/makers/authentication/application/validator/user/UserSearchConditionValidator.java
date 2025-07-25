@@ -3,6 +3,7 @@ package sopt.makers.authentication.application.validator.user;
 import static sopt.makers.authentication.domain.user.exception.UserFailure.BAD_REQUEST_INVALID_USER_SEARCH_CONDITION;
 
 import sopt.makers.authentication.domain.user.Part;
+import sopt.makers.authentication.domain.user.Team;
 import sopt.makers.authentication.domain.user.exception.UserException;
 
 import org.springframework.stereotype.Component;
@@ -10,8 +11,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserSearchConditionValidator {
 
-  public void validateUserSearchCondition(Integer generation, Part part, String name) {
-    if (generation == null && part == null && name == null) {
+  public void validateUserSearchCondition(Integer generation, Part part, String name, Team team) {
+    if (generation == null && part == null && name == null && team == null) {
       throw new UserException(BAD_REQUEST_INVALID_USER_SEARCH_CONDITION);
     }
   }

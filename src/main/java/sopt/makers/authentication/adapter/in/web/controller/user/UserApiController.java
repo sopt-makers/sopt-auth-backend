@@ -13,6 +13,7 @@ import sopt.makers.authentication.application.port.in.user.UpdateUserProfileUsec
 import sopt.makers.authentication.application.validator.user.UserIdValidator;
 import sopt.makers.authentication.application.validator.user.UserSearchConditionValidator;
 import sopt.makers.authentication.domain.user.Part;
+import sopt.makers.authentication.domain.user.Team;
 
 import java.util.List;
 
@@ -71,11 +72,13 @@ public class UserApiController implements UserApi {
       @RequestParam(required = false) Integer generation,
       @RequestParam(required = false) Part part,
       @RequestParam(required = false) String name,
+      @RequestParam(required = false) Team team,
       @RequestParam(defaultValue = "0") Integer offset,
       @RequestParam(defaultValue = "30") Integer limit) {
-    userSearchConditionValidator.validateUserSearchCondition(generation, part, name);
+    userSearchConditionValidator.validateUserSearchCondition(generation, part, name, team);
     GetUserProfileUsecase.PaginatedUserProfiles userInformation =
-        getUserProfileUsecase.getUserInformationByFilters(generation, part, name, offset, limit);
+        getUserProfileUsecase.getUserInformationByFilters(
+            generation, part, name, team, offset, limit);
 
     return ResponseUtil.success(
         UserSuccess.GET_USER_PROFILE, UserResponse.PaginatedUserProfiles.from(userInformation));
