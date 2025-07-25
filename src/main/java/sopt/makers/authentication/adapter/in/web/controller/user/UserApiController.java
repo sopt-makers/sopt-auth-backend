@@ -18,8 +18,10 @@ import sopt.makers.authentication.domain.user.Team;
 import java.util.List;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -34,6 +36,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
+@Validated
 public class UserApiController implements UserApi {
   private final GetUserProfileUsecase getUserProfileUsecase;
   private final UpdateUserProfileUsecase updateUserProfileUsecase;
@@ -74,7 +77,7 @@ public class UserApiController implements UserApi {
       @RequestParam(required = false) String name,
       @RequestParam(required = false) Team team,
       @RequestParam(defaultValue = "0") Integer offset,
-      @RequestParam(defaultValue = "30") Integer limit) {
+      @RequestParam(defaultValue = "30") @Positive Integer limit) {
     userSearchConditionValidator.validateUserSearchCondition(generation, part, name, team);
     GetUserProfileUsecase.PaginatedUserProfiles userInformation =
         getUserProfileUsecase.getUserInformationByFilters(
