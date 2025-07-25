@@ -59,5 +59,5 @@ public interface GetUserProfileUsecase {
   record UserCountByGeneration(int count) {}
 
   record PaginatedUserProfiles(
-      List<UserProfileAndActivityInfo> profiles, boolean hasNext, int totalCount) {}
+      List<UserProfileAndActivityInfo> profiles, boolean hasNext, long totalCount) {}
 }

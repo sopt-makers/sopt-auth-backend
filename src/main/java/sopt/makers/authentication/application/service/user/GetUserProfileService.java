@@ -39,7 +39,7 @@ public class GetUserProfileService implements GetUserProfileUsecase {
         userRepository.findAllByGenerationAndPartAndNameAndTeam(
             generation, part, name, team, pageable);
 
-    int totalCount = (int) userEntityPage.getTotalElements();
+    long totalCount = userEntityPage.getTotalElements();
     boolean hasNext = userEntityPage.hasNext();
 
     List<UserProfileAndActivityInfo> profiles =
