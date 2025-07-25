@@ -15,7 +15,7 @@ public interface GetUserProfileUsecase {
   List<UserProfileAndActivityInfo> getUserInformation(List<Long> userIds);
 
   PaginatedUserProfiles getUserInformationByFilters(
-      Integer generation, Part part, String name, Team team, Integer offset, Integer limit);
+      Integer generation, Part part, String name, Team team, int offset, int limit);
 
   UserCountByGeneration getUserCountByGeneration(int generation);
 

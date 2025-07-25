@@ -33,7 +33,7 @@ public class GetUserProfileService implements GetUserProfileUsecase {
 
   @Override
   public PaginatedUserProfiles getUserInformationByFilters(
-      Integer generation, Part part, String name, Team team, Integer offset, Integer limit) {
+      Integer generation, Part part, String name, Team team, int offset, int limit) {
     Pageable pageable = PageRequest.of(offset / limit, limit, Sort.by("id").descending());
     Page<User> userEntityPage =
         userRepository.findAllByGenerationAndPartAndNameAndTeam(

@@ -39,8 +39,8 @@ public interface UserApi {
       @RequestParam(required = false) Part part,
       @RequestParam(required = false) String name,
       @RequestParam(required = false) Team team,
-      @RequestParam(defaultValue = "0") Integer offset,
-      @RequestParam(defaultValue = "30") @Positive @Max(30) Integer limit);
+      @RequestParam(defaultValue = "0") int offset,
+      @RequestParam(defaultValue = "30") @Positive @Max(30) int limit);
 
   ResponseEntity<BaseResponse<?>> getUserCountByGeneration(
       @RequestHeader(API_KEY_HEADER) String apiKey,
