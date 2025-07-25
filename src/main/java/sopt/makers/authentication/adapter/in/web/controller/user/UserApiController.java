@@ -1,5 +1,6 @@
 package sopt.makers.authentication.adapter.in.web.controller.user;
 
+import static sopt.makers.authentication.common.constant.PagingConstant.*;
 import static sopt.makers.authentication.common.constant.SystemConstant.API_KEY_HEADER;
 import static sopt.makers.authentication.common.constant.SystemConstant.SERVICE_NAME_HEADER;
 
@@ -14,6 +15,7 @@ import sopt.makers.authentication.application.validator.user.UserIdValidator;
 import sopt.makers.authentication.application.validator.user.UserSearchConditionValidator;
 import sopt.makers.authentication.domain.user.Part;
 import sopt.makers.authentication.domain.user.Team;
+import sopt.makers.authentication.domain.user.UserOrderBy;
 
 import java.util.List;
 
@@ -77,12 +79,13 @@ public class UserApiController implements UserApi {
       @RequestParam(required = false) Part part,
       @RequestParam(required = false) String name,
       @RequestParam(required = false) Team team,
-      @RequestParam(defaultValue = "0") int offset,
-      @RequestParam(defaultValue = "30") @Positive @Max(30) int limit) {
+      @RequestParam(defaultValue = "" + DEFAULT_OFFSET) int offset,
+      @RequestParam(defaultValue = "" + DEFAULT_LIMIT) @Positive @Max(MAX_LIMIT) int limit,
+      @RequestParam(defaultValue = DEFAULT_ORDER_BY) UserOrderBy orderBy) {
     userSearchConditionValidator.validateUserSearchCondition(generation, part, name, team);
     GetUserProfileUsecase.PaginatedUserProfiles userInformation =
         getUserProfileUsecase.getUserInformationByFilters(
-            generation, part, name, team, offset, limit);
+            generation, part, name, team, offset, limit, orderBy);
 
     return ResponseUtil.success(
         UserSuccess.GET_USER_PROFILE, UserResponse.PaginatedUserProfiles.from(userInformation));

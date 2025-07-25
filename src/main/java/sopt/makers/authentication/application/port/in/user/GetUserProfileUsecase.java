@@ -6,6 +6,7 @@ import sopt.makers.authentication.domain.user.Part;
 import sopt.makers.authentication.domain.user.Profile;
 import sopt.makers.authentication.domain.user.Team;
 import sopt.makers.authentication.domain.user.User;
+import sopt.makers.authentication.domain.user.UserOrderBy;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -15,7 +16,13 @@ public interface GetUserProfileUsecase {
   List<UserProfileAndActivityInfo> getUserInformation(List<Long> userIds);
 
   PaginatedUserProfiles getUserInformationByFilters(
-      Integer generation, Part part, String name, Team team, int offset, int limit);
+      Integer generation,
+      Part part,
+      String name,
+      Team team,
+      int offset,
+      int limit,
+      UserOrderBy orderBy);
 
   UserCountByGeneration getUserCountByGeneration(int generation);
 

@@ -1,5 +1,6 @@
 package sopt.makers.authentication.adapter.in.web.controller.user;
 
+import static sopt.makers.authentication.common.constant.PagingConstant.*;
 import static sopt.makers.authentication.common.constant.SystemConstant.API_KEY_HEADER;
 import static sopt.makers.authentication.common.constant.SystemConstant.SERVICE_NAME_HEADER;
 
@@ -7,6 +8,7 @@ import sopt.makers.authentication.adapter.in.web.common.BaseResponse;
 import sopt.makers.authentication.adapter.in.web.dto.user.request.UserRequest;
 import sopt.makers.authentication.domain.user.Part;
 import sopt.makers.authentication.domain.user.Team;
+import sopt.makers.authentication.domain.user.UserOrderBy;
 
 import java.util.List;
 
@@ -39,8 +41,9 @@ public interface UserApi {
       @RequestParam(required = false) Part part,
       @RequestParam(required = false) String name,
       @RequestParam(required = false) Team team,
-      @RequestParam(defaultValue = "0") int offset,
-      @RequestParam(defaultValue = "30") @Positive @Max(30) int limit);
+      @RequestParam(defaultValue = "" + DEFAULT_OFFSET) int offset,
+      @RequestParam(defaultValue = "" + DEFAULT_LIMIT) @Positive @Max(MAX_LIMIT) int limit,
+      @RequestParam(defaultValue = DEFAULT_ORDER_BY) UserOrderBy orderBy);
 
   ResponseEntity<BaseResponse<?>> getUserCountByGeneration(
       @RequestHeader(API_KEY_HEADER) String apiKey,
