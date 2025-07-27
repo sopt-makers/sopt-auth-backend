@@ -1,6 +1,9 @@
 package sopt.makers.authentication.adapter.in.web.controller.user;
 
-import static sopt.makers.authentication.common.constant.PagingConstant.*;
+import static sopt.makers.authentication.common.constant.PagingConstant.DEFAULT_LIMIT;
+import static sopt.makers.authentication.common.constant.PagingConstant.DEFAULT_OFFSET;
+import static sopt.makers.authentication.common.constant.PagingConstant.DEFAULT_ORDER_BY;
+import static sopt.makers.authentication.common.constant.PagingConstant.MAX_LIMIT;
 import static sopt.makers.authentication.common.constant.SystemConstant.API_KEY_HEADER;
 import static sopt.makers.authentication.common.constant.SystemConstant.SERVICE_NAME_HEADER;
 
