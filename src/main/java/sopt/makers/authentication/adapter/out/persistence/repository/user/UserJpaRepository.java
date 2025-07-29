@@ -3,10 +3,13 @@ package sopt.makers.authentication.adapter.out.persistence.repository.user;
 import sopt.makers.authentication.adapter.out.persistence.entity.UserEntity;
 import sopt.makers.authentication.domain.auth.AuthPlatform;
 import sopt.makers.authentication.domain.user.Part;
+import sopt.makers.authentication.domain.user.Team;
 
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -35,9 +38,15 @@ public interface UserJpaRepository extends JpaRepository<UserEntity, Long> {
           + "FROM UserEntity u "
           + "JOIN FETCH u.userActivityHistoryList a "
           + "WHERE (:generation IS NULL OR a.generation = :generation) "
-          + "AND (:part IS NULL OR a.part = :part)")
-  List<UserEntity> findAllWithActivityHistoriesByGenerationAndPart(
-      @Param("generation") Integer generation, @Param("part") Part part);
+          + "AND (:part IS NULL OR a.part = :part) "
+          + "AND (:name IS NULL OR u.name LIKE %:name%) "
+          + "AND (:team IS NULL OR a.team = :team)")
+  Page<UserEntity> findAllWithActivityHistoriesByGenerationAndPartAndNameAndTeam(
+      @Param("generation") Integer generation,
+      @Param("part") Part part,
+      @Param("name") String name,
+      @Param("team") Team team,
+      Pageable pageable);
 
   @Query(
       "SELECT COUNT(DISTINCT u.id) "

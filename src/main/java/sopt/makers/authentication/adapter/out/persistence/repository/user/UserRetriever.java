@@ -7,11 +7,14 @@ import sopt.makers.authentication.adapter.out.persistence.entity.UserEntity;
 import sopt.makers.authentication.domain.auth.SocialAccount;
 import sopt.makers.authentication.domain.auth.exception.AuthException;
 import sopt.makers.authentication.domain.user.Part;
+import sopt.makers.authentication.domain.user.Team;
 import sopt.makers.authentication.domain.user.User;
 import sopt.makers.authentication.domain.user.exception.UserException;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
@@ -49,11 +52,13 @@ public class UserRetriever {
     return userJpaRepository.existsByPhone(phone);
   }
 
-  public List<User> findAllByActivity(Integer generation, Part part) {
-    List<UserEntity> userEntityList =
-        userJpaRepository.findAllWithActivityHistoriesByGenerationAndPart(generation, part);
+  public Page<User> findAllByGenerationAndPartAndNameAndTeam(
+      Integer generation, Part part, String name, Team team, Pageable pageable) {
+    Page<UserEntity> userEntityPage =
+        userJpaRepository.findAllWithActivityHistoriesByGenerationAndPartAndNameAndTeam(
+            generation, part, name, team, pageable);
 
-    return userEntityList.stream().map(UserEntity::toDomain).toList();
+    return userEntityPage.map(UserEntity::toDomain);
   }
 
   public int countByGeneration(int generation) {

@@ -5,10 +5,13 @@ import sopt.makers.authentication.application.port.out.user.UserRepository;
 import sopt.makers.authentication.domain.auth.SocialAccount;
 import sopt.makers.authentication.domain.user.Part;
 import sopt.makers.authentication.domain.user.Profile;
+import sopt.makers.authentication.domain.user.Team;
 import sopt.makers.authentication.domain.user.User;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -71,8 +74,10 @@ public class UserRepositoryImpl implements UserRepository {
   }
 
   @Override
-  public List<User> findAllByGenerationAndPart(Integer generation, Part part) {
-    return userRetriever.findAllByActivity(generation, part);
+  public Page<User> findAllByGenerationAndPartAndNameAndTeam(
+      Integer generation, Part part, String name, Team team, Pageable pageable) {
+    return userRetriever.findAllByGenerationAndPartAndNameAndTeam(
+        generation, part, name, team, pageable);
   }
 
   @Override
