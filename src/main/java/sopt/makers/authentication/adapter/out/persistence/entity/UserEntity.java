@@ -39,6 +39,7 @@ public class UserEntity extends BaseEntity {
   private LocalDate birthday;
   @NotNull private String authPlatformId;
   private String profileImage;
+  @NotNull private boolean hasProfile;
 
   @NotNull
   @Enumerated(EnumType.STRING)
@@ -54,7 +55,8 @@ public class UserEntity extends BaseEntity {
       LocalDate birthday,
       String profileImage,
       String authPlatformId,
-      AuthPlatform authPlatformType) {
+      AuthPlatform authPlatformType,
+      boolean hasProfile) {
     super();
     this.name = name;
     this.phone = phone;
@@ -63,6 +65,7 @@ public class UserEntity extends BaseEntity {
     this.profileImage = profileImage;
     this.authPlatformId = authPlatformId;
     this.authPlatformType = authPlatformType;
+    this.hasProfile = hasProfile;
   }
 
   public static UserEntity fromDomain(final User user) {
@@ -77,7 +80,8 @@ public class UserEntity extends BaseEntity {
             profile.birthday(),
             profile.profileImage().orElse(null),
             socialAccount.authPlatformId(),
-            socialAccount.authPlatformType());
+            socialAccount.authPlatformType(),
+            profile.hasProfile());
     if (hasId) {
       userEntity.setId(user.getId());
     }
@@ -86,7 +90,7 @@ public class UserEntity extends BaseEntity {
 
   public User toDomain() {
     SocialAccount socialAccount = SocialAccount.of(authPlatformId, authPlatformType);
-    Profile profile = Profile.of(name, email, phone, birthday, profileImage);
+    Profile profile = Profile.of(name, email, phone, birthday, profileImage, hasProfile);
     if (userActivityHistoryList == null || userActivityHistoryList.isEmpty()) {
       return User.createUser(super.getId(), socialAccount, profile);
     }
