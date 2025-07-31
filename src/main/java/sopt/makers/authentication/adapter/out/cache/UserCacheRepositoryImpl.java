@@ -1,11 +1,11 @@
 package sopt.makers.authentication.adapter.out.cache;
 
-import static sopt.makers.authentication.adapter.out.common.exception.CacheFailure.CACHE_NOT_CONFIGURED;
+import static sopt.makers.authentication.adapter.out.cache.exception.CacheFailure.CACHE_NOT_CONFIGURED;
 import static sopt.makers.authentication.common.constant.SystemConstant.USER_CACHE_NAME;
 
 import sopt.makers.authentication.adapter.out.cache.dto.CachedUserProfile;
+import sopt.makers.authentication.adapter.out.cache.exception.CacheException;
 import sopt.makers.authentication.adapter.out.cache.mapper.UserMapper;
-import sopt.makers.authentication.adapter.out.common.exception.CacheException;
 import sopt.makers.authentication.application.port.out.user.UserCacheRepository;
 import sopt.makers.authentication.domain.user.User;
 
@@ -39,6 +39,7 @@ public class UserCacheRepositoryImpl implements UserCacheRepository {
   public Map<Long, User> getAllPresent(List<Long> userIds) {
     Map<Object, Object> raw = cache.getAllPresent(userIds);
     return raw.entrySet().stream()
+        .filter(e -> e.getKey() instanceof Long && e.getValue() instanceof CachedUserProfile)
         .collect(
             Collectors.toMap(
                 e -> (Long) e.getKey(),
