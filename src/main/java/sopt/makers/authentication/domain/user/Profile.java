@@ -43,39 +43,4 @@ public record Profile(
         Optional.ofNullable(profileImage),
         true);
   }
-
-  public Profile updateName(final String name) {
-    return new Profile(
-        name, this.email, this.phone, this.birthday, this.profileImage, this.hasProfile);
-  }
-
-  public Profile updateEmail(final String email) {
-    return new Profile(
-        this.name,
-        Optional.ofNullable(email),
-        this.phone,
-        this.birthday,
-        this.profileImage,
-        this.hasProfile);
-  }
-
-  public Profile updatePhone(final String phone) {
-    return new Profile(
-        this.name, this.email, phone, this.birthday, this.profileImage, this.hasProfile);
-  }
-
-  public Profile updateBirthday(final LocalDate birthday) {
-    return new Profile(
-        this.name, this.email, this.phone, birthday, this.profileImage, this.hasProfile);
-  }
-
-  public Profile updateProfileImage(final String profileImage) {
-    return new Profile(
-        this.name,
-        this.email,
-        this.phone,
-        this.birthday,
-        Optional.ofNullable(profileImage),
-        this.hasProfile);
-  }
 }
