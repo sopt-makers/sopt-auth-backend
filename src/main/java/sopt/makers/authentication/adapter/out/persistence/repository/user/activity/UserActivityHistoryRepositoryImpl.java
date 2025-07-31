@@ -8,9 +8,6 @@ import sopt.makers.authentication.domain.user.User;
 
 import java.util.List;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,7 +16,6 @@ import lombok.RequiredArgsConstructor;
 @Repository
 @RequiredArgsConstructor
 public class UserActivityHistoryRepositoryImpl implements UserActivityHistoryRepository {
-  @PersistenceContext private final EntityManager entityManager;
   private final UserActivityHistoryRegister userActivityHistoryRegister;
 
   @Transactional
@@ -37,7 +33,5 @@ public class UserActivityHistoryRepositoryImpl implements UserActivityHistoryRep
             .map(activity -> UserActivityHistoryEntity.fromDomain(user, activity))
             .toList();
     userActivityHistoryRegister.saveAll(entities);
-    entityManager.flush();
-    entityManager.clear();
   }
 }

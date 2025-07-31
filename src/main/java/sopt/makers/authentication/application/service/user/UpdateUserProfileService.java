@@ -39,9 +39,9 @@ public class UpdateUserProfileService implements UpdateUserProfileUsecase {
     User user = userRepository.findByIdWithHistories(command.userId());
     validatePhoneIfChanged(user, command);
 
-    updateUser(user, command);
-    updateUserActivities(user, command);
-    updateUserCache(user.getId());
+    Profile updatedProfile = updateUserProfile(user, command);
+    ActivityList updatedActivities = updateUserActivities(user, command);
+    updateUserCache(user, updatedProfile, updatedActivities);
   }
 
   private void validatePhoneIfChanged(User user, UserProfileCommand command) {
@@ -53,22 +53,25 @@ public class UpdateUserProfileService implements UpdateUserProfileUsecase {
     }
   }
 
-  private void updateUser(User user, UserProfileCommand command) {
+  private Profile updateUserProfile(User user, UserProfileCommand command) {
     Profile updatedProfile =
         user.getProfile()
             .updateProfile(
                 command.email(), command.phone(), command.birthday(), command.profileImage());
     userRepository.update(user, updatedProfile);
+    return updatedProfile;
   }
 
-  private void updateUserActivities(User user, UserProfileCommand command) {
+  private ActivityList updateUserActivities(User user, UserProfileCommand command) {
     Map<Long, Activity> existingActivitiesById = findExistsActivities(user.getActivities());
     List<Activity> updatedActivities = updateActivities(command, existingActivitiesById);
     userActivityHistoryRepository.update(user, ActivityList.of(updatedActivities));
+    return ActivityList.of(updatedActivities);
   }
 
-  private void updateUserCache(Long userId) {
-    User updatedUser = userRepository.findByIdWithHistories(userId);
+  private void updateUserCache(User user, Profile updatedProfile, ActivityList updatedActivities) {
+    User updatedUser =
+        User.createUser(user.getId(), user.getSocialAccount(), updatedProfile, updatedActivities);
     userCacheRepository.put(updatedUser);
   }
 
