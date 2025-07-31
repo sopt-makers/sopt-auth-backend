@@ -47,7 +47,7 @@ public class UserCacheRepositoryImpl implements UserCacheRepository {
   }
 
   @Override
-  public void put(Long userId, User user) {
-    cache.put(userId, userMapper.toCache(user));
+  public void put(User user) {
+    cache.put(user.getId(), userMapper.toCache(user));
   }
 }

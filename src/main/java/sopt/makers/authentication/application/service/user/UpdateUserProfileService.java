@@ -69,7 +69,7 @@ public class UpdateUserProfileService implements UpdateUserProfileUsecase {
 
   private void updateUserCache(Long userId) {
     User updatedUser = userRepository.findByIdWithHistories(userId);
-    userCacheRepository.put(updatedUser.getId(), updatedUser);
+    userCacheRepository.put(updatedUser);
   }
 
   private Map<Long, Activity> findExistsActivities(ActivityList activityList) {

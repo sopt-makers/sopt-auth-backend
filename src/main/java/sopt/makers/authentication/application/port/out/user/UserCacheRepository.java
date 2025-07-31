@@ -8,5 +8,5 @@ import java.util.Map;
 public interface UserCacheRepository {
   Map<Long, User> getAllPresent(List<Long> userIds);
 
-  void put(Long userId, User user);
+  void put(User user);
 }

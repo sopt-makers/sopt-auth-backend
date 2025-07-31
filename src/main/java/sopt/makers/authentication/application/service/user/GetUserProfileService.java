@@ -24,7 +24,6 @@ public class GetUserProfileService implements GetUserProfileUsecase {
   @Override
   public List<UserProfileAndActivityInfo> getUserInformation(List<Long> userIds) {
     Map<Long, User> cache = userCacheRepository.getAllPresent(userIds);
-
     loadMissingUsers(userIds, cache);
     return userIds.stream()
         .map(cache::get)
@@ -43,7 +42,7 @@ public class GetUserProfileService implements GetUserProfileUsecase {
         .findAllById(missingIds)
         .forEach(
             user -> {
-              userCacheRepository.put(user.getId(), user);
+              userCacheRepository.put(user);
               cache.put(user.getId(), user);
             });
   }
