@@ -18,6 +18,7 @@ public final class UserResponse {
       LocalDate birthday,
       String phone,
       String email,
+      boolean hasProfile,
       Integer lastGeneration,
       List<UserActivityDetail> soptActivities) {
     public static UserProfileAndActivity from(
@@ -34,6 +35,7 @@ public final class UserResponse {
           userProfileAndActivityInfo.birthday(),
           userProfileAndActivityInfo.phone(),
           userProfileAndActivityInfo.email(),
+          userProfileAndActivityInfo.hasProfile(),
           userProfileAndActivityInfo.lastGeneration(),
           soptActivities);
     }

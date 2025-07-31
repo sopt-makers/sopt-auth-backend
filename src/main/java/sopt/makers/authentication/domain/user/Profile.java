@@ -10,43 +10,37 @@ public record Profile(
     Optional<String> email,
     @NotNull String phone,
     @NotNull LocalDate birthday,
-    Optional<String> profileImage) {
+    Optional<String> profileImage,
+    @NotNull boolean hasProfile) {
 
   public static Profile of(String name, String email, String phone, LocalDate birthday) {
-    return new Profile(name, Optional.ofNullable(email), phone, birthday, Optional.empty());
+    return new Profile(name, Optional.ofNullable(email), phone, birthday, Optional.empty(), false);
   }
 
   public static Profile of(
-      String name, String email, String phone, LocalDate birthday, String profileImage) {
+      String name,
+      String email,
+      String phone,
+      LocalDate birthday,
+      String profileImage,
+      boolean hasProfile) {
     return new Profile(
-        name, Optional.ofNullable(email), phone, birthday, Optional.ofNullable(profileImage));
+        name,
+        Optional.ofNullable(email),
+        phone,
+        birthday,
+        Optional.ofNullable(profileImage),
+        hasProfile);
   }
 
   public Profile updateProfile(
       String email, String phone, LocalDate birthday, String profileImage) {
     return new Profile(
-        this.name, Optional.ofNullable(email), phone, birthday, Optional.ofNullable(profileImage));
-  }
-
-  public Profile updateName(final String name) {
-    return new Profile(name, this.email, this.phone, this.birthday, this.profileImage);
-  }
-
-  public Profile updateEmail(final String email) {
-    return new Profile(
-        this.name, Optional.ofNullable(email), this.phone, this.birthday, this.profileImage);
-  }
-
-  public Profile updatePhone(final String phone) {
-    return new Profile(this.name, this.email, phone, this.birthday, this.profileImage);
-  }
-
-  public Profile updateBirthday(final LocalDate birthday) {
-    return new Profile(this.name, this.email, this.phone, birthday, this.profileImage);
-  }
-
-  public Profile updateProfileImage(final String profileImage) {
-    return new Profile(
-        this.name, this.email, this.phone, this.birthday, Optional.ofNullable(profileImage));
+        this.name,
+        Optional.ofNullable(email),
+        phone,
+        birthday,
+        Optional.ofNullable(profileImage),
+        true);
   }
 }
