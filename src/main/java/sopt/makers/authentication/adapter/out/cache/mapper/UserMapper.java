@@ -46,7 +46,8 @@ public class UserMapper {
             cached.email(),
             cached.phone(),
             cached.birthday(),
-            cached.profileImage());
+            cached.profileImage(),
+            true);
 
     List<Activity> activities = cached.activities().stream().map(this::toActivity).toList();
     ActivityList activityList = ActivityList.of(activities);
