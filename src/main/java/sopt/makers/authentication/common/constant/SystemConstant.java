@@ -31,4 +31,5 @@ public final class SystemConstant {
 
   public static final String ROLE = "ROLE_";
   public static final String INTERNAL_SERVICE = "INTERNAL_SERVICE";
+  public static final String USER_CACHE_NAME = "user";
 }

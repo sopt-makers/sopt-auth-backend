@@ -47,7 +47,7 @@ public final class UserResponse {
   }
 
   public record UserActivityDetail(long activityId, int generation, String part, String team) {
-    public static UserActivityDetail from(GetUserProfileUsecase.UserActivityinfo userActivityInfo) {
+    public static UserActivityDetail from(GetUserProfileUsecase.UserActivityInfo userActivityInfo) {
       return new UserActivityDetail(
           userActivityInfo.activityId(),
           userActivityInfo.generation(),
