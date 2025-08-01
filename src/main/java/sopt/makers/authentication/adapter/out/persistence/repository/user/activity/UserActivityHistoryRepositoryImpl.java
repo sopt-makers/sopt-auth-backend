@@ -14,9 +14,12 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Repository
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class UserActivityHistoryRepositoryImpl implements UserActivityHistoryRepository {
+
   private final UserActivityHistoryRegister userActivityHistoryRegister;
+  private final UserActivityHistoryRetriever userActivityHistoryRetriever;
 
   @Transactional
   @Override
@@ -26,12 +29,17 @@ public class UserActivityHistoryRepositoryImpl implements UserActivityHistoryRep
     userActivityHistoryRegister.save(userActivityHistoryEntity);
   }
 
+  public ActivityList findByUser(Long userId) {
+    return userActivityHistoryRetriever.findByUser(userId);
+  }
+
+  @Transactional
   @Override
   public void update(User user, ActivityList activityList) {
-    List<UserActivityHistoryEntity> entities =
+    List<UserActivityHistoryEntity> userActivityHistoryEntities =
         activityList.getActivities().stream()
             .map(activity -> UserActivityHistoryEntity.fromDomain(user, activity))
             .toList();
-    userActivityHistoryRegister.saveAll(entities);
+    userActivityHistoryRegister.saveAll(userActivityHistoryEntities);
   }
 }

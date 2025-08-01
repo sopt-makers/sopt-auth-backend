@@ -71,6 +71,7 @@ public class UserApiController implements UserApi {
       @Valid @RequestBody UserRequest.UserProfileInfo userProfileInfo) {
     userIdValidator.validateUserIds(userId);
     updateUserProfileUsecase.updateUserProfile(userProfileInfo.toCommand(userId));
+
     return ResponseUtil.success(UserSuccess.UPDATE_USER_PROFILE);
   }
 

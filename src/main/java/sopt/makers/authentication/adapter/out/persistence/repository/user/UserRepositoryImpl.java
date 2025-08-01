@@ -35,11 +35,6 @@ public class UserRepositoryImpl implements UserRepository {
   }
 
   @Override
-  public User findByIdWithHistories(Long userId) {
-    return userRetriever.findByIdWithHistories(userId).toDomain();
-  }
-
-  @Override
   public List<User> findAllById(List<Long> userIds) {
     return userRetriever.findAllById(userIds);
   }

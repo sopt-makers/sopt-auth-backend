@@ -35,12 +35,12 @@ public interface GetUserProfileUsecase {
       String email,
       boolean hasProfile,
       Integer lastGeneration,
-      List<UserActivityInfo> soptActivities) {
+      List<UserActivityinfo> soptActivities) {
 
     public static UserProfileAndActivityInfo of(User user, ActivityList activities) {
       Profile profile = user.getProfile();
-      List<UserActivityInfo> userActivityInfos =
-          activities.getActivities().stream().map(UserActivityInfo::of).toList();
+      List<UserActivityinfo> userActivityinfos =
+          activities.getActivities().stream().map(UserActivityinfo::of).toList();
 
       return new UserProfileAndActivityInfo(
           user.getId(),
@@ -51,13 +51,13 @@ public interface GetUserProfileUsecase {
           profile.email().orElse(null),
           profile.hasProfile(),
           activities.getLastActivity().getGeneration(),
-          userActivityInfos);
+          userActivityinfos);
     }
   }
 
-  record UserActivityInfo(long activityId, int generation, String part, String team) {
-    public static UserActivityInfo of(Activity activity) {
-      return new UserActivityInfo(
+  record UserActivityinfo(long activityId, int generation, String part, String team) {
+    public static UserActivityinfo of(Activity activity) {
+      return new UserActivityinfo(
           activity.getId(),
           activity.getGeneration(),
           activity.getPart().getName(),

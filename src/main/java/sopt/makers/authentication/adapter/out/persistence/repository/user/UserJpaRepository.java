@@ -33,9 +33,6 @@ public interface UserJpaRepository extends JpaRepository<UserEntity, Long> {
       "SELECT DISTINCT u FROM UserEntity u JOIN FETCH u.userActivityHistoryList WHERE u.id IN :userIds")
   List<UserEntity> findAllWithActivityHistoriesByIdIn(@Param("userIds") List<Long> userIds);
 
-  @Query("SELECT u FROM UserEntity u JOIN FETCH u.userActivityHistoryList WHERE u.id = :userId")
-  Optional<UserEntity> findWithActivityHistoriesById(@Param("userId") Long userId);
-
   @Query(
       "SELECT DISTINCT u "
           + "FROM UserEntity u "

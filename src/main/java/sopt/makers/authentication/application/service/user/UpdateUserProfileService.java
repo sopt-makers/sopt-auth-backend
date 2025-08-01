@@ -4,7 +4,6 @@ import static sopt.makers.authentication.domain.user.exception.UserFailure.NOT_F
 
 import sopt.makers.authentication.application.port.in.user.UpdateUserProfileUsecase;
 import sopt.makers.authentication.application.port.out.user.UserActivityHistoryRepository;
-import sopt.makers.authentication.application.port.out.user.UserCacheRepository;
 import sopt.makers.authentication.application.port.out.user.UserRepository;
 import sopt.makers.authentication.application.validator.auth.PhoneVerificationValidator;
 import sopt.makers.authentication.domain.auth.PhoneVerificationType;
@@ -31,48 +30,26 @@ public class UpdateUserProfileService implements UpdateUserProfileUsecase {
   private final UserRepository userRepository;
   private final UserActivityHistoryRepository userActivityHistoryRepository;
   private final PhoneVerificationValidator phoneVerificationValidator;
-  private final UserCacheRepository userCacheRepository;
 
   @Transactional
   @Override
   public void updateUserProfile(UserProfileCommand command) {
-    User user = userRepository.findByIdWithHistories(command.userId());
-    validatePhoneIfChanged(user, command);
-
-    Profile updatedProfile = updateUserProfile(user, command);
-    ActivityList updatedActivities = updateUserActivities(user, command);
-    updateUserCache(user, updatedProfile, updatedActivities);
-  }
-
-  private void validatePhoneIfChanged(User user, UserProfileCommand command) {
-    boolean isPhoneChanged = !user.getProfile().phone().equals(command.phone());
-
-    if (isPhoneChanged) {
+    User user = userRepository.findById(command.userId());
+    if (!user.getProfile().phone().equals(command.phone())) {
       phoneVerificationValidator.validate(
           user.getProfile().name(), command.phone(), PhoneVerificationType.CHANGE_PHONE_NUMBER);
     }
-  }
-
-  private Profile updateUserProfile(User user, UserProfileCommand command) {
+    ActivityList activityList = userActivityHistoryRepository.findByUser(user.getId());
     Profile updatedProfile =
         user.getProfile()
             .updateProfile(
-                command.email(), command.phone(), command.birthday(), command.profileImage());
-    userRepository.update(user, updatedProfile);
-    return updatedProfile;
-  }
-
-  private ActivityList updateUserActivities(User user, UserProfileCommand command) {
-    Map<Long, Activity> existingActivitiesById = findExistsActivities(user.getActivities());
+                command.email(), command.phone(),
+                command.birthday(), command.profileImage());
+    Map<Long, Activity> existingActivitiesById = findExistsActivities(activityList);
     List<Activity> updatedActivities = updateActivities(command, existingActivitiesById);
-    userActivityHistoryRepository.update(user, ActivityList.of(updatedActivities));
-    return ActivityList.of(updatedActivities);
-  }
 
-  private void updateUserCache(User user, Profile updatedProfile, ActivityList updatedActivities) {
-    User updatedUser =
-        User.createUser(user.getId(), user.getSocialAccount(), updatedProfile, updatedActivities);
-    userCacheRepository.put(updatedUser);
+    userActivityHistoryRepository.update(user, ActivityList.of(updatedActivities));
+    userRepository.update(user, updatedProfile);
   }
 
   private Map<Long, Activity> findExistsActivities(ActivityList activityList) {
