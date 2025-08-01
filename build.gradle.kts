@@ -68,6 +68,9 @@ dependencies {
 	runtimeOnly("io.jsonwebtoken:jjwt-impl:${jsonwebtokenVersion}")
 	runtimeOnly("io.jsonwebtoken:jjwt-jackson:${jsonwebtokenVersion}")
 
+	implementation("org.springframework.boot:spring-boot-starter-cache")
+	implementation("com.github.ben-manes.caffeine:caffeine")
+
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.security:spring-security-test")
 	testImplementation("com.tngtech.archunit:archunit:${archunitVersion}")
