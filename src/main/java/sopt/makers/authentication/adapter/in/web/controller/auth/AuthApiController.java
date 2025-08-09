@@ -15,7 +15,6 @@ import sopt.makers.authentication.application.port.in.auth.VerifyPhoneVerificati
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -90,7 +89,7 @@ public class AuthApiController implements AuthApi {
   @PostMapping("/refresh/web")
   public ResponseEntity<BaseResponse<?>> refreshTokenFromWeb(
       @RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken,
-      @CookieValue(REFRESH_TOKEN_HEADER) String refreshToken) {
+      @RequestHeader(REFRESH_TOKEN_HEADER) String refreshToken) {
     AuthRequest.AuthenticationTokenInfo authenticationTokenInfo =
         new AuthRequest.AuthenticationTokenInfo(accessToken, refreshToken);
 
