@@ -56,7 +56,7 @@ public class AuthApiController implements AuthApi {
   @PostMapping("/login/web")
   public ResponseEntity<BaseResponse<?>> authenticateSocialAuthInfoFromWeb(
       @RequestBody AuthRequest.AuthenticateSocialAuthInfo socialAuthInfo) {
-    AuthenticateSocialAccountUsecase.AuthenticateTokenInfo tokenInfo =
+    AuthenticateSocialAccountUsecase.AuthenticateSocialTokenInfo tokenInfo =
         authenticateSocialAccountUsecase.authenticate(socialAuthInfo.toCommand());
     HttpHeaders headers = cookieUtil.setRefreshToken(tokenInfo.refreshToken());
 
@@ -71,7 +71,7 @@ public class AuthApiController implements AuthApi {
   @PostMapping("/login/app")
   public ResponseEntity<BaseResponse<?>> authenticateSocialAuthInfoFromApp(
       @RequestBody AuthRequest.AuthenticateSocialAuthInfo socialAuthInfo) {
-    AuthenticateSocialAccountUsecase.AuthenticateTokenInfo tokenInfo =
+    AuthenticateSocialAccountUsecase.AuthenticateSocialTokenInfo tokenInfo =
         authenticateSocialAccountUsecase.authenticate(socialAuthInfo.toCommand());
 
     return ResponseUtil.success(

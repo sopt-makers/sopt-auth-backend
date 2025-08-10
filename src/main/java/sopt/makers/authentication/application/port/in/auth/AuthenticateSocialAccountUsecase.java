@@ -3,14 +3,20 @@ package sopt.makers.authentication.application.port.in.auth;
 import sopt.makers.authentication.domain.auth.AuthPlatform;
 
 public interface AuthenticateSocialAccountUsecase {
-  AuthenticateTokenInfo authenticate(AuthenticateSocialAccountCommand command);
+  AuthenticateSocialTokenInfo authenticate(AuthenticateSocialAccountCommand command);
 
   AuthenticateTokenInfo refresh(AuthenticateTokenInfo command);
 
-  record AuthenticateTokenInfo(String accessToken, String refreshToken, boolean hasProfile) {
-    public static AuthenticateTokenInfo of(
+  record AuthenticateTokenInfo(String accessToken, String refreshToken) {
+    public static AuthenticateTokenInfo of(String accessToken, String refreshToken) {
+      return new AuthenticateTokenInfo(accessToken, refreshToken);
+    }
+  }
+
+  record AuthenticateSocialTokenInfo(String accessToken, String refreshToken, boolean hasProfile) {
+    public static AuthenticateSocialTokenInfo of(
         String accessToken, String refreshToken, boolean hasProfile) {
-      return new AuthenticateTokenInfo(accessToken, refreshToken, hasProfile);
+      return new AuthenticateSocialTokenInfo(accessToken, refreshToken, hasProfile);
     }
   }
 
