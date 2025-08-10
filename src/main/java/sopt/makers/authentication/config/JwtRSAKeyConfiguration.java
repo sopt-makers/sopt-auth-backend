@@ -1,5 +1,6 @@
 package sopt.makers.authentication.config;
 
+import sopt.makers.authentication.adapter.out.jwt.decoder.LenientJwtDecoder;
 import sopt.makers.authentication.application.port.out.auth.RSAKeyManager;
 
 import java.security.interfaces.RSAPrivateKey;
@@ -7,8 +8,11 @@ import java.security.interfaces.RSAPublicKey;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.oauth2.core.OAuth2TokenValidator;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
+import org.springframework.security.oauth2.jwt.JwtIssuerValidator;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 
@@ -41,5 +45,17 @@ public class JwtRSAKeyConfiguration {
   @Bean
   public JwtDecoder jwtDecoder() {
     return NimbusJwtDecoder.withPublicKey(keyManager.getPublicKey()).build();
+  }
+
+  @Bean
+  public LenientJwtDecoder lenientJwtDecoder() {
+    NimbusJwtDecoder decoder = NimbusJwtDecoder.withPublicKey(keyManager.getPublicKey()).build();
+
+    String issuer = securityProperty.jwt().secret().issuer().issuerName();
+
+    OAuth2TokenValidator<Jwt> onlyIssuer = new JwtIssuerValidator(issuer);
+    decoder.setJwtValidator(onlyIssuer);
+
+    return decoder::decode;
   }
 }

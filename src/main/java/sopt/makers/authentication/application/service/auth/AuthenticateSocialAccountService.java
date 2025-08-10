@@ -50,7 +50,7 @@ public class AuthenticateSocialAccountService implements AuthenticateSocialAccou
 
     jwtAuthRefreshTokenProvider.parse(refreshToken);
     CustomAuthentication customAuthentication =
-        jwtAuthAccessTokenProvider.parse(command.accessToken());
+        jwtAuthAccessTokenProvider.parseLenient(command.accessToken());
 
     String renewedAccessToken = jwtAuthAccessTokenProvider.generateJwt(customAuthentication);
     String renewedRefreshToken = jwtAuthRefreshTokenProvider.generateJwt(renewedAccessToken);
