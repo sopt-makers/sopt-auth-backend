@@ -4,6 +4,7 @@ import static sopt.makers.authentication.adapter.out.jwt.provider.JwtTokenUtil.e
 
 import sopt.makers.authentication.adapter.in.web.security.authentication.CustomAuthentication;
 import sopt.makers.authentication.adapter.out.jwt.JwtProvider;
+import sopt.makers.authentication.adapter.out.jwt.decoder.LenientJwtDecoder;
 import sopt.makers.authentication.adapter.out.jwt.token.JwtAccessToken;
 import sopt.makers.authentication.config.SecurityProperty;
 
@@ -28,6 +29,7 @@ public class JwtAuthAccessTokenService implements JwtProvider<CustomAuthenticati
   private final JwtEncoder jwtEncoder;
   private final JwtDecoder jwtDecoder;
   private final SecurityProperty securityProperty;
+  private final LenientJwtDecoder lenientJwtDecoder;
 
   @Override
   public String generateJwt(CustomAuthentication authentication) {
@@ -74,6 +76,13 @@ public class JwtAuthAccessTokenService implements JwtProvider<CustomAuthenticati
   public CustomAuthentication parse(String requestToken) {
     String token = extract(requestToken);
     Jwt accessToken = jwtDecoder.decode(token);
+    JwtAccessToken jwtAccessToken = JwtAccessToken.createJwtAccessToken(accessToken);
+    return jwtAccessToken.parse();
+  }
+
+  public CustomAuthentication parseLenient(String requestToken) {
+    String token = extract(requestToken);
+    Jwt accessToken = lenientJwtDecoder.decode(token);
     JwtAccessToken jwtAccessToken = JwtAccessToken.createJwtAccessToken(accessToken);
     return jwtAccessToken.parse();
   }
