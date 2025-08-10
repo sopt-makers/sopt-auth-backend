@@ -39,15 +39,7 @@ public class JwtAuthRefreshTokenService implements JwtProvider<String> {
 
     JwtRefreshToken jwtRefreshToken = JwtRefreshToken.createRefreshToken(jwt);
     jwtRefreshToken.validateExpire();
-    JwtRefreshToken refreshedToken = refresh();
-
-    return refreshedToken.getToken();
-  }
-
-  private JwtRefreshToken refresh() {
-    JwtClaimsSet claimsSet = generateClaimSet();
-    Jwt jwt = jwtEncoder.encode(JwtEncoderParameters.from(claimsSet));
-    return JwtRefreshToken.createRefreshToken(jwt);
+    return jwtRefreshToken.getToken();
   }
 
   private JwtClaimsSet generateClaimSet() {
