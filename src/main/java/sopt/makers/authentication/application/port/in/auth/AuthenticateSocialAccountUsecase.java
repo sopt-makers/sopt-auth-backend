@@ -7,9 +7,10 @@ public interface AuthenticateSocialAccountUsecase {
 
   AuthenticateTokenInfo refresh(AuthenticateTokenInfo command);
 
-  record AuthenticateTokenInfo(String accessToken, String refreshToken) {
-    public static AuthenticateTokenInfo of(String accessToken, String refreshToken) {
-      return new AuthenticateTokenInfo(accessToken, refreshToken);
+  record AuthenticateTokenInfo(String accessToken, String refreshToken, boolean hasProfile) {
+    public static AuthenticateTokenInfo of(
+        String accessToken, String refreshToken, boolean hasProfile) {
+      return new AuthenticateTokenInfo(accessToken, refreshToken, hasProfile);
     }
   }
 

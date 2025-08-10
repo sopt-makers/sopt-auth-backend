@@ -41,7 +41,7 @@ public class AuthenticateSocialAccountService implements AuthenticateSocialAccou
     String accessToken = jwtAuthAccessTokenProvider.generateJwt(customAuthentication);
     String refreshToken = jwtAuthRefreshTokenProvider.generateJwt(accessToken);
 
-    return AuthenticateTokenInfo.of(accessToken, refreshToken);
+    return AuthenticateTokenInfo.of(accessToken, refreshToken, user.getProfile().hasProfile());
   }
 
   @Override
