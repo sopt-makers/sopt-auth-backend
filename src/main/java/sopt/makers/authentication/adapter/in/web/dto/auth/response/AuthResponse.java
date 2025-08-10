@@ -20,15 +20,29 @@ public final class AuthResponse {
     }
   }
 
-  public record AuthenticateSocialAuthInfoForWeb(String accessToken) {
-    public static AuthenticateSocialAuthInfoForWeb of(String accessToken) {
-      return new AuthenticateSocialAuthInfoForWeb(accessToken);
+  public record AuthenticateSocialAuthInfoForWeb(String accessToken, boolean hasProfile) {
+    public static AuthenticateSocialAuthInfoForWeb of(String accessToken, boolean hasProfile) {
+      return new AuthenticateSocialAuthInfoForWeb(accessToken, hasProfile);
     }
   }
 
-  public record AuthenticateSocialAuthInfoForApp(String accessToken, String refreshToken) {
-    public static AuthenticateSocialAuthInfoForApp of(String accessToken, String refreshToken) {
-      return new AuthenticateSocialAuthInfoForApp(accessToken, refreshToken);
+  public record AuthenticateSocialAuthInfoForApp(
+      String accessToken, String refreshToken, boolean hasProfile) {
+    public static AuthenticateSocialAuthInfoForApp of(
+        String accessToken, String refreshToken, boolean hasProfile) {
+      return new AuthenticateSocialAuthInfoForApp(accessToken, refreshToken, hasProfile);
+    }
+  }
+
+  public record AuthenticateAuthInfoForWeb(String accessToken) {
+    public static AuthenticateAuthInfoForWeb of(String accessToken) {
+      return new AuthenticateAuthInfoForWeb(accessToken);
+    }
+  }
+
+  public record AuthenticateAuthInfoForApp(String accessToken, String refreshToken) {
+    public static AuthenticateAuthInfoForApp of(String accessToken, String refreshToken) {
+      return new AuthenticateAuthInfoForApp(accessToken, refreshToken);
     }
   }
 

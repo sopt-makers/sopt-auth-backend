@@ -27,7 +27,7 @@ public class AuthenticateSocialAccountService implements AuthenticateSocialAccou
   private final JwtAuthRefreshTokenService jwtAuthRefreshTokenProvider;
 
   @Override
-  public AuthenticateTokenInfo authenticate(AuthenticateSocialAccountCommand command) {
+  public AuthenticateSocialTokenInfo authenticate(AuthenticateSocialAccountCommand command) {
     String authPlatformId =
         oAuthAuthenticator.getIdentifier(command.token(), command.authPlatform());
     User user =
@@ -41,7 +41,8 @@ public class AuthenticateSocialAccountService implements AuthenticateSocialAccou
     String accessToken = jwtAuthAccessTokenProvider.generateJwt(customAuthentication);
     String refreshToken = jwtAuthRefreshTokenProvider.generateJwt(accessToken);
 
-    return AuthenticateTokenInfo.of(accessToken, refreshToken);
+    return AuthenticateSocialTokenInfo.of(
+        accessToken, refreshToken, user.getProfile().hasProfile());
   }
 
   @Override

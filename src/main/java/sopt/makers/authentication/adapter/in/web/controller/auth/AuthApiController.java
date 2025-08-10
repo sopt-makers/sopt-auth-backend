@@ -56,27 +56,28 @@ public class AuthApiController implements AuthApi {
   @PostMapping("/login/web")
   public ResponseEntity<BaseResponse<?>> authenticateSocialAuthInfoFromWeb(
       @RequestBody AuthRequest.AuthenticateSocialAuthInfo socialAuthInfo) {
-    AuthenticateSocialAccountUsecase.AuthenticateTokenInfo tokenInfo =
+    AuthenticateSocialAccountUsecase.AuthenticateSocialTokenInfo tokenInfo =
         authenticateSocialAccountUsecase.authenticate(socialAuthInfo.toCommand());
     HttpHeaders headers = cookieUtil.setRefreshToken(tokenInfo.refreshToken());
 
     return ResponseUtil.success(
         AuthSuccess.AUTHENTICATE_SOCIAL_ACCOUNT,
         headers,
-        AuthResponse.AuthenticateSocialAuthInfoForWeb.of(tokenInfo.accessToken()));
+        AuthResponse.AuthenticateSocialAuthInfoForWeb.of(
+            tokenInfo.accessToken(), tokenInfo.hasProfile()));
   }
 
   @Override
   @PostMapping("/login/app")
   public ResponseEntity<BaseResponse<?>> authenticateSocialAuthInfoFromApp(
       @RequestBody AuthRequest.AuthenticateSocialAuthInfo socialAuthInfo) {
-    AuthenticateSocialAccountUsecase.AuthenticateTokenInfo tokenInfo =
+    AuthenticateSocialAccountUsecase.AuthenticateSocialTokenInfo tokenInfo =
         authenticateSocialAccountUsecase.authenticate(socialAuthInfo.toCommand());
 
     return ResponseUtil.success(
         AuthSuccess.AUTHENTICATE_SOCIAL_ACCOUNT,
         AuthResponse.AuthenticateSocialAuthInfoForApp.of(
-            tokenInfo.accessToken(), tokenInfo.refreshToken()));
+            tokenInfo.accessToken(), tokenInfo.refreshToken(), tokenInfo.hasProfile()));
   }
 
   @PostMapping("/signup")
@@ -100,7 +101,7 @@ public class AuthApiController implements AuthApi {
     return ResponseUtil.success(
         AuthSuccess.REFRESH_TOKEN,
         headers,
-        AuthResponse.AuthenticateSocialAuthInfoForWeb.of(tokenInfo.accessToken()));
+        AuthResponse.AuthenticateAuthInfoForWeb.of(tokenInfo.accessToken()));
   }
 
   @Override
@@ -113,7 +114,7 @@ public class AuthApiController implements AuthApi {
 
     return ResponseUtil.success(
         AuthSuccess.REFRESH_TOKEN,
-        AuthResponse.AuthenticateSocialAuthInfoForApp.of(
+        AuthResponse.AuthenticateAuthInfoForApp.of(
             tokenInfo.accessToken(), tokenInfo.refreshToken()));
   }
 }
