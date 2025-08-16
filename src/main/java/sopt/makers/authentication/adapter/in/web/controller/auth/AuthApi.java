@@ -4,7 +4,6 @@ import sopt.makers.authentication.adapter.in.web.common.BaseResponse;
 import sopt.makers.authentication.adapter.in.web.dto.auth.request.AuthRequest;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestHeader;
 
 public interface AuthApi {
 
@@ -23,9 +22,7 @@ public interface AuthApi {
   ResponseEntity<BaseResponse<?>> refreshTokenFromApp(
       AuthRequest.AuthenticationTokenInfo authenticationTokenInfo);
 
-  ResponseEntity<BaseResponse<?>> refreshTokenFromWeb(
-      @RequestHeader("accessToken") String accessToken,
-      @RequestHeader("refreshToken") String refreshToken);
+  ResponseEntity<BaseResponse<?>> refreshTokenFromWeb(String accessToken, String refreshToken);
 
   ResponseEntity<BaseResponse<?>> signUp(AuthRequest.SignUpInfo signUp);
 }
