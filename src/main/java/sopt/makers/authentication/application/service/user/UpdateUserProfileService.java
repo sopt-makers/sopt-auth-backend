@@ -54,10 +54,10 @@ public class UpdateUserProfileService implements UpdateUserProfileUsecase {
   }
 
   private Profile updateUserProfile(User user, UserProfileCommand command) {
+    Profile profile = user.getProfile();
     Profile updatedProfile =
-        user.getProfile()
-            .updateProfile(
-                command.email(), command.phone(), command.birthday(), command.profileImage());
+        profile.updateProfile(
+            command.email(), command.phone(), command.birthday(), command.profileImage());
     userRepository.update(user, updatedProfile);
     return updatedProfile;
   }
@@ -71,7 +71,12 @@ public class UpdateUserProfileService implements UpdateUserProfileUsecase {
 
   private void updateUserCache(User user, Profile updatedProfile, ActivityList updatedActivities) {
     User updatedUser =
-        User.createUser(user.getId(), user.getSocialAccount(), updatedProfile, updatedActivities);
+        User.createUser(
+            user.getId(),
+            user.getSocialAccount(),
+            updatedProfile,
+            updatedActivities,
+            user.isFirstLogin());
     userCacheRepository.put(updatedUser);
   }
 

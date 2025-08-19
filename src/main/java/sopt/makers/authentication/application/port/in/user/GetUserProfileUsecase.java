@@ -33,7 +33,6 @@ public interface GetUserProfileUsecase {
       LocalDate birthday,
       String phone,
       String email,
-      boolean hasProfile,
       Integer lastGeneration,
       List<UserActivityInfo> soptActivities) {
 
@@ -49,7 +48,6 @@ public interface GetUserProfileUsecase {
           profile.birthday(),
           profile.phone(),
           profile.email().orElse(null),
-          profile.hasProfile(),
           activities.getLastActivity().getGeneration(),
           userActivityInfos);
     }

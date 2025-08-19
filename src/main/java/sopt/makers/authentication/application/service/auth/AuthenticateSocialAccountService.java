@@ -40,9 +40,14 @@ public class AuthenticateSocialAccountService implements AuthenticateSocialAccou
             user.getId(), null, List.of(new SimpleGrantedAuthority(role.name())));
     String accessToken = jwtAuthAccessTokenProvider.generateJwt(customAuthentication);
     String refreshToken = jwtAuthRefreshTokenProvider.generateJwt(accessToken);
+    boolean isFirstLogin = user.isFirstLogin();
 
-    return AuthenticateSocialTokenInfo.of(
-        accessToken, refreshToken, user.getProfile().hasProfile());
+    if (isFirstLogin) {
+      User updatedUser = user.updateIsFirstLogin();
+      userRepository.update(updatedUser);
+    }
+
+    return AuthenticateSocialTokenInfo.of(accessToken, refreshToken, isFirstLogin);
   }
 
   @Override

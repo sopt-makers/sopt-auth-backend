@@ -46,13 +46,12 @@ public class UserMapper {
             cached.email(),
             cached.phone(),
             cached.birthday(),
-            cached.profileImage(),
-            true);
+            cached.profileImage());
 
     List<Activity> activities = cached.activities().stream().map(this::toActivity).toList();
     ActivityList activityList = ActivityList.of(activities);
 
-    return User.createUser(cached.userId(), null, profile, activityList);
+    return User.createUser(cached.userId(), null, profile, activityList, false);
   }
 
   public Activity toActivity(CachedUserActivity cached) {

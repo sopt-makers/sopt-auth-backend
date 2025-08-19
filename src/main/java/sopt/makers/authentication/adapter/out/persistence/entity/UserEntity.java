@@ -39,7 +39,7 @@ public class UserEntity extends BaseEntity {
   private LocalDate birthday;
   @NotNull private String authPlatformId;
   private String profileImage;
-  @NotNull private boolean hasProfile;
+  private boolean isFirstLogin;
 
   @NotNull
   @Enumerated(EnumType.STRING)
@@ -56,7 +56,7 @@ public class UserEntity extends BaseEntity {
       String profileImage,
       String authPlatformId,
       AuthPlatform authPlatformType,
-      boolean hasProfile) {
+      boolean isFirstLogin) {
     super();
     this.name = name;
     this.phone = phone;
@@ -65,7 +65,7 @@ public class UserEntity extends BaseEntity {
     this.profileImage = profileImage;
     this.authPlatformId = authPlatformId;
     this.authPlatformType = authPlatformType;
-    this.hasProfile = hasProfile;
+    this.isFirstLogin = isFirstLogin;
   }
 
   public static UserEntity fromDomain(final User user) {
@@ -81,7 +81,7 @@ public class UserEntity extends BaseEntity {
             profile.profileImage().orElse(null),
             socialAccount.authPlatformId(),
             socialAccount.authPlatformType(),
-            profile.hasProfile());
+            user.isFirstLogin());
     if (hasId) {
       userEntity.setId(user.getId());
     }
@@ -90,12 +90,13 @@ public class UserEntity extends BaseEntity {
 
   public User toDomain() {
     SocialAccount socialAccount = SocialAccount.of(authPlatformId, authPlatformType);
-    Profile profile = Profile.of(name, email, phone, birthday, profileImage, hasProfile);
+    Profile profile = Profile.of(name, email, phone, birthday, profileImage);
     if (userActivityHistoryList == null || userActivityHistoryList.isEmpty()) {
-      return User.createUser(super.getId(), socialAccount, profile);
+      return User.createUser(super.getId(), socialAccount, profile, isFirstLogin);
     }
     List<Activity> activityList =
         userActivityHistoryList.stream().map(UserActivityHistoryEntity::toDomain).toList();
-    return User.createUser(super.getId(), socialAccount, profile, ActivityList.of(activityList));
+    return User.createUser(
+        super.getId(), socialAccount, profile, ActivityList.of(activityList), isFirstLogin);
   }
 }

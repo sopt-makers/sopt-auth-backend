@@ -65,7 +65,7 @@ public class AuthApiController implements AuthApi {
         AuthSuccess.AUTHENTICATE_SOCIAL_ACCOUNT,
         headers,
         AuthResponse.AuthenticateSocialAuthInfoForWeb.of(
-            tokenInfo.accessToken(), tokenInfo.hasProfile()));
+            tokenInfo.accessToken(), tokenInfo.isFirstLogin()));
   }
 
   @Override
@@ -78,7 +78,7 @@ public class AuthApiController implements AuthApi {
     return ResponseUtil.success(
         AuthSuccess.AUTHENTICATE_SOCIAL_ACCOUNT,
         AuthResponse.AuthenticateSocialAuthInfoForApp.of(
-            tokenInfo.accessToken(), tokenInfo.refreshToken(), tokenInfo.hasProfile()));
+            tokenInfo.accessToken(), tokenInfo.refreshToken(), tokenInfo.isFirstLogin()));
   }
 
   @PostMapping("/signup")

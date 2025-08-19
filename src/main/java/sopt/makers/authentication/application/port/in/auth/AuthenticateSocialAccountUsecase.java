@@ -13,10 +13,11 @@ public interface AuthenticateSocialAccountUsecase {
     }
   }
 
-  record AuthenticateSocialTokenInfo(String accessToken, String refreshToken, boolean hasProfile) {
+  record AuthenticateSocialTokenInfo(
+      String accessToken, String refreshToken, boolean isFirstLogin) {
     public static AuthenticateSocialTokenInfo of(
-        String accessToken, String refreshToken, boolean hasProfile) {
-      return new AuthenticateSocialTokenInfo(accessToken, refreshToken, hasProfile);
+        String accessToken, String refreshToken, boolean isFirstLogin) {
+      return new AuthenticateSocialTokenInfo(accessToken, refreshToken, isFirstLogin);
     }
   }
 
