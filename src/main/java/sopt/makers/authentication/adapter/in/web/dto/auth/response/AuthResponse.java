@@ -20,17 +20,18 @@ public final class AuthResponse {
     }
   }
 
-  public record AuthenticateSocialAuthInfoForWeb(String accessToken, boolean hasProfile) {
-    public static AuthenticateSocialAuthInfoForWeb of(String accessToken, boolean hasProfile) {
-      return new AuthenticateSocialAuthInfoForWeb(accessToken, hasProfile);
+  public record AuthenticateSocialAuthInfoForWeb(
+      String accessToken, @JsonProperty("isFirstLogin") boolean isFirstLogin) {
+    public static AuthenticateSocialAuthInfoForWeb of(String accessToken, boolean isFirstLogin) {
+      return new AuthenticateSocialAuthInfoForWeb(accessToken, isFirstLogin);
     }
   }
 
   public record AuthenticateSocialAuthInfoForApp(
-      String accessToken, String refreshToken, boolean hasProfile) {
+      String accessToken, String refreshToken, @JsonProperty("isFirstLogin") boolean isFirstLogin) {
     public static AuthenticateSocialAuthInfoForApp of(
-        String accessToken, String refreshToken, boolean hasProfile) {
-      return new AuthenticateSocialAuthInfoForApp(accessToken, refreshToken, hasProfile);
+        String accessToken, String refreshToken, boolean isFirstLogin) {
+      return new AuthenticateSocialAuthInfoForApp(accessToken, refreshToken, isFirstLogin);
     }
   }
 
