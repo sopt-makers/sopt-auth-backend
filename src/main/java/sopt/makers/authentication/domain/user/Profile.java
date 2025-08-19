@@ -34,13 +34,13 @@ public record Profile(
   }
 
   public Profile updateProfile(
-      String email, String phone, LocalDate birthday, String profileImage) {
+      String email, String phone, LocalDate birthday, String profileImage, boolean isFirstLogin) {
     return new Profile(
         this.name,
         Optional.ofNullable(email),
         phone,
         birthday,
         Optional.ofNullable(profileImage),
-        this.isFirstLogin);
+        isFirstLogin);
   }
 }

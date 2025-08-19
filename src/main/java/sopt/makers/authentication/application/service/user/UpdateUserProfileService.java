@@ -54,10 +54,14 @@ public class UpdateUserProfileService implements UpdateUserProfileUsecase {
   }
 
   private Profile updateUserProfile(User user, UserProfileCommand command) {
+    Profile profile = user.getProfile();
     Profile updatedProfile =
-        user.getProfile()
-            .updateProfile(
-                command.email(), command.phone(), command.birthday(), command.profileImage());
+        profile.updateProfile(
+            command.email(),
+            command.phone(),
+            command.birthday(),
+            command.profileImage(),
+            profile.isFirstLogin());
     userRepository.update(user, updatedProfile);
     return updatedProfile;
   }
