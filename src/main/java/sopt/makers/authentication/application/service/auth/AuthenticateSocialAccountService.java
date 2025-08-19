@@ -42,7 +42,7 @@ public class AuthenticateSocialAccountService implements AuthenticateSocialAccou
     String refreshToken = jwtAuthRefreshTokenProvider.generateJwt(accessToken);
 
     return AuthenticateSocialTokenInfo.of(
-        accessToken, refreshToken, user.getProfile().hasProfile());
+        accessToken, refreshToken, user.getProfile().isFirstLogin());
   }
 
   @Override
