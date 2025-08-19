@@ -41,9 +41,9 @@ public class AuthenticateSocialAccountService implements AuthenticateSocialAccou
             user.getId(), null, List.of(new SimpleGrantedAuthority(role.name())));
     String accessToken = jwtAuthAccessTokenProvider.generateJwt(customAuthentication);
     String refreshToken = jwtAuthRefreshTokenProvider.generateJwt(accessToken);
-    boolean isFirstLoginUser = user.getProfile().isFirstLogin();
+    boolean isFirstLogin = user.getProfile().isFirstLogin();
 
-    if (isFirstLoginUser) {
+    if (isFirstLogin) {
       Profile profile = user.getProfile();
       Profile updatedProfile =
           profile.updateProfile(
@@ -53,10 +53,9 @@ public class AuthenticateSocialAccountService implements AuthenticateSocialAccou
               profile.profileImage().orElse(null),
               false);
       userRepository.update(user, updatedProfile);
-      return AuthenticateSocialTokenInfo.of(accessToken, refreshToken, true);
     }
 
-    return AuthenticateSocialTokenInfo.of(accessToken, refreshToken, false);
+    return AuthenticateSocialTokenInfo.of(accessToken, refreshToken, isFirstLogin);
   }
 
   @Override
