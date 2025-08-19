@@ -10,37 +10,21 @@ public record Profile(
     Optional<String> email,
     @NotNull String phone,
     @NotNull LocalDate birthday,
-    Optional<String> profileImage,
-    boolean isFirstLogin) {
+    Optional<String> profileImage) {
 
   public static Profile of(String name, String email, String phone, LocalDate birthday) {
-    return new Profile(name, Optional.ofNullable(email), phone, birthday, Optional.empty(), true);
+    return new Profile(name, Optional.ofNullable(email), phone, birthday, Optional.empty());
   }
 
   public static Profile of(
-      String name,
-      String email,
-      String phone,
-      LocalDate birthday,
-      String profileImage,
-      boolean isFirstLogin) {
+      String name, String email, String phone, LocalDate birthday, String profileImage) {
     return new Profile(
-        name,
-        Optional.ofNullable(email),
-        phone,
-        birthday,
-        Optional.ofNullable(profileImage),
-        isFirstLogin);
+        name, Optional.ofNullable(email), phone, birthday, Optional.ofNullable(profileImage));
   }
 
   public Profile updateProfile(
-      String email, String phone, LocalDate birthday, String profileImage, boolean isFirstLogin) {
+      String email, String phone, LocalDate birthday, String profileImage) {
     return new Profile(
-        this.name,
-        Optional.ofNullable(email),
-        phone,
-        birthday,
-        Optional.ofNullable(profileImage),
-        isFirstLogin);
+        this.name, Optional.ofNullable(email), phone, birthday, Optional.ofNullable(profileImage));
   }
 }

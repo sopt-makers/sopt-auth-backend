@@ -81,7 +81,7 @@ public class UserEntity extends BaseEntity {
             profile.profileImage().orElse(null),
             socialAccount.authPlatformId(),
             socialAccount.authPlatformType(),
-            profile.isFirstLogin());
+            user.isFirstLogin());
     if (hasId) {
       userEntity.setId(user.getId());
     }
@@ -90,12 +90,13 @@ public class UserEntity extends BaseEntity {
 
   public User toDomain() {
     SocialAccount socialAccount = SocialAccount.of(authPlatformId, authPlatformType);
-    Profile profile = Profile.of(name, email, phone, birthday, profileImage, isFirstLogin);
+    Profile profile = Profile.of(name, email, phone, birthday, profileImage);
     if (userActivityHistoryList == null || userActivityHistoryList.isEmpty()) {
       return User.createUser(super.getId(), socialAccount, profile);
     }
     List<Activity> activityList =
         userActivityHistoryList.stream().map(UserActivityHistoryEntity::toDomain).toList();
-    return User.createUser(super.getId(), socialAccount, profile, ActivityList.of(activityList));
+    return User.createUser(
+        super.getId(), socialAccount, profile, ActivityList.of(activityList), isFirstLogin);
   }
 }

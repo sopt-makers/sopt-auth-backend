@@ -29,6 +29,8 @@ public interface UserRepository {
 
   void update(User user, Profile profile);
 
+  void update(User user);
+
   boolean existsByPhone(String phone);
 
   Page<User> findAllByGenerationAndPartAndNameAndTeam(

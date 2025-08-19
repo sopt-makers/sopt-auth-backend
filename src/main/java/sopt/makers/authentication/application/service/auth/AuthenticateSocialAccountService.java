@@ -8,7 +8,6 @@ import sopt.makers.authentication.application.port.out.auth.OAuthAuthenticator;
 import sopt.makers.authentication.application.port.out.user.UserRepository;
 import sopt.makers.authentication.domain.auth.SocialAccount;
 import sopt.makers.authentication.domain.user.ActivityList;
-import sopt.makers.authentication.domain.user.Profile;
 import sopt.makers.authentication.domain.user.Role;
 import sopt.makers.authentication.domain.user.User;
 
@@ -41,18 +40,11 @@ public class AuthenticateSocialAccountService implements AuthenticateSocialAccou
             user.getId(), null, List.of(new SimpleGrantedAuthority(role.name())));
     String accessToken = jwtAuthAccessTokenProvider.generateJwt(customAuthentication);
     String refreshToken = jwtAuthRefreshTokenProvider.generateJwt(accessToken);
-    boolean isFirstLogin = user.getProfile().isFirstLogin();
+    boolean isFirstLogin = user.isFirstLogin();
 
     if (isFirstLogin) {
-      Profile profile = user.getProfile();
-      Profile updatedProfile =
-          profile.updateProfile(
-              profile.email().orElse(null),
-              profile.phone(),
-              profile.birthday(),
-              profile.profileImage().orElse(null),
-              false);
-      userRepository.update(user, updatedProfile);
+      User updatedUser = user.updateIsFirstLogin();
+      userRepository.update(updatedUser);
     }
 
     return AuthenticateSocialTokenInfo.of(accessToken, refreshToken, isFirstLogin);

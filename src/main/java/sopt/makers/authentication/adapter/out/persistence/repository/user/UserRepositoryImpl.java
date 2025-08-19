@@ -73,6 +73,13 @@ public class UserRepositoryImpl implements UserRepository {
     userRegister.save(userEntity);
   }
 
+  @Transactional
+  @Override
+  public void update(User user) {
+    UserEntity userEntity = UserEntity.fromDomain(user);
+    userRegister.save(userEntity);
+  }
+
   @Override
   public boolean existsByPhone(String phone) {
     return userRetriever.existsByPhone(phone);
