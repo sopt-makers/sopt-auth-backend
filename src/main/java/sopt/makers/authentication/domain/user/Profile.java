@@ -11,10 +11,10 @@ public record Profile(
     @NotNull String phone,
     @NotNull LocalDate birthday,
     Optional<String> profileImage,
-    @NotNull boolean hasProfile) {
+    boolean isFirstLogin) {
 
   public static Profile of(String name, String email, String phone, LocalDate birthday) {
-    return new Profile(name, Optional.ofNullable(email), phone, birthday, Optional.empty(), false);
+    return new Profile(name, Optional.ofNullable(email), phone, birthday, Optional.empty(), true);
   }
 
   public static Profile of(
@@ -23,14 +23,14 @@ public record Profile(
       String phone,
       LocalDate birthday,
       String profileImage,
-      boolean hasProfile) {
+      boolean isFirstLogin) {
     return new Profile(
         name,
         Optional.ofNullable(email),
         phone,
         birthday,
         Optional.ofNullable(profileImage),
-        hasProfile);
+        isFirstLogin);
   }
 
   public Profile updateProfile(
@@ -41,6 +41,6 @@ public record Profile(
         phone,
         birthday,
         Optional.ofNullable(profileImage),
-        true);
+        this.isFirstLogin);
   }
 }
