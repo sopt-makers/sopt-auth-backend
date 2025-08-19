@@ -92,7 +92,7 @@ public class UserEntity extends BaseEntity {
     SocialAccount socialAccount = SocialAccount.of(authPlatformId, authPlatformType);
     Profile profile = Profile.of(name, email, phone, birthday, profileImage);
     if (userActivityHistoryList == null || userActivityHistoryList.isEmpty()) {
-      return User.createUser(super.getId(), socialAccount, profile);
+      return User.createUser(super.getId(), socialAccount, profile, isFirstLogin);
     }
     List<Activity> activityList =
         userActivityHistoryList.stream().map(UserActivityHistoryEntity::toDomain).toList();

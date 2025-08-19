@@ -27,12 +27,16 @@ public class User {
   }
 
   public static User createUser(
-      final Long id, final SocialAccount socialAccount, final Profile profile) {
+      final Long id,
+      final SocialAccount socialAccount,
+      final Profile profile,
+      boolean isFirstLogin) {
     return User.builder()
         .id(id)
         .socialAccount(socialAccount)
         .profile(profile)
         .activities(new ActivityList())
+        .isFirstLogin(isFirstLogin)
         .build();
   }
 
@@ -47,6 +51,7 @@ public class User {
         .socialAccount(socialAccount)
         .profile(profile)
         .activities(activities)
+        .isFirstLogin(isFirstLogin)
         .build();
   }
 
@@ -61,7 +66,7 @@ public class User {
   }
 
   public User updateProfile(final Profile profile) {
-    return User.createUser(this.id, this.socialAccount, profile);
+    return User.createUser(this.id, this.socialAccount, profile, this.isFirstLogin);
   }
 
   public User updateIsFirstLogin() {
