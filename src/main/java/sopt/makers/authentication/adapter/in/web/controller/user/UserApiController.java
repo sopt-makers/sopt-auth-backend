@@ -15,7 +15,6 @@ import sopt.makers.authentication.adapter.in.web.util.ResponseUtil;
 import sopt.makers.authentication.application.port.in.user.GetUserProfileUsecase;
 import sopt.makers.authentication.application.port.in.user.UpdateUserProfileUsecase;
 import sopt.makers.authentication.application.validator.user.UserIdValidator;
-import sopt.makers.authentication.application.validator.user.UserSearchConditionValidator;
 import sopt.makers.authentication.domain.user.Part;
 import sopt.makers.authentication.domain.user.Team;
 import sopt.makers.authentication.domain.user.UserOrderBy;
@@ -48,7 +47,6 @@ public class UserApiController implements UserApi {
   private final GetUserProfileUsecase getUserProfileUsecase;
   private final UpdateUserProfileUsecase updateUserProfileUsecase;
   private final UserIdValidator userIdValidator;
-  private final UserSearchConditionValidator userSearchConditionValidator;
 
   @GetMapping("")
   public ResponseEntity<BaseResponse<?>> getUserProfile(
@@ -85,7 +83,6 @@ public class UserApiController implements UserApi {
       @RequestParam(defaultValue = DEFAULT_OFFSET) @Min(0) int offset,
       @RequestParam(defaultValue = DEFAULT_LIMIT) @Positive @Max(MAX_LIMIT) int limit,
       @RequestParam(defaultValue = DEFAULT_ORDER_BY) UserOrderBy orderBy) {
-    userSearchConditionValidator.validateUserSearchCondition(generation, part, name, team);
     GetUserProfileUsecase.PaginatedUserProfiles userInformation =
         getUserProfileUsecase.getUserInformationByFilters(
             generation, part, name, team, offset, limit, orderBy);
