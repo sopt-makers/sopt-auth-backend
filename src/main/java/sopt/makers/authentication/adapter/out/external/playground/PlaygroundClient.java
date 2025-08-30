@@ -36,9 +36,14 @@ public class PlaygroundClient {
   public void createMemberProfile(Long memberId) {
     String requestBody = gson.toJson(Map.of(FIELD_USER_ID, memberId));
     RequestBody body = RequestBody.create(requestBody, JSON);
+    okhttp3.HttpUrl url =
+        okhttp3.HttpUrl.parse(playgroundProperty.url())
+            .newBuilder()
+            .addPathSegments(ENDPOINT_CREATE_PROFILE)
+            .build();
     Request httpRequest =
         new Request.Builder()
-            .url(playgroundProperty.url() + ENDPOINT_CREATE_PROFILE)
+            .url(url)
             .addHeader(HEADER_API_KEY, playgroundProperty.key())
             .addHeader(HEADER_CONTENT_TYPE, CONTENT_TYPE_JSON)
             .post(body)
