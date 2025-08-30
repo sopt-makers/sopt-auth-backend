@@ -1,8 +1,8 @@
 package sopt.makers.authentication.domain.auth;
 
-import static sopt.makers.authentication.support.code.domain.failure.AuthFailure.INVALID_SOCIAL_PLATFORM;
+import static sopt.makers.authentication.domain.auth.exception.AuthFailure.INVALID_SOCIAL_PLATFORM;
 
-import sopt.makers.authentication.support.exception.domain.AuthException;
+import sopt.makers.authentication.domain.auth.exception.AuthException;
 
 import java.util.Arrays;
 

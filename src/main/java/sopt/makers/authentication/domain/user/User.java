@@ -15,22 +15,14 @@ public class User {
   private final Profile profile;
   private final SocialAccount socialAccount;
   private ActivityList activities;
+  private final boolean isFirstLogin;
 
   public static User createNewUser(final SocialAccount socialAccount, final Profile profile) {
     return User.builder()
         .socialAccount(socialAccount)
         .profile(profile)
         .activities(new ActivityList())
-        .build();
-  }
-
-  public static User createUser(
-      final Long id, final SocialAccount socialAccount, final Profile profile) {
-    return User.builder()
-        .id(id)
-        .socialAccount(socialAccount)
-        .profile(profile)
-        .activities(new ActivityList())
+        .isFirstLogin(true)
         .build();
   }
 
@@ -38,12 +30,28 @@ public class User {
       final Long id,
       final SocialAccount socialAccount,
       final Profile profile,
-      final ActivityList activities) {
+      boolean isFirstLogin) {
+    return User.builder()
+        .id(id)
+        .socialAccount(socialAccount)
+        .profile(profile)
+        .activities(new ActivityList())
+        .isFirstLogin(isFirstLogin)
+        .build();
+  }
+
+  public static User createUser(
+      final Long id,
+      final SocialAccount socialAccount,
+      final Profile profile,
+      final ActivityList activities,
+      boolean isFirstLogin) {
     return User.builder()
         .id(id)
         .socialAccount(socialAccount)
         .profile(profile)
         .activities(activities)
+        .isFirstLogin(isFirstLogin)
         .build();
   }
 
@@ -53,11 +61,22 @@ public class User {
         .socialAccount(socialAccount)
         .profile(this.profile)
         .activities(this.activities)
+        .isFirstLogin(this.isFirstLogin)
         .build();
   }
 
   public User updateProfile(final Profile profile) {
-    return User.createUser(this.id, socialAccount, profile);
+    return User.createUser(this.id, this.socialAccount, profile, this.isFirstLogin);
+  }
+
+  public User updateIsFirstLogin() {
+    return User.builder()
+        .id(this.id)
+        .socialAccount(this.socialAccount)
+        .profile(this.profile)
+        .activities(this.activities)
+        .isFirstLogin(false)
+        .build();
   }
 
   public void joinActivity(final Activity activity) {

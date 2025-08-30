@@ -26,23 +26,12 @@ public class PhoneVerification {
   private final LocalDateTime createdAt;
   private final boolean isVerified;
 
-  public static PhoneVerification of(
-      Long id,
-      String name,
-      String phone,
-      PhoneVerificationType type,
-      String code,
-      LocalDateTime createdAt,
-      boolean isVerified) {
+  public static PhoneVerification of(String phone, PhoneVerificationType type, String code) {
     VerificationCode verificationCode = VerificationCode.of(code);
     return PhoneVerification.builder()
-        .id(id)
-        .name(name)
         .phone(phone)
         .verificationType(type)
         .verificationCode(verificationCode)
-        .createdAt(createdAt)
-        .isVerified(isVerified)
         .build();
   }
 
@@ -56,6 +45,26 @@ public class PhoneVerification {
         .verificationCode(verificationCode)
         .createdAt(null)
         .isVerified(false)
+        .build();
+  }
+
+  public static PhoneVerification of(
+      Long id,
+      String name,
+      String phone,
+      PhoneVerificationType type,
+      String code,
+      LocalDateTime createdAt,
+      boolean isVerified) {
+    VerificationCode verificationCode = VerificationCode.of(code);
+    return PhoneVerification.builder()
+        .id(id)
+        .name(name)
+        .phone(phone)
+        .verificationCode(verificationCode)
+        .verificationType(type)
+        .createdAt(createdAt)
+        .isVerified(isVerified)
         .build();
   }
 
