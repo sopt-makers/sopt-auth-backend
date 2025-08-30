@@ -29,12 +29,11 @@ public class PlaygroundClient {
   private static final String CONTENT_TYPE_JSON = "application/json";
   private static final String ENDPOINT_CREATE_PROFILE = "/internal/api/v1/members/profile";
   private static final String FIELD_USER_ID = "userId";
-
   private final PlaygroundProperty playgroundProperty;
-  private final OkHttpClient client = new OkHttpClient();
+  private final OkHttpClient client;
+  private final Gson gson;
 
   public void createMemberProfile(Long memberId) {
-    Gson gson = new Gson();
     String requestBody = gson.toJson(Map.of(FIELD_USER_ID, memberId));
     RequestBody body = RequestBody.create(requestBody, JSON);
     Request httpRequest =
