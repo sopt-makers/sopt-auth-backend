@@ -23,7 +23,7 @@ public class UpdateSocialAccountService implements UpdateSocialAccountUsecase {
   public boolean update(UpdateSocialAccountCommand command) {
     User user = userRepository.findByPhone(command.phone());
     phoneVerificationValidator.validate(
-        user.getProfile().name(), command.phone(), PhoneVerificationType.CHANGE_SOCIAL_PLATFORM);
+        command.phone(), PhoneVerificationType.CHANGE_SOCIAL_PLATFORM);
     String authPlatformId =
         oAuthAuthenticator.getIdentifier(command.token(), command.authPlatform());
     SocialAccount updatedSocialAccount = SocialAccount.of(authPlatformId, command.authPlatform());
