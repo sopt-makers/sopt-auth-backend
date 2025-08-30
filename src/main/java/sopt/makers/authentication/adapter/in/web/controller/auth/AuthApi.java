@@ -25,4 +25,6 @@ public interface AuthApi {
   ResponseEntity<BaseResponse<?>> refreshTokenFromWeb(String accessToken, String refreshToken);
 
   ResponseEntity<BaseResponse<?>> signUp(AuthRequest.SignUpInfo signUp);
+
+  ResponseEntity<BaseResponse<?>> withdraw(String accessToken);
 }

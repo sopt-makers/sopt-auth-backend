@@ -4,6 +4,7 @@ import static sopt.makers.authentication.adapter.out.jwt.JwtConstant.REFRESH_TOK
 
 import sopt.makers.authentication.adapter.in.web.common.BaseResponse;
 import sopt.makers.authentication.adapter.in.web.common.code.AuthSuccess;
+import sopt.makers.authentication.adapter.in.web.common.code.UserSuccess;
 import sopt.makers.authentication.adapter.in.web.dto.auth.request.AuthRequest;
 import sopt.makers.authentication.adapter.in.web.dto.auth.response.AuthResponse;
 import sopt.makers.authentication.adapter.in.web.util.CookieUtil;
@@ -16,6 +17,7 @@ import sopt.makers.authentication.application.port.in.auth.VerifyPhoneVerificati
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -117,5 +119,12 @@ public class AuthApiController implements AuthApi {
         AuthSuccess.REFRESH_TOKEN,
         AuthResponse.AuthenticateAuthInfoForApp.of(
             tokenInfo.accessToken(), tokenInfo.refreshToken()));
+  }
+
+  @Override
+  @DeleteMapping("")
+  public ResponseEntity<BaseResponse<?>> withdraw(
+      @RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken) {
+    return ResponseUtil.success(UserSuccess.WITHDRAW_USER);
   }
 }
