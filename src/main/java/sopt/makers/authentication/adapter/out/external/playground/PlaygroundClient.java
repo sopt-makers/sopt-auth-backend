@@ -27,7 +27,7 @@ public class PlaygroundClient {
   private static final String HEADER_API_KEY = "apiKey";
   private static final String HEADER_CONTENT_TYPE = "Content-Type";
   private static final String CONTENT_TYPE_JSON = "application/json";
-  private static final String ENDPOINT_CREATE_PROFILE = "/internal/api/v1/members/profile";
+  private static final String ENDPOINT_CREATE_PROFILE = "internal/api/v1/members/profile";
   private static final String FIELD_USER_ID = "userId";
   private final PlaygroundProperty playgroundProperty;
   private final OkHttpClient client;
