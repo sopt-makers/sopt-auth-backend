@@ -68,10 +68,10 @@ class GabiaClient {
             .build();
 
     Request request = buildPostRequest(URI_SEND_SMS, authToken, requestBody);
-    Response response = executeRequest(request);
-    String fieldValue = extractSerializedDataIn(RESPONSE_SUCCESS_FLAG_FIELD, response);
-
-    validateResponseData(fieldValue, RESPONSE_SUCCESS_FLAG_VALUE);
+    try (Response response = executeRequest(request)) {
+      String fieldValue = extractSerializedDataIn(RESPONSE_SUCCESS_FLAG_FIELD, response);
+      validateResponseData(fieldValue, RESPONSE_SUCCESS_FLAG_VALUE);
+    }
   }
 
   protected void sendLmsMessage(String receiver, String title, String content) {
@@ -89,10 +89,10 @@ class GabiaClient {
             .build();
 
     Request request = buildPostRequest(URI_SEND_LMS, authToken, requestBody);
-    Response response = executeRequest(request);
-    String fieldValue = extractSerializedDataIn(RESPONSE_SUCCESS_FLAG_FIELD, response);
-
-    validateResponseData(fieldValue, RESPONSE_SUCCESS_FLAG_VALUE);
+    try (Response response = executeRequest(request)) {
+      String fieldValue = extractSerializedDataIn(RESPONSE_SUCCESS_FLAG_FIELD, response);
+      validateResponseData(fieldValue, RESPONSE_SUCCESS_FLAG_VALUE);
+    }
   }
 
   private String authenticate() {
@@ -103,11 +103,11 @@ class GabiaClient {
             .build();
 
     Request request = buildPostRequest(URI_OAUTH_TOKEN, gabiaProperty.sms().key(), requestBody);
-    Response response = executeRequest(request);
-
-    String authValue = extractSerializedDataIn(RESPONSE_ACCESS_TOKEN_FIELD, response);
-    validateResponseData(authValue);
-    return authValue;
+    try (Response response = executeRequest(request)) {
+      String authValue = extractSerializedDataIn(RESPONSE_ACCESS_TOKEN_FIELD, response);
+      validateResponseData(authValue);
+      return authValue;
+    }
   }
 
   private String extractSerializedDataIn(String dataKey, Response response) {
