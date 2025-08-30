@@ -16,16 +16,15 @@ import lombok.RequiredArgsConstructor;
 public class PhoneVerificationValidator {
   private final PhoneVerificationRepository phoneVerificationRepository;
 
-  public void validate(String name, String phone, PhoneVerificationType type) {
-    boolean isVerified = findPhoneVerification(name, phone, type).isVerified();
+  public void validate(String phone, PhoneVerificationType type) {
+    boolean isVerified = findPhoneVerification(phone, type).isVerified();
     if (!isVerified) {
       throw new AuthException(PHONE_NOT_VERIFIED);
     }
   }
 
-  private PhoneVerification findPhoneVerification(
-      String name, String phone, PhoneVerificationType type) {
-    PhoneVerification phoneVerification = PhoneVerification.of(name, phone, type, null);
-    return phoneVerificationRepository.findLatestByPhoneNameType(phoneVerification);
+  private PhoneVerification findPhoneVerification(String phone, PhoneVerificationType type) {
+    PhoneVerification phoneVerification = PhoneVerification.of(null, phone, type, null);
+    return phoneVerificationRepository.findByPhoneVerification(phoneVerification);
   }
 }

@@ -8,7 +8,8 @@ import java.util.Arrays;
 
 public enum AuthPlatform {
   GOOGLE,
-  APPLE;
+  APPLE,
+  FACEBOOK;
 
   public static AuthPlatform find(final String platform) {
 

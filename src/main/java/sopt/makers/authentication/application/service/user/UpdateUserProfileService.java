@@ -49,7 +49,7 @@ public class UpdateUserProfileService implements UpdateUserProfileUsecase {
 
     if (isPhoneChanged) {
       phoneVerificationValidator.validate(
-          user.getProfile().name(), command.phone(), PhoneVerificationType.CHANGE_PHONE_NUMBER);
+          command.phone(), PhoneVerificationType.CHANGE_PHONE_NUMBER);
     }
   }
 
