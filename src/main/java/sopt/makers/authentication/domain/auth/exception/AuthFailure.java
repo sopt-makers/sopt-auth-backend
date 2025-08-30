@@ -30,7 +30,7 @@ public enum AuthFailure implements FailureCode {
   NOT_FOUND_PHONE_VERIFICATION(HttpStatus.NOT_FOUND, "존재하지 않는 번호 인증 이력입니다."),
   NOT_FOUND_USER_WITH_SOCIAL_ACCOUNT(HttpStatus.BAD_REQUEST, "소셜 계정 정보와 일치하는 회원이 없습니다."),
   NOT_FOUND_AVAILABLE_PUBLIC_KEY_SET(HttpStatus.NOT_FOUND, "유효한 Public Key Set를 찾을 수 없습니다."),
-  NOT_FOUND_REGISTER_INFO(HttpStatus.NOT_FOUND, "가입 정보를 찾을 수 없습니다.");
+  NOT_FOUND_REGISTER_INFO(HttpStatus.NOT_FOUND, "SOPT 활동 시 사용한 전화번호가 아니에요.");
 
   private final HttpStatus status;
   private final String message;
