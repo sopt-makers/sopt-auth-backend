@@ -22,7 +22,7 @@ public class GetSocialAccountPlatformService implements GetSocialAccountUsecase 
       GetSocialAccountPlatformCommand command) {
     User user = userRepository.findByPhone(command.phone());
     phoneVerificationValidator.validate(
-        user.getProfile().name(), command.phone(), PhoneVerificationType.SEARCH_SOCIAL_PLATFORM);
+        command.phone(), PhoneVerificationType.SEARCH_SOCIAL_PLATFORM);
     AuthPlatform authPlatform = user.getSocialAccount().authPlatformType();
     return new SocialAccountPlatformInfo(authPlatform.name());
   }

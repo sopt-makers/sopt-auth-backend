@@ -51,6 +51,8 @@ class GabiaClient {
 
   public static final String COLON = " : ";
   private final GabiaProperty gabiaProperty;
+  private final Gson gson;
+  private final OkHttpClient client;
 
   protected void sendSmsMessage(String receiver, String content) {
     String authToken = authenticate();
@@ -66,10 +68,10 @@ class GabiaClient {
             .build();
 
     Request request = buildPostRequest(URI_SEND_SMS, authToken, requestBody);
-    Response response = executeRequest(request);
-    String fieldValue = extractSerializedDataIn(RESPONSE_SUCCESS_FLAG_FIELD, response);
-
-    validateResponseData(fieldValue, RESPONSE_SUCCESS_FLAG_VALUE);
+    try (Response response = executeRequest(request)) {
+      String fieldValue = extractSerializedDataIn(RESPONSE_SUCCESS_FLAG_FIELD, response);
+      validateResponseData(fieldValue, RESPONSE_SUCCESS_FLAG_VALUE);
+    }
   }
 
   protected void sendLmsMessage(String receiver, String title, String content) {
@@ -87,10 +89,10 @@ class GabiaClient {
             .build();
 
     Request request = buildPostRequest(URI_SEND_LMS, authToken, requestBody);
-    Response response = executeRequest(request);
-    String fieldValue = extractSerializedDataIn(RESPONSE_SUCCESS_FLAG_FIELD, response);
-
-    validateResponseData(fieldValue, RESPONSE_SUCCESS_FLAG_VALUE);
+    try (Response response = executeRequest(request)) {
+      String fieldValue = extractSerializedDataIn(RESPONSE_SUCCESS_FLAG_FIELD, response);
+      validateResponseData(fieldValue, RESPONSE_SUCCESS_FLAG_VALUE);
+    }
   }
 
   private String authenticate() {
@@ -101,19 +103,19 @@ class GabiaClient {
             .build();
 
     Request request = buildPostRequest(URI_OAUTH_TOKEN, gabiaProperty.sms().key(), requestBody);
-    Response response = executeRequest(request);
-
-    String authValue = extractSerializedDataIn(RESPONSE_ACCESS_TOKEN_FIELD, response);
-    validateResponseData(authValue);
-    return authValue;
+    try (Response response = executeRequest(request)) {
+      String authValue = extractSerializedDataIn(RESPONSE_ACCESS_TOKEN_FIELD, response);
+      validateResponseData(authValue);
+      return authValue;
+    }
   }
 
   private String extractSerializedDataIn(String dataKey, Response response) {
     try {
       HashMap<String, String> result =
-          new Gson().fromJson(Objects.requireNonNull(response.body()).string(), HashMap.class);
+          gson.fromJson(Objects.requireNonNull(response.body()).string(), HashMap.class);
       return result.get(dataKey);
-    } catch (IOException | JsonSyntaxException | JsonIOException e) {
+    } catch (IOException | JsonSyntaxException | JsonIOException | NullPointerException e) {
       throw new ClientResponseException(ClientError.GABIA_RESPONSE_BIND_FAIL);
     }
   }
@@ -127,7 +129,7 @@ class GabiaClient {
   }
 
   private void validateResponseData(String data, String dataExpected) {
-    boolean isExpectData = data.equals(dataExpected);
+    boolean isExpectData = Objects.equals(data, dataExpected);
     if (!isExpectData) {
       ClientError error = ClientError.GABIA_REQUEST_INVALID_AUTH_DATA;
       error.addMessage(String.join(COLON, RESPONSE_ACCESS_TOKEN_FIELD, data));
@@ -165,7 +167,6 @@ class GabiaClient {
 
   private Response executeRequest(Request request) {
     try {
-      OkHttpClient client = new OkHttpClient();
       return client.newCall(request).execute();
     } catch (IOException e) {
       throw new ClientRequestException(ClientError.GABIA_REQUEST_INVALID_AUTH_DATA);

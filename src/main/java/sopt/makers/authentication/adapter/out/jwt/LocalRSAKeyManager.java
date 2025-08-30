@@ -22,7 +22,6 @@ import java.security.spec.X509EncodedKeySpec;
 
 import org.bouncycastle.util.io.pem.PemObject;
 import org.bouncycastle.util.io.pem.PemReader;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
@@ -31,7 +30,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Component
-@EnableConfigurationProperties(SecurityProperty.class)
 @RequiredArgsConstructor
 @Slf4j
 public class LocalRSAKeyManager implements RSAKeyManager {

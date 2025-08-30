@@ -31,13 +31,6 @@ public class PhoneVerificationRepositoryImpl implements PhoneVerificationReposit
     return phoneVerificationEntity.toDomain();
   }
 
-  @Override
-  public PhoneVerification findLatestByPhoneNameType(PhoneVerification phoneVerification) {
-    PhoneVerificationEntity phoneVerificationEntity =
-        retriever.findLatestByPhoneNameType(phoneVerification);
-    return phoneVerificationEntity.toDomain();
-  }
-
   @Transactional
   @Override
   public void deleteByPhoneVerification(PhoneVerification phoneVerification) {
