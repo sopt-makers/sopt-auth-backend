@@ -115,7 +115,7 @@ class GabiaClient {
       HashMap<String, String> result =
           gson.fromJson(Objects.requireNonNull(response.body()).string(), HashMap.class);
       return result.get(dataKey);
-    } catch (IOException | JsonSyntaxException | JsonIOException e) {
+    } catch (IOException | JsonSyntaxException | JsonIOException | NullPointerException e) {
       throw new ClientResponseException(ClientError.GABIA_RESPONSE_BIND_FAIL);
     }
   }
@@ -129,7 +129,7 @@ class GabiaClient {
   }
 
   private void validateResponseData(String data, String dataExpected) {
-    boolean isExpectData = data.equals(dataExpected);
+    boolean isExpectData = Objects.equals(data, dataExpected);
     if (!isExpectData) {
       ClientError error = ClientError.GABIA_REQUEST_INVALID_AUTH_DATA;
       error.addMessage(String.join(COLON, RESPONSE_ACCESS_TOKEN_FIELD, data));
