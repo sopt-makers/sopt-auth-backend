@@ -14,6 +14,7 @@ import sopt.makers.authentication.domain.auth.AuthPlatform;
 import sopt.makers.authentication.domain.auth.PhoneVerificationType;
 import sopt.makers.authentication.domain.auth.SocialAccount;
 import sopt.makers.authentication.domain.auth.exception.AuthException;
+import sopt.makers.authentication.domain.auth.exception.AuthFailure;
 import sopt.makers.authentication.domain.user.Activity;
 import sopt.makers.authentication.domain.user.Profile;
 import sopt.makers.authentication.domain.user.User;
@@ -75,6 +76,7 @@ public class SignUpService implements SignUpUsecase {
     return switch (authPlatform) {
       case GOOGLE -> SocialAccount.of(authPlatformId, AuthPlatform.GOOGLE);
       case APPLE -> SocialAccount.of(authPlatformId, AuthPlatform.APPLE);
+      default -> throw new AuthException(AuthFailure.INVALID_SOCIAL_PLATFORM);
     };
   }
 
