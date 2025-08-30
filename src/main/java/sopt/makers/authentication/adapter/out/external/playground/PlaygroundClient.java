@@ -23,8 +23,6 @@ import okhttp3.Response;
 @Component
 @RequiredArgsConstructor
 public class PlaygroundClient {
-
-  // 📌 상수 정의
   private static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
   private static final String HEADER_API_KEY = "apiKey";
   private static final String HEADER_CONTENT_TYPE = "Content-Type";
