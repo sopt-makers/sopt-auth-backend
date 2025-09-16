@@ -97,22 +97,6 @@ public class SignUpService implements SignUpUsecase {
     }
   }
 
-  private void safeDeleteApp(Long userId) {
-    try {
-      appClient.deleteMemberProfile(userId);
-    } catch (Exception ex) {
-      log.warn("App 보상 트랜잭션 실패: {}", userId, ex);
-    }
-  }
-
-  private void safeDeletePlayground(Long userId) {
-    try {
-      playgroundClient.deleteMemberProfile(userId);
-    } catch (Exception ex) {
-      log.warn("Playground 보상 트랜잭션 실패: {}", userId, ex);
-    }
-  }
-
   private SocialAccount createSocialAccount(String authPlatformId, AuthPlatform authPlatform) {
     return switch (authPlatform) {
       case GOOGLE -> SocialAccount.of(authPlatformId, AuthPlatform.GOOGLE);
