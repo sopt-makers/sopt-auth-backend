@@ -27,3 +27,6 @@ external:
   playground:
     url: ${PLAYGROUND_BASE_URL}
     key: ${PLAYGROUND_EXTERNAL_KEY}
+  app:
+    url: ${APP_BASE_URL}
+    key: ${APP_EXTERNAL_KEY}
