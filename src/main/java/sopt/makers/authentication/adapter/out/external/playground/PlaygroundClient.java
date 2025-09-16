@@ -3,12 +3,14 @@ package sopt.makers.authentication.adapter.out.external.playground;
 import static sopt.makers.authentication.adapter.out.external.exception.ClientError.PLAYGROUND_REQUEST_FAIL;
 import static sopt.makers.authentication.adapter.out.external.exception.ClientError.PLAYGROUND_RESPONSE_UNAVAILABLE;
 
-import sopt.makers.authentication.adapter.out.external.exception.ClientRequestException;
-import sopt.makers.authentication.adapter.out.external.exception.ClientResponseException;
+import sopt.makers.authentication.adapter.out.external.exception.ClientException.PlaygroundRequestException;
+import sopt.makers.authentication.adapter.out.external.exception.ClientException.PlaygroundResponseException;
 
 import java.io.IOException;
 import java.util.Map;
 
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Component;
 
 import com.google.gson.Gson;
@@ -26,11 +28,16 @@ public class PlaygroundClient {
   private static final String HEADER_CONTENT_TYPE = "Content-Type";
   private static final String CONTENT_TYPE_JSON = "application/json";
   private static final String ENDPOINT_CREATE_PROFILE = "internal/api/v1/members";
+  private static final String ENDPOINT_DELETE_PROFILE = "internal/api/v1/members";
   private static final String FIELD_USER_ID = "userId";
   private final PlaygroundProperty playgroundProperty;
   private final OkHttpClient client;
   private final Gson gson;
 
+  @Retryable(
+      value = {PlaygroundRequestException.class, PlaygroundResponseException.class},
+      maxAttempts = 3,
+      backoff = @Backoff(delay = 2000, multiplier = 1.5))
   public void createMemberProfile(Long memberId) {
     String requestBody = gson.toJson(Map.of(FIELD_USER_ID, memberId));
     RequestBody body = RequestBody.create(requestBody, JSON);
@@ -49,11 +56,41 @@ public class PlaygroundClient {
 
     try (Response response = client.newCall(httpRequest).execute()) {
       if (response.code() != 201) {
-        log.error(response.message());
-        throw new ClientRequestException(PLAYGROUND_REQUEST_FAIL);
+        log.error("플그 유저 생성 요청 실패: code={}, message={}", response.code(), response.message());
+        throw new PlaygroundRequestException(PLAYGROUND_REQUEST_FAIL);
       }
     } catch (IOException e) {
-      throw new ClientResponseException(PLAYGROUND_RESPONSE_UNAVAILABLE);
+      throw new PlaygroundResponseException(PLAYGROUND_RESPONSE_UNAVAILABLE);
+    }
+  }
+
+  @Retryable(
+      value = {PlaygroundRequestException.class, PlaygroundResponseException.class},
+      maxAttempts = 3,
+      backoff = @Backoff(delay = 2000, multiplier = 1.5))
+  public void deleteMemberProfile(Long memberId) {
+    okhttp3.HttpUrl url =
+        okhttp3.HttpUrl.parse(playgroundProperty.url())
+            .newBuilder()
+            .addPathSegments(ENDPOINT_DELETE_PROFILE)
+            .addPathSegment(String.valueOf(memberId))
+            .build();
+
+    Request httpRequest =
+        new Request.Builder()
+            .url(url)
+            .addHeader(HEADER_API_KEY, playgroundProperty.key())
+            .addHeader(HEADER_CONTENT_TYPE, CONTENT_TYPE_JSON)
+            .delete()
+            .build();
+
+    try (Response response = client.newCall(httpRequest).execute()) {
+      if (response.code() != 200) {
+        log.error("플그 유저 삭제 요청 실패: code={}, message={}", response.code(), response.message());
+        throw new PlaygroundRequestException(PLAYGROUND_REQUEST_FAIL);
+      }
+    } catch (IOException e) {
+      throw new PlaygroundResponseException(PLAYGROUND_RESPONSE_UNAVAILABLE);
     }
   }
 }
