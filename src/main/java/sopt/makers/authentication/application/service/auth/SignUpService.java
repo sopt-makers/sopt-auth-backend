@@ -1,7 +1,12 @@
 package sopt.makers.authentication.application.service.auth;
 
-import static sopt.makers.authentication.domain.auth.exception.AuthFailure.NOT_FOUND_REGISTER_INFO;
+import static sopt.makers.authentication.domain.auth.exception.AuthFailure.*;
 
+import sopt.makers.authentication.adapter.out.external.app.AppClient;
+import sopt.makers.authentication.adapter.out.external.exception.ClientException.AppRequestException;
+import sopt.makers.authentication.adapter.out.external.exception.ClientException.AppResponseException;
+import sopt.makers.authentication.adapter.out.external.exception.ClientException.PlaygroundRequestException;
+import sopt.makers.authentication.adapter.out.external.exception.ClientException.PlaygroundResponseException;
 import sopt.makers.authentication.adapter.out.external.oauth.MagicLoginProperty;
 import sopt.makers.authentication.adapter.out.external.playground.PlaygroundClient;
 import sopt.makers.authentication.application.port.in.auth.SignUpUsecase;
@@ -24,9 +29,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class SignUpService implements SignUpUsecase {
   private final OAuthAuthenticator oAuthAuthenticator;
   private final UserRepository userRepository;
@@ -35,6 +42,7 @@ public class SignUpService implements SignUpUsecase {
   private final PhoneVerificationValidator phoneVerificationValidator;
   private final MagicLoginProperty magicLoginProperty;
   private final PlaygroundClient playgroundClient;
+  private final AppClient appClient;
 
   @Transactional
   @Override
@@ -67,9 +75,42 @@ public class SignUpService implements SignUpUsecase {
     User newUser = User.createNewUser(socialAccount, profile);
     User savedUser = userRepository.save(newUser);
 
-    userActivityHistoryRepository.save(savedUser, activity);
-    userRegisterInfoRepository.delete(targetRegisterInfo);
-    playgroundClient.createMemberProfile(savedUser.getId());
+    try {
+      appClient.createMemberProfile(savedUser.getId());
+      playgroundClient.createMemberProfile(savedUser.getId());
+      userActivityHistoryRepository.save(savedUser, activity);
+      userRegisterInfoRepository.delete(targetRegisterInfo);
+    } catch (AppRequestException | AppResponseException e) {
+      // 케이스 1: App이 실패 → Playground는 요청 시도 x
+      log.error("앱 유저 생성 요청 실패 userId={}", savedUser.getId());
+      userRepository.deleteById(savedUser.getId());
+      throw new AuthException(APP_SYNC_FAIL);
+    } catch (PlaygroundRequestException | PlaygroundResponseException e) {
+      // 케이스 2: App은 성공했지만 Playground 실패
+      try {
+        appClient.deleteMemberProfile(savedUser.getId());
+      } catch (Exception ex) {
+        log.error("앱 유저 Delete 요청 실패 userId={}", savedUser.getId());
+      }
+      userRepository.deleteById(savedUser.getId());
+      throw new AuthException(PLAYGROUND_SYNC_FAIL);
+    }
+  }
+
+  private void safeDeleteApp(Long userId) {
+    try {
+      appClient.deleteMemberProfile(userId);
+    } catch (Exception ex) {
+      log.warn("App 보상 트랜잭션 실패: {}", userId, ex);
+    }
+  }
+
+  private void safeDeletePlayground(Long userId) {
+    try {
+      playgroundClient.deleteMemberProfile(userId);
+    } catch (Exception ex) {
+      log.warn("Playground 보상 트랜잭션 실패: {}", userId, ex);
+    }
   }
 
   private SocialAccount createSocialAccount(String authPlatformId, AuthPlatform authPlatform) {
