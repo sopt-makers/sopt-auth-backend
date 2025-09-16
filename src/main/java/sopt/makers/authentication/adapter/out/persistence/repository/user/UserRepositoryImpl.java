@@ -23,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 public class UserRepositoryImpl implements UserRepository {
   private final UserRetriever userRetriever;
   private final UserRegister userRegister;
+  private final UserRemover userRemover;
 
   @Override
   public User findBySocialAccount(SocialAccount socialAccount) {
@@ -50,6 +51,11 @@ public class UserRepositoryImpl implements UserRepository {
     UserEntity userEntity = UserEntity.fromDomain(user);
     userRegister.save(userEntity);
     return userEntity.toDomain();
+  }
+
+  @Override
+  public void deleteById(Long userId) {
+    userRemover.deleteById(userId);
   }
 
   @Override
