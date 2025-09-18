@@ -30,6 +30,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -56,6 +57,19 @@ public class UserApiController implements UserApi {
     userIdValidator.validateUserIds(userIds);
     List<GetUserProfileUsecase.UserProfileAndActivityInfo> userInformation =
         getUserProfileUsecase.getUserInformation(userIds);
+
+    return ResponseUtil.success(
+        UserSuccess.GET_USER_PROFILE, UserResponse.UserProfileAndActivity.from(userInformation));
+  }
+
+  @PostMapping("")
+  public ResponseEntity<BaseResponse<?>> getUserProfileWithBody(
+      @RequestHeader(API_KEY_HEADER) String apiKey,
+      @RequestHeader(SERVICE_NAME_HEADER) String serviceName,
+      @RequestBody UserRequest.getUserProfileInfo userIdList) {
+    userIdValidator.validateUserIds(userIdList.userIds());
+    List<GetUserProfileUsecase.UserProfileAndActivityInfo> userInformation =
+        getUserProfileUsecase.getUserInformation(userIdList.userIds());
 
     return ResponseUtil.success(
         UserSuccess.GET_USER_PROFILE, UserResponse.UserProfileAndActivity.from(userInformation));

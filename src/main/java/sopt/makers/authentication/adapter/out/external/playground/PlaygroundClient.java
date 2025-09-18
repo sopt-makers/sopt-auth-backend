@@ -14,20 +14,18 @@ import org.springframework.stereotype.Component;
 import com.google.gson.Gson;
 
 import lombok.RequiredArgsConstructor;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
+import lombok.extern.slf4j.Slf4j;
+import okhttp3.*;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class PlaygroundClient {
   private static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
   private static final String HEADER_API_KEY = "apiKey";
   private static final String HEADER_CONTENT_TYPE = "Content-Type";
   private static final String CONTENT_TYPE_JSON = "application/json";
-  private static final String ENDPOINT_CREATE_PROFILE = "internal/api/v1/members/profile";
+  private static final String ENDPOINT_CREATE_PROFILE = "internal/api/v1/members";
   private static final String FIELD_USER_ID = "userId";
   private final PlaygroundProperty playgroundProperty;
   private final OkHttpClient client;
@@ -51,6 +49,7 @@ public class PlaygroundClient {
 
     try (Response response = client.newCall(httpRequest).execute()) {
       if (response.code() != 201) {
+        log.error(response.message());
         throw new ClientRequestException(PLAYGROUND_REQUEST_FAIL);
       }
     } catch (IOException e) {
