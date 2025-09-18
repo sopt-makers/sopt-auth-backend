@@ -15,6 +15,9 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor(access = PRIVATE)
 public class UserRequest {
+
+  public record getUserProfileInfo(List<Long> userIds) {}
+
   public record UserProfileInfo(
       Long userId,
       String profileImage,

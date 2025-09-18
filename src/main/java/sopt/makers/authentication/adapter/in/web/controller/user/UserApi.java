@@ -32,6 +32,11 @@ public interface UserApi {
       @RequestHeader(SERVICE_NAME_HEADER) String serviceName,
       @RequestParam List<Long> userIds);
 
+  ResponseEntity<BaseResponse<?>> getUserProfileWithBody(
+      @RequestHeader(API_KEY_HEADER) String apiKey,
+      @RequestHeader(SERVICE_NAME_HEADER) String serviceName,
+      @RequestBody UserRequest.getUserProfileInfo userIdList);
+
   ResponseEntity<BaseResponse<?>> updateUserProfile(
       @RequestHeader(API_KEY_HEADER) String apiKey,
       @RequestHeader(SERVICE_NAME_HEADER) String serviceName,
