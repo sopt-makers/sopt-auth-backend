@@ -61,6 +61,7 @@ public class GetUserProfileService implements GetUserProfileUsecase {
       Part part,
       String name,
       Team team,
+      Boolean isAdmin,
       int offset,
       int limit,
       UserOrderBy orderBy) {
@@ -68,7 +69,7 @@ public class GetUserProfileService implements GetUserProfileUsecase {
 
     Page<User> userEntityPage =
         userRepository.findAllByGenerationAndPartAndNameAndTeam(
-            generation, part, name, team, pageable);
+            generation, part, name, team, isAdmin, pageable);
 
     long totalCount = userEntityPage.getTotalElements();
     boolean hasNext = userEntityPage.hasNext();

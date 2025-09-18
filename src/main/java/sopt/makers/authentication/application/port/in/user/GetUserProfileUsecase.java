@@ -20,6 +20,7 @@ public interface GetUserProfileUsecase {
       Part part,
       String name,
       Team team,
+      Boolean isAdmin,
       int offset,
       int limit,
       UserOrderBy orderBy);

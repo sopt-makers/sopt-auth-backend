@@ -43,12 +43,14 @@ public interface UserJpaRepository extends JpaRepository<UserEntity, Long> {
           + "WHERE (:generation IS NULL OR a.generation = :generation) "
           + "AND (:part IS NULL OR a.part = :part) "
           + "AND (:name IS NULL OR u.name LIKE %:name%) "
-          + "AND (:team IS NULL OR a.team = :team)")
+          + "AND (:team IS NULL OR a.team = :team)"
+          + "AND (:isAdmin IS NULL OR :isAdmin = FALSE OR a.role <> 'MEMBER')")
   Page<UserEntity> findAllWithActivityHistoriesByGenerationAndPartAndNameAndTeam(
       @Param("generation") Integer generation,
       @Param("part") Part part,
       @Param("name") String name,
       @Param("team") Team team,
+      @Param("isAdmin") Boolean isAdmin,
       Pageable pageable);
 
   @Query(
