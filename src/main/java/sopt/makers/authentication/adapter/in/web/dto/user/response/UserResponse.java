@@ -44,13 +44,15 @@ public final class UserResponse {
     }
   }
 
-  public record UserActivityDetail(long activityId, int generation, String part, String team) {
+  public record UserActivityDetail(
+      long activityId, int generation, String part, String team, String role) {
     public static UserActivityDetail from(GetUserProfileUsecase.UserActivityInfo userActivityInfo) {
       return new UserActivityDetail(
           userActivityInfo.activityId(),
           userActivityInfo.generation(),
           userActivityInfo.part(),
-          userActivityInfo.team());
+          userActivityInfo.team(),
+          userActivityInfo.role());
     }
   }
 
