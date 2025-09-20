@@ -94,12 +94,13 @@ public class UserApiController implements UserApi {
       @RequestParam(required = false) Part part,
       @RequestParam(required = false) String name,
       @RequestParam(required = false) Team team,
+      @RequestParam(required = false) Boolean isAdmin,
       @RequestParam(defaultValue = DEFAULT_OFFSET) @Min(0) int offset,
       @RequestParam(defaultValue = DEFAULT_LIMIT) @Positive @Max(MAX_LIMIT) int limit,
       @RequestParam(defaultValue = DEFAULT_ORDER_BY) UserOrderBy orderBy) {
     GetUserProfileUsecase.PaginatedUserProfiles userInformation =
         getUserProfileUsecase.getUserInformationByFilters(
-            generation, part, name, team, offset, limit, orderBy);
+            generation, part, name, team, isAdmin, offset, limit, orderBy);
 
     return ResponseUtil.success(
         UserSuccess.GET_USER_PROFILE, UserResponse.PaginatedUserProfiles.from(userInformation));

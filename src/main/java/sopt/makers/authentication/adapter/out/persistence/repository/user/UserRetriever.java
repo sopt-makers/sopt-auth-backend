@@ -59,10 +59,10 @@ public class UserRetriever {
   }
 
   public Page<User> findAllByGenerationAndPartAndNameAndTeam(
-      Integer generation, Part part, String name, Team team, Pageable pageable) {
+      Integer generation, Part part, String name, Team team, Boolean isAdmin, Pageable pageable) {
     Page<UserEntity> userEntityPage =
         userJpaRepository.findAllWithActivityHistoriesByGenerationAndPartAndNameAndTeam(
-            generation, part, name, team, pageable);
+            generation, part, name, team, isAdmin, pageable);
 
     return userEntityPage.map(UserEntity::toDomain);
   }

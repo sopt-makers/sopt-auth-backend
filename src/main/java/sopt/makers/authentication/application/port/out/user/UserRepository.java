@@ -34,7 +34,7 @@ public interface UserRepository {
   boolean existsByPhone(String phone);
 
   Page<User> findAllByGenerationAndPartAndNameAndTeam(
-      Integer generation, Part part, String name, Team team, Pageable pageable);
+      Integer generation, Part part, String name, Team team, Boolean isAdmin, Pageable pageable);
 
   int countByGeneration(int generation);
 }
