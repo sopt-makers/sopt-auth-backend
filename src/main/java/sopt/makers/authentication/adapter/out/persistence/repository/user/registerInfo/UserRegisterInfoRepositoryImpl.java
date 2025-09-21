@@ -13,15 +13,23 @@ import lombok.RequiredArgsConstructor;
 
 @Repository
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 public class UserRegisterInfoRepositoryImpl implements UserRegisterInfoRepository {
 
   private final UserRegisterInfoRetriever retriever;
   private final UserRegisterInfoRemover remover;
+  private final UserRegisterInfoRegister register;
 
   @Override
   public Optional<UserRegisterInfo> findByPhone(String phone) {
     return retriever.findByPhone(phone).map(UserRegisterInfoEntity::toDomain);
+  }
+
+  @Transactional
+  @Override
+  public void save(UserRegisterInfo userRegisterInfo) {
+    UserRegisterInfoEntity entity = UserRegisterInfoEntity.fromDomain(userRegisterInfo);
+    register.save(entity);
   }
 
   @Transactional

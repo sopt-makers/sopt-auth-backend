@@ -39,6 +39,33 @@ public class UserRegisterInfoEntity {
   @Enumerated(EnumType.STRING)
   private Part part;
 
+  private UserRegisterInfoEntity(
+      final String name,
+      final String phone,
+      final String email,
+      final LocalDate birthday,
+      final int generation,
+      final Part part) {
+    this.name = name;
+    this.phone = phone;
+    this.email = email;
+    this.birthday = birthday;
+    this.generation = generation;
+    this.part = part;
+  }
+
+  public static UserRegisterInfoEntity fromDomain(UserRegisterInfo userRegisterInfo) {
+    UserRegisterInfoEntity entity =
+        new UserRegisterInfoEntity(
+            userRegisterInfo.getName(),
+            userRegisterInfo.getPhone(),
+            userRegisterInfo.getEmail(),
+            userRegisterInfo.getBirthday(),
+            userRegisterInfo.getGeneration(),
+            userRegisterInfo.getPart());
+    return entity;
+  }
+
   public UserRegisterInfo toDomain() {
     return UserRegisterInfo.of(
         this.name, this.phone, this.email, this.birthday, this.generation, this.part);

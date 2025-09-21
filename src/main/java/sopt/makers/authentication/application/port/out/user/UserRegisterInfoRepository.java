@@ -8,5 +8,7 @@ public interface UserRegisterInfoRepository {
 
   Optional<UserRegisterInfo> findByPhone(String phone);
 
+  void save(UserRegisterInfo userRegisterInfo);
+
   void delete(UserRegisterInfo userRegisterInfo);
 }
