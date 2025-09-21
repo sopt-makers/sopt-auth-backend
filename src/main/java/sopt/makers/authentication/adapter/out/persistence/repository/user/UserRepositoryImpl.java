@@ -53,6 +53,7 @@ public class UserRepositoryImpl implements UserRepository {
     return userEntity.toDomain();
   }
 
+  @Transactional
   @Override
   public void deleteById(Long userId) {
     userRemover.deleteById(userId);
