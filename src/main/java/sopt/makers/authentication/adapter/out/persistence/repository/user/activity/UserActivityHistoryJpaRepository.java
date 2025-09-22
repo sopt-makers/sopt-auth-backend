@@ -10,4 +10,6 @@ interface UserActivityHistoryJpaRepository extends JpaRepository<UserActivityHis
   List<UserActivityHistoryEntity> findByUserId(Long userId);
 
   List<UserActivityHistoryEntity> findAllByUserIdIn(List<Long> userIds);
+
+  void deleteByUserId(Long userId);
 }

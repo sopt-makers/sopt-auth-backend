@@ -59,4 +59,6 @@ public interface UserJpaRepository extends JpaRepository<UserEntity, Long> {
           + "JOIN u.userActivityHistoryList a "
           + "WHERE a.generation = :generation")
   int countByGeneration(@Param("generation") int generation);
+
+  void deleteById(Long userId);
 }
