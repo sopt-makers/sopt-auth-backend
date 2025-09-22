@@ -83,7 +83,6 @@ public class SignUpService implements SignUpUsecase {
     } catch (AppRequestException | AppResponseException e) {
       // 케이스 1: App이 실패 → Playground는 요청 시도 x
       log.error("앱 유저 생성 요청 실패 userId={}", savedUser.getId());
-      userRepository.deleteById(savedUser.getId());
       throw new AuthException(APP_SYNC_FAIL);
     } catch (PlaygroundRequestException | PlaygroundResponseException e) {
       // 케이스 2: App은 성공했지만 Playground 실패
@@ -92,10 +91,6 @@ public class SignUpService implements SignUpUsecase {
       } catch (Exception ex) {
         log.error("앱 유저 Delete 요청 실패 userId={}", savedUser.getId());
       }
-      userActivityHistoryRepository.deleteByUserId(savedUser.getId());
-      userRepository.deleteById(savedUser.getId());
-      userRegisterInfoRepository.save(targetRegisterInfo);
-
       throw new AuthException(PLAYGROUND_SYNC_FAIL);
     }
   }
