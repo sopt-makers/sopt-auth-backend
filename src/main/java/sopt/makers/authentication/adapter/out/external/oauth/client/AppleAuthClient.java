@@ -4,8 +4,8 @@ import static sopt.makers.authentication.adapter.out.external.exception.ClientEr
 import static sopt.makers.authentication.adapter.out.external.exception.ClientError.INVALID_APPLE_REQUEST_URL;
 import static sopt.makers.authentication.adapter.out.external.oauth.OAuthConstant.APPLE_PUBLIC_KEY_SET_URL;
 
-import sopt.makers.authentication.adapter.out.external.exception.ClientRequestException;
-import sopt.makers.authentication.adapter.out.external.exception.ClientResponseException;
+import sopt.makers.authentication.adapter.out.external.exception.ClientException.ClientRequestException;
+import sopt.makers.authentication.adapter.out.external.exception.ClientException.ClientResponseException;
 
 import java.io.IOException;
 import java.net.URI;
