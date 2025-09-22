@@ -49,9 +49,13 @@ public class SignUpService implements SignUpUsecase {
   @Transactional
   @Override
   public void signUp(SignUpCommand command) {
-    if (command.phone().matches("^0100000\\d{4}$")) {
-      signUpConcurrency(command.token(), command.authPlatform(), command.phone());
-    } else if (isMagicPhone(command.phone())) {
+    // for concurrency test
+    //    if (command.phone().matches("^0100000\\d{4}$")) {
+    //      signUpConcurrency(command.token(), command.authPlatform(), command.phone());
+    //      return ;
+    //    }
+
+    if (isMagicPhone(command.phone())) {
       signUpForMagicNumber(command.token(), command.authPlatform());
     } else {
       signUpForSoptUser(command.token(), command.phone(), command.authPlatform());
@@ -59,8 +63,6 @@ public class SignUpService implements SignUpUsecase {
   }
 
   private void signUpConcurrency(String token, AuthPlatform authPlatform, String phone) {
-    //    phoneVerificationValidator.validate(phone, PhoneVerificationType.REGISTER);
-    //    String authPlatformId = oAuthAuthenticator.getIdentifier(token, authPlatform);
     UserRegisterInfo targetRegisterInfo =
         userRegisterInfoRepository
             .findByPhone(phone)
