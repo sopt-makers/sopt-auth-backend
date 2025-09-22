@@ -1,6 +1,7 @@
 package sopt.makers.authentication.adapter.out.external.app;
 
-import static sopt.makers.authentication.adapter.out.external.exception.ClientError.*;
+import static sopt.makers.authentication.adapter.out.external.exception.ClientError.APP_REQUEST_FAIL;
+import static sopt.makers.authentication.adapter.out.external.exception.ClientError.APP_RESPONSE_UNAVAILABLE;
 
 import sopt.makers.authentication.adapter.out.external.exception.ClientException.AppRequestException;
 import sopt.makers.authentication.adapter.out.external.exception.ClientException.AppResponseException;
