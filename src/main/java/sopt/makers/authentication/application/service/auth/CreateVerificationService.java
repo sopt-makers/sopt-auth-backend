@@ -43,6 +43,10 @@ public class CreateVerificationService implements CreatePhoneVerificationUsecase
     PhoneVerification savedPhoneVerification = verificationRepository.create(phoneVerification);
     String content = convertCodeToMessage(savedPhoneVerification.getVerificationCode().getCode());
 
+    if (command.phone().matches("^0100000\\d{4}$")) {
+      return;
+    }
+
     eventPublisher.publishEvent(
         new PhoneVerificationCreatedEvent(
             savedPhoneVerification.getPhone(), content, MessageType.SMS));
