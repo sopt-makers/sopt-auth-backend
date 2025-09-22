@@ -20,6 +20,7 @@ public interface GetUserProfileUsecase {
       Part part,
       String name,
       Team team,
+      Boolean isAdmin,
       int offset,
       int limit,
       UserOrderBy orderBy);
@@ -53,13 +54,14 @@ public interface GetUserProfileUsecase {
     }
   }
 
-  record UserActivityInfo(long activityId, int generation, String part, String team) {
+  record UserActivityInfo(long activityId, int generation, String part, String team, String role) {
     public static UserActivityInfo of(Activity activity) {
       return new UserActivityInfo(
           activity.getId(),
           activity.getGeneration(),
           activity.getPart().getName(),
-          activity.getTeam() != null ? activity.getTeam().getName() : null);
+          activity.getTeam() != null ? activity.getTeam().getName() : null,
+          activity.getRole().name());
     }
   }
 

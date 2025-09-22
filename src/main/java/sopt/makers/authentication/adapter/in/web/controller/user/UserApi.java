@@ -50,6 +50,7 @@ public interface UserApi {
       @RequestParam(required = false) Part part,
       @RequestParam(required = false) String name,
       @RequestParam(required = false) Team team,
+      @RequestParam(required = false) Boolean isAdmin,
       @RequestParam(defaultValue = DEFAULT_OFFSET) @Min(0) int offset,
       @RequestParam(defaultValue = DEFAULT_LIMIT) @Positive @Max(MAX_LIMIT) int limit,
       @RequestParam(defaultValue = DEFAULT_ORDER_BY) UserOrderBy orderBy);
