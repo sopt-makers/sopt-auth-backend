@@ -27,13 +27,6 @@ public class UserRegisterInfoRepositoryImpl implements UserRegisterInfoRepositor
 
   @Transactional
   @Override
-  public void save(UserRegisterInfo userRegisterInfo) {
-    UserRegisterInfoEntity entity = UserRegisterInfoEntity.fromDomain(userRegisterInfo);
-    register.save(entity);
-  }
-
-  @Transactional
-  @Override
   public void delete(UserRegisterInfo userRegisterInfo) {
     Optional<UserRegisterInfoEntity> registerInfoEntity =
         retriever.findByPhone(userRegisterInfo.getPhone());

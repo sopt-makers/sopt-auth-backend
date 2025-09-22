@@ -1,6 +1,9 @@
 package sopt.makers.authentication.application.service.auth;
 
-import static sopt.makers.authentication.domain.auth.exception.AuthFailure.*;
+import static sopt.makers.authentication.domain.auth.exception.AuthFailure.APP_SYNC_FAIL;
+import static sopt.makers.authentication.domain.auth.exception.AuthFailure.INVALID_SOCIAL_PLATFORM;
+import static sopt.makers.authentication.domain.auth.exception.AuthFailure.NOT_FOUND_REGISTER_INFO;
+import static sopt.makers.authentication.domain.auth.exception.AuthFailure.PLAYGROUND_SYNC_FAIL;
 
 import sopt.makers.authentication.adapter.out.external.app.AppClient;
 import sopt.makers.authentication.adapter.out.external.exception.ClientException.AppRequestException;
@@ -19,7 +22,6 @@ import sopt.makers.authentication.domain.auth.AuthPlatform;
 import sopt.makers.authentication.domain.auth.PhoneVerificationType;
 import sopt.makers.authentication.domain.auth.SocialAccount;
 import sopt.makers.authentication.domain.auth.exception.AuthException;
-import sopt.makers.authentication.domain.auth.exception.AuthFailure;
 import sopt.makers.authentication.domain.user.Activity;
 import sopt.makers.authentication.domain.user.Profile;
 import sopt.makers.authentication.domain.user.User;
@@ -99,7 +101,7 @@ public class SignUpService implements SignUpUsecase {
     return switch (authPlatform) {
       case GOOGLE -> SocialAccount.of(authPlatformId, AuthPlatform.GOOGLE);
       case APPLE -> SocialAccount.of(authPlatformId, AuthPlatform.APPLE);
-      default -> throw new AuthException(AuthFailure.INVALID_SOCIAL_PLATFORM);
+      default -> throw new AuthException(INVALID_SOCIAL_PLATFORM);
     };
   }
 

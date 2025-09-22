@@ -34,10 +34,4 @@ public class UserActivityHistoryRepositoryImpl implements UserActivityHistoryRep
             .toList();
     userActivityHistoryRegister.saveAll(entities);
   }
-
-  @Transactional
-  @Override
-  public void deleteByUserId(Long userId) {
-    userActivityHistoryRegister.deleteByUserId(userId);
-  }
 }

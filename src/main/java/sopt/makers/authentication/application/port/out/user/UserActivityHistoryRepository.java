@@ -8,6 +8,4 @@ public interface UserActivityHistoryRepository {
   void save(User user, Activity activity);
 
   void update(User user, ActivityList activityList);
-
-  void deleteByUserId(Long userId);
 }

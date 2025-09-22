@@ -21,8 +21,4 @@ public class UserActivityHistoryRegister {
   public void saveAll(List<UserActivityHistoryEntity> userActivityHistoryEntities) {
     userActivityHistoryJpaRepository.saveAll(userActivityHistoryEntities);
   }
-
-  public void deleteByUserId(Long userId) {
-    userActivityHistoryJpaRepository.deleteByUserId(userId);
-  }
 }

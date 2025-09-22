@@ -25,8 +25,6 @@ public interface UserRepository {
 
   User save(User user);
 
-  void deleteById(Long userId);
-
   void update(User user, SocialAccount socialAccount);
 
   void update(User user, Profile profile);
