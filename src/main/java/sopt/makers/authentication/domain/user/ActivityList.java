@@ -31,7 +31,9 @@ public class ActivityList {
   }
 
   public static ActivityList of(List<Activity> activities) {
-    return new ActivityList(activities);
+    List<Activity> sortedActivities = new ArrayList<>(activities);
+    sortedActivities.sort(Comparator.comparingInt(Activity::getGeneration));
+    return new ActivityList(sortedActivities);
   }
 
   public Activity getFirstActivity() {
@@ -39,7 +41,7 @@ public class ActivityList {
   }
 
   public Activity getLastActivity() {
-    return activities.stream().max(Comparator.comparingInt(Activity::getGeneration)).get();
+    return activities.getLast();
   }
 
   public int getTotalActivitySize() {
