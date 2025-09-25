@@ -130,7 +130,7 @@ jobs:
           key: ${{ secrets.PEM_KEY_PROD }}
           port: 22
           source: ".env,docker-compose.yml,scripts,key"
-          target: /home/ec2-user/authentication
+          target: /home/ubuntu/authentication
           overwrite: true
 
       - name: 🚀 Remote SSH Deployment
