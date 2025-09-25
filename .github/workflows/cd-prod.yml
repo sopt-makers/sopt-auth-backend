@@ -115,12 +115,12 @@ jobs:
           S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
           JWT_PUBLIC_KEY_PATH: ${{ secrets.JWT_PUBLIC_KEY_PATH }}
           JWT_PRIVATE_KEY_PATH: ${{ secrets.JWT_PRIVATE_KEY_PATH }}
-          DEV_ENV_FILE_PATH: ${{ secrets.ENV_FILE_PATH_PROD }}
+          PROD_ENV_FILE_PATH: ${{ secrets.ENV_FILE_PATH_PROD }}
         run: |
           mkdir -p ./key
-          aws s3 cp s3://$S3_BUCKET/dev/static/$JWT_PUBLIC_KEY_PATH ./key/jwt_public_key.pem --region $REGION
-          aws s3 cp s3://$S3_BUCKET/dev/static/$JWT_PRIVATE_KEY_PATH ./key/jwt_private_key.pem --region $REGION
-          aws s3 cp s3://$S3_BUCKET/dev/$DEV_ENV_FILE_PATH .env --region $REGION
+          aws s3 cp s3://$S3_BUCKET/prod/static/$JWT_PUBLIC_KEY_PATH ./key/jwt_public_key.pem --region $REGION
+          aws s3 cp s3://$S3_BUCKET/prod/static/$JWT_PRIVATE_KEY_PATH ./key/jwt_private_key.pem --region $REGION
+          aws s3 cp s3://$S3_BUCKET/prod/$PROD_ENV_FILE_PATH .env --region $REGION
 
       - name: 🔄 Transfer Deployment Files to EC2
         uses: appleboy/scp-action@master
