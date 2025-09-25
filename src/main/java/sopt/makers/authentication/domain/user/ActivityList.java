@@ -5,6 +5,7 @@ import static sopt.makers.authentication.domain.user.exception.UserFailure.DUPLI
 import sopt.makers.authentication.domain.user.exception.UserException;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import jakarta.validation.constraints.NotNull;
@@ -38,7 +39,7 @@ public class ActivityList {
   }
 
   public Activity getLastActivity() {
-    return activities.getLast();
+    return activities.stream().max(Comparator.comparingInt(Activity::getGeneration)).get();
   }
 
   public int getTotalActivitySize() {
