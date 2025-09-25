@@ -126,7 +126,7 @@ jobs:
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.HOST_PROD }}
-          username: ec2-user
+          username: ubuntu
           key: ${{ secrets.PEM_KEY_PROD }}
           port: 22
           source: ".env,docker-compose.yml,scripts,key"
@@ -137,7 +137,7 @@ jobs:
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST_PROD }}
-          username: ec2-user
+          username: ubuntu
           key: ${{ secrets.PEM_KEY_PROD }}
           port: 22
           script: |
