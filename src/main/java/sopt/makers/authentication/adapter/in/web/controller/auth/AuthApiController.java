@@ -12,6 +12,7 @@ import sopt.makers.authentication.application.port.in.auth.AuthenticateSocialAcc
 import sopt.makers.authentication.application.port.in.auth.CreatePhoneVerificationUsecase;
 import sopt.makers.authentication.application.port.in.auth.SignUpUsecase;
 import sopt.makers.authentication.application.port.in.auth.VerifyPhoneVerificationUsecase;
+import sopt.makers.authentication.domain.auth.exception.AuthFailure;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -91,10 +92,13 @@ public class AuthApiController implements AuthApi {
   @PostMapping("/refresh/web")
   public ResponseEntity<BaseResponse<?>> refreshTokenFromWeb(
       @RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken,
-      @CookieValue(REFRESH_TOKEN_HEADER) String refreshToken) {
+      @CookieValue(value = REFRESH_TOKEN_HEADER, required = false) String refreshToken) {
+    if (refreshToken == null) {
+      return ResponseUtil.failure(AuthFailure.REFRESH_TOKEN_NOT_FOUND);
+    }
+
     AuthRequest.AuthenticationTokenInfo authenticationTokenInfo =
         new AuthRequest.AuthenticationTokenInfo(accessToken, refreshToken);
-
     AuthenticateSocialAccountUsecase.AuthenticateTokenInfo tokenInfo =
         authenticateSocialAccountUsecase.refresh(authenticationTokenInfo.toCommand());
     HttpHeaders headers = cookieUtil.setRefreshToken(tokenInfo.refreshToken());

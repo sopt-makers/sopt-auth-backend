@@ -1,6 +1,8 @@
 package sopt.makers.authentication.adapter.in.web.util;
 
 import static sopt.makers.authentication.adapter.out.jwt.JwtConstant.REFRESH_TOKEN_HEADER;
+import static sopt.makers.authentication.common.constant.CookieConstant.COOKIE_DOMAIN;
+import static sopt.makers.authentication.common.constant.CookieConstant.SAME_SITE_NONE;
 import static sopt.makers.authentication.common.constant.SystemConstant.PATTERN_ROOT_PATH;
 
 import sopt.makers.authentication.config.SecurityProperty;
@@ -17,7 +19,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CookieUtil {
   private final SecurityProperty securityProperty;
-  private static final String SAME_SITE_NONE = "None";
 
   public HttpHeaders setRefreshToken(String refreshToken) {
     long durationMillis = securityProperty.jwt().secret().expiration().refreshTokenExpiration();
@@ -27,6 +28,7 @@ public class CookieUtil {
             .httpOnly(true)
             .secure(true)
             .sameSite(SAME_SITE_NONE)
+            .domain(COOKIE_DOMAIN)
             .path(PATTERN_ROOT_PATH)
             .maxAge(duration)
             .build();
