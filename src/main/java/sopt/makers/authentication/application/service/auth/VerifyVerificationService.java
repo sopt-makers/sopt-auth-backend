@@ -24,7 +24,7 @@ public class VerifyVerificationService implements VerifyPhoneVerificationUsecase
   @Transactional
   public VerifyVerificationResult verify(VerifyVerificationCommand command) {
     if (isMagicVerification(command.phone(), command.code())) {
-      return new VerifyVerificationResult(magicLoginProperty.name(), magicLoginProperty.code());
+      return new VerifyVerificationResult(magicLoginProperty.name(), magicLoginProperty.phone());
     }
 
     PhoneVerification targetVerification =
