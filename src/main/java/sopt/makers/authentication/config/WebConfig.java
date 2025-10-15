@@ -1,7 +1,9 @@
 package sopt.makers.authentication.config;
 
 import static sopt.makers.authentication.common.constant.CookieConstant.CORS_ALLOWED_ORIGIN_PATTERN;
+import static sopt.makers.authentication.common.constant.SystemConstant.API_KEY_HEADER;
 import static sopt.makers.authentication.common.constant.SystemConstant.PATTERN_ALL;
+import static sopt.makers.authentication.common.constant.SystemConstant.SERVICE_NAME_HEADER;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -16,7 +18,7 @@ public class WebConfig implements WebMvcConfigurer {
         .addMapping(PATTERN_ALL)
         .allowedOriginPatterns(CORS_ALLOWED_ORIGIN_PATTERN)
         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH")
-        .allowedHeaders("Authorization", "Content-Type")
+        .allowedHeaders("Authorization", "Content-Type", API_KEY_HEADER, SERVICE_NAME_HEADER)
         .allowCredentials(true)
         .maxAge(3600);
   }
