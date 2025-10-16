@@ -1,6 +1,6 @@
 package sopt.makers.authentication.config;
 
-import static sopt.makers.authentication.common.constant.CookieConstant.CORS_ALLOWED_ORIGIN_PATTERN;
+import static sopt.makers.authentication.common.constant.CookieConstant.CORS_ALLOWED_ORIGINS;
 import static sopt.makers.authentication.common.constant.SystemConstant.API_KEY_HEADER;
 import static sopt.makers.authentication.common.constant.SystemConstant.PATTERN_ALL;
 import static sopt.makers.authentication.common.constant.SystemConstant.SERVICE_NAME_HEADER;
@@ -16,7 +16,7 @@ public class WebConfig implements WebMvcConfigurer {
   public void addCorsMappings(CorsRegistry registry) {
     registry
         .addMapping(PATTERN_ALL)
-        .allowedOriginPatterns(CORS_ALLOWED_ORIGIN_PATTERN)
+        .allowedOrigins(CORS_ALLOWED_ORIGINS)
         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH")
         .allowedHeaders("Authorization", "Content-Type", API_KEY_HEADER, SERVICE_NAME_HEADER)
         .allowCredentials(true)
