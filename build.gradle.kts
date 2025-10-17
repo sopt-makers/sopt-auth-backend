@@ -49,7 +49,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("org.springframework.retry:spring-retry")
 
-	implementation("io.micrometer:micrometer-registry-prometheus")
+    implementation("io.micrometer:micrometer-registry-prometheus-simpleclient")
 
 	implementation("com.fasterxml.jackson.core:jackson-databind:${jacksonCoreVersion}")
 
