@@ -21,8 +21,8 @@ public class CookieUtil {
   private final SecurityProperty securityProperty;
 
   public HttpHeaders setRefreshToken(String refreshToken) {
-    long durationMillis = securityProperty.jwt().secret().expiration().refreshTokenExpiration();
-    Duration duration = Duration.ofMillis(durationMillis);
+    long durationSeconds = securityProperty.jwt().secret().expiration().refreshTokenExpiration();
+    Duration duration = Duration.ofSeconds(durationSeconds);
     ResponseCookie cookie =
         ResponseCookie.from(REFRESH_TOKEN_HEADER, refreshToken)
             .httpOnly(true)
