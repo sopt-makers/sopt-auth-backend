@@ -1,4 +1,4 @@
-FROM openjdk:21-jdk-slim as production
+FROM eclipse-temurin:21-jre-alpine AS production
 
 # 빌드 시 전달된 PROFILE 인수를 받을 ARG 설정
 ARG PROFILE
