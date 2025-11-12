@@ -39,6 +39,7 @@ val okHttpVersion = "${property("okHttp3Version")}"
 val gsonVersion = "${property("gsonVersion")}"
 val bouncycastleVersion = "${property("bouncycastleVersion")}"
 val jsonwebtokenVersion = "${property("jsonwebtokenVersion")}"
+val sentryVersion = "${property("sentryVersion")}"
 
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web")
@@ -77,6 +78,8 @@ dependencies {
 	testImplementation("com.navercorp.fixturemonkey:fixture-monkey-starter:${fixtureMonkeyVersion}")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 	testRuntimeOnly("com.h2database:h2")
+
+	implementation("io.sentry:sentry-spring-boot-starter-jakarta:${sentryVersion}")
 }
 
 spotless{

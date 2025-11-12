@@ -29,6 +29,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
+import io.sentry.Sentry;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -39,12 +40,14 @@ public class ApplicationExceptionHandler {
 
   @ExceptionHandler(Exception.class)
   ResponseEntity<BaseResponse<?>> handleInternalException(final Exception e) {
+    Sentry.captureException(e);
     log.error(e.getMessage());
     return ResponseUtil.failure(INTERNAL_SERVER_ERROR, e.getMessage());
   }
 
   @ExceptionHandler(BaseException.class)
   ResponseEntity<BaseResponse<?>> handleBusinessException(final BaseException e) {
+    Sentry.captureException(e);
     log.warn(e.getError().getMessage());
     return ResponseUtil.failure(e.getError());
   }
@@ -52,6 +55,7 @@ public class ApplicationExceptionHandler {
   @ExceptionHandler(NoResourceFoundException.class)
   public ResponseEntity<BaseResponse<?>> handleNoResourceFoundException(
       final NoResourceFoundException e) {
+    Sentry.captureException(e);
     log.warn(e.getMessage());
     return ResponseUtil.failure(NO_RESOURCE_FOUND);
   }
@@ -59,6 +63,7 @@ public class ApplicationExceptionHandler {
   @ExceptionHandler(NoHandlerFoundException.class)
   public ResponseEntity<BaseResponse<?>> handleNoHandlerFoundException(
       final NoHandlerFoundException e) {
+    Sentry.captureException(e);
     log.warn(e.getMessage());
     return ResponseUtil.failure(NOT_FOUND_URL);
   }
@@ -66,6 +71,7 @@ public class ApplicationExceptionHandler {
   @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
   public ResponseEntity<BaseResponse<?>> handleHttpRequestMethodNotSupportedException(
       final HttpRequestMethodNotSupportedException e) {
+    Sentry.captureException(e);
     log.warn(e.getMessage());
     return ResponseUtil.failure(METHOD_NOT_SUPPORTED);
   }
@@ -73,6 +79,7 @@ public class ApplicationExceptionHandler {
   @ExceptionHandler(MethodArgumentTypeMismatchException.class)
   public ResponseEntity<BaseResponse<?>> handleTypeMismatch(
       final MethodArgumentTypeMismatchException e) {
+    Sentry.captureException(e);
     log.warn(e.getMessage());
     return ResponseUtil.failure(METHOD_ARGUMENT_TYPE_MISMATCH);
   }
@@ -80,6 +87,7 @@ public class ApplicationExceptionHandler {
   @ExceptionHandler(MethodArgumentNotValidException.class)
   public ResponseEntity<BaseResponse<?>> handleMethodArgumentNotValidException(
       final MethodArgumentNotValidException e) {
+    Sentry.captureException(e);
     log.warn(e.getMessage());
     Errors errors = e.getBindingResult();
     Map<String, String> errorDetails = new HashMap<>();
@@ -94,6 +102,7 @@ public class ApplicationExceptionHandler {
   @ExceptionHandler(MissingRequestHeaderException.class)
   public ResponseEntity<BaseResponse<?>> handleMissingHeaderException(
       final MissingRequestHeaderException e) {
+    Sentry.captureException(e);
     log.warn(e.getMessage());
     return ResponseUtil.failure(MISSING_REQUEST_HEADER);
   }
@@ -101,6 +110,7 @@ public class ApplicationExceptionHandler {
   @ExceptionHandler(HttpMessageNotReadableException.class)
   public ResponseEntity<BaseResponse<?>> handleNotReadableException(
       final HttpMessageNotReadableException e) {
+    Sentry.captureException(e);
     log.warn(e.getMessage());
     return ResponseUtil.failure(INVALID_REQUEST_BODY);
   }

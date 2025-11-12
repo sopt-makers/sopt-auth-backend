@@ -30,3 +30,8 @@ external:
   app:
     url: ${APP_BASE_URL}
     key: ${APP_EXTERNAL_KEY}
+  sentry:
+    dsn: ${SENTRY_DSN}
+    environment: ${SENTRY_ENVIRONMENT}
+    server-name: ${SENTRY_SERVER_NAME}
+    send-default-pii: true
