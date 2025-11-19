@@ -32,13 +32,10 @@ configurations {
 	}
 }
 
-val archunitVersion = "${property("archunitVersion")}"
-val fixtureMonkeyVersion = "${property("fixturemonkeyVersion")}"
 val jacksonCoreVersion = "${property("jacksonDataBindVersion")}"
 val okHttpVersion = "${property("okHttp3Version")}"
 val gsonVersion = "${property("gsonVersion")}"
 val bouncycastleVersion = "${property("bouncycastleVersion")}"
-val jsonwebtokenVersion = "${property("jsonwebtokenVersion")}"
 
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web")
@@ -60,21 +57,15 @@ dependencies {
 	implementation("org.bouncycastle:bcpkix-jdk18on:${bouncycastleVersion}")
 
 	compileOnly("org.projectlombok:lombok")
-	runtimeOnly("org.postgresql:postgresql")
-	runtimeOnly("com.mysql:mysql-connector-j")
 	annotationProcessor("org.projectlombok:lombok")
 
-	implementation("io.jsonwebtoken:jjwt-api:${jsonwebtokenVersion}")
-	runtimeOnly("io.jsonwebtoken:jjwt-impl:${jsonwebtokenVersion}")
-	runtimeOnly("io.jsonwebtoken:jjwt-jackson:${jsonwebtokenVersion}")
+    runtimeOnly("org.postgresql:postgresql")
 
 	implementation("org.springframework.boot:spring-boot-starter-cache")
 	implementation("com.github.ben-manes.caffeine:caffeine")
 
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.security:spring-security-test")
-	testImplementation("com.tngtech.archunit:archunit:${archunitVersion}")
-	testImplementation("com.navercorp.fixturemonkey:fixture-monkey-starter:${fixtureMonkeyVersion}")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 	testRuntimeOnly("com.h2database:h2")
 }
