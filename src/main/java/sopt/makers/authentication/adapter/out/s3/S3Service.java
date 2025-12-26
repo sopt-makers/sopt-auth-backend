@@ -1,0 +1,38 @@
+package sopt.makers.authentication.adapter.out.s3;
+
+import sopt.makers.authentication.application.port.out.s3.S3FileManager;
+
+import java.io.IOException;
+import java.nio.file.Paths;
+
+import org.springframework.stereotype.Service;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import software.amazon.awssdk.core.sync.ResponseTransformer;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.GetObjectRequest;
+
+@Service
+@RequiredArgsConstructor
+@Slf4j
+public class S3Service implements S3FileManager {
+
+  private final S3Client s3Client;
+
+  @Override
+  public String downloadFile(String bucket, String key, String localFilePath) throws IOException {
+    try {
+      log.info(
+          "Downloading file from S3: bucket={}, key={}, localPath={}", bucket, key, localFilePath);
+      s3Client.getObject(
+          GetObjectRequest.builder().bucket(bucket).key(key).build(),
+          ResponseTransformer.toFile(Paths.get(localFilePath)));
+      log.info("Successfully downloaded file to: {}", localFilePath);
+      return localFilePath;
+    } catch (Exception e) {
+      log.error("Failed to download file from S3: bucket={}, key={}", bucket, key, e);
+      throw new IOException("Failed to download file from S3", e);
+    }
+  }
+}
