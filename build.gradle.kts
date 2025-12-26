@@ -38,7 +38,10 @@ val gsonVersion = "${property("gsonVersion")}"
 val bouncycastleVersion = "${property("bouncycastleVersion")}"
 
 dependencies {
-	implementation("org.springframework.boot:spring-boot-starter-web")
+	// Spring Web에서 Tomcat 제외 (Lambda에서는 불필요)
+	implementation("org.springframework.boot:spring-boot-starter-web") {
+		exclude(group = "org.springframework.boot", module = "spring-boot-starter-tomcat")
+	}
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("org.springframework.boot:spring-boot-starter-validation")
@@ -65,6 +68,11 @@ dependencies {
 
 	implementation("org.springframework.boot:spring-boot-starter-cache")
 	implementation("com.github.ben-manes.caffeine:caffeine")
+
+    // AWS Lambda Dependencies for JAR deployment
+    implementation("com.amazonaws.serverless:aws-serverless-java-container-springboot3:2.1.5")
+    implementation("com.amazonaws:aws-lambda-java-core:1.4.0")
+    implementation("com.amazonaws:aws-lambda-java-events:3.16.1")
 
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.security:spring-security-test")
