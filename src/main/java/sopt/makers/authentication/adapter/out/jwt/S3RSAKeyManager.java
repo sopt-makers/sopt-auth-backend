@@ -53,13 +53,6 @@ public class S3RSAKeyManager implements RSAKeyManager {
     } catch (S3Exception e) {
       log.error("Failed to download public key from S3", e);
       throw e;
-    } catch (IOException e) {
-      log.error("Failed to read public key file", e);
-      throw new ResourceException(INVALID_LOCATION);
-    } catch (NoSuchAlgorithmException e) {
-      throw new ResourceException(INVALID_ALGORITHM);
-    } catch (InvalidKeySpecException e) {
-      throw new ResourceException(INVALID_SUBJECT);
     }
   }
 
@@ -72,72 +65,88 @@ public class S3RSAKeyManager implements RSAKeyManager {
     } catch (S3Exception e) {
       log.error("Failed to download private key from S3", e);
       throw e;
+    }
+  }
+
+  private String downloadPublicKeyFromS3() {
+    return downloadKeyFromS3(PUBLIC_KEY_FILE_NAME, externalProperty.aws().s3().publicKeyPath());
+  }
+
+  private String downloadPrivateKeyFromS3() {
+    return downloadKeyFromS3(PRIVATE_KEY_FILE_NAME, externalProperty.aws().s3().privateKeyPath());
+  }
+
+  private String downloadKeyFromS3(String fileName, String s3KeyPath) {
+    try {
+      Path baseDir = Paths.get(System.getProperty(TEMP_DIR_PROPERTY));
+      Path targetPath = baseDir.resolve(fileName);
+
+      Files.createDirectories(baseDir);
+
+      if (Files.exists(targetPath)) {
+        log.debug("Key file already exists, skipping download: {}", targetPath);
+        return targetPath.toString();
+      }
+
+      String bucket = externalProperty.aws().s3().bucket();
+      return s3FileManager.downloadFile(bucket, s3KeyPath, targetPath.toString());
     } catch (IOException e) {
-      log.error("Failed to read private key file", e);
+      log.error("Failed to create directory or check file existence: fileName={}", fileName, e);
       throw new ResourceException(INVALID_LOCATION);
+    }
+  }
+
+  private PemObject readPublicPemFile(final String filePath) {
+    try {
+      String content = Files.readString(Paths.get(filePath), StandardCharsets.UTF_8);
+      try (PemReader pemReader = new PemReader(new StringReader(content))) {
+        return pemReader.readPemObject();
+      }
+    } catch (IOException e) {
+      log.error("Failed to read public key file: filePath={}", filePath, e);
+      throw new ResourceException(INVALID_LOCATION);
+    }
+  }
+
+  private RSAPublicKey parsePublicKey(final PemObject pemObject) {
+    try {
+      byte[] publicKeyBytes = pemObject.getContent();
+      X509EncodedKeySpec keySpec = new X509EncodedKeySpec(publicKeyBytes);
+      KeyFactory keyFactory = KeyFactory.getInstance(RSA);
+      return (RSAPublicKey) keyFactory.generatePublic(keySpec);
     } catch (NoSuchAlgorithmException e) {
+      log.error("Invalid algorithm for public key parsing", e);
       throw new ResourceException(INVALID_ALGORITHM);
     } catch (InvalidKeySpecException e) {
+      log.error("Invalid key spec for public key parsing", e);
       throw new ResourceException(INVALID_SUBJECT);
     }
   }
 
-  private String downloadPublicKeyFromS3() throws IOException {
-    Path baseDir = Paths.get(System.getProperty(TEMP_DIR_PROPERTY));
-    Path targetPath = baseDir.resolve(PUBLIC_KEY_FILE_NAME);
-
-    Files.createDirectories(baseDir);
-
-    if (Files.exists(targetPath)) {
-      return targetPath.toString();
-    }
-
-    String bucket = externalProperty.aws().s3().bucket();
-    String key = externalProperty.aws().s3().publicKeyPath();
-    return s3FileManager.downloadFile(bucket, key, targetPath.toString());
-  }
-
-  private String downloadPrivateKeyFromS3() throws IOException {
-    Path baseDir = Paths.get(System.getProperty(TEMP_DIR_PROPERTY));
-    Path targetPath = baseDir.resolve(PRIVATE_KEY_FILE_NAME);
-
-    Files.createDirectories(baseDir);
-    if (Files.exists(targetPath)) {
-      return targetPath.toString();
-    }
-
-    String bucket = externalProperty.aws().s3().bucket();
-    String key = externalProperty.aws().s3().privateKeyPath();
-    return s3FileManager.downloadFile(bucket, key, targetPath.toString());
-  }
-
-  private PemObject readPublicPemFile(final String filePath) throws IOException {
-    String content = Files.readString(Paths.get(filePath), StandardCharsets.UTF_8);
-    try (PemReader pemReader = new PemReader(new StringReader(content))) {
-      return pemReader.readPemObject();
+  private PemObject readPrivatePemFile(final String filePath) {
+    try {
+      String content = Files.readString(Paths.get(filePath), StandardCharsets.UTF_8);
+      try (PemReader pemReader = new PemReader(new StringReader(content))) {
+        return pemReader.readPemObject();
+      }
+    } catch (IOException e) {
+      log.error("Failed to read private key file: filePath={}", filePath, e);
+      throw new ResourceException(INVALID_LOCATION);
     }
   }
 
-  private RSAPublicKey parsePublicKey(final PemObject pemObject)
-      throws NoSuchAlgorithmException, InvalidKeySpecException {
-    byte[] publicKeyBytes = pemObject.getContent();
-    X509EncodedKeySpec keySpec = new X509EncodedKeySpec(publicKeyBytes);
-    KeyFactory keyFactory = KeyFactory.getInstance(RSA);
-    return (RSAPublicKey) keyFactory.generatePublic(keySpec);
-  }
-
-  private PemObject readPrivatePemFile(final String filePath) throws IOException {
-    String content = Files.readString(Paths.get(filePath), StandardCharsets.UTF_8);
-    try (PemReader pemReader = new PemReader(new StringReader(content))) {
-      return pemReader.readPemObject();
+  private RSAPrivateKey generatePrivateKey(final PemObject pemObject) {
+    try {
+      byte[] privateKeyBytes = pemObject.getContent();
+      PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(privateKeyBytes);
+      KeyFactory keyFactory = KeyFactory.getInstance(RSA);
+      return (RSAPrivateKey) keyFactory.generatePrivate(keySpec);
+    } catch (NoSuchAlgorithmException e) {
+      log.error("Invalid algorithm for private key generation", e);
+      throw new ResourceException(INVALID_ALGORITHM);
+    } catch (InvalidKeySpecException e) {
+      log.error("Invalid key spec for private key generation", e);
+      throw new ResourceException(INVALID_SUBJECT);
     }
-  }
-
-  private RSAPrivateKey generatePrivateKey(final PemObject pemObject)
-      throws NoSuchAlgorithmException, InvalidKeySpecException {
-    byte[] privateKeyBytes = pemObject.getContent();
-    PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(privateKeyBytes);
-    KeyFactory keyFactory = KeyFactory.getInstance(RSA);
-    return (RSAPrivateKey) keyFactory.generatePrivate(keySpec);
   }
 }
