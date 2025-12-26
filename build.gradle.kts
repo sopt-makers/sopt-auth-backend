@@ -56,6 +56,8 @@ dependencies {
 	implementation("org.bouncycastle:bcprov-jdk18on:${bouncycastleVersion}")
 	implementation("org.bouncycastle:bcpkix-jdk18on:${bouncycastleVersion}")
 
+	implementation("software.amazon.awssdk:s3:2.20.26")
+
 	compileOnly("org.projectlombok:lombok")
 	annotationProcessor("org.projectlombok:lombok")
 
