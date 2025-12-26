@@ -5,7 +5,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @ConfigurationProperties(prefix = "external")
-public record ExternalProperty(Gabia gabia, OAuth oauth, Playground playground, App app, S3 s3) {
+public record ExternalProperty(Gabia gabia, OAuth oauth, Playground playground, App app, Aws aws) {
 
   public record Gabia(Sms sms) {
     public record Sms(String id, String key, String url, String phone) {}
@@ -26,7 +26,11 @@ public record ExternalProperty(Gabia gabia, OAuth oauth, Playground playground, 
 
   public record App(String key, String url) {}
 
-  public record S3(String region, Jwt jwt) {
-    public record Jwt(String bucket, String publicKeyPath, String privateKeyPath) {}
+  public record Aws(
+      String region,
+      @JsonProperty("access-key") String accessKey,
+      @JsonProperty("secret-key") String secretKey,
+      S3 s3) {
+    public record S3(String bucket, String publicKeyPath, String privateKeyPath) {}
   }
 }

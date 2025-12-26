@@ -30,9 +30,11 @@ external:
   app:
     url: ${APP_BASE_URL}
     key: ${APP_EXTERNAL_KEY}
-  s3:
+  aws:
     region: ${AWS_REGION}
-    jwt:
+    access-key: ${AWS_ACCESS_KEY:}
+    secret-key: ${AWS_SECRET_KEY:}
+    s3:
       bucket: ${JWT_KEY_S3_BUCKET}
       public-key-path: ${JWT_PUBLIC_KEY_S3_PATH}
       private-key-path: ${JWT_PRIVATE_KEY_S3_PATH}

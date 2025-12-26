@@ -73,15 +73,15 @@ public class S3RSAKeyManager implements RSAKeyManager {
   }
 
   private String downloadPublicKeyFromS3() throws IOException {
-    String bucket = externalProperty.s3().jwt().bucket();
-    String key = externalProperty.s3().jwt().publicKeyPath();
+    String bucket = externalProperty.aws().s3().bucket();
+    String key = externalProperty.aws().s3().publicKeyPath();
 
     return s3FileManager.downloadFile(bucket, key, PUBLIC_KEY_TEMP_PATH);
   }
 
   private String downloadPrivateKeyFromS3() throws IOException {
-    String bucket = externalProperty.s3().jwt().bucket();
-    String key = externalProperty.s3().jwt().privateKeyPath();
+    String bucket = externalProperty.aws().s3().bucket();
+    String key = externalProperty.aws().s3().privateKeyPath();
 
     return s3FileManager.downloadFile(bucket, key, PRIVATE_KEY_TEMP_PATH);
   }
