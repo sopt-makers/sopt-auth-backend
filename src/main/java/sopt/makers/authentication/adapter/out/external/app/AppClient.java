@@ -5,6 +5,7 @@ import static sopt.makers.authentication.adapter.out.external.exception.ClientEr
 
 import sopt.makers.authentication.adapter.out.external.exception.ClientException.AppRequestException;
 import sopt.makers.authentication.adapter.out.external.exception.ClientException.AppResponseException;
+import sopt.makers.authentication.config.ExternalProperty;
 
 import java.io.IOException;
 import java.util.Map;
@@ -35,7 +36,7 @@ public class AppClient {
   private static final String ENDPOINT_CREATE_PROFILE = "internal/api/v1/members";
   private static final String ENDPOINT_DELETE_PROFILE = "internal/api/v1/members";
   private static final String FIELD_USER_ID = "userId";
-  private final AppProperty appProperty;
+  private final ExternalProperty externalProperty;
   private final OkHttpClient client;
   private final Gson gson;
 
@@ -47,14 +48,14 @@ public class AppClient {
     String requestBody = gson.toJson(Map.of(FIELD_USER_ID, memberId));
     RequestBody body = RequestBody.create(requestBody, JSON);
     HttpUrl url =
-        HttpUrl.parse(appProperty.url())
+        HttpUrl.parse(externalProperty.app().url())
             .newBuilder()
             .addPathSegments(ENDPOINT_CREATE_PROFILE)
             .build();
     Request httpRequest =
         new Request.Builder()
             .url(url)
-            .addHeader(HEADER_API_KEY, appProperty.key())
+            .addHeader(HEADER_API_KEY, externalProperty.app().key())
             .addHeader(HEADER_CONTENT_TYPE, CONTENT_TYPE_JSON)
             .post(body)
             .build();
@@ -75,7 +76,7 @@ public class AppClient {
       backoff = @Backoff(delay = 2000, multiplier = 1.5))
   public void deleteMemberProfile(Long memberId) {
     okhttp3.HttpUrl url =
-        okhttp3.HttpUrl.parse(appProperty.url())
+        okhttp3.HttpUrl.parse(externalProperty.app().url())
             .newBuilder()
             .addPathSegments(ENDPOINT_DELETE_PROFILE)
             .addPathSegment(String.valueOf(memberId))
@@ -84,7 +85,7 @@ public class AppClient {
     Request httpRequest =
         new Request.Builder()
             .url(url)
-            .addHeader(HEADER_API_KEY, appProperty.key())
+            .addHeader(HEADER_API_KEY, externalProperty.app().key())
             .addHeader(HEADER_CONTENT_TYPE, CONTENT_TYPE_JSON)
             .delete()
             .build();
