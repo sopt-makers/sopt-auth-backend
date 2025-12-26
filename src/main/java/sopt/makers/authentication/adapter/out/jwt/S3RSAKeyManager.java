@@ -87,9 +87,8 @@ public class S3RSAKeyManager implements RSAKeyManager {
     Path targetPath = baseDir.resolve(PUBLIC_KEY_FILE_NAME);
 
     Files.createDirectories(baseDir);
-    // 파일이 이미 존재하면 다운로드 건너뛰기
+
     if (Files.exists(targetPath)) {
-      log.debug("Public key file already exists, skipping download: {}", targetPath);
       return targetPath.toString();
     }
 
@@ -103,9 +102,7 @@ public class S3RSAKeyManager implements RSAKeyManager {
     Path targetPath = baseDir.resolve(PRIVATE_KEY_FILE_NAME);
 
     Files.createDirectories(baseDir);
-    // 파일이 이미 존재하면 다운로드 건너뛰기
     if (Files.exists(targetPath)) {
-      log.debug("Private key file already exists, skipping download: {}", targetPath);
       return targetPath.toString();
     }
 
