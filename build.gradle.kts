@@ -1,4 +1,5 @@
 import org.springframework.boot.gradle.tasks.bundling.BootJar
+import org.gradle.api.tasks.bundling.Zip
 
 val googleJavaFormatVersion = "1.18.1"
 
@@ -110,13 +111,44 @@ tasks.named("compileJava") {
 
 val jarName = "authentication.jar"
 tasks.named<BootJar>("bootJar") {
+	enabled = true
 	archiveFileName.set(jarName)
 }
 
-// *-SNAPSHOT-plain.jar 생성 방지
-tasks.getByName<Jar>("jar"){
-	enabled=false
+// JAR 설정
+tasks.named<Jar>("jar") {
+	enabled = true
+	archiveClassifier.set("")
 }
+
+// Lambda ZIP 빌드 설정
+// 로컬 개발 시에는 필요 없으므로 build task에 포함하지 않음
+// Lambda 배포가 필요할 때만: ./gradlew lambdaJar 실행
+tasks.register<Zip>("lambdaJar") {
+	dependsOn("jar")
+	archiveClassifier.set("lambda")
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+	isZip64 = true // 대용량 ZIP 파일 지원
+
+	// lib 디렉토리 구조로 패키징
+	into("lib") {
+		from(tasks.jar)
+		from(configurations.runtimeClasspath) {
+			// Lambda에서 불필요한 파일 제외
+			exclude("org/apache/tomcat/embed/**")
+			exclude("META-INF/*.SF")
+			exclude("META-INF/*.DSA")
+			exclude("META-INF/*.RSA")
+			exclude("META-INF/MANIFEST.MF")
+			exclude("**/module-info.class")
+		}
+	}
+}
+
+// build task에는 lambdaJar를 포함하지 않음
+// - 로컬 개발/테스트: ./gradlew build (bootJar만 생성)
+// - Lambda 배포: ./gradlew lambdaJar (Lambda ZIP 생성)
+// - CI/CD에서 Lambda 배포가 필요하면: ./gradlew build lambdaJar
 
 val profile: String = project.findProperty("profile") as? String ?: "test"
 println("Build Profile: $profile")
