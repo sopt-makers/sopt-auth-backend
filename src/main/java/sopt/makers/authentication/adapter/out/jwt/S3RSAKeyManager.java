@@ -4,7 +4,9 @@ import static sopt.makers.authentication.adapter.out.jwt.exception.ResourceFailu
 import static sopt.makers.authentication.adapter.out.jwt.exception.ResourceFailure.INVALID_LOCATION;
 import static sopt.makers.authentication.adapter.out.jwt.exception.ResourceFailure.INVALID_SUBJECT;
 import static sopt.makers.authentication.common.constant.SystemConstant.RSA;
+import static sopt.makers.authentication.common.constant.SystemConstant.TEMP_DIR_PROPERTY;
 
+import sopt.makers.authentication.adapter.out.external.exception.ClientException.S3Exception;
 import sopt.makers.authentication.adapter.out.jwt.exception.ResourceException;
 import sopt.makers.authentication.application.port.out.auth.RSAKeyManager;
 import sopt.makers.authentication.application.port.out.s3.S3FileManager;
@@ -14,6 +16,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
@@ -37,8 +40,9 @@ public class S3RSAKeyManager implements RSAKeyManager {
 
   private final S3FileManager s3FileManager;
   private final ExternalProperty externalProperty;
-  private static final String PUBLIC_KEY_TEMP_PATH = "/tmp/jwt_public_key.pem";
-  private static final String PRIVATE_KEY_TEMP_PATH = "/tmp/jwt_private_key.pem";
+
+  private static final String PUBLIC_KEY_FILE_NAME = "jwt_public_key.pem";
+  private static final String PRIVATE_KEY_FILE_NAME = "jwt_private_key.pem";
 
   @Override
   public RSAPublicKey getPublicKey() {
@@ -46,8 +50,11 @@ public class S3RSAKeyManager implements RSAKeyManager {
       String tempFilePath = downloadPublicKeyFromS3();
       PemObject pemObject = readPublicPemFile(tempFilePath);
       return parsePublicKey(pemObject);
+    } catch (S3Exception e) {
+      log.error("Failed to download public key from S3", e);
+      throw e;
     } catch (IOException e) {
-      log.error("Failed to read public key from S3", e);
+      log.error("Failed to read public key file", e);
       throw new ResourceException(INVALID_LOCATION);
     } catch (NoSuchAlgorithmException e) {
       throw new ResourceException(INVALID_ALGORITHM);
@@ -62,8 +69,11 @@ public class S3RSAKeyManager implements RSAKeyManager {
       String tempFilePath = downloadPrivateKeyFromS3();
       PemObject pemObject = readPrivatePemFile(tempFilePath);
       return generatePrivateKey(pemObject);
+    } catch (S3Exception e) {
+      log.error("Failed to download private key from S3", e);
+      throw e;
     } catch (IOException e) {
-      log.error("Failed to read private key from S3", e);
+      log.error("Failed to read private key file", e);
       throw new ResourceException(INVALID_LOCATION);
     } catch (NoSuchAlgorithmException e) {
       throw new ResourceException(INVALID_ALGORITHM);
@@ -73,17 +83,35 @@ public class S3RSAKeyManager implements RSAKeyManager {
   }
 
   private String downloadPublicKeyFromS3() throws IOException {
+    Path baseDir = Paths.get(System.getProperty(TEMP_DIR_PROPERTY));
+    Path targetPath = baseDir.resolve(PUBLIC_KEY_FILE_NAME);
+
+    Files.createDirectories(baseDir);
+    // 파일이 이미 존재하면 다운로드 건너뛰기
+    if (Files.exists(targetPath)) {
+      log.debug("Public key file already exists, skipping download: {}", targetPath);
+      return targetPath.toString();
+    }
+
     String bucket = externalProperty.aws().s3().bucket();
     String key = externalProperty.aws().s3().publicKeyPath();
-
-    return s3FileManager.downloadFile(bucket, key, PUBLIC_KEY_TEMP_PATH);
+    return s3FileManager.downloadFile(bucket, key, targetPath.toString());
   }
 
   private String downloadPrivateKeyFromS3() throws IOException {
+    Path baseDir = Paths.get(System.getProperty(TEMP_DIR_PROPERTY));
+    Path targetPath = baseDir.resolve(PRIVATE_KEY_FILE_NAME);
+
+    Files.createDirectories(baseDir);
+    // 파일이 이미 존재하면 다운로드 건너뛰기
+    if (Files.exists(targetPath)) {
+      log.debug("Private key file already exists, skipping download: {}", targetPath);
+      return targetPath.toString();
+    }
+
     String bucket = externalProperty.aws().s3().bucket();
     String key = externalProperty.aws().s3().privateKeyPath();
-
-    return s3FileManager.downloadFile(bucket, key, PRIVATE_KEY_TEMP_PATH);
+    return s3FileManager.downloadFile(bucket, key, targetPath.toString());
   }
 
   private PemObject readPublicPemFile(final String filePath) throws IOException {
