@@ -2,6 +2,7 @@ package sopt.makers.authentication.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.util.StringUtils;
 
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,7 @@ import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 
 @Configuration
+@Profile({"local", "test"})
 @RequiredArgsConstructor
 public class S3ClientConfig {
 
