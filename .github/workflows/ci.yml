@@ -28,73 +28,15 @@ jobs:
           ${{ secrets.PROPERTY_GRADLE }}
           EOF
 
-      - name: 🔑 Create .env file
+      # ⭐ 핵심 변경 포인트
+      - name: 🔑 Create test.env in classpath
         run: |
-          cat <<EOF > .env
+          mkdir -p src/main/resources/env
+          cat <<EOF > src/main/resources/env/test.env
           ${{ secrets.ENV_FILE_TEST }}
           EOF
 
-      - name: ✅ Validate env variables
+      - name: 🧱 Build (context load only)
         run: |
           set -e
-          source .env
-
-          REQUIRED_VARS=(
-            DB_URL
-            DB_USERNAME
-            DB_PASSWORD
-            DB_DRIVER_CLASS
-  
-            JPA_DATABASE_PLATFORM
-            JPA_DATABASE
-            
-            ACCESS_TOKEN_EXPIRATION_TIME
-            REFRESH_TOKEN_EXPIRATION_TIME
-            ISSUER
-            
-            GABIA_SMS_ID
-            GABIA_SMS_KEY
-            GABIA_SMS_URL
-            GABIA_SMS_PHONE
-            
-            APPLE_AUD_APP
-            APPLE_AUD_WEB
-            GOOGLE_CLIENT_ID
-            
-            PLAYGROUND_X_API_KEY
-            CREW_X_API_KEY
-            APP_X_API_KEY
-            ADMIN_X_API_KEY
-            PLATFORM_X_API_KEY
-            MONITORING_X_API_KEY
-            
-            JWT_KEY_S3_BUCKET
-            JWT_PUBLIC_KEY_S3_PATH
-            JWT_PRIVATE_KEY_S3_PATH
-            
-            ACTUATOR_PATH
-            USER_PATH
-            MAGIC_LOGIN_PHONE
-            MAGIC_LOGIN_CODE
-            MAGIC_LOGIN_NAME
-            
-            PLAYGROUND_EXTERNAL_KEY
-            PLAYGROUND_BASE_URL
-            APP_EXTERNAL_KEY
-            APP_BASE_URL
-          )
-
-          for VAR in "${REQUIRED_VARS[@]}"; do
-            if [ -z "${!VAR}" ]; then
-              echo "❌ Missing env: $VAR"
-              exit 1
-            fi
-          done
-
-          echo "✅ Env validation passed"
-
-      - name: 🧱 Build and Test with Gradle
-        run: |
-          set -e
-          source .env
           ./gradlew clean build --no-daemon -Pprofile=test
