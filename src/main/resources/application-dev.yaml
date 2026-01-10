@@ -1,7 +1,6 @@
 spring:
   main:
     lazy-initialization: true
-    web-application-type: none
   config:
     activate:
       on-profile: dev

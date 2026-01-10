@@ -9,20 +9,151 @@ Globals:
     MemorySize: 3072
     Runtime: java21
 
+########################################
+# Parameters
+########################################
 Parameters:
   S3Bucket:
     Type: String
-    Default: ""
     Description: S3 bucket containing the Lambda JAR
+
   S3Key:
     Type: String
-    Default: ""
     Description: S3 key (path) to the Lambda JAR file
+
   Profile:
     Type: String
-    Default: "lambda-prod"
+    Default: prod
     Description: Spring profile to use
 
+  # === Database ===
+  DbUrl:
+    Type: String
+    NoEcho: true
+  DbUsername:
+    Type: String
+    NoEcho: true
+  DbPassword:
+    Type: String
+    NoEcho: true
+  DbDriverClass:
+    Type: String
+    NoEcho: true
+
+  JpaDatabasePlatform:
+    Type: String
+    NoEcho: true
+  JpaDatabase:
+    Type: String
+    NoEcho: true
+
+  # === JWT / Token ===
+  KeyId:
+    Type: String
+    NoEcho: true
+  AccessTokenExpirationTime:
+    Type: String
+    NoEcho: true
+  RefreshTokenExpirationTime:
+    Type: String
+    NoEcho: true
+  Issuer:
+    Type: String
+    NoEcho: true
+
+  # === External APIs ===
+  GabiaSmsId:
+    Type: String
+    NoEcho: true
+  GabiaSmsKey:
+    Type: String
+    NoEcho: true
+  GabiaSmsUrl:
+    Type: String
+    NoEcho: true
+  GabiaSmsPhone:
+    Type: String
+    NoEcho: true
+
+  AppleAudApp:
+    Type: String
+    NoEcho: true
+  AppleAudWeb:
+    Type: String
+    NoEcho: true
+  GoogleClientId:
+    Type: String
+    NoEcho: true
+
+  PlaygroundXApiKey:
+    Type: String
+    NoEcho: true
+  CrewXApiKey:
+    Type: String
+    NoEcho: true
+  AppXApiKey:
+    Type: String
+    NoEcho: true
+  AdminXApiKey:
+    Type: String
+    NoEcho: true
+  PlatformXApiKey:
+    Type: String
+    NoEcho: true
+  MonitoringXApiKey:
+    Type: String
+    NoEcho: true
+
+  # === JWT Key (S3) ===
+  JwtKeyS3Bucket:
+    Type: String
+    NoEcho: true
+  JwtPublicKeyS3Path:
+    Type: String
+    NoEcho: true
+  JwtPrivateKeyS3Path:
+    Type: String
+    NoEcho: true
+
+  # === Paths ===
+  ActuatorPath:
+    Type: String
+    NoEcho: true
+  UserPath:
+    Type: String
+    NoEcho: true
+  GetPublicKey:
+    Type: String
+    NoEcho: true
+
+  # === Magic Login ===
+  MagicLoginPhone:
+    Type: String
+    NoEcho: true
+  MagicLoginCode:
+    Type: String
+    NoEcho: true
+  MagicLoginName:
+    Type: String
+    NoEcho: true
+
+  # === External Services ===
+  PlaygroundExternalKey:
+    Type: String
+    NoEcho: true
+  PlaygroundBaseUrl:
+    Type: String
+    NoEcho: true
+  AppExternalKey:
+    Type: String
+    NoEcho: true
+  AppBaseUrl:
+    Type: String
+    NoEcho: true
+
+########################################
+# Resources
+########################################
 Resources:
   ApiFunction:
     Type: AWS::Serverless::Function
@@ -35,18 +166,75 @@ Resources:
       SnapStart:
         ApplyOn: PublishedVersions
       AutoPublishAlias: live
+
       Environment:
         Variables:
           SPRING_PROFILES_ACTIVE: !Ref Profile
           TZ: Asia/Seoul
           JAVA_TOOL_OPTIONS: "-XX:+TieredCompilation -XX:TieredStopAtLevel=1"
+
+          # === DB ===
+          DB_URL: !Ref DbUrl
+          DB_USERNAME: !Ref DbUsername
+          DB_PASSWORD: !Ref DbPassword
+          DB_DRIVER_CLASS: !Ref DbDriverClass
+          JPA_DATABASE_PLATFORM: !Ref JpaDatabasePlatform
+          JPA_DATABASE: !Ref JpaDatabase
+
+          # === JWT / Token ===
+          KEY_ID: !Ref KeyId
+          ACCESS_TOKEN_EXPIRATION_TIME: !Ref AccessTokenExpirationTime
+          REFRESH_TOKEN_EXPIRATION_TIME: !Ref RefreshTokenExpirationTime
+          ISSUER: !Ref Issuer
+
+          # === Gabia ===
+          GABIA_SMS_ID: !Ref GabiaSmsId
+          GABIA_SMS_KEY: !Ref GabiaSmsKey
+          GABIA_SMS_URL: !Ref GabiaSmsUrl
+          GABIA_SMS_PHONE: !Ref GabiaSmsPhone
+
+          # === OAuth ===
+          APPLE_AUD_APP: !Ref AppleAudApp
+          APPLE_AUD_WEB: !Ref AppleAudWeb
+          GOOGLE_CLIENT_ID: !Ref GoogleClientId
+
+          # === X API Keys ===
+          PLAYGROUND_X_API_KEY: !Ref PlaygroundXApiKey
+          CREW_X_API_KEY: !Ref CrewXApiKey
+          APP_X_API_KEY: !Ref AppXApiKey
+          ADMIN_X_API_KEY: !Ref AdminXApiKey
+          PLATFORM_X_API_KEY: !Ref PlatformXApiKey
+          MONITORING_X_API_KEY: !Ref MonitoringXApiKey
+
+          # === JWT S3 ===
+          JWT_KEY_S3_BUCKET: !Ref JwtKeyS3Bucket
+          JWT_PUBLIC_KEY_S3_PATH: !Ref JwtPublicKeyS3Path
+          JWT_PRIVATE_KEY_S3_PATH: !Ref JwtPrivateKeyS3Path
+
+          # === Paths ===
+          ACTUATOR_PATH: !Ref ActuatorPath
+          USER_PATH: !Ref UserPath
+          GET_PUBLIC_KEY: !Ref GetPublicKey
+
+          # === Magic Login ===
+          MAGIC_LOGIN_PHONE: !Ref MagicLoginPhone
+          MAGIC_LOGIN_CODE: !Ref MagicLoginCode
+          MAGIC_LOGIN_NAME: !Ref MagicLoginName
+
+          # === External ===
+          PLAYGROUND_EXTERNAL_KEY: !Ref PlaygroundExternalKey
+          PLAYGROUND_BASE_URL: !Ref PlaygroundBaseUrl
+          APP_EXTERNAL_KEY: !Ref AppExternalKey
+          APP_BASE_URL: !Ref AppBaseUrl
+
       Policies:
         - AWSLambdaBasicExecutionRole
         - Statement:
             - Effect: Allow
               Action:
                 - s3:GetObject
-              Resource: !Sub "arn:aws:s3:::${S3Bucket}/*"
+              Resource: !Sub "arn:aws:s3:::${JwtKeyS3Bucket}/*"
+
       Events:
         ApiProxy:
           Type: Api
@@ -71,7 +259,10 @@ Resources:
         AllowMethods: "'*'"
         AllowCredentials: "'false'"
 
+########################################
+# Outputs
+########################################
 Outputs:
   ApiEndpoint:
-    Description: "API Gateway endpoint URL"
+    Description: API Gateway endpoint URL
     Value: !Sub "https://${ApiGateway}.execute-api.${AWS::Region}.amazonaws.com/prod"
