@@ -11,7 +11,7 @@ val gsonVersion = property("gsonVersion").toString()
 val bouncycastleVersion = property("bouncycastleVersion").toString()
 
 /* =====================================================
- * Profile (BUILD TIME)
+ * Build Profile
  * ===================================================== */
 val profile: String = project.findProperty("profile") as? String ?: "local"
 val isLambdaProfile = profile == "dev" || profile == "prod"
@@ -47,31 +47,9 @@ java {
     }
 }
 
-/* =====================================================
- * SourceSets
- * ===================================================== */
-sourceSets {
-
-    val main by getting
-    val lambda by creating {
-        java.srcDir("src/lambda/java")
-
-        compileClasspath += main.output + configurations.runtimeClasspath.get()
-        runtimeClasspath += output + compileClasspath
-    }
-}
-
-/* =====================================================
- * Configurations
- * ===================================================== */
 configurations {
-
     compileOnly {
-        extendsFrom(annotationProcessor.get())
-    }
-
-    named("lambdaImplementation") {
-        extendsFrom(implementation.get())
+        extendsFrom(configurations.annotationProcessor.get())
     }
 }
 
@@ -112,12 +90,10 @@ dependencies {
     /* ---------- AWS SDK ---------- */
     implementation("software.amazon.awssdk:s3:2.20.26")
 
-    /* ---------- AWS Lambda (ONLY lambda sourceSet) ---------- */
-    if (isLambdaProfile) {
-        add("lambdaImplementation", "com.amazonaws.serverless:aws-serverless-java-container-springboot3:2.1.5")
-        add("lambdaImplementation", "com.amazonaws:aws-lambda-java-core:1.4.0")
-        add("lambdaImplementation", "com.amazonaws:aws-lambda-java-events:3.16.1")
-    }
+    /* ---------- AWS Lambda ---------- */
+    implementation("com.amazonaws.serverless:aws-serverless-java-container-springboot3:2.1.5")
+    implementation("com.amazonaws:aws-lambda-java-core:1.4.0")
+    implementation("com.amazonaws:aws-lambda-java-events:3.16.1")
 
     /* ---------- Cache ---------- */
     implementation("org.springframework.boot:spring-boot-starter-cache")
@@ -171,16 +147,13 @@ tasks.named<Jar>("jar") {
 }
 
 /* =====================================================
- * Lambda ZIP (FINAL)
+ * Lambda ZIP (Packaging Only)
  * ===================================================== */
 tasks.register<Zip>("lambdaJar") {
     group = "distribution"
     description = "Build AWS Lambda deployment ZIP"
 
-    dependsOn(
-        tasks.named("jar"),
-        tasks.named("compileLambdaJava")
-    )
+    dependsOn(tasks.named("jar"))
 
     archiveClassifier.set("lambda")
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
@@ -198,7 +171,4 @@ tasks.register<Zip>("lambdaJar") {
             exclude("**/module-info.class")
         }
     }
-
-    // Lambda 전용 코드
-    from(sourceSets["lambda"].output)
 }
