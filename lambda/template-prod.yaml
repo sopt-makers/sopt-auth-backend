@@ -1,7 +1,7 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
 Description: >
-  Authentication Backend DEV - Spring Boot JAR on AWS Lambda with SnapStart
+  Authentication Backend PROD - Spring Boot JAR on AWS Lambda with SnapStart
 
 Globals:
   Function:
@@ -20,7 +20,7 @@ Parameters:
     Description: S3 key (path) to the Lambda JAR file
   Profile:
     Type: String
-    Default: "lambda-dev"
+    Default: "lambda-prod"
     Description: Spring profile to use
 
 Resources:
@@ -64,7 +64,7 @@ Resources:
   ApiGateway:
     Type: AWS::Serverless::Api
     Properties:
-      StageName: dev
+      StageName: prod
       Cors:
         AllowOrigin: "'*'"
         AllowHeaders: "'*'"
@@ -74,4 +74,4 @@ Resources:
 Outputs:
   ApiEndpoint:
     Description: "API Gateway endpoint URL"
-    Value: !Sub "https://${ApiGateway}.execute-api.${AWS::Region}.amazonaws.com/dev"
+    Value: !Sub "https://${ApiGateway}.execute-api.${AWS::Region}.amazonaws.com/prod"
