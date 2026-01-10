@@ -12,7 +12,6 @@ val bouncycastleVersion = property("bouncycastleVersion").toString()
 
 /* =====================================================
  * Profile (BUILD TIME)
- * - 역할: 의존성 분기 (Tomcat 포함 여부)
  * ===================================================== */
 val profile: String = project.findProperty("profile") as? String ?: "local"
 val isLambdaProfile = profile == "dev" || profile == "prod"
@@ -48,9 +47,31 @@ java {
     }
 }
 
+/* =====================================================
+ * SourceSets
+ * ===================================================== */
+sourceSets {
+
+    val main by getting
+    val lambda by creating {
+        java.srcDir("src/lambda/java")
+
+        compileClasspath += main.output + configurations.runtimeClasspath.get()
+        runtimeClasspath += output + compileClasspath
+    }
+}
+
+/* =====================================================
+ * Configurations
+ * ===================================================== */
 configurations {
+
     compileOnly {
-        extendsFrom(configurations.annotationProcessor.get())
+        extendsFrom(annotationProcessor.get())
+    }
+
+    named("lambdaImplementation") {
+        extendsFrom(implementation.get())
     }
 }
 
@@ -64,7 +85,6 @@ dependencies {
         implementation("org.springframework.boot:spring-boot-starter-web") {
             exclude(group = "org.springframework.boot", module = "spring-boot-starter-tomcat")
         }
-        implementation("org.springframework.boot:spring-boot-starter-web")
     } else {
         implementation("org.springframework.boot:spring-boot-starter-web")
     }
@@ -89,13 +109,15 @@ dependencies {
     implementation("org.bouncycastle:bcprov-jdk18on:$bouncycastleVersion")
     implementation("org.bouncycastle:bcpkix-jdk18on:$bouncycastleVersion")
 
-    /* ---------- AWS ---------- */
+    /* ---------- AWS SDK ---------- */
     implementation("software.amazon.awssdk:s3:2.20.26")
 
-    // Lambda runtime (dev/prod에서만 실제 사용)
-    implementation("com.amazonaws.serverless:aws-serverless-java-container-springboot3:2.1.5")
-    implementation("com.amazonaws:aws-lambda-java-core:1.4.0")
-    implementation("com.amazonaws:aws-lambda-java-events:3.16.1")
+    /* ---------- AWS Lambda (ONLY lambda sourceSet) ---------- */
+    if (isLambdaProfile) {
+        add("lambdaImplementation", "com.amazonaws.serverless:aws-serverless-java-container-springboot3:2.1.5")
+        add("lambdaImplementation", "com.amazonaws:aws-lambda-java-core:1.4.0")
+        add("lambdaImplementation", "com.amazonaws:aws-lambda-java-events:3.16.1")
+    }
 
     /* ---------- Cache ---------- */
     implementation("org.springframework.boot:spring-boot-starter-cache")
@@ -136,23 +158,6 @@ tasks.withType<Test> {
 }
 
 /* =====================================================
- * Git Hooks
- * ===================================================== */
-tasks.register<Copy>("updateGitHooks") {
-    from(".github/script/pre-commit")
-    into(".git/hooks")
-}
-
-tasks.register<Exec>("makeGitHooksExecutable") {
-    commandLine("chmod", "+x", ".git/hooks/pre-commit")
-    dependsOn("updateGitHooks")
-}
-
-tasks.named("compileJava") {
-    dependsOn("makeGitHooksExecutable")
-}
-
-/* =====================================================
  * BootJar / Jar
  * ===================================================== */
 tasks.named<BootJar>("bootJar") {
@@ -160,30 +165,30 @@ tasks.named<BootJar>("bootJar") {
     archiveFileName.set("authentication.jar")
 }
 
-/**
- * Plain jar
- * - Lambda ZIP에서 사용
- */
 tasks.named<Jar>("jar") {
     enabled = true
     archiveClassifier.set("")
 }
 
 /* =====================================================
- * Lambda ZIP (MANUAL)
+ * Lambda ZIP (FINAL)
  * ===================================================== */
 tasks.register<Zip>("lambdaJar") {
     group = "distribution"
-    description = "Build AWS Lambda deployment ZIP (manual)"
+    description = "Build AWS Lambda deployment ZIP"
 
-    dependsOn("jar")
+    dependsOn(
+        tasks.named("jar"),
+        tasks.named("compileLambdaJava")
+    )
+
     archiveClassifier.set("lambda")
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     isZip64 = true
 
-    // Lambda standard layout: lib/
+    // Lambda 표준 구조: lib/
     into("lib") {
-        from(tasks.jar)
+        from(tasks.named("jar"))
         from(configurations.runtimeClasspath) {
             exclude("org/apache/tomcat/embed/**")
             exclude("META-INF/*.SF")
@@ -193,4 +198,7 @@ tasks.register<Zip>("lambdaJar") {
             exclude("**/module-info.class")
         }
     }
+
+    // Lambda 전용 코드
+    from(sourceSets["lambda"].output)
 }
