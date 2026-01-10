@@ -1,11 +1,3 @@
-spring:
-  config:
-    activate.on-profile:
-      - prod
-      - dev
-      - local
-      - test
-
 external:
   gabia:
     sms:
