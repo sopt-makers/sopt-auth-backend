@@ -8,7 +8,7 @@ on:
 
 env:
   PROJECT_NAME: authentication
-  ENV: dev
+  SAM_PROFILE: dev
   AWS_REGION: ${{ secrets.AWS_REGION }}
   S3_BUCKET: ${{ secrets.S3_BUCKET }}
 
@@ -110,12 +110,12 @@ jobs:
           cd lambda
 
           sam deploy \
-            --config-env ${ENV} \
+            --config-env ${SAM_PROFILE} \
             --no-fail-on-empty-changeset \
             --parameter-overrides \
               S3Bucket="${S3_BUCKET}" \
               S3Key="${S3_KEY}" \
-              Profile="${ENV}" \
+              Profile="${SAM_PROFILE}" \
               DbUrl="${DB_URL}" \
               DbUsername="${DB_USERNAME}" \
               DbPassword="${DB_PASSWORD}" \
@@ -156,6 +156,6 @@ jobs:
       - name: Output API Endpoint
         run: |
           aws cloudformation describe-stacks \
-            --stack-name "${PROJECT_NAME}-${ENV}" \
+            --stack-name "${PROJECT_NAME}-${SAM_PROFILE}" \
             --query "Stacks[0].Outputs[?OutputKey=='ApiEndpoint'].OutputValue" \
             --output text
