@@ -254,10 +254,17 @@ Resources:
     Properties:
       StageName: dev
       Cors:
-        AllowOrigin: "'*'"
-        AllowHeaders: "'*'"
-        AllowMethods: "'*'"
-        AllowCredentials: "'false'"
+        AllowOrigin:
+          - "http://localhost:3000"
+          - "http://localhost:5173"
+          - "https://sopt-internal-dev.sopt.org"
+        AllowMethods: [ GET, POST, PUT, DELETE, OPTIONS, PATCH ]
+        AllowHeaders:
+          - Authorization
+          - Content-Type
+          - X-Api-Key
+          - X-Service-Name
+        AllowCredentials: true
 
 ########################################
 # Outputs

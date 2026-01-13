@@ -54,10 +54,8 @@ jobs:
             DB_URL DB_USERNAME DB_PASSWORD DB_DRIVER_CLASS
             JPA_DATABASE_PLATFORM JPA_DATABASE
 
-            KEY_ID
-            ACCESS_TOKEN_EXPIRATION_TIME
-            REFRESH_TOKEN_EXPIRATION_TIME
-            ISSUER
+            KEY_ID ISSUER
+            ACCESS_TOKEN_EXPIRATION_TIME REFRESH_TOKEN_EXPIRATION_TIME
 
             GABIA_SMS_ID GABIA_SMS_KEY GABIA_SMS_URL GABIA_SMS_PHONE
 
@@ -96,11 +94,13 @@ jobs:
         run: |
           set -e
           ZIP_FILE=$(find build/distributions -name "*-lambda.zip" | head -1)
-          TIMESTAMP=$(date +"%Y%m%d-%H%M%S")
-          S3_KEY="${ENV}/lambda/${PROJECT_NAME}-${TIMESTAMP}.zip"
+          
+          if [ -z "$ZIP_FILE" ]; then
+            echo "❌ Lambda ZIP file not found"
+            exit 1
+          fi
 
-          aws s3 cp "$ZIP_FILE" "s3://${S3_BUCKET}/${S3_KEY}"
-
+          aws s3 cp "${ZIP_FILE}" "s3://${S3_BUCKET}/${S3_KEY}"
           echo "S3_KEY=$S3_KEY" >> $GITHUB_ENV
 
       - name: Deploy with SAM

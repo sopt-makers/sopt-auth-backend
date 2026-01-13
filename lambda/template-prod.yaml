@@ -254,10 +254,15 @@ Resources:
     Properties:
       StageName: prod
       Cors:
-        AllowOrigin: "'*'"
-        AllowHeaders: "'*'"
-        AllowMethods: "'*'"
-        AllowCredentials: "'false'"
+        AllowOrigin:
+          - "https://playground.sopt.org"
+        AllowMethods: [ GET, POST, PUT, DELETE, OPTIONS, PATCH ]
+        AllowHeaders:
+          - Authorization
+          - Content-Type
+          - X-Api-Key
+          - X-Service-Name
+        AllowCredentials: true
 
 ########################################
 # Outputs
