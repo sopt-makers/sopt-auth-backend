@@ -6,14 +6,16 @@ import static sopt.makers.authentication.adapter.out.external.exception.ClientEr
 import sopt.makers.authentication.adapter.out.external.exception.ClientException.S3Exception;
 import sopt.makers.authentication.application.port.out.s3.S3FileManager;
 
-import java.nio.file.Paths;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.file.*;
 
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import software.amazon.awssdk.core.exception.SdkException;
-import software.amazon.awssdk.core.sync.ResponseTransformer;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 
@@ -26,13 +28,12 @@ public class S3Service implements S3FileManager {
 
   @Override
   public String downloadFile(String bucket, String key, String localFilePath) {
+    Path targetPath = Paths.get(localFilePath);
+
     try {
-      log.info(
-          "Downloading file from S3: bucket={}, key={}, localPath={}", bucket, key, localFilePath);
-      s3Client.getObject(
-          GetObjectRequest.builder().bucket(bucket).key(key).build(),
-          ResponseTransformer.toFile(Paths.get(localFilePath)));
-      log.info("Successfully downloaded file to: {}", localFilePath);
+      downloadToNewFile(bucket, key, targetPath);
+      return localFilePath;
+    } catch (FileAlreadyExistsException e) {
       return localFilePath;
     } catch (SdkException e) {
       log.error(
@@ -42,15 +43,31 @@ public class S3Service implements S3FileManager {
           e.getMessage(),
           e);
       throw new S3Exception(S3_REQUEST_FAIL);
-    } catch (Exception e) {
+    } catch (IOException e) {
       log.error(
-          "Unexpected error downloading file from S3: bucket={}, key={}, localPath={}, error={}",
+          "IO error downloading file from S3: bucket={}, key={}, localPath={}",
           bucket,
           key,
           localFilePath,
-          e.getMessage(),
           e);
       throw new S3Exception(S3_RESPONSE_UNAVAILABLE);
     }
+  }
+
+  /**
+   * Downloads the S3 object and writes it to a new local file atomically. Uses CREATE_NEW to
+   * prevent TOCTOU race conditions.
+   */
+  private void downloadToNewFile(String bucket, String key, Path targetPath) throws IOException {
+    try (InputStream s3Stream = openS3ObjectStream(bucket, key);
+        OutputStream fileStream =
+            Files.newOutputStream(
+                targetPath, StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE)) {
+      s3Stream.transferTo(fileStream);
+    }
+  }
+
+  private InputStream openS3ObjectStream(String bucket, String key) {
+    return s3Client.getObject(GetObjectRequest.builder().bucket(bucket).key(key).build());
   }
 }

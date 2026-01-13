@@ -41,6 +41,7 @@ public class S3RSAKeyManager implements RSAKeyManager {
   private final S3FileManager s3FileManager;
   private final ExternalProperty externalProperty;
 
+  private static final Object downloadLock = new Object();
   private static final String PUBLIC_KEY_FILE_NAME = "jwt_public_key.pem";
   private static final String PRIVATE_KEY_FILE_NAME = "jwt_private_key.pem";
 
@@ -77,22 +78,16 @@ public class S3RSAKeyManager implements RSAKeyManager {
   }
 
   private String downloadKeyFromS3(String fileName, String s3KeyPath) {
-    try {
-      Path baseDir = Paths.get(System.getProperty(TEMP_DIR_PROPERTY));
-      Path targetPath = baseDir.resolve(fileName);
-
-      Files.createDirectories(baseDir);
-
-      if (Files.exists(targetPath)) {
-        log.debug("Key file already exists, skipping download: {}", targetPath);
-        return targetPath.toString();
+    synchronized (downloadLock) {
+      try {
+        Path baseDir = Paths.get(System.getProperty(TEMP_DIR_PROPERTY));
+        Files.createDirectories(baseDir);
+        String bucket = externalProperty.aws().s3().bucket();
+        return s3FileManager.downloadFile(bucket, s3KeyPath, baseDir.resolve(fileName).toString());
+      } catch (IOException e) {
+        log.error("Failed to prepare temp directory: fileName={}", fileName, e);
+        throw new ResourceException(INVALID_LOCATION);
       }
-
-      String bucket = externalProperty.aws().s3().bucket();
-      return s3FileManager.downloadFile(bucket, s3KeyPath, targetPath.toString());
-    } catch (IOException e) {
-      log.error("Failed to create directory or check file existence: fileName={}", fileName, e);
-      throw new ResourceException(INVALID_LOCATION);
     }
   }
 
