@@ -31,12 +31,12 @@ jobs:
       # ⭐ 핵심 변경 포인트
       - name: 🔑 Create test.env in classpath
         run: |
-          mkdir -p src/main/resources/env
-          cat <<EOF > src/main/resources/env/test.env
-          ${{ secrets.ENV_FILE_TEST }}
+          mkdir -p src/test/resources/env
+          cat <<'EOF' > src/test/resources/env/test.env
+            ${{ secrets.ENV_FILE_TEST }}
           EOF
 
       - name: 🧱 Build (context load only)
         run: |
           set -e
-          ./gradlew clean build --no-daemon -Pprofile=test
+          ./gradlew clean build --no-daemon --no-build-cache -Pprofile=test
