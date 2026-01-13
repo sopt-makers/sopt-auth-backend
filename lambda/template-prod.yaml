@@ -233,7 +233,9 @@ Resources:
             - Effect: Allow
               Action:
                 - s3:GetObject
-              Resource: !Sub "arn:aws:s3:::${JwtKeyS3Bucket}/*"
+              Resource:
+                - !Sub "arn:aws:s3:::${JwtKeyS3Bucket}/${JwtPublicKeyS3Path}"
+                - !Sub "arn:aws:s3:::${JwtKeyS3Bucket}/${JwtPrivateKeyS3Path}"
 
       Events:
         ApiProxy:
