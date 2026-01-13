@@ -49,7 +49,7 @@ public class S3RSAKeyManager implements RSAKeyManager {
   public RSAPublicKey getPublicKey() {
     try {
       String tempFilePath = downloadPublicKeyFromS3();
-      PemObject pemObject = readPublicPemFile(tempFilePath);
+      PemObject pemObject = readPemFile(tempFilePath);
       return parsePublicKey(pemObject);
     } catch (S3Exception e) {
       log.error("Failed to download public key from S3", e);
@@ -61,7 +61,7 @@ public class S3RSAKeyManager implements RSAKeyManager {
   public RSAPrivateKey getPrivateKey() {
     try {
       String tempFilePath = downloadPrivateKeyFromS3();
-      PemObject pemObject = readPrivatePemFile(tempFilePath);
+      PemObject pemObject = readPemFile(tempFilePath);
       return generatePrivateKey(pemObject);
     } catch (S3Exception e) {
       log.error("Failed to download private key from S3", e);
@@ -91,18 +91,6 @@ public class S3RSAKeyManager implements RSAKeyManager {
     }
   }
 
-  private PemObject readPublicPemFile(final String filePath) {
-    try {
-      String content = Files.readString(Paths.get(filePath), StandardCharsets.UTF_8);
-      try (PemReader pemReader = new PemReader(new StringReader(content))) {
-        return pemReader.readPemObject();
-      }
-    } catch (IOException e) {
-      log.error("Failed to read public key file: filePath={}", filePath, e);
-      throw new ResourceException(INVALID_LOCATION);
-    }
-  }
-
   private RSAPublicKey parsePublicKey(final PemObject pemObject) {
     try {
       byte[] publicKeyBytes = pemObject.getContent();
@@ -118,14 +106,14 @@ public class S3RSAKeyManager implements RSAKeyManager {
     }
   }
 
-  private PemObject readPrivatePemFile(final String filePath) {
+  private PemObject readPemFile(final String filePath) {
     try {
       String content = Files.readString(Paths.get(filePath), StandardCharsets.UTF_8);
       try (PemReader pemReader = new PemReader(new StringReader(content))) {
         return pemReader.readPemObject();
       }
     } catch (IOException e) {
-      log.error("Failed to read private key file: filePath={}", filePath, e);
+      log.error("Failed to read PEM file: filePath={}", filePath, e);
       throw new ResourceException(INVALID_LOCATION);
     }
   }
