@@ -256,10 +256,7 @@ Resources:
     Properties:
       StageName: dev
       Cors:
-        AllowOrigin:
-          - "http://localhost:3000"
-          - "http://localhost:5173"
-          - "https://sopt-internal-dev.sopt.org"
+        AllowOrigin: "'http://localhost:3000, http://localhost:5173, https://sopt-internal-dev.sopt.org'"
         AllowMethods: [ GET, POST, PUT, DELETE, OPTIONS, PATCH ]
         AllowHeaders:
           - Authorization

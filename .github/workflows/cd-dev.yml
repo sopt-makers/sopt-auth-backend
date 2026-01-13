@@ -100,7 +100,9 @@ jobs:
             exit 1
           fi
 
-          aws s3 cp "${ZIP_FILE}" "s3://${S3_BUCKET}/${S3_KEY}"
+          TIMESTAMP=$(date +"%Y%m%d-%H%M%S")
+          S3_KEY="${SAM_PROFILE}/lambda/${PROJECT_NAME}-${TIMESTAMP}.zip"
+          aws s3 cp "$ZIP_FILE" "s3://${S3_BUCKET}/${S3_KEY}"
           echo "S3_KEY=$S3_KEY" >> $GITHUB_ENV
 
       - name: Deploy with SAM
