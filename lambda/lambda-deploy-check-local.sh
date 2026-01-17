@@ -117,6 +117,9 @@ deploy_with_sam() {
       DbDriverClass="${DB_DRIVER_CLASS}" \
       JpaDatabasePlatform="${JPA_DATABASE_PLATFORM}" \
       JpaDatabase="${JPA_DATABASE}" \
+      RedisHost="${REDIS_HOST}" \
+      RedisPort="${REDIS_PORT}" \
+      RedisPassword="${REDIS_PASSWORD}" \
       AccessTokenExpirationTime="${ACCESS_TOKEN_EXPIRATION_TIME}" \
       RefreshTokenExpirationTime="${REFRESH_TOKEN_EXPIRATION_TIME}" \
       Issuer="${ISSUER}" \

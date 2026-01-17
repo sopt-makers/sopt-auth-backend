@@ -24,6 +24,9 @@ spring:
       leak-detection-threshold: 20000
       connection-test-query: SELECT 1
       register-mbeans: false
+  redis:
+    redisson:
+      config: "classpath:redisson.yaml"
   web:
     resources:
       add-mappings: false

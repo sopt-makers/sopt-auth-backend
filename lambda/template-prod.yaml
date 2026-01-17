@@ -47,6 +47,19 @@ Parameters:
     Type: String
     NoEcho: true
 
+  # === Redis ===
+  RedisHost:
+    Type: String
+    NoEcho: true
+  RedisPort:
+    Type: String
+    Default: "6379"
+    NoEcho: true
+  RedisPassword:
+    Type: String
+    Default: ""
+    NoEcho: true
+
   # === JWT / Token ===
   KeyId:
     Type: String
@@ -180,6 +193,11 @@ Resources:
           DB_DRIVER_CLASS: !Ref DbDriverClass
           JPA_DATABASE_PLATFORM: !Ref JpaDatabasePlatform
           JPA_DATABASE: !Ref JpaDatabase
+
+          # === Redis ===
+          REDIS_HOST: !Ref RedisHost
+          REDIS_PORT: !Ref RedisPort
+          REDIS_PASSWORD: !Ref RedisPassword
 
           # === JWT / Token ===
           KEY_ID: !Ref KeyId
