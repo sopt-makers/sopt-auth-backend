@@ -53,7 +53,6 @@ Parameters:
     NoEcho: true
   RedisPort:
     Type: String
-    Default: "6379"
     NoEcho: true
   RedisPassword:
     Type: String
@@ -147,20 +146,6 @@ Parameters:
     Type: String
     NoEcho: true
   MagicLoginName:
-    Type: String
-    NoEcho: true
-
-  # === External Services ===
-  PlaygroundExternalKey:
-    Type: String
-    NoEcho: true
-  PlaygroundBaseUrl:
-    Type: String
-    NoEcho: true
-  AppExternalKey:
-    Type: String
-    NoEcho: true
-  AppBaseUrl:
     Type: String
     NoEcho: true
 

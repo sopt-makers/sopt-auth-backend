@@ -16,12 +16,6 @@ external:
       phone: ${MAGIC_LOGIN_PHONE}
       code: ${MAGIC_LOGIN_CODE}
       name: ${MAGIC_LOGIN_NAME}
-  playground:
-    url: ${PLAYGROUND_BASE_URL}
-    key: ${PLAYGROUND_EXTERNAL_KEY}
-  app:
-    url: ${APP_BASE_URL}
-    key: ${APP_EXTERNAL_KEY}
   aws:
     region: ${AWS_REGION}
     access-key: ${AWS_ACCESS_KEY:}

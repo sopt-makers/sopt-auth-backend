@@ -146,10 +146,6 @@ deploy_with_sam() {
       MagicLoginPhone="${MAGIC_LOGIN_PHONE}" \
       MagicLoginCode="${MAGIC_LOGIN_CODE}" \
       MagicLoginName="${MAGIC_LOGIN_NAME}" \
-      PlaygroundExternalKey="${PLAYGROUND_EXTERNAL_KEY}" \
-      PlaygroundBaseUrl="${PLAYGROUND_BASE_URL}" \
-      AppExternalKey="${APP_EXTERNAL_KEY}" \
-      AppBaseUrl="${APP_BASE_URL}" \
     --region ${AWS_REGION} \
     --profile ${AWS_PROFILE}
 
