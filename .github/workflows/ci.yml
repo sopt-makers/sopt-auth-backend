@@ -28,7 +28,6 @@ jobs:
           ${{ secrets.PROPERTY_GRADLE }}
           EOF
 
-      # ⭐ 핵심 변경 포인트
       - name: 🔑 Create test.env in classpath
         run: |
           mkdir -p src/test/resources/env
