@@ -1,8 +1,6 @@
 package sopt.makers.authentication.adapter.out.jwt;
 
-import static sopt.makers.authentication.adapter.out.jwt.exception.ResourceFailure.INVALID_ALGORITHM;
-import static sopt.makers.authentication.adapter.out.jwt.exception.ResourceFailure.INVALID_LOCATION;
-import static sopt.makers.authentication.adapter.out.jwt.exception.ResourceFailure.INVALID_SUBJECT;
+import static sopt.makers.authentication.adapter.out.jwt.exception.ResourceFailure.*;
 import static sopt.makers.authentication.common.constant.SystemConstant.RSA;
 import static sopt.makers.authentication.common.constant.SystemConstant.TEMP_DIR_PROPERTY;
 
@@ -110,7 +108,13 @@ public class S3RSAKeyManager implements RSAKeyManager {
     try {
       String content = Files.readString(Paths.get(filePath), StandardCharsets.UTF_8);
       try (PemReader pemReader = new PemReader(new StringReader(content))) {
-        return pemReader.readPemObject();
+        PemObject pemObject = pemReader.readPemObject();
+        boolean isPemObjectEmpty = (pemObject == null);
+
+        if (isPemObjectEmpty) {
+          throw new ResourceException(INVALID_PEM_FORMAT);
+        }
+        return pemObject;
       }
     } catch (IOException e) {
       log.error("Failed to read PEM file: filePath={}", filePath, e);
