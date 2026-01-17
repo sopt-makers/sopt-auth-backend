@@ -9,6 +9,10 @@ val jacksonCoreVersion = property("jacksonDataBindVersion").toString()
 val okHttpVersion = property("okHttp3Version").toString()
 val gsonVersion = property("gsonVersion").toString()
 val bouncycastleVersion = property("bouncycastleVersion").toString()
+val redissonVersion = property("redissonVersion").toString()
+val javaContainerVersion = property("javaContainerVersion").toString()
+val javaCore = property("javaCore").toString()
+val javaEvents = property("javaEvents").toString()
 
 /* =====================================================
  * Build Profile
@@ -91,13 +95,12 @@ dependencies {
     implementation("software.amazon.awssdk:s3:2.20.26")
 
     /* ---------- AWS Lambda ---------- */
-    implementation("com.amazonaws.serverless:aws-serverless-java-container-springboot3:2.1.5")
-    implementation("com.amazonaws:aws-lambda-java-core:1.4.0")
-    implementation("com.amazonaws:aws-lambda-java-events:3.16.1")
+    implementation("com.amazonaws.serverless:aws-serverless-java-container-springboot3:${javaContainerVersion}")
+    implementation("com.amazonaws:aws-lambda-java-core:${javaCore}")
+    implementation("com.amazonaws:aws-lambda-java-events:${javaEvents}")
 
     /* ---------- Cache ---------- */
-    implementation("org.springframework.boot:spring-boot-starter-cache")
-    implementation("com.github.ben-manes.caffeine:caffeine")
+    implementation("org.redisson:redisson-spring-boot-starter:${redissonVersion}")
 
     /* ---------- DB ---------- */
     runtimeOnly("org.postgresql:postgresql")
