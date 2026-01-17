@@ -252,7 +252,7 @@ Resources:
             Method: ANY
 
   ApiGateway:
-    Type: AWS::Serverless::Api
+    Type: AWS::Serverless::HttpApi
     Properties:
       StageName: prod
       Cors:
