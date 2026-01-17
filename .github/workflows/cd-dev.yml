@@ -43,6 +43,11 @@ jobs:
           ${{ secrets.ENV_FILE_DEV }}
           EOF
 
+      - name: Create Property File
+        run: |
+          touch ./gradle.properties
+          echo "${{ secrets.PROPERTY_GRADLE }}" >> ./gradle.properties
+
       - name: Validate env variables
         run: |
           set -e
