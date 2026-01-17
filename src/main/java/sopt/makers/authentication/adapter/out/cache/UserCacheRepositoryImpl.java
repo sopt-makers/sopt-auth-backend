@@ -19,7 +19,6 @@ import org.redisson.codec.TypedJsonJacksonCodec;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 @Component
 public class UserCacheRepositoryImpl implements UserCacheRepository {
@@ -27,8 +26,8 @@ public class UserCacheRepositoryImpl implements UserCacheRepository {
   private final RMapCache<Long, CachedUserProfile> cache;
   private final UserMapper userMapper;
 
-  public UserCacheRepositoryImpl(RedissonClient redissonClient, UserMapper userMapper) {
-    ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
+  public UserCacheRepositoryImpl(
+      RedissonClient redissonClient, UserMapper userMapper, ObjectMapper objectMapper) {
     this.cache =
         redissonClient.getMapCache(
             USER_CACHE_NAME,
