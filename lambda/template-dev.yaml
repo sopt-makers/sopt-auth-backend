@@ -224,12 +224,6 @@ Resources:
           MAGIC_LOGIN_CODE: !Ref MagicLoginCode
           MAGIC_LOGIN_NAME: !Ref MagicLoginName
 
-          # === External ===
-          PLAYGROUND_EXTERNAL_KEY: !Ref PlaygroundExternalKey
-          PLAYGROUND_BASE_URL: !Ref PlaygroundBaseUrl
-          APP_EXTERNAL_KEY: !Ref AppExternalKey
-          APP_BASE_URL: !Ref AppBaseUrl
-
       Policies:
         - AWSLambdaBasicExecutionRole
         - Statement:
