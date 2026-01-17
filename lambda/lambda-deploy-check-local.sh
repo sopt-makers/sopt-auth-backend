@@ -1,7 +1,8 @@
 #!/bin/bash
 
 # AWS Lambda JAR 배포 스크립트
-# 사용법: ./lambda/lambda-test-local.sh [dev|prod]
+# 사용법: ./lambda/lambda-deploy-check-local.sh [dev]
+# 로컬에서 배포를 테스트하고 싶을 때에만 사용할 수 있습니다
 
 set -e  # 에러 발생시 중단
 
