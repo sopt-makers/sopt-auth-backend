@@ -239,15 +239,15 @@ Resources:
 
       Events:
         ApiProxy:
-          Type: Api
+          Type: HttpApi
           Properties:
-            RestApiId: !Ref ApiGateway
+            ApiId: !Ref ApiGateway
             Path: /{proxy+}
             Method: ANY
         ApiRoot:
-          Type: Api
+          Type: HttpApi
           Properties:
-            RestApiId: !Ref ApiGateway
+            ApiId: !Ref ApiGateway
             Path: /
             Method: ANY
 
@@ -255,8 +255,8 @@ Resources:
     Type: AWS::Serverless::HttpApi
     Properties:
       StageName: dev
-      Cors:
-        AllowOrigin:
+      CorsConfiguration:
+        AllowOrigins:
           - "http://localhost:3000"
           - "http://localhost:5173"
           - "https://sopt-internal-dev.sopt.org"
