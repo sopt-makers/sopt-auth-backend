@@ -5,6 +5,7 @@ import static sopt.makers.authentication.adapter.out.external.oauth.OAuthConstan
 import sopt.makers.authentication.adapter.out.external.oauth.client.GoogleAuthClient;
 import sopt.makers.authentication.adapter.out.jwt.exception.TokenException;
 import sopt.makers.authentication.adapter.out.jwt.exception.TokenFailure;
+import sopt.makers.authentication.config.ExternalProperty;
 import sopt.makers.authentication.domain.auth.exception.AuthException;
 import sopt.makers.authentication.domain.auth.exception.AuthFailure;
 
@@ -27,7 +28,7 @@ import lombok.RequiredArgsConstructor;
 @Component
 @RequiredArgsConstructor
 public class GoogleAuthService implements OAuthService {
-  private final GoogleOAuthProperty googleOAuthProperty;
+  private final ExternalProperty externalProperty;
   private final GoogleAuthClient googleAuthClient;
 
   @Override
@@ -60,7 +61,7 @@ public class GoogleAuthService implements OAuthService {
       boolean isVerifiedSignature = jwt.verify(verifier);
       boolean isCorrectIssuer = jwtClaimsSet.getIssuer().equals(GOOGLE_ISSUER);
       boolean isCorrectAudience =
-          jwtClaimsSet.getAudience().contains(googleOAuthProperty.client().id());
+          jwtClaimsSet.getAudience().contains(externalProperty.oauth().google().client().id());
       boolean isNotExpired = jwtClaimsSet.getExpirationTime().after(Date.from(Instant.now()));
 
       if (!(isVerifiedSignature && isCorrectIssuer && isCorrectAudience && isNotExpired)) {

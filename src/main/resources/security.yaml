@@ -1,9 +1,3 @@
-spring.config.activate.on-profile:
-  - prod
-  - dev
-  - local
-  - test
-
 security:
   api:
     keys:
@@ -22,10 +16,12 @@ security:
     secret:
       rsa:
         key-id: ${KEY_ID}
-        public-key: ${RSA_PUBLIC_KEY_PATH}
-        private-key: ${RSA_PRIVATE_KEY_PATH}
       expiration:
         access-token-expiration: ${ACCESS_TOKEN_EXPIRATION_TIME}
         refresh-token-expiration: ${REFRESH_TOKEN_EXPIRATION_TIME}
       issuer:
         issuer-name: ${ISSUER}
+    s3:
+      bucket: ${JWT_KEY_S3_BUCKET}
+      public-key-path: ${JWT_PUBLIC_KEY_S3_PATH}
+      private-key-path: ${JWT_PRIVATE_KEY_S3_PATH}

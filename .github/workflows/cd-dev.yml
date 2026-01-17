@@ -1,145 +1,163 @@
-name: Continuous Deployment for SOPT makers Authentication Development Server
+name: Deploy SOPT Makers Authentication Server to Lambda (DEV)
 
 on:
-  workflow_dispatch:
   push:
-    branches: [ dev ]
+    branches:
+      - dev
+  workflow_dispatch:
+
+env:
+  PROJECT_NAME: authentication
+  SAM_PROFILE: dev
+  AWS_REGION: ${{ secrets.AWS_REGION }}
+  S3_BUCKET: ${{ secrets.S3_BUCKET }}
 
 jobs:
-
-  build-and-push-image:
+  deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      - name: Checkout source
+        uses: actions/checkout@v4
 
-      - name: ✅ Set up JDK 21
-        uses: actions/setup-java@v3
+      - name: Set up Java 21
+        uses: actions/setup-java@v4
         with:
+          distribution: temurin
           java-version: 21
-          distribution: 'corretto'
-          cache: gradle
 
-      - name: 🔒 Configure AWS credentials
+      - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
 
-      - name: ⚙️ Create Property File
+      - name: Install AWS SAM CLI
+        uses: aws-actions/setup-sam@v2
+
+      - name: Create .env file
         run: |
-          touch ./gradle.properties
-          echo "${{ secrets.PROPERTY_GRADLE }}" >> ./gradle.properties
+          set -e
+          cat <<EOF > .env
+          ${{ secrets.ENV_FILE_DEV }}
+          EOF
 
-      - name: 📂 Download Keys and Env from S3
-        env:
-          REGION: ${{ secrets.AWS_REGION }}
-          S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
-          JWT_PUBLIC_KEY_PATH: ${{ secrets.JWT_PUBLIC_KEY_PATH }}
-          JWT_PRIVATE_KEY_PATH: ${{ secrets.JWT_PRIVATE_KEY_PATH }}
-          TEST_ENV_PATH: ${{ secrets.ENV_FILE_PATH_TEST }}
+      - name: Validate env variables
         run: |
-          mkdir -p ./src/main/resources
-          aws s3 cp s3://$S3_BUCKET/dev/static/$JWT_PUBLIC_KEY_PATH ./src/main/resources/jwt_public_key.pem --region $REGION
-          aws s3 cp s3://$S3_BUCKET/dev/static/$JWT_PRIVATE_KEY_PATH ./src/main/resources/jwt_private_key.pem --region $REGION
-          mkdir -p ./src/main/resources/env
-          aws s3 cp s3://$S3_BUCKET/dev/$TEST_ENV_PATH ./src/main/resources/env/test.env --region $REGION
+          set -e
+          source .env
 
-      - name: 🧱 Build and Test with Gradle
-        run: ./gradlew build --no-daemon
-        shell: bash
+          REQUIRED_VARS=(
+            SPRING_PROFILES_ACTIVE
 
-      - name: 🧱 Build Image and Push to ECR Public
-        env:
-          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
-          AWS_ECR_REPO: ${{ secrets.AWS_ECR_REPO_DEV }}
-          GITHUB_SHA: ${{ github.sha }}
-        run: |
-          IMAGE_SHA_TAG=$(echo $GITHUB_SHA | cut -c1-8)
+            DB_URL DB_USERNAME DB_PASSWORD DB_DRIVER_CLASS
+            JPA_DATABASE_PLATFORM JPA_DATABASE
 
-          aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws
-          
-          docker build --build-arg PROFILE=dev \
-            -t public.ecr.aws/$AWS_ACCOUNT_ID/$AWS_ECR_REPO:latest \
-            -t public.ecr.aws/$AWS_ACCOUNT_ID/$AWS_ECR_REPO:$IMAGE_SHA_TAG .
+            KEY_ID ISSUER
+            ACCESS_TOKEN_EXPIRATION_TIME REFRESH_TOKEN_EXPIRATION_TIME
 
-          docker push public.ecr.aws/$AWS_ACCOUNT_ID/$AWS_ECR_REPO:latest
-          docker push public.ecr.aws/$AWS_ACCOUNT_ID/$AWS_ECR_REPO:$IMAGE_SHA_TAG
+            GABIA_SMS_ID GABIA_SMS_KEY GABIA_SMS_URL GABIA_SMS_PHONE
 
-      - name: 🗑️ Prune old ECR Public images (keep 2 latest)
-        env:
-          ECR_APP_NAME: ${{ secrets.AWS_ECR_REPO_DEV }}
-        run: |
-          echo "Pruning old images, keeping only 2 most recent..."
-          IMAGES=$(aws ecr-public describe-images \
-            --region us-east-1 \
-            --repository-name $ECR_APP_NAME \
-            --query 'sort_by(imageDetails,& imagePushedAt)[*].imageDigest' \
-            --output json)
+            APPLE_AUD_APP APPLE_AUD_WEB GOOGLE_CLIENT_ID
 
-          COUNT=$(echo $IMAGES | jq length)
+            PLAYGROUND_X_API_KEY CREW_X_API_KEY APP_X_API_KEY
+            ADMIN_X_API_KEY PLATFORM_X_API_KEY MONITORING_X_API_KEY
 
-          if [ "$COUNT" -gt 2 ]; then
-            TO_DELETE=$(echo $IMAGES | jq -c ".[:$((COUNT-2))] | [{imageDigest: .[]}]")
-            if [ "$TO_DELETE" != "[]" ]; then
-              aws ecr-public batch-delete-image \
-                --region us-east-1 \
-                --repository-name $ECR_APP_NAME \
-                --image-ids "$TO_DELETE"
-            else
-              echo "No images to delete."
+            JWT_KEY_S3_BUCKET JWT_PUBLIC_KEY_S3_PATH JWT_PRIVATE_KEY_S3_PATH
+
+            ACTUATOR_PATH USER_PATH GET_PUBLIC_KEY
+
+            MAGIC_LOGIN_PHONE MAGIC_LOGIN_CODE MAGIC_LOGIN_NAME
+
+            PLAYGROUND_EXTERNAL_KEY PLAYGROUND_BASE_URL
+            APP_EXTERNAL_KEY APP_BASE_URL
+          )
+
+          for VAR in "${REQUIRED_VARS[@]}"; do
+            if [ -z "${!VAR}" ]; then
+              echo "❌ Missing env: $VAR"
+              exit 1
             fi
-          else
-            echo "Less than or equal to 2 images, skipping prune."
+          done
+
+          echo "✅ All required env variables are present"
+
+      - name: Build Lambda JAR
+        run: |
+          set -e
+          chmod +x gradlew
+          source .env
+          ./gradlew clean lambdaJar -x test -Pprofile=dev
+
+      - name: Upload Lambda artifact to S3
+        run: |
+          set -e
+          ZIP_FILE=$(find build/distributions -name "*-lambda.zip" | head -1)
+          
+          if [ -z "$ZIP_FILE" ]; then
+            echo "❌ Lambda ZIP file not found"
+            exit 1
           fi
 
-  deploy:
-    needs: build-and-push-image
-    runs-on: ubuntu-latest
-    steps:
-      - name: 📥 Checkout Source
-        uses: actions/checkout@v3
+          TIMESTAMP=$(date +"%Y%m%d-%H%M%S")
+          S3_KEY="${SAM_PROFILE}/lambda/${PROJECT_NAME}-${TIMESTAMP}.zip"
+          aws s3 cp "$ZIP_FILE" "s3://${S3_BUCKET}/${S3_KEY}"
+          echo "S3_KEY=$S3_KEY" >> $GITHUB_ENV
 
-      - name: 🔒 Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
-
-      - name: 📂 Download Keys and Env from S3
-        env:
-          REGION: ${{ secrets.AWS_REGION }}
-          S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
-          JWT_PUBLIC_KEY_PATH: ${{ secrets.JWT_PUBLIC_KEY_PATH }}
-          JWT_PRIVATE_KEY_PATH: ${{ secrets.JWT_PRIVATE_KEY_PATH }}
-          DEV_ENV_FILE_PATH: ${{ secrets.ENV_FILE_PATH_DEV }}
+      - name: Deploy with SAM
         run: |
-          mkdir -p ./key
-          aws s3 cp s3://$S3_BUCKET/dev/static/$JWT_PUBLIC_KEY_PATH ./key/jwt_public_key.pem --region $REGION
-          aws s3 cp s3://$S3_BUCKET/dev/static/$JWT_PRIVATE_KEY_PATH ./key/jwt_private_key.pem --region $REGION
-          aws s3 cp s3://$S3_BUCKET/dev/$DEV_ENV_FILE_PATH .env --region $REGION
+          set -e
+          source .env
+          cd lambda
 
-      - name: 🔄 Transfer Deployment Files to EC2
-        uses: appleboy/scp-action@master
-        with:
-          host: ${{ secrets.HOST_DEV }}
-          username: ec2-user
-          key: ${{ secrets.PEM_KEY_DEV }}
-          port: 22
-          source: ".env,docker-compose.yml,scripts,key"
-          target: /home/ec2-user/authentication
-          overwrite: true
+          sam deploy \
+            --config-env ${SAM_PROFILE} \
+            --no-fail-on-empty-changeset \
+            --parameter-overrides \
+              S3Bucket="${S3_BUCKET}" \
+              S3Key="${S3_KEY}" \
+              Profile="${SAM_PROFILE}" \
+              DbUrl="${DB_URL}" \
+              DbUsername="${DB_USERNAME}" \
+              DbPassword="${DB_PASSWORD}" \
+              DbDriverClass="${DB_DRIVER_CLASS}" \
+              JpaDatabasePlatform="${JPA_DATABASE_PLATFORM}" \
+              JpaDatabase="${JPA_DATABASE}" \
+              KeyId="${KEY_ID}" \
+              AccessTokenExpirationTime="${ACCESS_TOKEN_EXPIRATION_TIME}" \
+              RefreshTokenExpirationTime="${REFRESH_TOKEN_EXPIRATION_TIME}" \
+              Issuer="${ISSUER}" \
+              GabiaSmsId="${GABIA_SMS_ID}" \
+              GabiaSmsKey="${GABIA_SMS_KEY}" \
+              GabiaSmsUrl="${GABIA_SMS_URL}" \
+              GabiaSmsPhone="${GABIA_SMS_PHONE}" \
+              AppleAudApp="${APPLE_AUD_APP}" \
+              AppleAudWeb="${APPLE_AUD_WEB}" \
+              GoogleClientId="${GOOGLE_CLIENT_ID}" \
+              PlaygroundXApiKey="${PLAYGROUND_X_API_KEY}" \
+              CrewXApiKey="${CREW_X_API_KEY}" \
+              AppXApiKey="${APP_X_API_KEY}" \
+              AdminXApiKey="${ADMIN_X_API_KEY}" \
+              PlatformXApiKey="${PLATFORM_X_API_KEY}" \
+              MonitoringXApiKey="${MONITORING_X_API_KEY}" \
+              JwtKeyS3Bucket="${JWT_KEY_S3_BUCKET}" \
+              JwtPublicKeyS3Path="${JWT_PUBLIC_KEY_S3_PATH}" \
+              JwtPrivateKeyS3Path="${JWT_PRIVATE_KEY_S3_PATH}" \
+              ActuatorPath="${ACTUATOR_PATH}" \
+              UserPath="${USER_PATH}" \
+              GetPublicKey="${GET_PUBLIC_KEY}" \
+              MagicLoginPhone="${MAGIC_LOGIN_PHONE}" \
+              MagicLoginCode="${MAGIC_LOGIN_CODE}" \
+              MagicLoginName="${MAGIC_LOGIN_NAME}" \
+              PlaygroundExternalKey="${PLAYGROUND_EXTERNAL_KEY}" \
+              PlaygroundBaseUrl="${PLAYGROUND_BASE_URL}" \
+              AppExternalKey="${APP_EXTERNAL_KEY}" \
+              AppBaseUrl="${APP_BASE_URL}"
 
-      - name: 🚀 Remote SSH Deployment
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.HOST_DEV }}
-          username: ec2-user
-          key: ${{ secrets.PEM_KEY_DEV }}
-          port: 22
-          script: |
-            sudo chmod +x /home/ec2-user/authentication/scripts/*.sh
-            cd /home/ec2-user/authentication/scripts
-            ./deploy.sh
+      - name: Output API Endpoint
+        run: |
+          aws cloudformation describe-stacks \
+            --stack-name "${PROJECT_NAME}-${SAM_PROFILE}" \
+            --query "Stacks[0].Outputs[?OutputKey=='ApiEndpoint'].OutputValue" \
+            --output text

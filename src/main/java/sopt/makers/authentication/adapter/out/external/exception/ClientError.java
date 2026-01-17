@@ -33,7 +33,9 @@ public enum ClientError implements FailureCode {
   PLAYGROUND_RESPONSE_UNAVAILABLE(
       HttpStatus.INTERNAL_SERVER_ERROR, "Playground 요청 결과 내 의도한 데이터가 없습니다."),
   APP_REQUEST_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "APP 요청에 실패했습니다."),
-  APP_RESPONSE_UNAVAILABLE(HttpStatus.INTERNAL_SERVER_ERROR, "APP 요청 결과 내 의도한 데이터가 없습니다.");
+  APP_RESPONSE_UNAVAILABLE(HttpStatus.INTERNAL_SERVER_ERROR, "APP 요청 결과 내 의도한 데이터가 없습니다."),
+  S3_REQUEST_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "S3 요청에 실패했습니다."),
+  S3_RESPONSE_UNAVAILABLE(HttpStatus.INTERNAL_SERVER_ERROR, "S3 파일 다운로드에 실패했습니다.");
 
   private final HttpStatus status;
   private final String message;

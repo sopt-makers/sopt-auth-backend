@@ -15,7 +15,8 @@ public enum ResourceFailure implements FailureCode {
   INVALID_LOCATION(HttpStatus.BAD_REQUEST, "키 파일 위치가 잘못되었습니다."),
   INVALID_SUBJECT(HttpStatus.BAD_REQUEST, "주체 정보가 잘못되었습니다."),
   INVALID_ALGORITHM(HttpStatus.BAD_REQUEST, "알고리즘이 잘못되었습니다."),
-  ;
+  INVALID_PEM_FORMAT(HttpStatus.INTERNAL_SERVER_ERROR, "서버 내부 인증키 형식이 유효하지 않습니다.");
+
   private final HttpStatus status;
   private final String message;
 }

@@ -10,7 +10,6 @@ import sopt.makers.authentication.adapter.out.external.exception.ClientException
 import sopt.makers.authentication.adapter.out.external.exception.ClientException.AppResponseException;
 import sopt.makers.authentication.adapter.out.external.exception.ClientException.PlaygroundRequestException;
 import sopt.makers.authentication.adapter.out.external.exception.ClientException.PlaygroundResponseException;
-import sopt.makers.authentication.adapter.out.external.oauth.MagicLoginProperty;
 import sopt.makers.authentication.adapter.out.external.playground.PlaygroundClient;
 import sopt.makers.authentication.application.port.in.auth.SignUpUsecase;
 import sopt.makers.authentication.application.port.out.auth.OAuthAuthenticator;
@@ -18,6 +17,7 @@ import sopt.makers.authentication.application.port.out.user.UserActivityHistoryR
 import sopt.makers.authentication.application.port.out.user.UserRegisterInfoRepository;
 import sopt.makers.authentication.application.port.out.user.UserRepository;
 import sopt.makers.authentication.application.validator.auth.PhoneVerificationValidator;
+import sopt.makers.authentication.config.ExternalProperty;
 import sopt.makers.authentication.domain.auth.AuthPlatform;
 import sopt.makers.authentication.domain.auth.PhoneVerificationType;
 import sopt.makers.authentication.domain.auth.SocialAccount;
@@ -42,7 +42,7 @@ public class SignUpService implements SignUpUsecase {
   private final UserRegisterInfoRepository userRegisterInfoRepository;
   private final UserActivityHistoryRepository userActivityHistoryRepository;
   private final PhoneVerificationValidator phoneVerificationValidator;
-  private final MagicLoginProperty magicLoginProperty;
+  private final ExternalProperty externalProperty;
   private final PlaygroundClient playgroundClient;
   private final AppClient appClient;
 
@@ -94,7 +94,7 @@ public class SignUpService implements SignUpUsecase {
   }
 
   private void signUpForMagicNumber(String token, AuthPlatform authPlatform) {
-    User user = userRepository.findByPhone(magicLoginProperty.phone());
+    User user = userRepository.findByPhone(externalProperty.oauth().magicLogin().phone());
     String authPlatformId = oAuthAuthenticator.getIdentifier(token, authPlatform);
     SocialAccount updatedSocialAccount = createSocialAccount(authPlatformId, authPlatform);
     User updatedUser = user.updateSocialAccount(updatedSocialAccount);
@@ -155,6 +155,6 @@ public class SignUpService implements SignUpUsecase {
   }
 
   private boolean isMagicPhone(String phone) {
-    return (phone.equals(magicLoginProperty.phone()));
+    return (phone.equals(externalProperty.oauth().magicLogin().phone()));
   }
 }

@@ -1,4 +1,6 @@
 spring:
+  main:
+    lazy-initialization: true
   config:
     activate:
       on-profile: dev
@@ -12,6 +14,16 @@ spring:
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
     driver-class-name: ${DB_DRIVER_CLASS}
+    hikari:
+      maximum-pool-size: 1
+      minimum-idle: 0
+      connection-timeout: 5000
+      idle-timeout: 30000
+      max-lifetime: 60000
+      validation-timeout: 2000
+      leak-detection-threshold: 20000
+      connection-test-query: SELECT 1
+      register-mbeans: false
   web:
     resources:
       add-mappings: false

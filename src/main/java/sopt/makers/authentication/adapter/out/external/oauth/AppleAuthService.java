@@ -5,6 +5,7 @@ import static sopt.makers.authentication.adapter.out.external.oauth.OAuthConstan
 import sopt.makers.authentication.adapter.out.external.oauth.client.AppleAuthClient;
 import sopt.makers.authentication.adapter.out.jwt.exception.TokenException;
 import sopt.makers.authentication.adapter.out.jwt.exception.TokenFailure;
+import sopt.makers.authentication.config.ExternalProperty;
 import sopt.makers.authentication.domain.auth.exception.AuthException;
 import sopt.makers.authentication.domain.auth.exception.AuthFailure;
 
@@ -30,7 +31,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Slf4j
 public class AppleAuthService implements OAuthService {
-  private final AppleOAuthProperty appleOAuthProperty;
+  private final ExternalProperty externalProperty;
   private final AppleAuthClient appleAuthClient;
 
   @Override
@@ -76,7 +77,7 @@ public class AppleAuthService implements OAuthService {
   }
 
   private boolean verifyAudience(List<String> audiences) {
-    return audiences.contains(appleOAuthProperty.webAud())
-        || audiences.contains(appleOAuthProperty.appAud());
+    return audiences.contains(externalProperty.oauth().apple().webAud())
+        || audiences.contains(externalProperty.oauth().apple().appAud());
   }
 }

@@ -1,4 +1,4 @@
-name: Continuous Integration for SOPT makers Authentication Project
+name: Continuous Integration for SOPT Makers Authentication Project
 
 on:
   pull_request:
@@ -10,49 +10,33 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: ⚙️ Set up JDK 21
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           java-version: 21
-          distribution: 'corretto'
+          distribution: temurin
           cache: gradle
 
       - name: ⚙️ Grant execute permission for gradlew
         run: chmod +x ./gradlew
-        shell: bash
 
-      - name: 🔑 Create Application Property File
+      - name: 🔑 Create gradle.properties
         run: |
-          touch ./gradle.properties
-          echo "${{ secrets.PROPERTY_GRADLE }}" >> ./gradle.properties
+          cat <<EOF > gradle.properties
+          ${{ secrets.PROPERTY_GRADLE }}
+          EOF
 
-      - name: 🔒 Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
-
-      - name: 📂 Download Keys and Env from S3
-        env:
-          REGION: ${{ secrets.AWS_REGION }}
-          S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
-          JWT_PUBLIC_KEY_PATH: ${{ secrets.JWT_PUBLIC_KEY_PATH }}
-          JWT_PRIVATE_KEY_PATH: ${{ secrets.JWT_PRIVATE_KEY_PATH }}
-          TEST_ENV_PATH: ${{ secrets.ENV_FILE_PATH_TEST }}
+      # ⭐ 핵심 변경 포인트
+      - name: 🔑 Create test.env in classpath
         run: |
-          mkdir -p ./src/main/resources
-          aws s3 cp s3://$S3_BUCKET/dev/static/$JWT_PUBLIC_KEY_PATH ./src/main/resources/jwt_public_key.pem --region $REGION
-          aws s3 cp s3://$S3_BUCKET/dev/static/$JWT_PRIVATE_KEY_PATH ./src/main/resources/jwt_private_key.pem --region $REGION
-          mkdir -p ./src/main/resources/env
-          aws s3 cp s3://$S3_BUCKET/dev/$TEST_ENV_PATH ./src/main/resources/env/test.env --region $REGION
+          mkdir -p src/test/resources/env
+          cat <<'EOF' > src/test/resources/env/test.env
+            ${{ secrets.ENV_FILE_TEST }}
+          EOF
 
-      - name: 🧱 Build and Test with Gradle
-        run: ./gradlew build --no-daemon
-        shell: bash
-
-      - name: 🐳 Build with Gradle
-        run: docker build -t app-ci .
-        shell: bash
+      - name: 🧱 Build (context load only)
+        run: |
+          set -e
+          ./gradlew clean build --no-daemon --no-build-cache -Pprofile=test
