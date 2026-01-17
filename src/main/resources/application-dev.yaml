@@ -26,7 +26,22 @@ spring:
       register-mbeans: false
   redis:
     redisson:
-      config: "classpath:redisson.yaml"
+      config: |
+        singleServerConfig:
+          address: "redis://${REDIS_HOST:localhost}:${REDIS_PORT:6382}"
+          password: "${REDIS_PASSWORD:}"
+          database: 0
+          connectionPoolSize: 3
+          connectionMinimumIdleSize: 0
+          timeout: 3000
+          connectTimeout: 2000
+          idleConnectionTimeout: 5000
+          retryAttempts: 2
+          retryInterval: 500
+          dnsMonitoringInterval: -1
+        threads: 2
+        nettyThreads: 2
+        codec: !<org.redisson.codec.JsonJacksonCodec> {}
   web:
     resources:
       add-mappings: false
