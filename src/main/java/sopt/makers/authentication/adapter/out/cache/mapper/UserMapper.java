@@ -10,7 +10,6 @@ import sopt.makers.authentication.domain.user.Role;
 import sopt.makers.authentication.domain.user.Team;
 import sopt.makers.authentication.domain.user.User;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
@@ -24,7 +23,7 @@ public class UserMapper {
         user.getId(),
         profile.name(),
         profile.profileImage().orElse(null),
-        profile.birthday() != null ? profile.birthday().toString() : null,
+        profile.birthday() != null ? profile.birthday() : null,
         profile.phone(),
         profile.email().orElse(null),
         user.getActivities().getLastActivity().getGeneration(),
@@ -46,7 +45,7 @@ public class UserMapper {
             cached.name(),
             cached.email(),
             cached.phone(),
-            cached.birthday() != null ? LocalDate.parse(cached.birthday()) : null,
+            cached.birthday() != null ? cached.birthday() : null,
             cached.profileImage());
 
     List<Activity> activities = cached.activities().stream().map(this::toActivity).toList();
