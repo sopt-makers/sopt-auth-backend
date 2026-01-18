@@ -1,53 +1,52 @@
 package sopt.makers.authentication.adapter.out.cache;
 
-import static sopt.makers.authentication.adapter.out.cache.exception.CacheFailure.CACHE_NOT_CONFIGURED;
 import static sopt.makers.authentication.common.constant.SystemConstant.USER_CACHE_NAME;
 
 import sopt.makers.authentication.adapter.out.cache.dto.CachedUserProfile;
-import sopt.makers.authentication.adapter.out.cache.exception.CacheException;
 import sopt.makers.authentication.adapter.out.cache.mapper.UserMapper;
 import sopt.makers.authentication.application.port.out.user.UserCacheRepository;
 import sopt.makers.authentication.domain.user.User;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-import org.springframework.cache.CacheManager;
-import org.springframework.cache.caffeine.CaffeineCache;
+import org.redisson.api.RMapCache;
+import org.redisson.api.RedissonClient;
+import org.redisson.codec.TypedJsonJacksonCodec;
 import org.springframework.stereotype.Component;
 
-import com.github.benmanes.caffeine.cache.Cache;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Component
 public class UserCacheRepositoryImpl implements UserCacheRepository {
-  private final Cache<Object, Object> cache;
+  private static final long TTL_DAYS = 1;
+  private final RMapCache<Long, CachedUserProfile> cache;
   private final UserMapper userMapper;
 
-  public UserCacheRepositoryImpl(CacheManager cacheManager, UserMapper userMapper) {
-    CaffeineCache caffeineCache = (CaffeineCache) cacheManager.getCache(USER_CACHE_NAME);
-    boolean notExistCache = caffeineCache == null;
-
-    if (notExistCache) {
-      throw new CacheException(CACHE_NOT_CONFIGURED);
-    }
-    this.cache = caffeineCache.getNativeCache();
+  public UserCacheRepositoryImpl(
+      RedissonClient redissonClient, UserMapper userMapper, ObjectMapper objectMapper) {
+    this.cache =
+        redissonClient.getMapCache(
+            USER_CACHE_NAME,
+            new TypedJsonJacksonCodec(Long.class, CachedUserProfile.class, objectMapper));
     this.userMapper = userMapper;
   }
 
   @Override
   public Map<Long, User> getAllPresent(List<Long> userIds) {
-    Map<Object, Object> raw = cache.getAllPresent(userIds);
-    return raw.entrySet().stream()
-        .filter(e -> e.getKey() instanceof Long && e.getValue() instanceof CachedUserProfile)
-        .collect(
-            Collectors.toMap(
-                e -> (Long) e.getKey(),
-                e -> userMapper.toDomain((CachedUserProfile) e.getValue())));
+    if (userIds.isEmpty()) return Map.of();
+
+    Map<Long, CachedUserProfile> cachedProfiles = cache.getAll(new HashSet<>(userIds));
+
+    return cachedProfiles.entrySet().stream()
+        .collect(Collectors.toMap(Map.Entry::getKey, e -> userMapper.toDomain(e.getValue())));
   }
 
   @Override
   public void put(User user) {
-    cache.put(user.getId(), userMapper.toCache(user));
+    cache.put(user.getId(), userMapper.toCache(user), TTL_DAYS, TimeUnit.DAYS);
   }
 }

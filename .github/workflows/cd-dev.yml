@@ -59,6 +59,8 @@ jobs:
             DB_URL DB_USERNAME DB_PASSWORD DB_DRIVER_CLASS
             JPA_DATABASE_PLATFORM JPA_DATABASE
 
+            REDIS_HOST REDIS_PORT REDIS_PASSWORD
+
             KEY_ID ISSUER
             ACCESS_TOKEN_EXPIRATION_TIME REFRESH_TOKEN_EXPIRATION_TIME
 
@@ -74,9 +76,6 @@ jobs:
             ACTUATOR_PATH USER_PATH GET_PUBLIC_KEY
 
             MAGIC_LOGIN_PHONE MAGIC_LOGIN_CODE MAGIC_LOGIN_NAME
-
-            PLAYGROUND_EXTERNAL_KEY PLAYGROUND_BASE_URL
-            APP_EXTERNAL_KEY APP_BASE_URL
           )
 
           for VAR in "${REQUIRED_VARS[@]}"; do
@@ -129,6 +128,9 @@ jobs:
               DbDriverClass="${DB_DRIVER_CLASS}" \
               JpaDatabasePlatform="${JPA_DATABASE_PLATFORM}" \
               JpaDatabase="${JPA_DATABASE}" \
+              RedisHost="${REDIS_HOST}" \
+              RedisPort="${REDIS_PORT}" \
+              RedisPassword="${REDIS_PASSWORD}" \
               KeyId="${KEY_ID}" \
               AccessTokenExpirationTime="${ACCESS_TOKEN_EXPIRATION_TIME}" \
               RefreshTokenExpirationTime="${REFRESH_TOKEN_EXPIRATION_TIME}" \
@@ -158,7 +160,8 @@ jobs:
               PlaygroundExternalKey="${PLAYGROUND_EXTERNAL_KEY}" \
               PlaygroundBaseUrl="${PLAYGROUND_BASE_URL}" \
               AppExternalKey="${APP_EXTERNAL_KEY}" \
-              AppBaseUrl="${APP_BASE_URL}"
+              AppBaseUrl="${APP_BASE_URL}" \
+              
 
       - name: Output API Endpoint
         run: |

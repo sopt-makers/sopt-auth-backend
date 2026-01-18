@@ -23,7 +23,7 @@ public class UserMapper {
         user.getId(),
         profile.name(),
         profile.profileImage().orElse(null),
-        profile.birthday(),
+        profile.birthday() != null ? profile.birthday() : null,
         profile.phone(),
         profile.email().orElse(null),
         user.getActivities().getLastActivity().getGeneration(),
@@ -45,7 +45,7 @@ public class UserMapper {
             cached.name(),
             cached.email(),
             cached.phone(),
-            cached.birthday(),
+            cached.birthday() != null ? cached.birthday() : null,
             cached.profileImage());
 
     List<Activity> activities = cached.activities().stream().map(this::toActivity).toList();
