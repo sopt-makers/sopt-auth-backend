@@ -237,32 +237,22 @@ Resources:
 
       Events:
         ApiProxy:
-          Type: HttpApi
+          Type: Api
           Properties:
-            ApiId: !Ref ApiGateway
+            RestApiId: !Ref ApiGateway
             Path: /{proxy+}
             Method: ANY
         ApiRoot:
-          Type: HttpApi
+          Type: Api
           Properties:
-            ApiId: !Ref ApiGateway
+            RestApiId: !Ref ApiGateway
             Path: /
             Method: ANY
 
   ApiGateway:
-    Type: AWS::Serverless::HttpApi
+    Type: AWS::Serverless::Api
     Properties:
       StageName: prod
-      CorsConfiguration:
-        AllowOrigins:
-          - "https://playground.sopt.org"
-        AllowMethods: [ GET, POST, PUT, DELETE, OPTIONS, PATCH ]
-        AllowHeaders:
-          - Authorization
-          - Content-Type
-          - X-Api-Key
-          - X-Service-Name
-        AllowCredentials: true
 
 ########################################
 # Outputs
