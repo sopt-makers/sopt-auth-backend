@@ -99,7 +99,8 @@ public class UpdateUserProfileService implements UpdateUserProfileUsecase {
                   existing.getGeneration(),
                   c.team() == null ? null : Team.findTeam(c.team()),
                   existing.getPart(),
-                  existing.getRole());
+                  existing.getRole(),
+                  existing.isSopt());
             })
         .toList();
   }
