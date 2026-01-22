@@ -15,22 +15,30 @@ public class Activity {
   private final Team team;
   private final Part part;
   private final Role role;
+  private final boolean isSopt;
 
-  private Activity(Long id, int generation, Team team, Part part, Role role) {
+  private Activity(Long id, int generation, Team team, Part part, Role role, boolean isSopt) {
     this.id = id;
     this.generation = generation;
     this.team = team;
     this.part = part;
     this.role = role;
-  }
-
-  public static Activity of(int generation, final Team team, final Part part) {
-    return new Activity(null, generation, team, part, Role.MEMBER);
+    this.isSopt = isSopt;
   }
 
   public static Activity of(
-      Long id, int generation, final Team team, final Part part, final Role role) {
-    return new Activity(id, generation, team, part, role);
+      int generation, final Team team, final Part part, final boolean isSopt) {
+    return new Activity(null, generation, team, part, Role.MEMBER, isSopt);
+  }
+
+  public static Activity of(
+      Long id,
+      int generation,
+      final Team team,
+      final Part part,
+      final Role role,
+      final boolean isSopt) {
+    return new Activity(id, generation, team, part, role, isSopt);
   }
 
   public Optional<Team> optionalTeam() {

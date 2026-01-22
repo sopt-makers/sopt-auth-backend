@@ -96,7 +96,7 @@ public class GetUserProfileService implements GetUserProfileUsecase {
 
   @Override
   public UserCountByGeneration getUserCountByGeneration(int generation) {
-    int count = userRepository.countByGeneration(generation);
+    int count = userRepository.countByGenerationAndIsSopt(generation);
     return new UserCountByGeneration(count);
   }
 }

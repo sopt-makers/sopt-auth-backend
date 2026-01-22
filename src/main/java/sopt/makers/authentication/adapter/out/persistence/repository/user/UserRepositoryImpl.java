@@ -93,7 +93,7 @@ public class UserRepositoryImpl implements UserRepository {
   }
 
   @Override
-  public int countByGeneration(int generation) {
+  public int countByGenerationAndIsSopt(int generation) {
     return userRetriever.countByGeneration(generation);
   }
 }

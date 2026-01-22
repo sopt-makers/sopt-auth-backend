@@ -57,8 +57,9 @@ public interface UserJpaRepository extends JpaRepository<UserEntity, Long> {
       "SELECT COUNT(DISTINCT u.id) "
           + "FROM UserEntity u "
           + "JOIN u.userActivityHistoryList a "
-          + "WHERE a.generation = :generation")
-  int countByGeneration(@Param("generation") int generation);
+          + "WHERE a.generation = :generation "
+          + "AND a.isSopt = true")
+  int countByGenerationAndIsSopt(@Param("generation") int generation);
 
   void deleteById(Long userId);
 }

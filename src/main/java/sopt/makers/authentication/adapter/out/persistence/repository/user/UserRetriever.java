@@ -68,6 +68,6 @@ public class UserRetriever {
   }
 
   public int countByGeneration(int generation) {
-    return userJpaRepository.countByGeneration(generation);
+    return userJpaRepository.countByGenerationAndIsSopt(generation);
   }
 }
