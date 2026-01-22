@@ -36,7 +36,8 @@ public class UserMapper {
         activity.getGeneration(),
         activity.getPart().getName(),
         activity.getTeam() != null ? activity.getTeam().getName() : null,
-        activity.getRole().name());
+        activity.getRole().name(),
+        activity.isSopt());
   }
 
   public User toDomain(CachedUserProfile cached) {
@@ -58,6 +59,7 @@ public class UserMapper {
     Part part = Part.findPart(cached.part());
     Team team = cached.team() != null ? Team.findTeam(cached.team()) : null;
     Role role = Role.valueOf(cached.role());
-    return Activity.of(cached.activityId(), cached.generation(), team, part, role);
+    boolean isSopt = cached.isSopt();
+    return Activity.of(cached.activityId(), cached.generation(), team, part, role, isSopt);
   }
 }
