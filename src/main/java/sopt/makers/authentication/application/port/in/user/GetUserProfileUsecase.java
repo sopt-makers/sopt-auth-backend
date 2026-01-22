@@ -54,14 +54,16 @@ public interface GetUserProfileUsecase {
     }
   }
 
-  record UserActivityInfo(long activityId, int generation, String part, String team, String role) {
+  record UserActivityInfo(
+      long activityId, int generation, String part, String team, String role, boolean isSopt) {
     public static UserActivityInfo of(Activity activity) {
       return new UserActivityInfo(
           activity.getId(),
           activity.getGeneration(),
           activity.getPart().getName(),
           activity.getTeam() != null ? activity.getTeam().getName() : null,
-          activity.getRole().name());
+          activity.getRole().name(),
+          activity.isSopt());
     }
   }
 
