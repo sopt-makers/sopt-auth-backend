@@ -49,47 +49,10 @@ public class SignUpService implements SignUpUsecase {
   @Transactional
   @Override
   public void signUp(SignUpCommand command) {
-    // for concurrency test
-    //    if (command.phone().matches("^0100000\\d{4}$")) {
-    //      signUpConcurrency(command.token(), command.authPlatform(), command.phone());
-    //      return ;
-    //    }
-
     if (isMagicPhone(command.phone())) {
       signUpForMagicNumber(command.token(), command.authPlatform());
     } else {
       signUpForSoptUser(command.token(), command.phone(), command.authPlatform());
-    }
-  }
-
-  private void signUpConcurrency(String token, AuthPlatform authPlatform, String phone) {
-    UserRegisterInfo targetRegisterInfo =
-        userRegisterInfoRepository
-            .findByPhone(phone)
-            .orElseThrow(() -> new AuthException(NOT_FOUND_REGISTER_INFO));
-    SocialAccount socialAccount = createSocialAccount(phone, authPlatform);
-    Profile profile = createProfile(targetRegisterInfo);
-    Activity activity = createActivity(targetRegisterInfo);
-    User newUser = User.createNewUser(socialAccount, profile);
-    User savedUser = userRepository.save(newUser);
-
-    try {
-      userActivityHistoryRepository.save(savedUser, activity);
-      userRegisterInfoRepository.delete(targetRegisterInfo);
-      appClient.createMemberProfile(savedUser.getId());
-      playgroundClient.createMemberProfile(savedUser.getId());
-    } catch (AppRequestException | AppResponseException e) {
-      // 케이스 1: App이 실패 → Playground는 요청 시도 x
-      log.error("앱 유저 생성 요청 실패 userId={}", savedUser.getId());
-      throw new AuthException(APP_SYNC_FAIL);
-    } catch (PlaygroundRequestException | PlaygroundResponseException e) {
-      // 케이스 2: App은 성공했지만 Playground 실패
-      try {
-        appClient.deleteMemberProfile(savedUser.getId());
-      } catch (Exception ex) {
-        log.error("앱 유저 Delete 요청 실패 userId={}", savedUser.getId());
-      }
-      throw new AuthException(PLAYGROUND_SYNC_FAIL);
     }
   }
 
@@ -151,7 +114,7 @@ public class SignUpService implements SignUpUsecase {
   }
 
   private Activity createActivity(UserRegisterInfo registerInfo) {
-    return Activity.of(registerInfo.getGeneration(), null, registerInfo.getPart());
+    return Activity.of(registerInfo.getGeneration(), null, registerInfo.getPart(), true);
   }
 
   private boolean isMagicPhone(String phone) {
