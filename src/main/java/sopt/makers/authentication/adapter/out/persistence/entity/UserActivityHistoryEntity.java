@@ -8,6 +8,7 @@ import sopt.makers.authentication.domain.user.Role;
 import sopt.makers.authentication.domain.user.Team;
 import sopt.makers.authentication.domain.user.User;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -32,7 +33,7 @@ import lombok.Setter;
     uniqueConstraints = {
       @UniqueConstraint(
           name = "UK_USER_ID_AND_GENERATION",
-          columnNames = {"user_id", "generation"})
+          columnNames = {"user_id", "generation", "isSopt"})
     })
 public class UserActivityHistoryEntity {
   @Id
@@ -59,17 +60,23 @@ public class UserActivityHistoryEntity {
   @Enumerated(EnumType.STRING)
   private Role role;
 
+  @NotNull
+  @Column(name = "is_sopt")
+  private boolean isSopt;
+
   private UserActivityHistoryEntity(
       final UserEntity user,
       final int generation,
       final Team team,
       final Part part,
-      final Role role) {
+      final Role role,
+      final boolean isSopt) {
     this.user = user;
     this.generation = generation;
     this.team = team;
     this.part = part;
     this.role = role;
+    this.isSopt = isSopt;
   }
 
   public static UserActivityHistoryEntity fromDomain(final User user, final Activity activity) {
@@ -80,7 +87,8 @@ public class UserActivityHistoryEntity {
             activity.getGeneration(),
             activity.optionalTeam().orElse(null),
             activity.getPart(),
-            activity.getRole());
+            activity.getRole(),
+            activity.isSopt());
 
     if (activity.getId() != null) {
       userActivityHistoryEntity.setId(activity.getId());
@@ -89,6 +97,6 @@ public class UserActivityHistoryEntity {
   }
 
   public Activity toDomain() {
-    return Activity.of(id, generation, team, part, role);
+    return Activity.of(id, generation, team, part, role, isSopt);
   }
 }
