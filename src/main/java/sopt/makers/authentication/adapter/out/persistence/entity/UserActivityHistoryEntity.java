@@ -33,7 +33,7 @@ import lombok.Setter;
     uniqueConstraints = {
       @UniqueConstraint(
           name = "UK_USER_ID_AND_GENERATION",
-          columnNames = {"user_id", "generation", "isSopt"})
+          columnNames = {"user_id", "generation", "is_sopt"})
     })
 public class UserActivityHistoryEntity {
   @Id
