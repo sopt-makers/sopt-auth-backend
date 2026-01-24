@@ -114,6 +114,9 @@ public class SignUpService implements SignUpUsecase {
   }
 
   private Activity createActivity(UserRegisterInfo registerInfo) {
+    /*
+    SOPT 앱을 최초 회원가입하는 경우 => isSopt는 무조건 true로 설정, 메이커스 활동 회원들은 매 기수 시작시 => isSopt false인 기수 레코드 추가하는 작업 필요
+     */
     return Activity.of(registerInfo.getGeneration(), null, registerInfo.getPart(), true);
   }
 
