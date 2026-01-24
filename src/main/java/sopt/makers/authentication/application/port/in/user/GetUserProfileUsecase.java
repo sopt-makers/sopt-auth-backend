@@ -49,7 +49,7 @@ public interface GetUserProfileUsecase {
           profile.birthday(),
           profile.phone(),
           profile.email().orElse(null),
-          activities.getLastActivity().getGeneration(),
+          activities.getLastSoptActivity().getGeneration(),
           userActivityInfos);
     }
   }

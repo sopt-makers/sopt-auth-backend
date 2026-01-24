@@ -1,6 +1,7 @@
 package sopt.makers.authentication.domain.user;
 
 import static sopt.makers.authentication.domain.user.exception.UserFailure.DUPLICATE_ACTIVITY;
+import static sopt.makers.authentication.domain.user.exception.UserFailure.NOT_FOUND_USER_ACTIVITY;
 
 import sopt.makers.authentication.domain.user.exception.UserException;
 
@@ -42,6 +43,13 @@ public class ActivityList {
 
   public Activity getLastActivity() {
     return activities.getLast();
+  }
+
+  public Activity getLastSoptActivity() {
+    return activities.stream()
+        .filter(Activity::isSopt)
+        .reduce((first, second) -> second)
+        .orElseThrow(() -> new UserException(NOT_FOUND_USER_ACTIVITY));
   }
 
   public int getTotalActivitySize() {
