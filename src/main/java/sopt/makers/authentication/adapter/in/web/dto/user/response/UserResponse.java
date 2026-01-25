@@ -45,14 +45,15 @@ public final class UserResponse {
   }
 
   public record UserActivityDetail(
-      long activityId, int generation, String part, String team, String role) {
+      long activityId, int generation, String part, String team, String role, boolean isSopt) {
     public static UserActivityDetail from(GetUserProfileUsecase.UserActivityInfo userActivityInfo) {
       return new UserActivityDetail(
           userActivityInfo.activityId(),
           userActivityInfo.generation(),
           userActivityInfo.part(),
           userActivityInfo.team(),
-          userActivityInfo.role());
+          userActivityInfo.role(),
+          userActivityInfo.isSopt());
     }
   }
 
