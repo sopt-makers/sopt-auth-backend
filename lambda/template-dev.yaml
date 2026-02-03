@@ -252,6 +252,11 @@ Resources:
     Type: AWS::Serverless::Api
     Properties:
       StageName: dev
+      Cors:
+        AllowMethods: "'GET,POST,PUT,PATCH,DELETE,OPTIONS'"
+        AllowHeaders: "'Authorization,Content-Type,X-Api-Key,X-Service-Name'"
+        AllowOrigin: "'https://sopt-internal-dev.sopt.org'"
+        AllowCredentials: true
 
 ########################################
 # Outputs
