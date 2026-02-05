@@ -23,7 +23,9 @@ public enum Part {
   PM("PM"),
   FRONTEND("프론트엔드"),
   BACKEND("백엔드"),
-  MARKETING("마케팅"),
+  MARKETER("마케터"),
+  RESEARCHER("리서처"),
+  ORGANIZER("오거나이저"),
   CX("CX");
 
   private final String name;
