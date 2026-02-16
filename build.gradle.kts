@@ -18,9 +18,10 @@ val javaEvents = property("javaEvents").toString()
  * Build Profile
  * ===================================================== */
 val profile: String = project.findProperty("profile") as? String ?: "local"
-val isLambdaProfile = profile == "dev" || profile == "prod"
+//val isLambdaProfile = profile == "dev" || profile == "prod"
+val isLambdaProfile = profile == "dev" // todo: 추후 prod 환경도 람다로 배포할 시 위 변수로 치환
 
-println("▶ Build Profile = $profile (lambda=$isLambdaProfile)")
+println("▶ Build Profile = $profile (lambda profile=$isLambdaProfile)")
 
 /* =====================================================
  * Plugins

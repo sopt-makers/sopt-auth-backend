@@ -46,7 +46,7 @@ jobs:
           aws s3 cp s3://$S3_BUCKET/prod/$TEST_ENV_PATH ./src/main/resources/env/test.env --region $REGION
 
       - name: 🧱 Build and Test with Gradle
-        run: ./gradlew build --no-daemon
+        run: ./gradlew build --no-daemon -Pprofile=prod
         shell: bash
 
       - name: 🧱 Build Image and Push to ECR Public
