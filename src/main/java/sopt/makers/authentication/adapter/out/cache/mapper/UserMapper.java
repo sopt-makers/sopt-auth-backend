@@ -23,7 +23,7 @@ public class UserMapper {
         user.getId(),
         profile.name(),
         profile.profileImage().orElse(null),
-        profile.birthday(),
+        profile.birthday() != null ? profile.birthday() : null,
         profile.phone(),
         profile.email().orElse(null),
         user.getActivities().getLastActivity().getGeneration(),
@@ -36,7 +36,8 @@ public class UserMapper {
         activity.getGeneration(),
         activity.getPart().getName(),
         activity.getTeam() != null ? activity.getTeam().getName() : null,
-        activity.getRole().name());
+        activity.getRole().name(),
+        activity.isSopt());
   }
 
   public User toDomain(CachedUserProfile cached) {
@@ -45,7 +46,7 @@ public class UserMapper {
             cached.name(),
             cached.email(),
             cached.phone(),
-            cached.birthday(),
+            cached.birthday() != null ? cached.birthday() : null,
             cached.profileImage());
 
     List<Activity> activities = cached.activities().stream().map(this::toActivity).toList();
@@ -58,6 +59,7 @@ public class UserMapper {
     Part part = Part.findPart(cached.part());
     Team team = cached.team() != null ? Team.findTeam(cached.team()) : null;
     Role role = Role.valueOf(cached.role());
-    return Activity.of(cached.activityId(), cached.generation(), team, part, role);
+    boolean isSopt = cached.isSopt();
+    return Activity.of(cached.activityId(), cached.generation(), team, part, role, isSopt);
   }
 }

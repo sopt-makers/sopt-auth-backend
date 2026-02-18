@@ -15,8 +15,12 @@ import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import lombok.RequiredArgsConstructor;
+
 @Component
+@RequiredArgsConstructor
 public class AuthenticationExceptionFilter extends OncePerRequestFilter {
+  private final ResponseUtil responseUtil;
 
   @Override
   protected void doFilterInternal(
@@ -27,7 +31,7 @@ public class AuthenticationExceptionFilter extends OncePerRequestFilter {
     try {
       filterChain.doFilter(request, response);
     } catch (AuthException | TokenException e) {
-      ResponseUtil.generateErrorResponse(response, e);
+      responseUtil.generateErrorResponse(response, e);
     }
   }
 }

@@ -1,11 +1,3 @@
-spring:
-  config:
-    activate.on-profile:
-      - prod
-      - dev
-      - local
-      - test
-
 external:
   gabia:
     sms:
@@ -24,9 +16,11 @@ external:
       phone: ${MAGIC_LOGIN_PHONE}
       code: ${MAGIC_LOGIN_CODE}
       name: ${MAGIC_LOGIN_NAME}
-  playground:
-    url: ${PLAYGROUND_BASE_URL}
-    key: ${PLAYGROUND_EXTERNAL_KEY}
-  app:
-    url: ${APP_BASE_URL}
-    key: ${APP_EXTERNAL_KEY}
+  aws:
+    region: ${AWS_REGION}
+    access-key: ${AWS_ACCESS_KEY:}
+    secret-key: ${AWS_SECRET_KEY:}
+    s3:
+      bucket: ${JWT_KEY_S3_BUCKET}
+      public-key-path: ${JWT_PUBLIC_KEY_S3_PATH}
+      private-key-path: ${JWT_PRIVATE_KEY_S3_PATH}

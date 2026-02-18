@@ -14,17 +14,21 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import lombok.RequiredArgsConstructor;
+
+@Component
+@RequiredArgsConstructor
 public final class ResponseUtil {
-  private ResponseUtil() {}
+  private final ObjectMapper objectMapper;
 
-  private static final ObjectMapper MAPPER = new ObjectMapper();
-
-  public static void generateErrorResponse(
+  public void generateErrorResponse(
       final HttpServletResponse response, final BaseException exception) throws IOException {
-    String bodyValue = MAPPER.writeValueAsString(BaseResponse.ofFailure(exception.getError()));
+    String bodyValue =
+        objectMapper.writeValueAsString(BaseResponse.ofFailure(exception.getError()));
 
     response.setStatus(exception.getError().getStatus().value());
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);

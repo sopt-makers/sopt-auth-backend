@@ -36,5 +36,5 @@ public interface UserRepository {
   Page<User> findAllByGenerationAndPartAndNameAndTeam(
       Integer generation, Part part, String name, Team team, Boolean isAdmin, Pageable pageable);
 
-  int countByGeneration(int generation);
+  int countByGenerationAndIsSopt(int generation, boolean isSopt);
 }

@@ -1,123 +1,178 @@
+import org.gradle.api.tasks.bundling.Zip
 import org.springframework.boot.gradle.tasks.bundling.BootJar
 
+/* =====================================================
+ * Versions
+ * ===================================================== */
 val googleJavaFormatVersion = "1.18.1"
+val jacksonCoreVersion = property("jacksonDataBindVersion").toString()
+val okHttpVersion = property("okHttp3Version").toString()
+val gsonVersion = property("gsonVersion").toString()
+val bouncycastleVersion = property("bouncycastleVersion").toString()
+val redissonVersion = property("redissonVersion").toString()
+val javaContainerVersion = property("javaContainerVersion").toString()
+val javaCore = property("javaCore").toString()
+val javaEvents = property("javaEvents").toString()
 
+/* =====================================================
+ * Build Profile
+ * ===================================================== */
+val profile: String = project.findProperty("profile") as? String ?: "local"
+//val isLambdaProfile = profile == "dev" || profile == "prod"
+val isLambdaProfile = profile == "dev" // todo: 추후 prod 환경도 람다로 배포할 시 위 변수로 치환
+
+println("▶ Build Profile = $profile (lambda profile=$isLambdaProfile)")
+
+/* =====================================================
+ * Plugins
+ * ===================================================== */
 plugins {
-	java
-	id("org.springframework.boot") version "3.3.5"
-	id("io.spring.dependency-management") version "1.1.6"
-	id ("com.diffplug.spotless")
+    java
+    id("org.springframework.boot") version "3.3.5"
+    id("io.spring.dependency-management") version "1.1.6"
+    id("com.diffplug.spotless")
 }
 
-apply(plugin = "java")
-apply(plugin = "com.diffplug.spotless")
+/* =====================================================
+ * Project Info
+ * ===================================================== */
+group = property("projectGroup").toString()
+version = property("applicationVersion").toString()
 
-group = "${property("projectGroup")}"
-
-version = "${property("applicationVersion")}"
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
-
+/* =====================================================
+ * Java
+ * ===================================================== */
 java {
-	toolchain {
-		languageVersion = JavaLanguageVersion.of(21)
-	}
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(21))
+    }
 }
 
 configurations {
-	compileOnly {
-		extendsFrom(configurations.annotationProcessor.get())
-	}
+    compileOnly {
+        extendsFrom(configurations.annotationProcessor.get())
+    }
 }
 
-val jacksonCoreVersion = "${property("jacksonDataBindVersion")}"
-val okHttpVersion = "${property("okHttp3Version")}"
-val gsonVersion = "${property("gsonVersion")}"
-val bouncycastleVersion = "${property("bouncycastleVersion")}"
-
+/* =====================================================
+ * Dependencies
+ * ===================================================== */
 dependencies {
-	implementation("org.springframework.boot:spring-boot-starter-web")
-	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-	implementation("org.springframework.boot:spring-boot-starter-security")
-	implementation("org.springframework.boot:spring-boot-starter-validation")
-	implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
-	implementation("org.springframework.boot:spring-boot-starter-actuator")
-	implementation("org.springframework.retry:spring-retry")
 
+    /* ---------- Web ---------- */
+    if (isLambdaProfile) {
+        implementation("org.springframework.boot:spring-boot-starter-web") {
+            exclude(group = "org.springframework.boot", module = "spring-boot-starter-tomcat")
+        }
+    } else {
+        implementation("org.springframework.boot:spring-boot-starter-web")
+    }
+
+    /* ---------- Spring Core ---------- */
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation("org.springframework.boot:spring-boot-starter-security")
+    implementation("org.springframework.boot:spring-boot-starter-validation")
+    implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
+    implementation("org.springframework.retry:spring-retry")
+
+    /* ---------- Observability ---------- */
     implementation("io.micrometer:micrometer-registry-prometheus-simpleclient")
 
-	implementation("com.fasterxml.jackson.core:jackson-databind:${jacksonCoreVersion}")
+    /* ---------- Serialization / HTTP ---------- */
+    implementation("com.fasterxml.jackson.core:jackson-databind:$jacksonCoreVersion")
+    implementation("com.squareup.okhttp3:okhttp:$okHttpVersion")
+    implementation("com.google.code.gson:gson:$gsonVersion")
 
-	implementation ("com.squareup.okhttp3:okhttp:${okHttpVersion}")
-	implementation ("com.google.code.gson:gson:${gsonVersion}")
+    /* ---------- Crypto ---------- */
+    implementation("org.bouncycastle:bcprov-jdk18on:$bouncycastleVersion")
+    implementation("org.bouncycastle:bcpkix-jdk18on:$bouncycastleVersion")
 
-	implementation("org.bouncycastle:bcprov-jdk18on:${bouncycastleVersion}")
-	implementation("org.bouncycastle:bcpkix-jdk18on:${bouncycastleVersion}")
+    /* ---------- AWS SDK ---------- */
+    implementation("software.amazon.awssdk:s3:2.20.26")
 
-	compileOnly("org.projectlombok:lombok")
-	annotationProcessor("org.projectlombok:lombok")
+    /* ---------- AWS Lambda ---------- */
+    implementation("com.amazonaws.serverless:aws-serverless-java-container-springboot3:${javaContainerVersion}")
+    implementation("com.amazonaws:aws-lambda-java-core:${javaCore}")
+    implementation("com.amazonaws:aws-lambda-java-events:${javaEvents}")
 
+    /* ---------- Cache ---------- */
+    implementation("org.redisson:redisson-spring-boot-starter:${redissonVersion}")
+
+    /* ---------- DB ---------- */
     runtimeOnly("org.postgresql:postgresql")
 
-	implementation("org.springframework.boot:spring-boot-starter-cache")
-	implementation("com.github.ben-manes.caffeine:caffeine")
+    /* ---------- Lombok ---------- */
+    compileOnly("org.projectlombok:lombok")
+    annotationProcessor("org.projectlombok:lombok")
 
-	testImplementation("org.springframework.boot:spring-boot-starter-test")
-	testImplementation("org.springframework.security:spring-security-test")
-	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-	testRuntimeOnly("com.h2database:h2")
+    /* ---------- Test ---------- */
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.springframework.security:spring-security-test")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    testRuntimeOnly("com.h2database:h2")
 }
 
-spotless{
-	java {
-		target("**/*.java")
-		googleJavaFormat(googleJavaFormatVersion)
-		importOrder("sopt", "java", "javax", "jakarta", "org", "com")
-		endWithNewline()
-		removeUnusedImports()
-	}
+/* =====================================================
+ * Spotless
+ * ===================================================== */
+spotless {
+    java {
+        target("**/*.java")
+        googleJavaFormat(googleJavaFormatVersion)
+        importOrder("sopt", "java", "javax", "jakarta", "org", "com")
+        endWithNewline()
+        removeUnusedImports()
+    }
 }
 
+/* =====================================================
+ * Test
+ * ===================================================== */
 tasks.withType<Test> {
-	useJUnitPlatform()
+    useJUnitPlatform()
 }
 
-tasks.register<Copy>("updateGitHooks") {
-	from(".github/script/pre-commit")
-	into(".git/hooks")
-}
-
-tasks.register<Exec>("makeGitHooksExecutable") {
-	commandLine("chmod", "+x", ".git/hooks/pre-commit")
-	dependsOn("updateGitHooks")
-}
-
-tasks.named("compileJava") {
-	dependsOn("makeGitHooksExecutable")
-}
-
-val jarName = "authentication.jar"
+/* =====================================================
+ * BootJar / Jar
+ * ===================================================== */
 tasks.named<BootJar>("bootJar") {
-	archiveFileName.set(jarName)
+    enabled = true
+    archiveFileName.set("authentication.jar")
 }
 
-// *-SNAPSHOT-plain.jar 생성 방지
-tasks.getByName<Jar>("jar"){
-	enabled=false
+tasks.named<Jar>("jar") {
+    enabled = true
+    archiveClassifier.set("")
 }
 
-val profile: String = project.findProperty("profile") as? String ?: "test"
-println("Build Profile: $profile")
+/* =====================================================
+ * Lambda ZIP (Packaging Only)
+ * ===================================================== */
+tasks.register<Zip>("lambdaJar") {
+    group = "distribution"
+    description = "Build AWS Lambda deployment ZIP"
 
-tasks.register<Copy>("processProfileYaml") {
-	from("src/main/resources/application-$profile.yaml")
-	into("build/resources/main") // 빌드 시 사용할 리소스 경로
-	rename { "application.yaml" } // 모든 프로파일 파일을 application.yaml로 변경
-}
+    dependsOn(tasks.named("jar"))
 
-// processResources 작업 후에 실행되도록 의존성 추가
-tasks.named("processResources") {
-	dependsOn("processProfileYaml")
+    archiveClassifier.set("lambda")
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    isZip64 = true
+
+    // Lambda 표준 구조: lib/
+    into("lib") {
+        from(tasks.named("jar"))
+        from(configurations.runtimeClasspath) {
+            exclude("org/apache/tomcat/embed/**")
+            exclude("META-INF/*.SF")
+            exclude("META-INF/*.DSA")
+            exclude("META-INF/*.RSA")
+            exclude("META-INF/MANIFEST.MF")
+            exclude("**/module-info.class")
+        }
+    }
 }

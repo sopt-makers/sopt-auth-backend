@@ -67,7 +67,7 @@ public class UserRetriever {
     return userEntityPage.map(UserEntity::toDomain);
   }
 
-  public int countByGeneration(int generation) {
-    return userJpaRepository.countByGeneration(generation);
+  public int countByGenerationAndIsSopt(int generation, boolean isSopt) {
+    return userJpaRepository.countByGenerationAndIsSopt(generation, isSopt);
   }
 }

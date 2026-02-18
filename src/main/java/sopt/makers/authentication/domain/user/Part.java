@@ -17,7 +17,16 @@ public enum Part {
   SERVER("서버"),
   DESIGN("디자인"),
   PLAN("기획"),
-  WEB("웹");
+  WEB("웹"),
+
+  // SOPT MAKERS 챕터
+  PM("PM"),
+  FRONTEND("프론트엔드"),
+  BACKEND("백엔드"),
+  MARKETER("마케터"),
+  RESEARCHER("리서처"),
+  ORGANIZER("오거나이저"),
+  CX("CX");
 
   private final String name;
 

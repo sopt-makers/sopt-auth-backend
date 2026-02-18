@@ -15,6 +15,7 @@ import java.util.List;
 
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 
@@ -27,6 +28,7 @@ public class AuthenticateSocialAccountService implements AuthenticateSocialAccou
   private final JwtAuthRefreshTokenService jwtAuthRefreshTokenProvider;
 
   @Override
+  @Transactional
   public AuthenticateSocialTokenInfo authenticate(AuthenticateSocialAccountCommand command) {
     String authPlatformId =
         oAuthAuthenticator.getIdentifier(command.token(), command.authPlatform());

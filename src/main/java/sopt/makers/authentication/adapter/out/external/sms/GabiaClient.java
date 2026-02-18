@@ -19,6 +19,7 @@ import static sopt.makers.authentication.adapter.out.external.sms.GabiaConstant.
 import sopt.makers.authentication.adapter.out.external.exception.ClientError;
 import sopt.makers.authentication.adapter.out.external.exception.ClientException.ClientRequestException;
 import sopt.makers.authentication.adapter.out.external.exception.ClientException.ClientResponseException;
+import sopt.makers.authentication.config.ExternalProperty;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -50,7 +51,7 @@ import okhttp3.Response;
 class GabiaClient {
 
   public static final String COLON = " : ";
-  private final GabiaProperty gabiaProperty;
+  private final ExternalProperty externalProperty;
   private final Gson gson;
   private final OkHttpClient client;
 
@@ -62,7 +63,7 @@ class GabiaClient {
             .setType(MultipartBody.FORM)
             // 수신번호가 두 개 이상인 경우 ',' 를 이용하여 입력 ex) 01011112222,01033334444
             .addFormDataPart(FORM_DATA_NAME_PHONE, receiver)
-            .addFormDataPart(FORM_DATA_NAME_CALLBACK, gabiaProperty.sms().phone())
+            .addFormDataPart(FORM_DATA_NAME_CALLBACK, externalProperty.gabia().sms().phone())
             .addFormDataPart(FORM_DATA_NAME_MESSAGE, content)
             .addFormDataPart(FORM_DATA_NAME_REFERENCE_KEY, generateReferenceKey())
             .build();
@@ -82,7 +83,7 @@ class GabiaClient {
             .setType(MultipartBody.FORM)
             // 수신번호가 두 개 이상인 경우 ',' 를 이용하여 입력 ex) 01011112222,01033334444
             .addFormDataPart(FORM_DATA_NAME_PHONE, receiver)
-            .addFormDataPart(FORM_DATA_NAME_CALLBACK, gabiaProperty.sms().phone())
+            .addFormDataPart(FORM_DATA_NAME_CALLBACK, externalProperty.gabia().sms().phone())
             .addFormDataPart(FORM_DATA_NAME_MESSAGE, content)
             .addFormDataPart(FORM_DATA_NAME_REFERENCE_KEY, generateReferenceKey())
             .addFormDataPart(FORM_DATA_NAME_SUBJECT, title)
@@ -102,7 +103,8 @@ class GabiaClient {
             .addFormDataPart(FORM_DATA_NAME_GRANT_TYPE, FORM_DATA_VALUE_GRANT_TYPE)
             .build();
 
-    Request request = buildPostRequest(URI_OAUTH_TOKEN, gabiaProperty.sms().key(), requestBody);
+    Request request =
+        buildPostRequest(URI_OAUTH_TOKEN, externalProperty.gabia().sms().key(), requestBody);
     try (Response response = executeRequest(request)) {
       String authValue = extractSerializedDataIn(RESPONSE_ACCESS_TOKEN_FIELD, response);
       validateResponseData(authValue);
@@ -144,7 +146,7 @@ class GabiaClient {
   private Request buildPostRequest(
       String requestUri, String authorizationValue, RequestBody requestBody) {
     return new Request.Builder()
-        .url(gabiaProperty.sms().url() + requestUri)
+        .url(externalProperty.gabia().sms().url() + requestUri)
         .post(requestBody)
         .headers(generateHeaderOfAuthorization(authorizationValue))
         .build();
@@ -161,7 +163,7 @@ class GabiaClient {
   private String encodeAuthorization(String value) {
     return Base64.getEncoder()
         .encodeToString(
-            String.format(FORMAT_AUTHORIZATION, gabiaProperty.sms().id(), value)
+            String.format(FORMAT_AUTHORIZATION, externalProperty.gabia().sms().id(), value)
                 .getBytes(StandardCharsets.UTF_8));
   }
 

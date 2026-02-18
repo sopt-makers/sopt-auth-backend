@@ -10,7 +10,6 @@ import sopt.makers.authentication.adapter.out.external.exception.ClientException
 import sopt.makers.authentication.adapter.out.external.exception.ClientException.AppResponseException;
 import sopt.makers.authentication.adapter.out.external.exception.ClientException.PlaygroundRequestException;
 import sopt.makers.authentication.adapter.out.external.exception.ClientException.PlaygroundResponseException;
-import sopt.makers.authentication.adapter.out.external.oauth.MagicLoginProperty;
 import sopt.makers.authentication.adapter.out.external.playground.PlaygroundClient;
 import sopt.makers.authentication.application.port.in.auth.SignUpUsecase;
 import sopt.makers.authentication.application.port.out.auth.OAuthAuthenticator;
@@ -18,6 +17,7 @@ import sopt.makers.authentication.application.port.out.user.UserActivityHistoryR
 import sopt.makers.authentication.application.port.out.user.UserRegisterInfoRepository;
 import sopt.makers.authentication.application.port.out.user.UserRepository;
 import sopt.makers.authentication.application.validator.auth.PhoneVerificationValidator;
+import sopt.makers.authentication.config.ExternalProperty;
 import sopt.makers.authentication.domain.auth.AuthPlatform;
 import sopt.makers.authentication.domain.auth.PhoneVerificationType;
 import sopt.makers.authentication.domain.auth.SocialAccount;
@@ -42,19 +42,13 @@ public class SignUpService implements SignUpUsecase {
   private final UserRegisterInfoRepository userRegisterInfoRepository;
   private final UserActivityHistoryRepository userActivityHistoryRepository;
   private final PhoneVerificationValidator phoneVerificationValidator;
-  private final MagicLoginProperty magicLoginProperty;
+  private final ExternalProperty externalProperty;
   private final PlaygroundClient playgroundClient;
   private final AppClient appClient;
 
   @Transactional
   @Override
   public void signUp(SignUpCommand command) {
-    // for concurrency test
-    //    if (command.phone().matches("^0100000\\d{4}$")) {
-    //      signUpConcurrency(command.token(), command.authPlatform(), command.phone());
-    //      return ;
-    //    }
-
     if (isMagicPhone(command.phone())) {
       signUpForMagicNumber(command.token(), command.authPlatform());
     } else {
@@ -62,39 +56,8 @@ public class SignUpService implements SignUpUsecase {
     }
   }
 
-  private void signUpConcurrency(String token, AuthPlatform authPlatform, String phone) {
-    UserRegisterInfo targetRegisterInfo =
-        userRegisterInfoRepository
-            .findByPhone(phone)
-            .orElseThrow(() -> new AuthException(NOT_FOUND_REGISTER_INFO));
-    SocialAccount socialAccount = createSocialAccount(phone, authPlatform);
-    Profile profile = createProfile(targetRegisterInfo);
-    Activity activity = createActivity(targetRegisterInfo);
-    User newUser = User.createNewUser(socialAccount, profile);
-    User savedUser = userRepository.save(newUser);
-
-    try {
-      userActivityHistoryRepository.save(savedUser, activity);
-      userRegisterInfoRepository.delete(targetRegisterInfo);
-      appClient.createMemberProfile(savedUser.getId());
-      playgroundClient.createMemberProfile(savedUser.getId());
-    } catch (AppRequestException | AppResponseException e) {
-      // 케이스 1: App이 실패 → Playground는 요청 시도 x
-      log.error("앱 유저 생성 요청 실패 userId={}", savedUser.getId());
-      throw new AuthException(APP_SYNC_FAIL);
-    } catch (PlaygroundRequestException | PlaygroundResponseException e) {
-      // 케이스 2: App은 성공했지만 Playground 실패
-      try {
-        appClient.deleteMemberProfile(savedUser.getId());
-      } catch (Exception ex) {
-        log.error("앱 유저 Delete 요청 실패 userId={}", savedUser.getId());
-      }
-      throw new AuthException(PLAYGROUND_SYNC_FAIL);
-    }
-  }
-
   private void signUpForMagicNumber(String token, AuthPlatform authPlatform) {
-    User user = userRepository.findByPhone(magicLoginProperty.phone());
+    User user = userRepository.findByPhone(externalProperty.oauth().magicLogin().phone());
     String authPlatformId = oAuthAuthenticator.getIdentifier(token, authPlatform);
     SocialAccount updatedSocialAccount = createSocialAccount(authPlatformId, authPlatform);
     User updatedUser = user.updateSocialAccount(updatedSocialAccount);
@@ -151,10 +114,13 @@ public class SignUpService implements SignUpUsecase {
   }
 
   private Activity createActivity(UserRegisterInfo registerInfo) {
-    return Activity.of(registerInfo.getGeneration(), null, registerInfo.getPart());
+    /*
+    SOPT 앱을 최초 회원가입하는 경우 => isSopt는 무조건 true로 설정, 메이커스 활동 회원들은 매 기수 시작시 => isSopt false인 기수 레코드 추가하는 작업 필요
+     */
+    return Activity.of(registerInfo.getGeneration(), null, registerInfo.getPart(), true);
   }
 
   private boolean isMagicPhone(String phone) {
-    return (phone.equals(magicLoginProperty.phone()));
+    return (phone.equals(externalProperty.oauth().magicLogin().phone()));
   }
 }

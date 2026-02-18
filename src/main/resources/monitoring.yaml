@@ -2,6 +2,8 @@ management:
   health:
     redis:
       enabled: false
+    diskspace:
+      enabled: false
   endpoints:
     enabled-by-default: false
     jmx:

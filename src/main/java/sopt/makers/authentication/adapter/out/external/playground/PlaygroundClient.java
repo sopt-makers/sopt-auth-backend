@@ -5,6 +5,7 @@ import static sopt.makers.authentication.adapter.out.external.exception.ClientEr
 
 import sopt.makers.authentication.adapter.out.external.exception.ClientException.PlaygroundRequestException;
 import sopt.makers.authentication.adapter.out.external.exception.ClientException.PlaygroundResponseException;
+import sopt.makers.authentication.config.ExternalProperty;
 
 import java.io.IOException;
 import java.util.Map;
@@ -30,7 +31,7 @@ public class PlaygroundClient {
   private static final String ENDPOINT_CREATE_PROFILE = "internal/api/v1/members";
   private static final String ENDPOINT_DELETE_PROFILE = "internal/api/v1/members";
   private static final String FIELD_USER_ID = "userId";
-  private final PlaygroundProperty playgroundProperty;
+  private final ExternalProperty externalProperty;
   private final OkHttpClient client;
   private final Gson gson;
 
@@ -42,14 +43,14 @@ public class PlaygroundClient {
     String requestBody = gson.toJson(Map.of(FIELD_USER_ID, memberId));
     RequestBody body = RequestBody.create(requestBody, JSON);
     okhttp3.HttpUrl url =
-        okhttp3.HttpUrl.parse(playgroundProperty.url())
+        okhttp3.HttpUrl.parse(externalProperty.playground().url())
             .newBuilder()
             .addPathSegments(ENDPOINT_CREATE_PROFILE)
             .build();
     Request httpRequest =
         new Request.Builder()
             .url(url)
-            .addHeader(HEADER_API_KEY, playgroundProperty.key())
+            .addHeader(HEADER_API_KEY, externalProperty.playground().key())
             .addHeader(HEADER_CONTENT_TYPE, CONTENT_TYPE_JSON)
             .post(body)
             .build();
@@ -70,7 +71,7 @@ public class PlaygroundClient {
       backoff = @Backoff(delay = 2000, multiplier = 1.5))
   public void deleteMemberProfile(Long memberId) {
     okhttp3.HttpUrl url =
-        okhttp3.HttpUrl.parse(playgroundProperty.url())
+        okhttp3.HttpUrl.parse(externalProperty.playground().url())
             .newBuilder()
             .addPathSegments(ENDPOINT_DELETE_PROFILE)
             .addPathSegment(String.valueOf(memberId))
@@ -79,7 +80,7 @@ public class PlaygroundClient {
     Request httpRequest =
         new Request.Builder()
             .url(url)
-            .addHeader(HEADER_API_KEY, playgroundProperty.key())
+            .addHeader(HEADER_API_KEY, externalProperty.playground().key())
             .addHeader(HEADER_CONTENT_TYPE, CONTENT_TYPE_JSON)
             .delete()
             .build();
