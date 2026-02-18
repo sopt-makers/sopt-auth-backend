@@ -14,7 +14,7 @@ import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 
 @Configuration
-@Profile({"local", "test"})
+@Profile({"local", "test", "prod"})
 @RequiredArgsConstructor
 public class S3ClientConfig {
 
