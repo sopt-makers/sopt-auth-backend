@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Profile;
 import software.amazon.awssdk.services.s3.S3Client;
 
 @Configuration
-@Profile({"dev", "prod"})
+@Profile({"dev"})
 public class LambdaS3ClientConfig {
 
   @Bean
