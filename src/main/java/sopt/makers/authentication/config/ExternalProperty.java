@@ -5,10 +5,10 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @ConfigurationProperties(prefix = "external")
-public record ExternalProperty(Gabia gabia, OAuth oauth, Playground playground, App app, Aws aws) {
+public record ExternalProperty(Sms sms, OAuth oauth, Playground playground, App app, Aws aws) {
 
-  public record Gabia(Sms sms) {
-    public record Sms(String id, String key, String url, String phone) {}
+  public record Sms(Internal internal) {
+    public record Internal(String url, String apiKey) {}
   }
 
   public record OAuth(
