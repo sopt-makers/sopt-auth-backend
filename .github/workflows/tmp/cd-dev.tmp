@@ -1,11 +1,12 @@
+// TODO: 람다 배포 확정되면 복구
 #name: Deploy SOPT Makers Authentication Server to Lambda (DEV)
 #
 #on:
 #  push:
 #    branches:
-##      - dev
+#      - dev
 #  workflow_dispatch:
-#
+
 #env:
 #  PROJECT_NAME: authentication
 #  SAM_PROFILE: dev

@@ -99,7 +99,7 @@ SOPT 회원들이 SOPT makers 프로덕트를 사용하기 위한 **인증**과 
 ### Server Architecture ☁️
 1. **Merge & Trigger** Github Actions
 2. **Run Deploy Workflow** Script
-   - [dev script](./.github/workflows/cd-dev.yml)
+   - [dev script](.github/workflows/cd-dev-ec2.yml)
    - [prod script](./.github/workflows/cd-prod.yml)
 3. **Copy Files from AWS S3**
 4. **Build and Push Image to ECR**
@@ -197,7 +197,7 @@ yaml 내 `${}` 정의된 변수명이 키 값이며 키 값에 해당하는 환�
 
 #### ※ JWKS는 어떻게 활용하나요?
 - 발급된 토큰을 복호화 및 검증해야 하는 전체 SOPT makers 프로덕트에서 사용합니다.
-- 각 프로덕트 도메인의 클라이언트가 토큰을 담아 각 프로덕트 서버에 요청을 보낸 경우, 서버는 인증서버의 Public Key Set을 조회하여 Private 키와 함께 JWS 검증을 진행합니다.
+- 각 프로덕트 도메인의 클라이언트가 토큰을 담아 각 프로덕트 서버에 요청을 보낸 경우, 서버는 인증서버의 Public Key Set을 조회하여 JWS 검증을 진행합니다.
 
 <br/>
 
