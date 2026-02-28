@@ -2,6 +2,7 @@ package sopt.makers.authentication.adapter.out.external.app;
 
 import static sopt.makers.authentication.adapter.out.external.exception.ClientError.APP_REQUEST_FAIL;
 import static sopt.makers.authentication.adapter.out.external.exception.ClientError.APP_RESPONSE_UNAVAILABLE;
+import static sopt.makers.authentication.common.constant.SystemConstant.JSON;
 
 import sopt.makers.authentication.adapter.out.external.exception.ClientException.AppRequestException;
 import sopt.makers.authentication.adapter.out.external.exception.ClientException.AppResponseException;
@@ -19,7 +20,6 @@ import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.HttpUrl;
-import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -29,7 +29,6 @@ import okhttp3.Response;
 @RequiredArgsConstructor
 @Slf4j
 public class AppClient {
-  private static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
   private static final String HEADER_API_KEY = "apiKey";
   private static final String HEADER_CONTENT_TYPE = "Content-Type";
   private static final String CONTENT_TYPE_JSON = "application/json";

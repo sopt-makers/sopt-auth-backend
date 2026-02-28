@@ -1,11 +1,12 @@
+// TODO: 람다 배포 확정되면 복구
 #name: Deploy SOPT Makers Authentication Server to Lambda (DEV)
 #
 #on:
 #  push:
 #    branches:
-##      - dev
+#      - dev
 #  workflow_dispatch:
-#
+
 #env:
 #  PROJECT_NAME: authentication
 #  SAM_PROFILE: dev
@@ -64,7 +65,7 @@
 #            KEY_ID ISSUER
 #            ACCESS_TOKEN_EXPIRATION_TIME REFRESH_TOKEN_EXPIRATION_TIME
 #
-#            GABIA_SMS_ID GABIA_SMS_KEY GABIA_SMS_URL GABIA_SMS_PHONE
+#            SMS_INTERNAL_URL SMS_INTERNAL_API_KEY
 #
 #            APPLE_AUD_APP APPLE_AUD_WEB GOOGLE_CLIENT_ID
 #
@@ -135,10 +136,8 @@
 #              AccessTokenExpirationTime="${ACCESS_TOKEN_EXPIRATION_TIME}" \
 #              RefreshTokenExpirationTime="${REFRESH_TOKEN_EXPIRATION_TIME}" \
 #              Issuer="${ISSUER}" \
-#              GabiaSmsId="${GABIA_SMS_ID}" \
-#              GabiaSmsKey="${GABIA_SMS_KEY}" \
-#              GabiaSmsUrl="${GABIA_SMS_URL}" \
-#              GabiaSmsPhone="${GABIA_SMS_PHONE}" \
+#              SmsInternalUrl="${SMS_INTERNAL_URL}" \
+#              SmsInternalApiKey="${SMS_INTERNAL_API_KEY}" \
 #              AppleAudApp="${APPLE_AUD_APP}" \
 #              AppleAudWeb="${APPLE_AUD_WEB}" \
 #              GoogleClientId="${GOOGLE_CLIENT_ID}" \
