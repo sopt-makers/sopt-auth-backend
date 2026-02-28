@@ -28,20 +28,7 @@ public class SmsProxyClient {
   private final ExternalProperty externalProperty;
 
   public void sendSMS(String phone, String message) {
-    int retryCount = 0;
-
-    while (retryCount < 3) {
-      try {
-        sendSmsToProxyServer(phone, message);
-        log.info("SMS 발송 성공 - 수신자: {}", phone);
-        return;
-      } catch (Exception e) {
-        retryCount++;
-        log.warn("SMS 발송 실패 - 재시도 {}/3, 수신자: {}, 에러: {}", retryCount, phone, e.getMessage());
-      }
-    }
-
-    throw new ClientRequestException(SMS_PROXY_REQUEST_FAIL);
+    sendSmsToProxyServer(phone, message);
   }
 
   private void sendSmsToProxyServer(String phone, String message) {
