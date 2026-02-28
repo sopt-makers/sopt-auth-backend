@@ -74,16 +74,10 @@ Parameters:
     NoEcho: true
 
   # === External APIs ===
-  GabiaSmsId:
+  SmsInternalUrl:
     Type: String
     NoEcho: true
-  GabiaSmsKey:
-    Type: String
-    NoEcho: true
-  GabiaSmsUrl:
-    Type: String
-    NoEcho: true
-  GabiaSmsPhone:
+  SmsInternalApiKey:
     Type: String
     NoEcho: true
 
@@ -190,11 +184,9 @@ Resources:
           REFRESH_TOKEN_EXPIRATION_TIME: !Ref RefreshTokenExpirationTime
           ISSUER: !Ref Issuer
 
-          # === Gabia ===
-          GABIA_SMS_ID: !Ref GabiaSmsId
-          GABIA_SMS_KEY: !Ref GabiaSmsKey
-          GABIA_SMS_URL: !Ref GabiaSmsUrl
-          GABIA_SMS_PHONE: !Ref GabiaSmsPhone
+          # === SMS Internal ===
+          SMS_INTERNAL_URL: !Ref SmsInternalUrl
+          SMS_INTERNAL_API_KEY: !Ref SmsInternalApiKey
 
           # === OAuth ===
           APPLE_AUD_APP: !Ref AppleAudApp
