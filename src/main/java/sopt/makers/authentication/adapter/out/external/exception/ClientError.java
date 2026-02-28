@@ -11,10 +11,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor(access = PRIVATE)
 public enum ClientError implements FailureCode {
   // 400 BAD_REQUEST
-  GABIA_REQUEST_INVALID_AUTH_DATA(HttpStatus.BAD_REQUEST, "Gabia에 잘못된 인증 데이터가 전달됐습니다."),
-  GABIA_REQUEST_FAIL(HttpStatus.BAD_REQUEST, "Gabia 요청에 실패했습니다."),
-  GABIA_RESPONSE_UNAVAILABLE(HttpStatus.BAD_REQUEST, "Gabia 요청 결과 내 의도한 데이터가 없습니다."),
-  GABIA_RESPONSE_BIND_FAIL(HttpStatus.BAD_REQUEST, "Gabia 요청 결과 역질렬화에 실패했습니다."),
+  SMS_PROXY_REQUEST_FAIL(HttpStatus.BAD_REQUEST, "Gabia 요청에 실패했습니다."),
   APPLE_REQUEST_FAIL(HttpStatus.BAD_REQUEST, "Apple 요청에 실패했습니다."),
   GOOGLE_REQUEST_FAIL(HttpStatus.BAD_REQUEST, "Google 요청에 실패했습니다."),
   INVALID_APPLE_REQUEST_URL(HttpStatus.BAD_REQUEST, "유효하지 않은 Apple 요청 URL입니다."),
