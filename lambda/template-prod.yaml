@@ -111,6 +111,20 @@ Parameters:
     Type: String
     NoEcho: true
 
+  # === External Service URLs ===
+  PlaygroundBaseUrl:
+    Type: String
+    NoEcho: true
+  PlaygroundExternalKey:
+    Type: String
+    NoEcho: true
+  AppBaseUrl:
+    Type: String
+    NoEcho: true
+  AppExternalKey:
+    Type: String
+    NoEcho: true
+
   # === JWT Key (S3) ===
   JwtKeyS3Bucket:
     Type: String
@@ -201,6 +215,12 @@ Resources:
           ADMIN_X_API_KEY: !Ref AdminXApiKey
           PLATFORM_X_API_KEY: !Ref PlatformXApiKey
           MONITORING_X_API_KEY: !Ref MonitoringXApiKey
+
+          # === External Services ===
+          PLAYGROUND_BASE_URL: !Ref PlaygroundBaseUrl
+          PLAYGROUND_EXTERNAL_KEY: !Ref PlaygroundExternalKey
+          APP_BASE_URL: !Ref AppBaseUrl
+          APP_EXTERNAL_KEY: !Ref AppExternalKey
 
           # === JWT S3 ===
           JWT_KEY_S3_BUCKET: !Ref JwtKeyS3Bucket

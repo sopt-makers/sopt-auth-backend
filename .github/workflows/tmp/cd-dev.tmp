@@ -72,6 +72,9 @@
 #            PLAYGROUND_X_API_KEY CREW_X_API_KEY APP_X_API_KEY
 #            ADMIN_X_API_KEY PLATFORM_X_API_KEY MONITORING_X_API_KEY
 #
+#            PLAYGROUND_BASE_URL PLAYGROUND_EXTERNAL_KEY
+#            APP_BASE_URL APP_EXTERNAL_KEY
+#
 #            JWT_KEY_S3_BUCKET JWT_PUBLIC_KEY_S3_PATH JWT_PRIVATE_KEY_S3_PATH
 #
 #            ACTUATOR_PATH USER_PATH GET_PUBLIC_KEY
@@ -147,6 +150,10 @@
 #              AdminXApiKey="${ADMIN_X_API_KEY}" \
 #              PlatformXApiKey="${PLATFORM_X_API_KEY}" \
 #              MonitoringXApiKey="${MONITORING_X_API_KEY}" \
+#              PlaygroundBaseUrl="${PLAYGROUND_BASE_URL}" \
+#              PlaygroundExternalKey="${PLAYGROUND_EXTERNAL_KEY}" \
+#              AppBaseUrl="${APP_BASE_URL}" \
+#              AppExternalKey="${APP_EXTERNAL_KEY}" \
 #              JwtKeyS3Bucket="${JWT_KEY_S3_BUCKET}" \
 #              JwtPublicKeyS3Path="${JWT_PUBLIC_KEY_S3_PATH}" \
 #              JwtPrivateKeyS3Path="${JWT_PRIVATE_KEY_S3_PATH}" \

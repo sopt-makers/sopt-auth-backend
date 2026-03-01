@@ -22,3 +22,9 @@ external:
       bucket: ${JWT_KEY_S3_BUCKET}
       public-key-path: ${JWT_PUBLIC_KEY_S3_PATH}
       private-key-path: ${JWT_PRIVATE_KEY_S3_PATH}
+  playground:
+    url: ${PLAYGROUND_BASE_URL}
+    key: ${PLAYGROUND_EXTERNAL_KEY}
+  app:
+    url: ${APP_BASE_URL}
+    key: ${APP_EXTERNAL_KEY}
