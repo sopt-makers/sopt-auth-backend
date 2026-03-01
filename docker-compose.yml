@@ -17,7 +17,7 @@ x-auth-service-template: &auth-service-template
   depends_on:
     - redis
   networks:
-    - app-net
+    - auth-app-net
 
 services:
 
@@ -33,7 +33,7 @@ services:
     volumes:
       - redis_data:/data
     networks:
-      - app-net
+      - auth-app-net
     restart: unless-stopped
 
   auth-blue:
@@ -51,7 +51,7 @@ services:
     restart: unless-stopped
 
 networks:
-  app-net:
+  auth-app-net:
     driver: bridge
 
 volumes:
