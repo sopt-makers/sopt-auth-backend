@@ -14,16 +14,47 @@ x-auth-service-template: &auth-service-template
     options:
       max-size: "10m"
       max-file: "3"
+  depends_on:
+    - redis
+  networks:
+    - auth-app-net
 
 services:
+
+  redis:
+    image: redis:7-alpine
+    container_name: platform-redis
+    command:
+      - redis-server
+      - --requirepass
+      - ${REDIS_PASSWORD:?REDIS_PASSWORD is required}
+      - --appendonly
+      - "yes"
+    ports:
+      - "6382:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - auth-app-net
+    restart: unless-stopped
+
   auth-blue:
     <<: *auth-service-template
     container_name: auth-blue
     ports:
       - "${AUTH_BLUE_PORT}:8080"
+    restart: unless-stopped
 
   auth-green:
     <<: *auth-service-template
     container_name: auth-green
     ports:
       - "${AUTH_GREEN_PORT}:8080"
+    restart: unless-stopped
+
+networks:
+  auth-app-net:
+    driver: bridge
+
+volumes:
+  redis_data:
