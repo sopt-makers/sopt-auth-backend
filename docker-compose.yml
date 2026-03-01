@@ -24,10 +24,12 @@ services:
   redis:
     image: redis:7-alpine
     container_name: platform-redis
-    command: >
-      redis-server
-      --requirepass ${REDIS_PASSWORD}
-      --appendonly yes
+    command:
+      - redis-server
+      - --requirepass
+      - ${REDIS_PASSWORD:?REDIS_PASSWORD is required}
+      - --appendonly
+      - "yes"
     ports:
       - "6382:6379"
     volumes:
