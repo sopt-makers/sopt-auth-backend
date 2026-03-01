@@ -2,9 +2,12 @@ package sopt.makers.authentication.common.constant;
 
 import java.util.List;
 
+import okhttp3.MediaType;
+
 public final class SystemConstant {
   private SystemConstant() {}
 
+  public static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
   public static final String UTF_8 = "UTF-8";
   public static final String RSA = "RSA";
   private static final String API_PATH_PREFIX = "/api";

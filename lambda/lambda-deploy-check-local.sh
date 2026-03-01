@@ -123,10 +123,8 @@ deploy_with_sam() {
       AccessTokenExpirationTime="${ACCESS_TOKEN_EXPIRATION_TIME}" \
       RefreshTokenExpirationTime="${REFRESH_TOKEN_EXPIRATION_TIME}" \
       Issuer="${ISSUER}" \
-      GabiaSmsId="${GABIA_SMS_ID}" \
-      GabiaSmsKey="${GABIA_SMS_KEY}" \
-      GabiaSmsUrl="${GABIA_SMS_URL}" \
-      GabiaSmsPhone="${GABIA_SMS_PHONE}" \
+      SmsInternalUrl="${SMS_INTERNAL_URL}" \
+      SmsInternalApiKey="${SMS_INTERNAL_API_KEY}" \
       AppleAudApp="${APPLE_AUD_APP}" \
       AppleAudWeb="${APPLE_AUD_WEB}" \
       GoogleClientId="${GOOGLE_CLIENT_ID}" \

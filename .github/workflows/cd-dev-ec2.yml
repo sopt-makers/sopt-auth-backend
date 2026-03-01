@@ -1,11 +1,12 @@
-name: Continuous Deployment for SOPT makers Authentication Production Server
+name: Continuous Deployment for SOPT makers Authentication Development EC2 Server
 
 on:
   workflow_dispatch:
   push:
-    branches: [ prod ]
+    branches: [ dev ]
 
 jobs:
+
   build-and-push-image:
     runs-on: ubuntu-latest
     steps:
@@ -40,39 +41,37 @@ jobs:
           TEST_ENV_PATH: ${{ secrets.ENV_FILE_PATH_TEST }}
         run: |
           mkdir -p ./src/main/resources
-          aws s3 cp s3://$S3_BUCKET/prod/static/$JWT_PUBLIC_KEY_PATH ./src/main/resources/jwt_public_key.pem --region $REGION
-          aws s3 cp s3://$S3_BUCKET/prod/static/$JWT_PRIVATE_KEY_PATH ./src/main/resources/jwt_private_key.pem --region $REGION
+          aws s3 cp s3://$S3_BUCKET/dev/static/$JWT_PUBLIC_KEY_PATH ./src/main/resources/jwt_public_key.pem --region $REGION
+          aws s3 cp s3://$S3_BUCKET/dev/static/$JWT_PRIVATE_KEY_PATH ./src/main/resources/jwt_private_key.pem --region $REGION
           mkdir -p ./src/main/resources/env
-          aws s3 cp s3://$S3_BUCKET/prod/$TEST_ENV_PATH ./src/main/resources/env/test.env --region $REGION
+          aws s3 cp s3://$S3_BUCKET/dev/$TEST_ENV_PATH ./src/main/resources/env/test.env --region $REGION
 
       - name: 🧱 Build and Test with Gradle
-        run: ./gradlew build --no-daemon -Pprofile=prod
+        run: ./gradlew build --no-daemon
         shell: bash
 
       - name: 🧱 Build Image and Push to ECR Public
         env:
           AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
-          AWS_ECR_REPO: ${{ secrets.AWS_ECR_REPO_PROD }}
+          AWS_ECR_REPO: ${{ secrets.AWS_ECR_REPO_DEV }}
           GITHUB_SHA: ${{ github.sha }}
         run: |
           IMAGE_SHA_TAG=$(echo $GITHUB_SHA | cut -c1-8)
 
           aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws
           
-          # build & tag directly with full repo path
-          docker build --build-arg PROFILE=prod \
+          docker build --build-arg PROFILE=dev \
             -t public.ecr.aws/$AWS_ACCOUNT_ID/$AWS_ECR_REPO:latest \
             -t public.ecr.aws/$AWS_ACCOUNT_ID/$AWS_ECR_REPO:$IMAGE_SHA_TAG .
 
-          # push both tags
           docker push public.ecr.aws/$AWS_ACCOUNT_ID/$AWS_ECR_REPO:latest
           docker push public.ecr.aws/$AWS_ACCOUNT_ID/$AWS_ECR_REPO:$IMAGE_SHA_TAG
 
-      - name: 🗑️ Prune old ECR Public images (keep 5 latest)
+      - name: 🗑️ Prune old ECR Public images (keep 2 latest)
         env:
-          ECR_APP_NAME: ${{ secrets.AWS_ECR_REPO_PROD }}
+          ECR_APP_NAME: ${{ secrets.AWS_ECR_REPO_DEV }}
         run: |
-          echo "Pruning old images, keeping only 5 most recent..."
+          echo "Pruning old images, keeping only 2 most recent..."
           IMAGES=$(aws ecr-public describe-images \
             --region us-east-1 \
             --repository-name $ECR_APP_NAME \
@@ -81,8 +80,8 @@ jobs:
 
           COUNT=$(echo $IMAGES | jq length)
 
-          if [ "$COUNT" -gt 5 ]; then
-            TO_DELETE=$(echo $IMAGES | jq -c ".[:$((COUNT-5))] | [{imageDigest: .[]}]")
+          if [ "$COUNT" -gt 2 ]; then
+            TO_DELETE=$(echo $IMAGES | jq -c ".[:$((COUNT-2))] | [{imageDigest: .[]}]")
             if [ "$TO_DELETE" != "[]" ]; then
               aws ecr-public batch-delete-image \
                 --region us-east-1 \
@@ -92,7 +91,7 @@ jobs:
               echo "No images to delete."
             fi
           else
-            echo "Less than or equal to 5 images, skipping prune."
+            echo "Less than or equal to 2 images, skipping prune."
           fi
 
   deploy:
@@ -115,32 +114,32 @@ jobs:
           S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
           JWT_PUBLIC_KEY_PATH: ${{ secrets.JWT_PUBLIC_KEY_PATH }}
           JWT_PRIVATE_KEY_PATH: ${{ secrets.JWT_PRIVATE_KEY_PATH }}
-          PROD_ENV_FILE_PATH: ${{ secrets.ENV_FILE_PATH_PROD }}
+          DEV_ENV_FILE_PATH: ${{ secrets.ENV_FILE_PATH_DEV }}
         run: |
           mkdir -p ./key
-          aws s3 cp s3://$S3_BUCKET/prod/static/$JWT_PUBLIC_KEY_PATH ./key/jwt_public_key.pem --region $REGION
-          aws s3 cp s3://$S3_BUCKET/prod/static/$JWT_PRIVATE_KEY_PATH ./key/jwt_private_key.pem --region $REGION
-          aws s3 cp s3://$S3_BUCKET/prod/$PROD_ENV_FILE_PATH .env --region $REGION
+          aws s3 cp s3://$S3_BUCKET/dev/static/$JWT_PUBLIC_KEY_PATH ./key/jwt_public_key.pem --region $REGION
+          aws s3 cp s3://$S3_BUCKET/dev/static/$JWT_PRIVATE_KEY_PATH ./key/jwt_private_key.pem --region $REGION
+          aws s3 cp s3://$S3_BUCKET/dev/$DEV_ENV_FILE_PATH .env --region $REGION
 
       - name: 🔄 Transfer Deployment Files to EC2
         uses: appleboy/scp-action@master
         with:
-          host: ${{ secrets.HOST_PROD }}
-          username: ubuntu
-          key: ${{ secrets.PEM_KEY_PROD }}
+          host: ${{ secrets.HOST_DEV }}
+          username: ec2-user
+          key: ${{ secrets.PEM_KEY_DEV }}
           port: 22
           source: ".env,docker-compose.yml,scripts,key"
-          target: /home/ubuntu/authentication
+          target: /home/ec2-user/authentication
           overwrite: true
 
       - name: 🚀 Remote SSH Deployment
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.HOST_PROD }}
-          username: ubuntu
-          key: ${{ secrets.PEM_KEY_PROD }}
+          host: ${{ secrets.HOST_DEV }}
+          username: ec2-user
+          key: ${{ secrets.PEM_KEY_DEV }}
           port: 22
           script: |
-            sudo chmod +x /home/ubuntu/authentication/scripts/*.sh
-            cd /home/ubuntu/authentication/scripts
+            sudo chmod +x /home/ec2-user/authentication/scripts/*.sh
+            cd /home/ec2-user/authentication/scripts
             ./deploy.sh

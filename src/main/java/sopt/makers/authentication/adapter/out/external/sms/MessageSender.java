@@ -11,14 +11,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MessageSender implements MessageSendPort {
 
-  private final GabiaClient gabiaClient;
+  private final SmsProxyClient smsProxyClient;
 
   @Override
   public void sendMessage(Message message) {
-    switch (message.getType()) {
-      case SMS -> gabiaClient.sendSmsMessage(message.getReceiver(), message.getContent());
-      case LMS -> gabiaClient.sendLmsMessage(
-          message.getReceiver(), message.getTitle(), message.getContent());
-    }
+    smsProxyClient.sendSMS(message.getReceiver(), message.getContent());
   }
 }

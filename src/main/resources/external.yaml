@@ -1,10 +1,8 @@
 external:
-  gabia:
-    sms:
-      id: ${GABIA_SMS_ID}
-      key: ${GABIA_SMS_KEY}
-      url: ${GABIA_SMS_URL}
-      phone: ${GABIA_SMS_PHONE}
+  sms:
+    internal:
+      url: ${SMS_INTERNAL_URL}
+      api-key: ${SMS_INTERNAL_API_KEY}
   oauth:
     apple:
       web-aud: ${APPLE_AUD_WEB}
@@ -24,3 +22,9 @@ external:
       bucket: ${JWT_KEY_S3_BUCKET}
       public-key-path: ${JWT_PUBLIC_KEY_S3_PATH}
       private-key-path: ${JWT_PRIVATE_KEY_S3_PATH}
+  playground:
+    url: ${PLAYGROUND_BASE_URL}
+    key: ${PLAYGROUND_EXTERNAL_KEY}
+  app:
+    url: ${APP_BASE_URL}
+    key: ${APP_EXTERNAL_KEY}

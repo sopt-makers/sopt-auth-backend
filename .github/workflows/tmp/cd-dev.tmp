@@ -1,0 +1,173 @@
+// TODO: 람다 배포 확정되면 복구
+#name: Deploy SOPT Makers Authentication Server to Lambda (DEV)
+#
+#on:
+#  push:
+#    branches:
+#      - dev
+#  workflow_dispatch:
+
+#env:
+#  PROJECT_NAME: authentication
+#  SAM_PROFILE: dev
+#  AWS_REGION: ${{ secrets.AWS_REGION }}
+#  S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+#
+#jobs:
+#  deploy:
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - name: Checkout source
+#        uses: actions/checkout@v4
+#
+#      - name: Set up Java 21
+#        uses: actions/setup-java@v4
+#        with:
+#          distribution: temurin
+#          java-version: 21
+#
+#      - name: Configure AWS credentials
+#        uses: aws-actions/configure-aws-credentials@v4
+#        with:
+#          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+#          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+#          aws-region: ${{ env.AWS_REGION }}
+#
+#      - name: Install AWS SAM CLI
+#        uses: aws-actions/setup-sam@v2
+#
+#      - name: Create .env file
+#        run: |
+#          set -e
+#          cat <<EOF > .env
+#          ${{ secrets.ENV_FILE_DEV }}
+#          EOF
+#
+#      - name: Create Property File
+#        run: |
+#          touch ./gradle.properties
+#          echo "${{ secrets.PROPERTY_GRADLE }}" >> ./gradle.properties
+#
+#      - name: Validate env variables
+#        run: |
+#          set -e
+#          source .env
+#
+#          REQUIRED_VARS=(
+#            SPRING_PROFILES_ACTIVE
+#
+#            DB_URL DB_USERNAME DB_PASSWORD DB_DRIVER_CLASS
+#            JPA_DATABASE_PLATFORM JPA_DATABASE
+#
+#            REDIS_HOST REDIS_PORT REDIS_PASSWORD
+#
+#            KEY_ID ISSUER
+#            ACCESS_TOKEN_EXPIRATION_TIME REFRESH_TOKEN_EXPIRATION_TIME
+#
+#            SMS_INTERNAL_URL SMS_INTERNAL_API_KEY
+#
+#            APPLE_AUD_APP APPLE_AUD_WEB GOOGLE_CLIENT_ID
+#
+#            PLAYGROUND_X_API_KEY CREW_X_API_KEY APP_X_API_KEY
+#            ADMIN_X_API_KEY PLATFORM_X_API_KEY MONITORING_X_API_KEY
+#
+#            PLAYGROUND_BASE_URL PLAYGROUND_EXTERNAL_KEY
+#            APP_BASE_URL APP_EXTERNAL_KEY
+#
+#            JWT_KEY_S3_BUCKET JWT_PUBLIC_KEY_S3_PATH JWT_PRIVATE_KEY_S3_PATH
+#
+#            ACTUATOR_PATH USER_PATH GET_PUBLIC_KEY
+#
+#            MAGIC_LOGIN_PHONE MAGIC_LOGIN_CODE MAGIC_LOGIN_NAME
+#          )
+#
+#          for VAR in "${REQUIRED_VARS[@]}"; do
+#            if [ -z "${!VAR}" ]; then
+#              echo "❌ Missing env: $VAR"
+#              exit 1
+#            fi
+#          done
+#
+#          echo "✅ All required env variables are present"
+#
+#      - name: Build Lambda JAR
+#        run: |
+#          set -e
+#          chmod +x gradlew
+#          source .env
+#          ./gradlew clean lambdaJar -x test -Pprofile=dev
+#
+#      - name: Upload Lambda artifact to S3
+#        run: |
+#          set -e
+#          ZIP_FILE=$(find build/distributions -name "*-lambda.zip" | head -1)
+#
+#          if [ -z "$ZIP_FILE" ]; then
+#            echo "❌ Lambda ZIP file not found"
+#            exit 1
+#          fi
+#
+#          TIMESTAMP=$(date +"%Y%m%d-%H%M%S")
+#          S3_KEY="${SAM_PROFILE}/lambda/${PROJECT_NAME}-${TIMESTAMP}.zip"
+#          aws s3 cp "$ZIP_FILE" "s3://${S3_BUCKET}/${S3_KEY}"
+#          echo "S3_KEY=$S3_KEY" >> $GITHUB_ENV
+#
+#      - name: Deploy with SAM
+#        run: |
+#          set -e
+#          source .env
+#          cd lambda
+#
+#          sam deploy \
+#            --config-env ${SAM_PROFILE} \
+#            --no-fail-on-empty-changeset \
+#            --parameter-overrides \
+#              S3Bucket="${S3_BUCKET}" \
+#              S3Key="${S3_KEY}" \
+#              Profile="${SAM_PROFILE}" \
+#              DbUrl="${DB_URL}" \
+#              DbUsername="${DB_USERNAME}" \
+#              DbPassword="${DB_PASSWORD}" \
+#              DbDriverClass="${DB_DRIVER_CLASS}" \
+#              JpaDatabasePlatform="${JPA_DATABASE_PLATFORM}" \
+#              JpaDatabase="${JPA_DATABASE}" \
+#              RedisHost="${REDIS_HOST}" \
+#              RedisPort="${REDIS_PORT}" \
+#              RedisPassword="${REDIS_PASSWORD}" \
+#              KeyId="${KEY_ID}" \
+#              AccessTokenExpirationTime="${ACCESS_TOKEN_EXPIRATION_TIME}" \
+#              RefreshTokenExpirationTime="${REFRESH_TOKEN_EXPIRATION_TIME}" \
+#              Issuer="${ISSUER}" \
+#              SmsInternalUrl="${SMS_INTERNAL_URL}" \
+#              SmsInternalApiKey="${SMS_INTERNAL_API_KEY}" \
+#              AppleAudApp="${APPLE_AUD_APP}" \
+#              AppleAudWeb="${APPLE_AUD_WEB}" \
+#              GoogleClientId="${GOOGLE_CLIENT_ID}" \
+#              PlaygroundXApiKey="${PLAYGROUND_X_API_KEY}" \
+#              CrewXApiKey="${CREW_X_API_KEY}" \
+#              AppXApiKey="${APP_X_API_KEY}" \
+#              AdminXApiKey="${ADMIN_X_API_KEY}" \
+#              PlatformXApiKey="${PLATFORM_X_API_KEY}" \
+#              MonitoringXApiKey="${MONITORING_X_API_KEY}" \
+#              PlaygroundBaseUrl="${PLAYGROUND_BASE_URL}" \
+#              PlaygroundExternalKey="${PLAYGROUND_EXTERNAL_KEY}" \
+#              AppBaseUrl="${APP_BASE_URL}" \
+#              AppExternalKey="${APP_EXTERNAL_KEY}" \
+#              JwtKeyS3Bucket="${JWT_KEY_S3_BUCKET}" \
+#              JwtPublicKeyS3Path="${JWT_PUBLIC_KEY_S3_PATH}" \
+#              JwtPrivateKeyS3Path="${JWT_PRIVATE_KEY_S3_PATH}" \
+#              ActuatorPath="${ACTUATOR_PATH}" \
+#              UserPath="${USER_PATH}" \
+#              GetPublicKey="${GET_PUBLIC_KEY}" \
+#              MagicLoginPhone="${MAGIC_LOGIN_PHONE}" \
+#              MagicLoginCode="${MAGIC_LOGIN_CODE}" \
+#              MagicLoginName="${MAGIC_LOGIN_NAME}"
+#
+#
+#      - name: Output API Endpoint
+#        run: |
+#          aws cloudformation describe-stacks \
+#            --stack-name "${PROJECT_NAME}-${SAM_PROFILE}" \
+#            --query "Stacks[0].Outputs[?OutputKey=='ApiEndpoint'].OutputValue" \
+#            --output text

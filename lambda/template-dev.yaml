@@ -74,16 +74,10 @@ Parameters:
     NoEcho: true
 
   # === External APIs ===
-  GabiaSmsId:
+  SmsInternalUrl:
     Type: String
     NoEcho: true
-  GabiaSmsKey:
-    Type: String
-    NoEcho: true
-  GabiaSmsUrl:
-    Type: String
-    NoEcho: true
-  GabiaSmsPhone:
+  SmsInternalApiKey:
     Type: String
     NoEcho: true
 
@@ -113,6 +107,20 @@ Parameters:
     Type: String
     NoEcho: true
   MonitoringXApiKey:
+    Type: String
+    NoEcho: true
+
+  # === External Service URLs ===
+  PlaygroundBaseUrl:
+    Type: String
+    NoEcho: true
+  PlaygroundExternalKey:
+    Type: String
+    NoEcho: true
+  AppBaseUrl:
+    Type: String
+    NoEcho: true
+  AppExternalKey:
     Type: String
     NoEcho: true
 
@@ -190,11 +198,9 @@ Resources:
           REFRESH_TOKEN_EXPIRATION_TIME: !Ref RefreshTokenExpirationTime
           ISSUER: !Ref Issuer
 
-          # === Gabia ===
-          GABIA_SMS_ID: !Ref GabiaSmsId
-          GABIA_SMS_KEY: !Ref GabiaSmsKey
-          GABIA_SMS_URL: !Ref GabiaSmsUrl
-          GABIA_SMS_PHONE: !Ref GabiaSmsPhone
+          # === SMS Internal ===
+          SMS_INTERNAL_URL: !Ref SmsInternalUrl
+          SMS_INTERNAL_API_KEY: !Ref SmsInternalApiKey
 
           # === OAuth ===
           APPLE_AUD_APP: !Ref AppleAudApp
@@ -208,6 +214,12 @@ Resources:
           ADMIN_X_API_KEY: !Ref AdminXApiKey
           PLATFORM_X_API_KEY: !Ref PlatformXApiKey
           MONITORING_X_API_KEY: !Ref MonitoringXApiKey
+
+          # === External Services ===
+          PLAYGROUND_BASE_URL: !Ref PlaygroundBaseUrl
+          PLAYGROUND_EXTERNAL_KEY: !Ref PlaygroundExternalKey
+          APP_BASE_URL: !Ref AppBaseUrl
+          APP_EXTERNAL_KEY: !Ref AppExternalKey
 
           # === JWT S3 ===
           JWT_KEY_S3_BUCKET: !Ref JwtKeyS3Bucket
