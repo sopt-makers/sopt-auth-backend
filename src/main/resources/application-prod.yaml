@@ -13,8 +13,8 @@ spring:
     password: ${DB_PASSWORD}
     driver-class-name: ${DB_DRIVER_CLASS}
   redis:
-    host: ${REDIS_HOST:platform-redis}
-    port: ${REDIS_PORT:6379}
+    host: ${REDIS_HOST:}
+    port: ${REDIS_PORT:}
     password: ${REDIS_PASSWORD:}
   web:
     resources:
