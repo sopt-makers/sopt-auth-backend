@@ -39,12 +39,15 @@ public interface UserJpaRepository extends JpaRepository<UserEntity, Long> {
   @Query(
       "SELECT DISTINCT u "
           + "FROM UserEntity u "
-          + "JOIN FETCH u.userActivityHistoryList a "
-          + "WHERE (:generation IS NULL OR a.generation = :generation) "
+          + "JOIN FETCH u.userActivityHistoryList "
+          + "WHERE (:name IS NULL OR u.name LIKE %:name%) "
+          + "AND EXISTS ("
+          + "SELECT 1 FROM UserActivityHistoryEntity a "
+          + "WHERE a.user = u "
+          + "AND (:generation IS NULL OR a.generation = :generation) "
           + "AND (:part IS NULL OR a.part = :part) "
-          + "AND (:name IS NULL OR u.name LIKE %:name%) "
-          + "AND (:team IS NULL OR a.team = :team)"
-          + "AND (:isAdmin IS NULL OR :isAdmin = FALSE OR a.role <> 'MEMBER')")
+          + "AND (:team IS NULL OR a.team = :team) "
+          + "AND (:isAdmin IS NULL OR :isAdmin = FALSE OR a.role <> 'MEMBER'))")
   Page<UserEntity> findAllWithActivityHistoriesByGenerationAndPartAndNameAndTeam(
       @Param("generation") Integer generation,
       @Param("part") Part part,
