@@ -77,24 +77,24 @@ public class SignUpService implements SignUpUsecase {
     Profile profile = createProfile(targetRegisterInfo);
     Activity activity = createActivity(targetRegisterInfo);
     User newUser = User.createNewUser(socialAccount, profile);
-    User savedUser = userRepository.save(newUser);
+    User savedUser;
+
+    try {
+      savedUser = userRepository.save(newUser);
+    } catch (DataIntegrityViolationException e) {
+      log.error("중복된 소셜 계정으로 회원가입 시도");
+      throw new AuthException(ALREADY_REGISTERED_SOCIAL_ACCOUNT);
+    }
 
     try {
       userActivityHistoryRepository.save(savedUser, activity);
       userRegisterInfoRepository.delete(targetRegisterInfo);
       appClient.createMemberProfile(savedUser.getId());
       playgroundClient.createMemberProfile(savedUser.getId());
-    } catch (DataIntegrityViolationException e) {
-      // 케이스 1: Unique Key 제약 조건 위반 (이미 가입된 소셜 계정)
-      log.error(
-          "중복된 소셜 계정으로 회원가입 시도 authPlatform={}, authPlatformId={}", authPlatform, authPlatformId);
-      throw new AuthException(ALREADY_REGISTERED_SOCIAL_ACCOUNT);
     } catch (AppRequestException | AppResponseException e) {
-      // 케이스 2: App이 실패 → Playground는 요청 시도 x
       log.error("앱 유저 생성 요청 실패 userId={}", savedUser.getId());
       throw new AuthException(APP_SYNC_FAIL);
     } catch (PlaygroundRequestException | PlaygroundResponseException e) {
-      // 케이스 3: App은 성공했지만 Playground 실패
       try {
         appClient.deleteMemberProfile(savedUser.getId());
       } catch (Exception ex) {
