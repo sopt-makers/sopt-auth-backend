@@ -13,7 +13,7 @@ spring:
     password: ${DB_PASSWORD}
     driver-class-name: ${DB_DRIVER_CLASS}
     hikari:
-      maximum-pool-size: 30
+      maximum-pool-size: 10
       minimum-idle: 3
       idle-timeout: 300000
       max-lifetime: 1800000
