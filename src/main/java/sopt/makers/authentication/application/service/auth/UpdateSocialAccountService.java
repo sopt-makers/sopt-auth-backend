@@ -9,6 +9,7 @@ import sopt.makers.authentication.domain.auth.SocialAccount;
 import sopt.makers.authentication.domain.user.User;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 
@@ -19,6 +20,7 @@ public class UpdateSocialAccountService implements UpdateSocialAccountUsecase {
   private final OAuthAuthenticator oAuthAuthenticator;
   private final PhoneVerificationValidator phoneVerificationValidator;
 
+  @Transactional
   @Override
   public boolean update(UpdateSocialAccountCommand command) {
     User user = userRepository.findByPhone(command.phone());
