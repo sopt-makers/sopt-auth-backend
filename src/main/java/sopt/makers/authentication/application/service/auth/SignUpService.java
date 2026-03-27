@@ -1,5 +1,6 @@
 package sopt.makers.authentication.application.service.auth;
 
+import static sopt.makers.authentication.domain.auth.exception.AuthFailure.ALREADY_REGISTERED_SOCIAL_ACCOUNT;
 import static sopt.makers.authentication.domain.auth.exception.AuthFailure.APP_SYNC_FAIL;
 import static sopt.makers.authentication.domain.auth.exception.AuthFailure.INVALID_SOCIAL_PLATFORM;
 import static sopt.makers.authentication.domain.auth.exception.AuthFailure.NOT_FOUND_REGISTER_INFO;
@@ -27,6 +28,7 @@ import sopt.makers.authentication.domain.user.Profile;
 import sopt.makers.authentication.domain.user.User;
 import sopt.makers.authentication.domain.user.UserRegisterInfo;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -75,7 +77,14 @@ public class SignUpService implements SignUpUsecase {
     Profile profile = createProfile(targetRegisterInfo);
     Activity activity = createActivity(targetRegisterInfo);
     User newUser = User.createNewUser(socialAccount, profile);
-    User savedUser = userRepository.save(newUser);
+    User savedUser;
+
+    try {
+      savedUser = userRepository.save(newUser);
+    } catch (DataIntegrityViolationException e) {
+      log.error("중복된 소셜 계정으로 회원가입 시도");
+      throw new AuthException(ALREADY_REGISTERED_SOCIAL_ACCOUNT);
+    }
 
     try {
       userActivityHistoryRepository.save(savedUser, activity);
@@ -83,11 +92,9 @@ public class SignUpService implements SignUpUsecase {
       appClient.createMemberProfile(savedUser.getId());
       playgroundClient.createMemberProfile(savedUser.getId());
     } catch (AppRequestException | AppResponseException e) {
-      // 케이스 1: App이 실패 → Playground는 요청 시도 x
       log.error("앱 유저 생성 요청 실패 userId={}", savedUser.getId());
       throw new AuthException(APP_SYNC_FAIL);
     } catch (PlaygroundRequestException | PlaygroundResponseException e) {
-      // 케이스 2: App은 성공했지만 Playground 실패
       try {
         appClient.deleteMemberProfile(savedUser.getId());
       } catch (Exception ex) {
