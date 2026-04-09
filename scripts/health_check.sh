@@ -4,7 +4,7 @@ health_check() {
   local PORT=$1
 
   echo "▶️ Health Check : http://localhost:${PORT}${AUTH_ACTUATOR_PATH}/health"
-  for retry_count in {1..10}; do
+  for retry_count in {1..20}; do
     response=$(curl -s \
       -H "X-Api-Key: ${PLATFORM_API_KEY}" \
       -H "X-Service-Name: ${PLATFORM_SERVICE_NAME}" \
