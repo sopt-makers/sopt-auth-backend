@@ -5,6 +5,7 @@ import sopt.makers.authentication.domain.user.Part;
 import sopt.makers.authentication.domain.user.Profile;
 import sopt.makers.authentication.domain.user.Team;
 import sopt.makers.authentication.domain.user.User;
+import sopt.makers.authentication.domain.user.UserOrderBy;
 
 import java.util.List;
 
@@ -34,7 +35,13 @@ public interface UserRepository {
   boolean existsByPhone(String phone);
 
   Page<User> findAllByGenerationAndPartAndNameAndTeam(
-      Integer generation, Part part, String name, Team team, Boolean isAdmin, Pageable pageable);
+      Integer generation,
+      Part part,
+      String name,
+      Team team,
+      Boolean isAdmin,
+      Pageable pageable,
+      UserOrderBy orderBy);
 
   int countByGenerationAndIsSopt(int generation, boolean isSopt);
 }

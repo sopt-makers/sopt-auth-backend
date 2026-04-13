@@ -24,8 +24,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class GetUserProfileService implements GetUserProfileUsecase {
 
-  private static final String USER_ACTIVITY_SORT_ALIAS = "a.";
-
   private final UserRepository userRepository;
   private final UserCacheRepository userCacheRepository;
 
@@ -69,7 +67,7 @@ public class GetUserProfileService implements GetUserProfileUsecase {
 
     Page<User> userEntityPage =
         userRepository.findAllByGenerationAndPartAndNameAndTeam(
-            generation, part, name, team, isAdmin, pageable);
+            generation, part, name, team, isAdmin, pageable, orderBy);
 
     long totalCount = userEntityPage.getTotalElements();
     boolean hasNext = userEntityPage.hasNext();
@@ -84,10 +82,7 @@ public class GetUserProfileService implements GetUserProfileUsecase {
 
   private static Pageable getPageable(int offset, int limit, UserOrderBy orderBy) {
     if (orderBy.isGenerationOrder()) {
-      return PageRequest.of(
-          offset / limit,
-          limit,
-          Sort.by(orderBy.getDirection(), USER_ACTIVITY_SORT_ALIAS + orderBy.getField()));
+      return PageRequest.of(offset / limit, limit);
     } else {
       return PageRequest.of(
           offset / limit, limit, Sort.by(orderBy.getDirection(), orderBy.getField()));
