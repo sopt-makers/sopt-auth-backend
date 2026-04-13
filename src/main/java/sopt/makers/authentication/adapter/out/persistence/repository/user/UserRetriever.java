@@ -9,6 +9,7 @@ import sopt.makers.authentication.domain.auth.exception.AuthException;
 import sopt.makers.authentication.domain.user.Part;
 import sopt.makers.authentication.domain.user.Team;
 import sopt.makers.authentication.domain.user.User;
+import sopt.makers.authentication.domain.user.UserOrderBy;
 import sopt.makers.authentication.domain.user.exception.UserException;
 
 import java.util.List;
@@ -59,11 +60,27 @@ public class UserRetriever {
   }
 
   public Page<User> findAllByGenerationAndPartAndNameAndTeam(
-      Integer generation, Part part, String name, Team team, Boolean isAdmin, Pageable pageable) {
-    Page<UserEntity> userEntityPage =
-        userJpaRepository.findAllWithActivityHistoriesByGenerationAndPartAndNameAndTeam(
-            generation, part, name, team, isAdmin, pageable);
-
+      Integer generation,
+      Part part,
+      String name,
+      Team team,
+      Boolean isAdmin,
+      Pageable pageable,
+      UserOrderBy orderBy) {
+    Page<UserEntity> userEntityPage;
+    if (orderBy == UserOrderBy.LATEST_GENERATION) {
+      userEntityPage =
+          userJpaRepository.findAllWithActivityHistoriesOrderByGenerationDesc(
+              generation, part, name, team, isAdmin, pageable);
+    } else if (orderBy == UserOrderBy.OLDEST_GENERATION) {
+      userEntityPage =
+          userJpaRepository.findAllWithActivityHistoriesOrderByGenerationAsc(
+              generation, part, name, team, isAdmin, pageable);
+    } else {
+      userEntityPage =
+          userJpaRepository.findAllWithActivityHistoriesByGenerationAndPartAndNameAndTeam(
+              generation, part, name, team, isAdmin, pageable);
+    }
     return userEntityPage.map(UserEntity::toDomain);
   }
 
