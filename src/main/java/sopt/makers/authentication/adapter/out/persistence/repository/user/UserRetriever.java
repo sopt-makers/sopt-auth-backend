@@ -14,8 +14,6 @@ import sopt.makers.authentication.domain.user.exception.UserException;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
@@ -103,14 +101,15 @@ public class UserRetriever {
 
     Map<Long, UserEntity> userById =
         userJpaRepository.findAllWithActivityHistoriesByIdIn(orderedIds).stream()
-            .collect(Collectors.toMap(UserEntity::getId, Function.identity()));
+            .collect(Collectors.toMap(UserEntity::getId, e -> e));
+
+    List<Long> missingIds = orderedIds.stream().filter(id -> !userById.containsKey(id)).toList();
+    if (!missingIds.isEmpty()) {
+      throw new UserException(NOT_FOUND_USER);
+    }
 
     List<User> orderedUsers =
-        orderedIds.stream()
-            .map(userById::get)
-            .filter(Objects::nonNull)
-            .map(UserEntity::toDomain)
-            .toList();
+        orderedIds.stream().map(userById::get).map(UserEntity::toDomain).toList();
 
     return new PageImpl<>(orderedUsers, pageable, userIdPage.getTotalElements());
   }
