@@ -96,7 +96,7 @@ public class UserRetriever {
 
     List<Long> orderedIds = userIdPage.getContent();
     if (orderedIds.isEmpty()) {
-      return userIdPage.map(id -> null);
+      return new PageImpl<>(List.of(), pageable, userIdPage.getTotalElements());
     }
 
     Map<Long, UserEntity> userById =
