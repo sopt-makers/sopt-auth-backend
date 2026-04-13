@@ -7,6 +7,7 @@ import sopt.makers.authentication.domain.user.Part;
 import sopt.makers.authentication.domain.user.Profile;
 import sopt.makers.authentication.domain.user.Team;
 import sopt.makers.authentication.domain.user.User;
+import sopt.makers.authentication.domain.user.UserOrderBy;
 
 import java.util.List;
 
@@ -87,9 +88,15 @@ public class UserRepositoryImpl implements UserRepository {
 
   @Override
   public Page<User> findAllByGenerationAndPartAndNameAndTeam(
-      Integer generation, Part part, String name, Team team, Boolean isAdmin, Pageable pageable) {
+      Integer generation,
+      Part part,
+      String name,
+      Team team,
+      Boolean isAdmin,
+      Pageable pageable,
+      UserOrderBy orderBy) {
     return userRetriever.findAllByGenerationAndPartAndNameAndTeam(
-        generation, part, name, team, isAdmin, pageable);
+        generation, part, name, team, isAdmin, pageable, orderBy);
   }
 
   @Override

@@ -57,6 +57,44 @@ public interface UserJpaRepository extends JpaRepository<UserEntity, Long> {
       Pageable pageable);
 
   @Query(
+      "SELECT u.id "
+          + "FROM UserEntity u "
+          + "JOIN u.userActivityHistoryList a "
+          + "WHERE (:name IS NULL OR u.name LIKE %:name%) "
+          + "AND (:generation IS NULL OR a.generation = :generation) "
+          + "AND (:part IS NULL OR a.part = :part) "
+          + "AND (:team IS NULL OR a.team = :team) "
+          + "AND (:isAdmin IS NULL OR :isAdmin = FALSE OR a.role <> 'MEMBER') "
+          + "GROUP BY u.id "
+          + "ORDER BY MAX(a.generation) DESC, u.id DESC")
+  Page<Long> findUserIdsOrderByMatchedGenerationDesc(
+      @Param("generation") Integer generation,
+      @Param("part") Part part,
+      @Param("name") String name,
+      @Param("team") Team team,
+      @Param("isAdmin") Boolean isAdmin,
+      Pageable pageable);
+
+  @Query(
+      "SELECT u.id "
+          + "FROM UserEntity u "
+          + "JOIN u.userActivityHistoryList a "
+          + "WHERE (:name IS NULL OR u.name LIKE %:name%) "
+          + "AND (:generation IS NULL OR a.generation = :generation) "
+          + "AND (:part IS NULL OR a.part = :part) "
+          + "AND (:team IS NULL OR a.team = :team) "
+          + "AND (:isAdmin IS NULL OR :isAdmin = FALSE OR a.role <> 'MEMBER') "
+          + "GROUP BY u.id "
+          + "ORDER BY MIN(a.generation) ASC, u.id ASC")
+  Page<Long> findUserIdsOrderByMatchedGenerationAsc(
+      @Param("generation") Integer generation,
+      @Param("part") Part part,
+      @Param("name") String name,
+      @Param("team") Team team,
+      @Param("isAdmin") Boolean isAdmin,
+      Pageable pageable);
+
+  @Query(
       "SELECT COUNT(DISTINCT u.id) "
           + "FROM UserEntity u "
           + "JOIN u.userActivityHistoryList a "
