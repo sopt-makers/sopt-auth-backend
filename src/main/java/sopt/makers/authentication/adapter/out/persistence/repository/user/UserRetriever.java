@@ -73,13 +73,10 @@ public class UserRetriever {
     if (orderBy.isGenerationOrder()) {
       return findByGenerationOrder(generation, part, name, team, isAdmin, pageable, orderBy);
     }
-    return userJpaRepository
-        .findAllWithActivityHistoriesByGenerationAndPartAndNameAndTeam(
-            generation, part, name, team, isAdmin, pageable)
-        .map(UserEntity::toDomain);
+    return findByRegisteredOrder(generation, part, name, team, isAdmin, pageable, orderBy);
   }
 
-  private Page<User> findByGenerationOrder(
+  private Page<User> findByRegisteredOrder(
       Integer generation,
       Part part,
       String name,
@@ -88,12 +85,16 @@ public class UserRetriever {
       Pageable pageable,
       UserOrderBy orderBy) {
     Page<Long> userIdPage =
-        orderBy == UserOrderBy.LATEST_GENERATION
-            ? userJpaRepository.findUserIdsOrderByMatchedGenerationDesc(
+        orderBy == UserOrderBy.LATEST_REGISTERED
+            ? userJpaRepository.findUserIdsOrderByRegisteredDesc(
                 generation, part, name, team, isAdmin, pageable)
-            : userJpaRepository.findUserIdsOrderByMatchedGenerationAsc(
+            : userJpaRepository.findUserIdsOrderByRegisteredAsc(
                 generation, part, name, team, isAdmin, pageable);
 
+    return getUsers(pageable, userIdPage);
+  }
+
+  private Page<User> getUsers(Pageable pageable, Page<Long> userIdPage) {
     List<Long> orderedIds = userIdPage.getContent();
     if (orderedIds.isEmpty()) {
       return new PageImpl<>(List.of(), pageable, userIdPage.getTotalElements());
@@ -112,6 +113,24 @@ public class UserRetriever {
         orderedIds.stream().map(userById::get).map(UserEntity::toDomain).toList();
 
     return new PageImpl<>(orderedUsers, pageable, userIdPage.getTotalElements());
+  }
+
+  private Page<User> findByGenerationOrder(
+      Integer generation,
+      Part part,
+      String name,
+      Team team,
+      Boolean isAdmin,
+      Pageable pageable,
+      UserOrderBy orderBy) {
+    Page<Long> userIdPage =
+        orderBy == UserOrderBy.LATEST_GENERATION
+            ? userJpaRepository.findUserIdsOrderByMatchedGenerationDesc(
+                generation, part, name, team, isAdmin, pageable)
+            : userJpaRepository.findUserIdsOrderByMatchedGenerationAsc(
+                generation, part, name, team, isAdmin, pageable);
+
+    return getUsers(pageable, userIdPage);
   }
 
   public int countByGenerationAndIsSopt(int generation, boolean isSopt) {
