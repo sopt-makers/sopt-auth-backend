@@ -37,18 +37,36 @@ public interface UserJpaRepository extends JpaRepository<UserEntity, Long> {
   Optional<UserEntity> findWithActivityHistoriesById(@Param("userId") Long userId);
 
   @Query(
-      "SELECT DISTINCT u "
+      "SELECT u.id "
           + "FROM UserEntity u "
-          + "JOIN FETCH u.userActivityHistoryList "
+          + "JOIN u.userActivityHistoryList a "
           + "WHERE (:name IS NULL OR u.name LIKE %:name%) "
-          + "AND EXISTS ("
-          + "SELECT 1 FROM UserActivityHistoryEntity a "
-          + "WHERE a.user = u "
           + "AND (:generation IS NULL OR a.generation = :generation) "
           + "AND (:part IS NULL OR a.part = :part) "
           + "AND (:team IS NULL OR a.team = :team) "
-          + "AND (:isAdmin IS NULL OR :isAdmin = FALSE OR a.role <> 'MEMBER'))")
-  Page<UserEntity> findAllWithActivityHistoriesByGenerationAndPartAndNameAndTeam(
+          + "AND (:isAdmin IS NULL OR :isAdmin = FALSE OR a.role <> 'MEMBER') "
+          + "GROUP BY u.id "
+          + "ORDER BY u.id DESC")
+  Page<Long> findUserIdsOrderByRegisteredDesc(
+      @Param("generation") Integer generation,
+      @Param("part") Part part,
+      @Param("name") String name,
+      @Param("team") Team team,
+      @Param("isAdmin") Boolean isAdmin,
+      Pageable pageable);
+
+  @Query(
+      "SELECT u.id "
+          + "FROM UserEntity u "
+          + "JOIN u.userActivityHistoryList a "
+          + "WHERE (:name IS NULL OR u.name LIKE %:name%) "
+          + "AND (:generation IS NULL OR a.generation = :generation) "
+          + "AND (:part IS NULL OR a.part = :part) "
+          + "AND (:team IS NULL OR a.team = :team) "
+          + "AND (:isAdmin IS NULL OR :isAdmin = FALSE OR a.role <> 'MEMBER') "
+          + "GROUP BY u.id "
+          + "ORDER BY u.id ASC")
+  Page<Long> findUserIdsOrderByRegisteredAsc(
       @Param("generation") Integer generation,
       @Param("part") Part part,
       @Param("name") String name,
