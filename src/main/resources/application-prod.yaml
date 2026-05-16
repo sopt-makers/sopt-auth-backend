@@ -14,7 +14,7 @@ spring:
     driver-class-name: ${DB_DRIVER_CLASS}
     hikari:
       maximum-pool-size: 10
-      minimum-idle: 3
+      minimum-idle: 2
       idle-timeout: 300000
       max-lifetime: 1800000
       connection-timeout: 30000
